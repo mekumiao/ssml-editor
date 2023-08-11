@@ -8,6 +8,7 @@ pnpm-debug.log*
 lerna-debug.log*
 
 node_modules
+.yalc
 .DS_Store
 dist
 dist-ssr

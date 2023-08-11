@@ -1,0 +1,9 @@
+{
+  "version": "v1",
+  "packages": {
+    "@wangeditor/editor-for-vue": {
+      "signature": "e58f5f56f960c95d8b57ea69e0334dc1",
+      "file": true
+    }
+  }
+}

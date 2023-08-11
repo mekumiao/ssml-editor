@@ -1,0 +1,11 @@
+@for $i from 1 to 21 {
+  .w.w-#{$i} {
+    width: #{$i * 8}px;
+  }
+}
+
+@for $i from 1 to 21 {
+  .h.h-#{$i} {
+    height: #{$i * 8}px;
+  }
+}
