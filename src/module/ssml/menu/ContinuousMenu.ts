@@ -1,5 +1,5 @@
 import throttle from 'lodash.throttle'
-import { type IButtonMenu, type IDomEditor } from '@wangeditor/core'
+import { type IDomEditor } from '@wangeditor/core'
 import type { Continuous } from '../custom-types'
 import {
   SlateTransforms,
@@ -15,18 +15,11 @@ function genDomID(): string {
   return genRandomStr('w-e-insert-continuous')
 }
 
-class InsertContinuous implements IButtonMenu {
-  readonly title = '插入连读'
-  readonly tag = 'button'
-
-  getValue(editor: IDomEditor): string | boolean {
+export default class ContinuousMenu {
+  private getValue(editor: IDomEditor): string | null {
     const { selection } = editor
     if (selection == null) return ''
     return SlateEditor.string(editor, selection)
-  }
-
-  isActive(): boolean {
-    return false
   }
 
   isDisabled(editor: IDomEditor): boolean {
@@ -40,12 +33,13 @@ class InsertContinuous implements IButtonMenu {
     return false
   }
 
-  exec(editor: IDomEditor, value: string | boolean) {
+  exec(editor: IDomEditor) {
     if (this.isDisabled(editor)) return
-    if (!value || typeof value !== 'string') return
-
     const { selection } = editor
     if (selection == null) return
+
+    const value = this.getValue(editor)
+    if (value == null) return
 
     const node: Continuous = {
       type: 'continuous',
@@ -77,5 +71,3 @@ class InsertContinuous implements IButtonMenu {
     $body.on('click', domId, handler)
   }
 }
-
-export default InsertContinuous

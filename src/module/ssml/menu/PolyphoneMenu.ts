@@ -1,5 +1,5 @@
 import throttle from 'lodash.throttle'
-import { type IButtonMenu, type IDomEditor } from '@wangeditor/core'
+import { type IDomEditor } from '@wangeditor/core'
 import type { Polyphone } from '../custom-types'
 import {
   SlateTransforms,
@@ -17,18 +17,11 @@ function genDomID(): string {
   return genRandomStr('w-e-insert-polyphone')
 }
 
-class InsertPolyphone implements IButtonMenu {
-  readonly title = '插入拼音'
-  readonly tag = 'button'
-
-  getValue(editor: IDomEditor): string | boolean {
+export default class PolyphoneMenu {
+  private getValue(editor: IDomEditor): string | null {
     const { selection } = editor
-    if (selection == null) return ''
+    if (selection == null) return null
     return SlateEditor.string(editor, selection)
-  }
-
-  isActive(): boolean {
-    return false
   }
 
   isDisabled(editor: IDomEditor): boolean {
@@ -42,12 +35,12 @@ class InsertPolyphone implements IButtonMenu {
     return false
   }
 
-  exec(editor: IDomEditor, value: string | boolean) {
+  exec(editor: IDomEditor) {
     if (this.isDisabled(editor)) return
-    if (!value || typeof value !== 'string') return
-
     const { selection } = editor
     if (selection == null) return
+    const value = this.getValue(editor)
+    if (value == null) return
 
     const node: Polyphone = {
       type: 'polyphone',
@@ -94,5 +87,3 @@ class InsertPolyphone implements IButtonMenu {
     $body.on('click', domId, handler)
   }
 }
-
-export default InsertPolyphone

@@ -19,17 +19,20 @@ export interface Continuous extends BaseElement {
 
 export interface SayAs extends BaseElement {
   type: 'say-as'
+  domId: string
   interpret: 'name' | 'address' | 'characters' | 'digits'
 }
 
 export interface Break extends BaseElement {
   type: 'break'
+  domId: string
   time: 'none' | 'short' | 'medium' | 'long'
   children: EmptyText[]
 }
 
 export interface Prosody extends BaseElement {
   type: 'prosody'
+  domId: string
   rate: number
   volume: number
 }

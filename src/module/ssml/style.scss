@@ -1,0 +1,146 @@
+.ssml-wrap {
+  $polyphone: #e86136;
+  $continuous: #05b3b1;
+  $say-as-text: #d31b39;
+  $say-as-digits: #e18d17;
+  $say-as-characters: #d4ac00;
+  $break: #04a363;
+  $prosody-rate: #0e5dd5;
+  $prosody-volume: #3547ed;
+
+  .bg {
+    &.polyphone {
+      background-color: $polyphone;
+    }
+
+    &.continuous {
+      background-color: $continuous;
+    }
+
+    &.say-as {
+      &.name {
+        background-color: $say-as-text;
+      }
+
+      &.address {
+        background-color: $say-as-text;
+      }
+
+      &.digits {
+        background-color: $say-as-digits;
+      }
+
+      &.characters {
+        background-color: $say-as-characters;
+      }
+    }
+
+    &.break {
+      background-color: $break;
+    }
+
+    &.prosody {
+      &.rate {
+        background-color: $prosody-rate;
+      }
+
+      &.volume {
+        background-color: $prosody-volume;
+      }
+    }
+  }
+
+  .color {
+    &.polyphone {
+      color: $polyphone;
+    }
+
+    &.continuous {
+      color: $continuous;
+    }
+
+    &.say-as {
+      &.name {
+        color: $say-as-text;
+      }
+
+      &.address {
+        color: $say-as-text;
+      }
+
+      &.digits {
+        color: $say-as-digits;
+      }
+
+      &.characters {
+        color: $say-as-characters;
+      }
+    }
+
+    &.break {
+      color: $break;
+    }
+
+    &.prosody {
+      &.rate {
+        color: $prosody-rate;
+      }
+
+      &.volume {
+        color: $prosody-volume;
+      }
+    }
+  }
+
+  .tag {
+    border-radius: 5px;
+    margin: 0px 2px;
+    padding: 2px 5px;
+    color: white;
+
+    .iconfont {
+      color: #e2fafa;
+      opacity: 0.6;
+    }
+
+    .btn-close {
+      display: inline-block;
+      padding-left: 4px;
+    }
+  }
+
+  .content {
+    &.continuous::before {
+      content: '连读';
+    }
+
+    &.say-as {
+      &.name::after {
+        content: '人名';
+      }
+
+      &.address::after {
+        content: '地址';
+      }
+
+      &.characters::after {
+        content: '读字母';
+      }
+
+      &.digits::after {
+        content: '读数字';
+      }
+    }
+  }
+
+  // 括号样式
+  .boundary {
+    &.start::before {
+      content: '【';
+    }
+
+    &.end::before {
+      content: '】';
+    }
+  }
+}

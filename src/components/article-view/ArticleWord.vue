@@ -4,15 +4,17 @@ import '@wangeditor/editor/dist/css/style.css'
 import { onBeforeUnmount, ref, shallowRef, computed } from 'vue'
 import { Editor } from '@wangeditor/editor-for-vue'
 import { type IDomEditor, type IEditorConfig } from '@wangeditor/editor'
+import { formatXML } from '@/utils/format'
 
 const mode = ref('simple')
 const editorRef = shallowRef<IDomEditor>()
 const children = ref()
 
-const code = computed<string>(() => JSON.stringify(children.value, null, 4))
-
 const valueHtml = ref('')
 const editorConfig = { placeholder: '请输入内容...' } as IEditorConfig
+
+const ssml = computed<string>(() => formatXML(valueHtml.value))
+const code = computed<string>(() => JSON.stringify(children.value, null, 4))
 
 onBeforeUnmount(() => {
   const editor = editorRef.value
@@ -47,7 +49,7 @@ const handleChange = (editor: IDomEditor) => {
   </div>
 
   <div class="model-window">
-    <pre class="ssml">{{ valueHtml }}</pre>
+    <pre class="ssml">{{ ssml }}</pre>
     <pre class="json">{{ code }}</pre>
   </div>
 </template>

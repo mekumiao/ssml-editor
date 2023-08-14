@@ -1,21 +1,31 @@
 <script setup lang="ts">
-import type { IButtonMenu } from '@wangeditor/editor'
 import ToolsButton from './ToolsButton.vue'
-import { insertPolyphoneConf, insertContinuousConf } from '@/module/ssml/menu'
+import PolyphoneMenu from '@/module/ssml/menu/PolyphoneMenu'
+import ContinuousMenu from '@/module/ssml/menu/ContinuousMenu'
+import SayAsMenu from '@/module/ssml/menu/SayAsMenu'
+import { type SayAs } from '@/module/ssml/custom-types'
 
-function exec(menu: IButtonMenu): void {
+const polyphoneMenu = new PolyphoneMenu()
+const continuousMenu = new ContinuousMenu()
+const sayAsMenu = new SayAsMenu()
+
+const handlePolyphone = () => {
   const editor = window.editor
-  if (menu.isDisabled(editor)) return
-
-  const value = menu.getValue(editor)
-  menu.exec(editor, value)
+  if (polyphoneMenu.isDisabled(editor)) return
+  polyphoneMenu.exec(editor)
 }
 
-const insertPolyphone = insertPolyphoneConf.factory()
-const insertContinuous = insertContinuousConf.factory()
+const handleContinuous = () => {
+  const editor = window.editor
+  if (continuousMenu.isDisabled(editor)) return
+  continuousMenu.exec(editor)
+}
 
-const handlePolyphone = () => exec(insertPolyphone)
-const handleContinuous = () => exec(insertContinuous)
+const handleSayAs = (interpret: SayAs['interpret']) => {
+  const editor = window.editor
+  if (sayAsMenu.isDisabled(editor)) return
+  sayAsMenu.exec(editor, interpret)
+}
 </script>
 
 <template>
@@ -27,10 +37,10 @@ const handleContinuous = () => exec(insertContinuous)
     <div class="tool-list">
       <ToolsButton text="多音字" icon="icon-play" @click="handlePolyphone"></ToolsButton>
       <ToolsButton text="重音" icon="icon-play"></ToolsButton>
-      <ToolsButton text="数字字符" icon="icon-play"></ToolsButton>
+      <ToolsButton text="数字符号" icon="icon-play" @click="handleSayAs('digits')"></ToolsButton>
       <ToolsButton text="连读" icon="icon-play" @click="handleContinuous"></ToolsButton>
-      <ToolsButton text="别名" icon="icon-play"></ToolsButton>
-      <ToolsButton text="音标" icon="icon-play"></ToolsButton>
+      <ToolsButton text="别名" icon="icon-play" @click="handleSayAs('characters')"></ToolsButton>
+      <ToolsButton text="音标" icon="icon-play" @click="handlePolyphone"></ToolsButton>
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">

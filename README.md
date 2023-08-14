@@ -40,6 +40,11 @@ const end = SlateEditor.end(editor, path)
 editor.select(end)
 // 或者选中多个字符
 editor.select({ anchor: start, focus: end })
+
+// 渲染方法
+function renderContinuous(elem: SlateElement, children: VNode[] | null, editor: IDomEditor): VNode {
+  return createWrap('continuous', '连读', children)
+}
 ```
 
 ## 其他代码
