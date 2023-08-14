@@ -1,5 +1,21 @@
 <script setup lang="ts">
+import type { IButtonMenu } from '@wangeditor/editor'
 import ToolsButton from './ToolsButton.vue'
+import { insertPolyphoneConf, insertContinuousConf } from '@/module/ssml/menu'
+
+function exec(menu: IButtonMenu): void {
+  const editor = window.editor
+  if (menu.isDisabled(editor)) return
+
+  const value = menu.getValue(editor)
+  menu.exec(editor, value)
+}
+
+const insertPolyphone = insertPolyphoneConf.factory()
+const insertContinuous = insertContinuousConf.factory()
+
+const handlePolyphone = () => exec(insertPolyphone)
+const handleContinuous = () => exec(insertContinuous)
 </script>
 
 <template>
@@ -9,10 +25,10 @@ import ToolsButton from './ToolsButton.vue'
     </div>
     <div class="divider divider-green"></div>
     <div class="tool-list">
-      <ToolsButton text="多音字" icon="icon-play"></ToolsButton>
+      <ToolsButton text="多音字" icon="icon-play" @click="handlePolyphone"></ToolsButton>
       <ToolsButton text="重音" icon="icon-play"></ToolsButton>
       <ToolsButton text="数字字符" icon="icon-play"></ToolsButton>
-      <ToolsButton text="连读" icon="icon-play"></ToolsButton>
+      <ToolsButton text="连读" icon="icon-play" @click="handleContinuous"></ToolsButton>
       <ToolsButton text="别名" icon="icon-play"></ToolsButton>
       <ToolsButton text="音标" icon="icon-play"></ToolsButton>
     </div>
@@ -84,3 +100,4 @@ import ToolsButton from './ToolsButton.vue'
   }
 }
 </style>
+@/module/ssml/menu/insertPolyphone

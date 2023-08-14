@@ -1,12 +1,14 @@
 <script setup lang="ts">
 defineProps<{ text: string; icon: string }>()
+const emit = defineEmits<{ click: [evt: MouseEvent] }>()
+const onClick = (evt: MouseEvent) => emit('click', evt)
 </script>
 
 <template>
-  <div class="tools-button">
-    <button class="button">
+  <div class="btn tools-button" @click="onClick" @mousedown.prevent>
+    <div class="button">
       <span :class="'size font-size-3 iconfont ' + icon"></span>
-    </button>
+    </div>
     <div class="content">{{ text }}</div>
   </div>
 </template>

@@ -1,46 +1,123 @@
 # ssml-editor
 
-This template should help get you started developing with Vue 3 in Vite.
+模仿[魔音工坊](https://www.moyin.com/overview/article-voice)的`ssml`编辑器
 
-## Recommended IDE Setup
+## 开始
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+## 参考
 
-## Type Support for `.vue` Imports in TS
+1. [阿里TTS](https://ai.aliyun.com/nls/tts)
+2. [wangEditor 5](https://www.wangeditor.com/)
+3. [slate-table](https://github.com/lqs469/slate-table.git)
+4. [wangEditor](https://github.com/wangeditor-team/wangEditor.git)
+5. [node](https://docs.slatejs.org/api/nodes/node) [transforms](https://docs.slatejs.org/api/transforms) slatejs [normalizing](https://docs.slatejs.org/concepts/11-normalizing)
 
-TypeScript cannot handle type information for `.vue` imports by default, so we replace the `tsc` CLI with `vue-tsc` for type checking. In editors, we need [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin) to make the TypeScript language service aware of `.vue` types.
+## 常见操作
 
-If the standalone TypeScript plugin doesn't feel fast enough to you, Volar has also implemented a [Take Over Mode](https://github.com/johnsoncodehk/volar/discussions/471#discussioncomment-1361669) that is more performant. You can enable it by the following steps:
+```ts
+// 从指定位置查找
+const { selection } = editor
+const [node] = SlateEditor.nodes(editor, {
+  at: location,
+  match: (n) => {
+    const type = DomEditor.getNodeType(n)
+    return type === 'table'
+  }
+})
 
-1. Disable the built-in TypeScript Extension
-    1) Run `Extensions: Show Built-in Extensions` from VSCode's command palette
-    2) Find `TypeScript and JavaScript Language Features`, right click and select `Disable (Workspace)`
-2. Reload the VSCode window by running `Developer: Reload Window` from the command palette.
+// 根据type查找node
+const cell = DomEditor.getSelectedNodeByType(newEditor, 'table-cell')
 
-## Customize configuration
+// 根据node查找path
+const path = DomEditor.findPath(newEditor, cell)
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+// 获取path位置的起点
+const start = SlateEditor.start(editor, path)
+// 获取path位置的终点
+const end = SlateEditor.end(editor, path)
 
-## Project Setup
-
-```sh
-npm install
+// 设置焦点
+editor.select(end)
+// 或者选中多个字符
+editor.select({ anchor: start, focus: end })
 ```
 
-### Compile and Hot-Reload for Development
+## 其他代码
 
-```sh
-npm run dev
-```
+```ts
+// import { createVNode, render } from 'vue'
+// import { ElButton } from 'element-plus'
 
-### Type-Check, Compile and Minify for Production
+// const node = document.createElement('div')
+// const vnode = createVNode(ElButton, { text: 'xxxxx' })
+// render(vnode, node)
+// console.log(node)
+// console.log(vnode)
 
-```sh
-npm run build
-```
+// Transforms.splitNodes(editor, { at: prePath })
 
-### Lint with [ESLint](https://eslint.org/)
+// Transforms.wrapNodes(editor, word, { at: prePath })
+// Transforms.insertNodes(editor, word, { at: prePath })
+// editor.move(1)
 
-```sh
-npm run lint
+// const [, path] = Editor.node(editor, selection)
+// const newPath = SlatePath.next(SlatePath.next(path))
+
+// console.log(Editor.node(editor, newPath))
+
+// editor.select(path)
+
+// SlatePath.parent(path)
+
+// const block = SlateEditor.above(editor, { match: (n) => SlateEditor.isBlock(editor, n) })
+// if (block == null) return
+// console.log(block)
+
+// const blockStart = SlateEditor.start(editor, block[1])
+// const blockEnd = SlateEditor.end(editor, block[1])
+// const range: SlateRange = { anchor: blockStart, focus: blockEnd }
+// const [, prePath] = Editor.node(editor, selection)
+
+// const entitys = Editor.nodes(editor, {
+//   // at: selection!,
+//   match: (n) => {
+//     console.log(DomEditor.getNodeType(n))
+//     return true
+//   },
+//   universal: false
+// })
+
+// if (entitys) {
+//   console.log('entitys', entitys)
+
+//   for (const iterator of entitys) {
+//     console.log(iterator)
+//   }
+// }
+
+// const [textNode] = Editor.nodes(editor, {
+//   match: (n) => {
+//     console.log(n)
+//     return SlateText.isText(n) && n.text == ''
+//   },
+//   universal: false,
+//   mode: 'highest'
+// })
+// console.log(textNode)
+
+// Transforms.select(editor,)
+
+// Transforms.wrapNodes(editor, word, { at: selection!, mode: 'highest' })
+
+// const [cellEntry] = Editor.nodes(editor, {
+//   match: (n) => DomEditor.checkNodeType(n, 'table-cell'),
+//   universal: true
+// })
+// const [cellNode, cellPath] = cellEntry
+
+// const tableNode = DomEditor.getSelectedNodeByType(editor, 'table')
+// if (tableNode == null) {
+//   // 选区未处于 table cell node ，则禁用
+//   return true
+// }
 ```
