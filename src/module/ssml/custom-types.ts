@@ -6,6 +6,7 @@ type EmptyText = {
 
 export interface Polyphone extends BaseElement {
   type: 'polyphone'
+  domId: string
   value: string
   pinyin: string
   children: EmptyText[]
@@ -13,6 +14,7 @@ export interface Polyphone extends BaseElement {
 
 export interface Continuous extends BaseElement {
   type: 'continuous'
+  domId: string
 }
 
 export interface SayAs extends BaseElement {

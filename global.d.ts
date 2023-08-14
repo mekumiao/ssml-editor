@@ -9,6 +9,7 @@ declare global {
     SlateNode: any
     SlateText: any
     SlateRange: any
+    $: any
   }
 }
 

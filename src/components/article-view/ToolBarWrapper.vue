@@ -42,22 +42,22 @@ const handleContinuous = () => exec(insertContinuous)
     <div class="tool-list">
       <ToolsButton text="停顿调节" icon="icon-play"></ToolsButton>
       <ToolsButton text="插入静音" icon="icon-play"></ToolsButton>
-      <ToolsButton text="符号静音" icon="icon-play"></ToolsButton>
+      <!-- <ToolsButton text="符号静音" icon="icon-play"></ToolsButton>
       <ToolsButton text="段落静音" icon="icon-play"></ToolsButton>
-      <ToolsButton text="解说模式" icon="icon-play"></ToolsButton>
+      <ToolsButton text="解说模式" icon="icon-play"></ToolsButton> -->
     </div>
     <div class="divider divider-purple"></div>
     <div class="tool-list">
       <ToolsButton text="音效" icon="icon-play"></ToolsButton>
       <ToolsButton text="配乐" icon="icon-play"></ToolsButton>
     </div>
-    <div class="divider divider-yellow"></div>
+    <!-- <div class="divider divider-yellow"></div>
     <div class="tool-list">
       <ToolsButton text="批量替换" icon="icon-play"></ToolsButton>
       <ToolsButton text="查看拼音" icon="icon-play"></ToolsButton>
       <ToolsButton text="敏感词" icon="icon-play"></ToolsButton>
       <ToolsButton text="评论" icon="icon-play"></ToolsButton>
-    </div>
+    </div> -->
   </div>
 </template>
 
@@ -100,4 +100,3 @@ const handleContinuous = () => exec(insertContinuous)
   }
 }
 </style>
-@/module/ssml/menu/insertPolyphone

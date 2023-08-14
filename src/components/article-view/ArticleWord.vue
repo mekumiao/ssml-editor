@@ -8,11 +8,11 @@ import { type IDomEditor, type IEditorConfig } from '@wangeditor/editor'
 const mode = ref('simple')
 const editorRef = shallowRef<IDomEditor>()
 const children = ref()
+
 const code = computed<string>(() => JSON.stringify(children.value, null, 4))
 
-const editorConfig = { placeholder: '请输入内容...' } as IEditorConfig
-
 const valueHtml = ref('')
+const editorConfig = { placeholder: '请输入内容...' } as IEditorConfig
 
 onBeforeUnmount(() => {
   const editor = editorRef.value
@@ -34,7 +34,6 @@ const handleChange = (editor: IDomEditor) => {
 
 <template>
   <div class="article-word">
-    <pre class="json">{{ code }}</pre>
     <div class="article-editor">
       <Editor
         style="height: 600px; overflow-y: hidden"
@@ -46,20 +45,42 @@ const handleChange = (editor: IDomEditor) => {
       />
     </div>
   </div>
+
+  <div class="model-window">
+    <pre class="ssml">{{ valueHtml }}</pre>
+    <pre class="json">{{ code }}</pre>
+  </div>
 </template>
 
 <style lang="scss" scoped>
 .article-word {
   display: flex;
 
-  .json {
-    padding: 10px;
-    width: 500px;
-  }
-
   .article-editor {
     margin: 0 auto;
     width: 800px;
+  }
+}
+
+.model-window {
+  position: fixed;
+  z-index: 9999;
+  bottom: 10px;
+  right: 50px;
+  background-color: white;
+
+  .ssml {
+    padding: 10px;
+    width: 300px;
+    height: 300px;
+    overflow: auto;
+  }
+
+  .json {
+    padding: 10px;
+    width: 300px;
+    height: 300px;
+    overflow: auto;
   }
 }
 </style>
