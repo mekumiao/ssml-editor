@@ -5,7 +5,7 @@ const onClick = (evt: MouseEvent) => emit('click', evt)
 </script>
 
 <template>
-  <div class="btn tools-button" @click="onClick" @mousedown.prevent>
+  <div class="btn edit-bar-button" @click="onClick" @mousedown.prevent>
     <div class="button">
       <span :class="'size font-size-3 iconfont ' + icon"></span>
     </div>
@@ -14,7 +14,7 @@ const onClick = (evt: MouseEvent) => emit('click', evt)
 </template>
 
 <style lang="scss" scoped>
-.tools-button {
+.edit-bar-button {
   display: flex;
   flex-direction: column;
   justify-content: center;

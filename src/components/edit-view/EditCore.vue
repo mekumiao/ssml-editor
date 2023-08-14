@@ -35,8 +35,8 @@ const handleChange = (editor: IDomEditor) => {
 </script>
 
 <template>
-  <div class="article-word">
-    <div class="article-editor">
+  <div class="edit-core">
+    <div class="editor">
       <Editor
         style="height: 600px; overflow-y: hidden"
         v-model="valueHtml"
@@ -55,10 +55,10 @@ const handleChange = (editor: IDomEditor) => {
 </template>
 
 <style lang="scss" scoped>
-.article-word {
+.edit-core {
   display: flex;
 
-  .article-editor {
+  .editor {
     margin: 0 auto;
     width: 800px;
   }

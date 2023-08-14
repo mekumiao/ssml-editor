@@ -4,7 +4,7 @@ import { Share } from '@element-plus/icons-vue'
 </script>
 
 <template>
-  <div class="article-title-content">
+  <div class="edit-title">
     <div class="title-wrapper">
       <div class="title-author">测试配音</div>
       <div class="h h-1"></div>
@@ -28,7 +28,7 @@ import { Share } from '@element-plus/icons-vue'
 </template>
 
 <style lang="scss" scoped>
-.article-title-content {
+.edit-title {
   display: flex;
   flex-direction: row;
   align-items: center;
