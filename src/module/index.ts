@@ -8,6 +8,7 @@ import {
   SlateRange
 } from '@wangeditor/editor'
 import module from './ssml'
+export { handleContinuous, handlePolyphone, handleSayAs } from './ssml'
 
 window.SlateEditor = SlateEditor
 window.SlateNode = SlateNode

@@ -1,42 +1,17 @@
 <script setup lang="ts">
 import EditBarButton from './EditBarButton.vue'
-import PolyphoneMenu from '@/module/ssml/menu/PolyphoneMenu'
-import ContinuousMenu from '@/module/ssml/menu/ContinuousMenu'
-import SayAsMenu from '@/module/ssml/menu/SayAsMenu'
-import { type SayAs } from '@/module/ssml/custom-types'
-
-const polyphoneMenu = new PolyphoneMenu()
-const continuousMenu = new ContinuousMenu()
-const sayAsMenu = new SayAsMenu()
-
-const handlePolyphone = () => {
-  const editor = window.editor
-  if (polyphoneMenu.isDisabled(editor)) return
-  polyphoneMenu.exec(editor)
-}
-
-const handleContinuous = () => {
-  const editor = window.editor
-  if (continuousMenu.isDisabled(editor)) return
-  continuousMenu.exec(editor)
-}
-
-const handleSayAs = (interpret: SayAs['interpret']) => {
-  const editor = window.editor
-  if (sayAsMenu.isDisabled(editor)) return
-  sayAsMenu.exec(editor, interpret)
-}
+import { handleContinuous, handlePolyphone, handleSayAs } from '@/module/ssml'
 </script>
 
 <template>
   <div class="edit-bar-wrapper">
     <div class="tool-list">
-      <EditBarButton text="24K高清音质" icon="icon-play"></EditBarButton>
+      <EditBarButton text="24K高清音质" icon="icon-play" disabled></EditBarButton>
     </div>
     <div class="divider divider-green"></div>
     <div class="tool-list">
       <EditBarButton text="多音字" icon="icon-play" @click="handlePolyphone"></EditBarButton>
-      <EditBarButton text="重音" icon="icon-play"></EditBarButton>
+      <EditBarButton text="重音" icon="icon-play" disabled></EditBarButton>
       <EditBarButton
         text="数字符号"
         icon="icon-play"
@@ -52,22 +27,22 @@ const handleSayAs = (interpret: SayAs['interpret']) => {
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">
-      <EditBarButton text="局部变速" icon="icon-play"></EditBarButton>
-      <EditBarButton text="多人配音" icon="icon-play"></EditBarButton>
-      <EditBarButton text="局部变音" icon="icon-play"></EditBarButton>
+      <EditBarButton text="局部变速" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="多人配音" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="局部变音" icon="icon-play" disabled></EditBarButton>
     </div>
     <div class="divider divider-orange"></div>
     <div class="tool-list">
-      <EditBarButton text="停顿调节" icon="icon-play"></EditBarButton>
-      <EditBarButton text="插入静音" icon="icon-play"></EditBarButton>
+      <EditBarButton text="停顿调节" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="插入静音" icon="icon-play" disabled></EditBarButton>
       <!-- <EditBarButton text="符号静音" icon="icon-play"></EditBarButton>
       <EditBarButton text="段落静音" icon="icon-play"></EditBarButton>
       <EditBarButton text="解说模式" icon="icon-play"></EditBarButton> -->
     </div>
     <div class="divider divider-purple"></div>
     <div class="tool-list">
-      <EditBarButton text="音效" icon="icon-play"></EditBarButton>
-      <EditBarButton text="配乐" icon="icon-play"></EditBarButton>
+      <EditBarButton text="音效" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="配乐" icon="icon-play" disabled></EditBarButton>
     </div>
     <!-- <div class="divider divider-yellow"></div>
     <div class="tool-list">
@@ -118,3 +93,4 @@ const handleSayAs = (interpret: SayAs['interpret']) => {
   }
 }
 </style>
+@/module/ssml/menu/continuous-menu@/module/ssml/menu/polyphone-menu

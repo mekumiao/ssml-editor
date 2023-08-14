@@ -46,7 +46,7 @@ export function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode
   ])
 }
 
-export default [
+export const renderElems = [
   {
     type: 'polyphone',
     renderElem: renderPolyphone
@@ -60,3 +60,5 @@ export default [
     renderElem: renderSayAs
   }
 ]
+
+export {}

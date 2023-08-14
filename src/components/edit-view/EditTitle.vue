@@ -22,7 +22,7 @@ import { Share } from '@element-plus/icons-vue'
       <ElButton>下载视频</ElButton>
       <ElButton>下载字幕</ElButton>
       <ElButton>声音转换</ElButton>
-      <div class="menu-divider"></div>
+      <div class="w w-2"></div>
     </div>
   </div>
 </template>

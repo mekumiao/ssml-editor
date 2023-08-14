@@ -15,7 +15,7 @@ function genDomID(): string {
   return genRandomStr('w-e-insert-continuous')
 }
 
-export default class SayAsMenu {
+export class SayAsFn {
   private getValue(editor: IDomEditor): string | null {
     const { selection } = editor
     if (selection == null) return ''
@@ -28,7 +28,7 @@ export default class SayAsMenu {
     if (SlateRange.isCollapsed(selection)) return true
 
     const value = SlateEditor.string(editor, selection)
-    if (value.length < 2) return true
+    if (value.length <= 0) return true
 
     return false
   }
@@ -71,3 +71,5 @@ export default class SayAsMenu {
     $body.on('click', domId, handler)
   }
 }
+
+export {}

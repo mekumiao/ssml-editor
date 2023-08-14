@@ -19,7 +19,7 @@ function renderSayAsToHtml(elem: SlateElement, childrenHtml: string): string {
   return `<say-as interpret-as="${interpret}">${childrenHtml}</say-as>`
 }
 
-export default [
+export const elemToHtmls = [
   {
     type: 'paragraph',
     elemToHtml: paragraphToHtml
@@ -37,3 +37,5 @@ export default [
     elemToHtml: renderSayAsToHtml
   }
 ]
+
+export {}

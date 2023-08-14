@@ -29,8 +29,12 @@ p > span {
   vertical-align: bottom;
 }
 
-.btn {
+.btn:not(.disabled) {
   cursor: pointer;
+}
+
+.btn.disabled {
+  cursor: not-allowed;
 }
 
 .noselect {

@@ -1,11 +1,20 @@
 <script setup lang="ts">
-defineProps<{ text: string; icon: string }>()
+const props = defineProps<{ text: string; icon: string; disabled?: boolean }>()
 const emit = defineEmits<{ click: [evt: MouseEvent] }>()
-const onClick = (evt: MouseEvent) => emit('click', evt)
+const handleClick = (evt: MouseEvent) => {
+  if (!props.disabled) {
+    emit('click', evt)
+  }
+}
 </script>
 
 <template>
-  <div class="btn edit-bar-button" @click="onClick" @mousedown.prevent>
+  <div
+    class="btn edit-bar-button"
+    :class="{ disabled: disabled }"
+    @click="handleClick"
+    @mousedown.prevent
+  >
     <div class="button">
       <span :class="'size font-size-3 iconfont ' + icon"></span>
     </div>
@@ -23,7 +32,11 @@ const onClick = (evt: MouseEvent) => emit('click', evt)
   border-radius: 10px;
   padding: 5px 8px;
 
-  &:hover {
+  &.disabled {
+    color: #a7a5a5;
+  }
+
+  &:not(.disabled):hover {
     background-color: #e5e5e5;
   }
 

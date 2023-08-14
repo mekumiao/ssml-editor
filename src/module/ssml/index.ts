@@ -1,11 +1,12 @@
 import { type IModuleConf } from '@wangeditor/editor'
-import renderElems from './render-elems'
-import withSetenceItem from './plugin'
-import elemToHtmls from './elem-to-htmls'
+import { renderElems } from './render-elems'
+import { elemToHtmls } from './elem-to-htmls'
+import withSSML from './plugin'
 import './style.scss'
+export * from './menu'
 
 const module: Partial<IModuleConf> = {
-  editorPlugin: withSetenceItem,
+  editorPlugin: withSSML,
   renderElems: renderElems,
   elemsToHtml: elemToHtmls
 }

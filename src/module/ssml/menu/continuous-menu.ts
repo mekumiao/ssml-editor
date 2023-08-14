@@ -15,8 +15,8 @@ function genDomID(): string {
   return genRandomStr('w-e-insert-continuous')
 }
 
-export default class ContinuousMenu {
-  private getValue(editor: IDomEditor): string | null {
+export class ContinuousFn {
+  getValue(editor: IDomEditor): string {
     const { selection } = editor
     if (selection == null) return ''
     return SlateEditor.string(editor, selection)
@@ -71,3 +71,5 @@ export default class ContinuousMenu {
     $body.on('click', domId, handler)
   }
 }
+
+export {}

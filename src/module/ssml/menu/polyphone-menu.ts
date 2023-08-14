@@ -17,7 +17,7 @@ function genDomID(): string {
   return genRandomStr('w-e-insert-polyphone')
 }
 
-export default class PolyphoneMenu {
+export class PolyphoneFn {
   private getValue(editor: IDomEditor): string | null {
     const { selection } = editor
     if (selection == null) return null
@@ -87,3 +87,5 @@ export default class PolyphoneMenu {
     $body.on('click', domId, handler)
   }
 }
+
+export {}
