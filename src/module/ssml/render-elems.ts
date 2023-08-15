@@ -9,7 +9,7 @@ export function renderPolyphone(elem: SlateElement): VNode {
 
   return h('span.ssml-wrap', { ...noSelectStyle }, [
     h(`span.noselect.tag.bg.${type}`, [
-      h('span', pinyin),
+      h('span.tag-remark', { attrs: { 'data-tag-remark': pinyin } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.color.${type}`),
@@ -23,7 +23,7 @@ export function renderContinuous(elem: SlateElement, children: VNode[] | null): 
 
   return h('span.ssml-wrap', [
     h(`span.noselect.tag.bg.${type}`, { ...noSelectStyle }, [
-      h(`span.content.${type}`),
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': '连读' } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.color.${type}`, { ...noSelectStyle }),
@@ -37,7 +37,7 @@ export function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode
 
   return h('span.ssml-wrap', [
     h(`span.noselect.tag.bg.${type}.${interpret}`, { ...noSelectStyle }, [
-      h(`span.content.${type}.${interpret}`),
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': interpret } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.color.${type}`, { ...noSelectStyle }),

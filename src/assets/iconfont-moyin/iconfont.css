@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'iconfont-moyin';
+  src: url('iconfont.woff2?t=1692070230') format('woff2');
+}
+
+.iconfont-moyin {
+  font-family: 'iconfont-moyin' !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.moyin-icon_play::before {
+  content: '\e643';
+}
+
+.moyin-icon_read::before {
+  content: '\e654';
+}
+
+.moyin-icon_speaker::before {
+  content: '\e62c';
+}
+
+.moyin-icon_digital::before {
+  content: '\e62b';
+}
+
+.moyin-icon_continuous::before {
+  content: '\e62e';
+}
+
+.moyin-icon_alias::before {
+  content: '\e64f';
+}
+
+.moyin-icon_english::before {
+  content: '\e62a';
+}
+
+.moyin-icon_changespeed::before {
+  content: '\e630';
+}
+
+.moyin-icon_management::before {
+  content: '\e631';
+}
+
+.moyin-icon_conversion::before {
+  content: '\e62f';
+}
+
+.moyin-icon_rhythm::before {
+  content: '\e63a';
+}
+
+.moyin-icon_mute:before {
+  content: '\e64e';
+}
+
+.moyin-icon_symbol::before {
+  content: '\e636';
+}
+
+.moyin-icon_special::before {
+  content: '\e639';
+}
+
+.moyin-icon_bgm::before {
+  content: '\e638';
+}

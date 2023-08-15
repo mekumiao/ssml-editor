@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import '@wangeditor/editor/dist/css/style.css'
 
-import { onBeforeUnmount, ref, shallowRef, computed } from 'vue'
+import { onBeforeUnmount, ref, shallowRef } from 'vue'
 import { Editor } from '@wangeditor/editor-for-vue'
 import { type IDomEditor, type IEditorConfig } from '@wangeditor/editor'
-import { formatXML } from '@/utils/format'
+
+const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
+const props = defineProps<{ maxLength: number }>()
 
 const mode = ref('simple')
 const editorRef = shallowRef<IDomEditor>()
 const children = ref()
 
-const valueHtml = ref('')
-const editorConfig = { placeholder: '请输入内容...' } as IEditorConfig
-
-const ssml = computed<string>(() => formatXML(valueHtml.value))
-const code = computed<string>(() => JSON.stringify(children.value, null, 4))
+const valueHtml = ref('地球在极其遥远的未来可能面临一些威胁，但目前不太可能突然消失。')
+const editorConfig = { maxLength: props.maxLength, placeholder: '请输入内容...' } as IEditorConfig
 
 onBeforeUnmount(() => {
   const editor = editorRef.value
@@ -27,10 +26,12 @@ const handleCreated = (editor: IDomEditor) => {
   window.editor = editor
   const config = editor.getConfig()
   config.hoverbarKeys = undefined
+  emit('onCreated', editor)
 }
 
 const handleChange = (editor: IDomEditor) => {
   children.value = editor.children
+  emit('onChange', editor)
 }
 </script>
 
@@ -46,11 +47,6 @@ const handleChange = (editor: IDomEditor) => {
         @onChange="handleChange"
       />
     </div>
-  </div>
-
-  <div class="model-window">
-    <pre class="ssml">{{ ssml }}</pre>
-    <pre class="json">{{ code }}</pre>
   </div>
 </template>
 

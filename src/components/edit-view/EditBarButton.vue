@@ -16,7 +16,7 @@ const handleClick = (evt: MouseEvent) => {
     @mousedown.prevent
   >
     <div class="button">
-      <span :class="'size font-size-3 iconfont ' + icon"></span>
+      <span class="size font-size-3 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
     </div>
     <div class="content">{{ text }}</div>
   </div>

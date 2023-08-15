@@ -8,6 +8,8 @@
   $prosody-rate: #0e5dd5;
   $prosody-volume: #3547ed;
 
+  display: inline-block;
+
   .bg {
     &.polyphone {
       background-color: $polyphone;
@@ -109,28 +111,8 @@
     }
   }
 
-  .content {
-    &.continuous::before {
-      content: '连读';
-    }
-
-    &.say-as {
-      &.name::after {
-        content: '人名';
-      }
-
-      &.address::after {
-        content: '地址';
-      }
-
-      &.characters::after {
-        content: '读字母';
-      }
-
-      &.digits::after {
-        content: '读数字';
-      }
-    }
+  .tag-remark::before {
+    content: attr(data-tag-remark);
   }
 
   // 括号样式

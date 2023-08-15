@@ -12,6 +12,7 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
+import { defineComponent, ref, withModifiers } from 'vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-polyphone')
@@ -88,4 +89,12 @@ export class PolyphoneFn {
   }
 }
 
-export {}
+export const PolyphoneView = defineComponent({
+  setup() {
+    const count = ref(0)
+    const inc = () => {
+      count.value++
+    }
+    return () => <div onClick={withModifiers(inc, ['self'])}>{count.value}</div>
+  }
+})

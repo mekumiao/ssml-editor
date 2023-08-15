@@ -6,43 +6,35 @@ import { handleContinuous, handlePolyphone, handleSayAs } from '@/module/ssml'
 <template>
   <div class="edit-bar-wrapper">
     <div class="tool-list">
-      <EditBarButton text="24K高清音质" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="24K高清音质" icon="play" disabled></EditBarButton>
     </div>
     <div class="divider divider-green"></div>
     <div class="tool-list">
-      <EditBarButton text="多音字" icon="icon-play" @click="handlePolyphone"></EditBarButton>
-      <EditBarButton text="重音" icon="icon-play" disabled></EditBarButton>
-      <EditBarButton
-        text="数字符号"
-        icon="icon-play"
-        @click="handleSayAs('digits')"
-      ></EditBarButton>
-      <EditBarButton text="连读" icon="icon-play" @click="handleContinuous"></EditBarButton>
-      <EditBarButton
-        text="别名"
-        icon="icon-play"
-        @click="handleSayAs('characters')"
-      ></EditBarButton>
-      <EditBarButton text="音标" icon="icon-play" @click="handlePolyphone"></EditBarButton>
+      <EditBarButton text="多音字" icon="speaker" @click="handlePolyphone"></EditBarButton>
+      <EditBarButton text="重音" icon="read" @click="handleSayAs('digits')"></EditBarButton>
+      <EditBarButton text="数字符号" icon="digital" @click="handleSayAs('digits')"></EditBarButton>
+      <EditBarButton text="连读" icon="continuous" @click="handleContinuous"></EditBarButton>
+      <EditBarButton text="别名" icon="alias" @click="handleSayAs('characters')"></EditBarButton>
+      <EditBarButton text="音标" icon="english" @click="handlePolyphone"></EditBarButton>
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">
-      <EditBarButton text="局部变速" icon="icon-play" disabled></EditBarButton>
-      <EditBarButton text="多人配音" icon="icon-play" disabled></EditBarButton>
-      <EditBarButton text="局部变音" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="局部变速" icon="changespeed" disabled></EditBarButton>
+      <EditBarButton text="多人配音" icon="management" disabled></EditBarButton>
+      <EditBarButton text="局部变音" icon="conversion" disabled></EditBarButton>
     </div>
     <div class="divider divider-orange"></div>
     <div class="tool-list">
-      <EditBarButton text="停顿调节" icon="icon-play" disabled></EditBarButton>
-      <EditBarButton text="插入静音" icon="icon-play" disabled></EditBarButton>
-      <!-- <EditBarButton text="符号静音" icon="icon-play"></EditBarButton>
-      <EditBarButton text="段落静音" icon="icon-play"></EditBarButton>
-      <EditBarButton text="解说模式" icon="icon-play"></EditBarButton> -->
+      <EditBarButton text="停顿调节" icon="rhythm" disabled></EditBarButton>
+      <EditBarButton text="插入静音" icon="mute" disabled></EditBarButton>
+      <EditBarButton text="符号静音" icon="symbol" disabled></EditBarButton>
+      <!-- <EditBarButton text="段落静音" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="解说模式" icon="icon-play" disabled></EditBarButton> -->
     </div>
     <div class="divider divider-purple"></div>
     <div class="tool-list">
-      <EditBarButton text="音效" icon="icon-play" disabled></EditBarButton>
-      <EditBarButton text="配乐" icon="icon-play" disabled></EditBarButton>
+      <EditBarButton text="音效" icon="special" disabled></EditBarButton>
+      <EditBarButton text="配乐" icon="bgm" disabled></EditBarButton>
     </div>
     <!-- <div class="divider divider-yellow"></div>
     <div class="tool-list">

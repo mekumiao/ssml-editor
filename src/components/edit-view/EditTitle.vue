@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ElButton } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
+
+defineProps<{ characterTotal: number; characterMax: number }>()
 </script>
 
 <template>
@@ -9,9 +11,9 @@ import { Share } from '@element-plus/icons-vue'
       <div class="title-author">测试配音</div>
       <div class="h h-1"></div>
       <div class="author">
-        <div>已保存</div>
-        <div>|</div>
-        <div>400/5000字</div>
+        <!-- <div>已保存</div>
+        <div>|</div> -->
+        <div>{{ characterTotal }}/{{ characterMax }}字</div>
       </div>
     </div>
     <div class="operation-wrapper">
