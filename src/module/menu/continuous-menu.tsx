@@ -10,6 +10,8 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
+import { defineComponent } from 'vue'
+import EditBarButton from '@/components/EditBarButton.vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-continuous')
@@ -72,4 +74,19 @@ export class ContinuousFn {
   }
 }
 
-export {}
+export default defineComponent({
+  setup() {
+    const fn = new ContinuousFn()
+
+    return () => (
+      <EditBarButton
+        text="连读"
+        icon="continuous"
+        isPopover={false}
+        onClick={async (editor) => {
+          if (!fn.isDisabled(editor)) fn.exec(editor)
+        }}
+      ></EditBarButton>
+    )
+  }
+})

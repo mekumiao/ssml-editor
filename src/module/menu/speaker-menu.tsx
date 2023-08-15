@@ -141,7 +141,9 @@ export default defineComponent({
                 key={id}
                 class={['btn', 'radius', 'ssml-menu', 'item']}
                 onClick={() => {
-                  fn.exec(editorRef?.value, text)
+                  if (!fn.isDisabled(editorRef?.value)) {
+                    fn.exec(editorRef?.value, text)
+                  }
                   visiblePopover.value = false
                 }}
                 onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
