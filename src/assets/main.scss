@@ -5,48 +5,10 @@
 @import './iconfont/iconfont.css';
 @import './iconfont-moyin/iconfont.css';
 
-#app {
-  margin: 0 auto;
-  font-weight: normal;
-}
-
-ul,
-li {
-  margin: 0;
-  padding: 0;
-  list-style: none;
-}
-
-button {
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  outline: none;
-}
-
-p > span {
-  line-height: 25px;
-  vertical-align: bottom;
-}
-
 .btn:not(.disabled) {
   cursor: pointer;
 }
 
 .btn.disabled {
   cursor: not-allowed;
-}
-
-.noselect {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -khtml-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.inline {
-  display: inline;
 }

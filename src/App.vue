@@ -11,4 +11,9 @@ const handleCreated = (editor: IDomEditor) => {
   <EditView @on-created="handleCreated"></EditView>
 </template>
 
-<style scoped></style>
+<style>
+#app {
+  margin: 0 auto;
+  font-weight: normal;
+}
+</style>

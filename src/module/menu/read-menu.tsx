@@ -1,27 +1,24 @@
 import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/core'
-import type { Polyphone } from '../custom-types'
+import type { Continuous, Read } from '../custom-types'
 import {
   SlateTransforms,
   SlateEditor,
   SlateRange,
   SlateElement,
-  DomEditor,
-  SlatePath,
-  SlateText
+  DomEditor
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent, ref, withModifiers } from 'vue'
 
 function genDomID(): string {
-  return genRandomStr('w-e-insert-polyphone')
+  return genRandomStr('w-e-insert-read')
 }
 
-export class PolyphoneFn {
+export class ReadFn {
   private getValue(editor: IDomEditor): string | null {
     const { selection } = editor
-    if (selection == null) return null
+    if (selection == null) return ''
     return SlateEditor.string(editor, selection)
   }
 
@@ -31,29 +28,27 @@ export class PolyphoneFn {
     if (SlateRange.isCollapsed(selection)) return true
 
     const value = SlateEditor.string(editor, selection)
-    if (value.length != 1) return true
+    if (value.length <= 0) return true
 
     return false
   }
 
-  exec(editor: IDomEditor) {
+  exec(editor: IDomEditor, selecte: Read['selecte']) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
     const value = this.getValue(editor)
     if (value == null) return
 
-    const node: Polyphone = {
-      type: 'polyphone',
+    const node: Read = {
+      type: 'read',
       domId: genDomID(),
-      value: value,
-      pinyin: 'de5',
-      children: [{ text: '' }]
+      selecte: selecte,
+      children: [{ text: value }]
     }
 
     SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
-    editor.move(1)
 
     const $body = $('body')
     const domId = `#${node.domId}`
@@ -61,26 +56,14 @@ export class PolyphoneFn {
     const handler = throttle((event: Event) => {
       event.preventDefault()
 
-      const [nodeEntity] = SlateEditor.nodes<Polyphone>(editor, {
+      SlateTransforms.unwrapNodes(editor, {
         at: [0],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'polyphone')) return false
-          return (n as Polyphone).domId === node.domId
+          if (!DomEditor.checkNodeType(n, 'read')) return false
+          return (n as Continuous).domId === node.domId
         }
       })
-      if (nodeEntity == null) return
-
-      const preNodeEntity = SlateEditor.previous(editor, {
-        at: nodeEntity[1],
-        match: (n) => SlateText.isText(n)
-      })
-      if (preNodeEntity == null) return
-
-      SlateTransforms.insertText(editor, nodeEntity[0].value, {
-        at: SlateEditor.end(editor, preNodeEntity[1])
-      })
-      SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
 
       $body.off('click', domId, handler)
     })
@@ -89,12 +72,4 @@ export class PolyphoneFn {
   }
 }
 
-export const PolyphoneView = defineComponent({
-  setup() {
-    const count = ref(0)
-    const inc = () => {
-      count.value++
-    }
-    return () => <div onClick={withModifiers(inc, ['self'])}>{count.value}</div>
-  }
-})
+export {}

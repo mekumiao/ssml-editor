@@ -7,11 +7,9 @@ function withSSML<T extends IDomEditor>(editor: T) {
   newEditor.isInline = (elem) => {
     const type = DomEditor.getNodeType(elem)
 
-    if (type === 'polyphone') return true
+    if (type === 'speaker') return true
     if (type === 'continuous') return true
-    if (type === 'say-as') return true
-    if (type === 'break') return true
-    if (type === 'prosody') return true
+    if (type === 'read') return true
 
     return isInline(elem)
   }
@@ -19,11 +17,9 @@ function withSSML<T extends IDomEditor>(editor: T) {
   newEditor.isVoid = (elem) => {
     const type = DomEditor.getNodeType(elem)
 
-    if (type === 'polyphone') return true
+    if (type === 'speaker') return true
     if (type === 'continuous') return false
-    if (type === 'say-as') return false
-    if (type === 'break') return true
-    if (type === 'prosody') return false
+    if (type === 'read') return false
 
     return isVoid(elem)
   }

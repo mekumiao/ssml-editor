@@ -1,14 +1,14 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement } from '@wangeditor/editor'
-import type { Polyphone, Continuous, SayAs } from './custom-types'
+import type { Speaker, Continuous, Read } from './custom-types'
 
 const noSelectStyle = { style: { userSelect: 'none' }, contentEditable: false }
 
-export function renderPolyphone(elem: SlateElement): VNode {
-  const { value, pinyin, domId, type } = elem as Polyphone
+export function renderSpeaker(elem: SlateElement): VNode {
+  const { value, pinyin, domId, type } = elem as Speaker
 
   return h('span.ssml-wrap', { ...noSelectStyle }, [
-    h(`span.noselect.tag.bg.${type}`, [
+    h(`span.tag.bg-color.${type}`, [
       h('span.tag-remark', { attrs: { 'data-tag-remark': pinyin } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
@@ -22,7 +22,7 @@ export function renderContinuous(elem: SlateElement, children: VNode[] | null): 
   const { type, domId } = elem as Continuous
 
   return h('span.ssml-wrap', [
-    h(`span.noselect.tag.bg.${type}`, { ...noSelectStyle }, [
+    h(`span.tag.bg.${type}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': '连读' } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
@@ -32,12 +32,13 @@ export function renderContinuous(elem: SlateElement, children: VNode[] | null): 
   ])
 }
 
-export function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode {
-  const { type, domId, interpret } = elem as SayAs
+export function renderRead(elem: SlateElement, children: VNode[] | null): VNode {
+  const { type, domId, selecte } = elem as Read
+  const remark = { z: '重', t: '拖', all: '重+拖' }[selecte]
 
   return h('span.ssml-wrap', [
-    h(`span.noselect.tag.bg.${type}.${interpret}`, { ...noSelectStyle }, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': interpret } }),
+    h(`span.tag.bg.${type}`, { ...noSelectStyle }, [
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.color.${type}`, { ...noSelectStyle }),
@@ -48,16 +49,16 @@ export function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode
 
 export const renderElems = [
   {
-    type: 'polyphone',
-    renderElem: renderPolyphone
+    type: 'speaker',
+    renderElem: renderSpeaker
   },
   {
     type: 'continuous',
     renderElem: renderContinuous
   },
   {
-    type: 'say-as',
-    renderElem: renderSayAs
+    type: 'read',
+    renderElem: renderRead
   }
 ]
 

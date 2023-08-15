@@ -15,12 +15,12 @@
   content: '\e643';
 }
 
-.moyin-icon_read::before {
-  content: '\e654';
-}
-
 .moyin-icon_speaker::before {
   content: '\e62c';
+}
+
+.moyin-icon_read::before {
+  content: '\e654';
 }
 
 .moyin-icon_digital::before {

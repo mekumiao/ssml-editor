@@ -1,22 +1,22 @@
 import { ContinuousFn } from './continuous-menu'
-import { PolyphoneFn } from './polyphone-menu'
-import { SayAsFn } from './say-as-menu'
-import type { SayAs } from '../custom-types'
+import { SpeakerFn } from './speaker-menu'
+import { ReadFn } from './read-menu'
+import type { Read } from '../custom-types'
 import type { IDomEditor } from '@wangeditor/editor'
 
 const continuousFn = new ContinuousFn()
-const polyphoneFn = new PolyphoneFn()
-const sayAsFn = new SayAsFn()
+const speakerFn = new SpeakerFn()
+const sayAsFn = new ReadFn()
 
 export function handleContinuous(editor: IDomEditor) {
   if (continuousFn.isDisabled(editor)) return
   continuousFn.exec(editor)
 }
-export function handlePolyphone(editor: IDomEditor) {
-  if (polyphoneFn.isDisabled(editor)) return
-  polyphoneFn.exec(editor)
+export function handleSpeaker(editor: IDomEditor) {
+  if (speakerFn.isDisabled(editor)) return
+  speakerFn.exec(editor)
 }
-export function handleSayAs(editor: IDomEditor, interpret: SayAs['interpret']) {
+export function handleRead(editor: IDomEditor, selecte: Read['selecte']) {
   if (sayAsFn.isDisabled(editor)) return
-  sayAsFn.exec(editor, interpret)
+  sayAsFn.exec(editor, selecte)
 }

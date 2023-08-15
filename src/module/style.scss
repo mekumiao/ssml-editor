@@ -1,96 +1,54 @@
 .ssml-wrap {
-  $polyphone: #e86136;
+  $speaker: #e86136;
+  $read: #d31b39;
+  $digits: #e18d17;
   $continuous: #05b3b1;
-  $say-as-text: #d31b39;
-  $say-as-digits: #e18d17;
-  $say-as-characters: #d4ac00;
-  $break: #04a363;
-  $prosody-rate: #0e5dd5;
-  $prosody-volume: #3547ed;
+  $alias: #d4ac00;
+  $english: #d4ac00;
+  $changespeed: #d4ac00;
+  $management: #d4ac00;
+  $conversion: #d4ac00;
+  $rhythm: #04a363;
+  $mute: #0e5dd5;
+  $symbol: #3547ed;
+  $special: #3547ed;
+  $bgm: #3547ed;
 
   display: inline-block;
 
-  .bg {
-    &.polyphone {
-      background-color: $polyphone;
+  .bg-color {
+    &.speaker {
+      background-color: $speaker;
+    }
+
+    &.read {
+      background-color: $read;
+    }
+
+    &.digits {
+      background-color: $digits;
     }
 
     &.continuous {
       background-color: $continuous;
     }
-
-    &.say-as {
-      &.name {
-        background-color: $say-as-text;
-      }
-
-      &.address {
-        background-color: $say-as-text;
-      }
-
-      &.digits {
-        background-color: $say-as-digits;
-      }
-
-      &.characters {
-        background-color: $say-as-characters;
-      }
-    }
-
-    &.break {
-      background-color: $break;
-    }
-
-    &.prosody {
-      &.rate {
-        background-color: $prosody-rate;
-      }
-
-      &.volume {
-        background-color: $prosody-volume;
-      }
-    }
   }
 
-  .color {
-    &.polyphone {
-      color: $polyphone;
+  .ft-color {
+    &.speaker {
+      color: $speaker;
+    }
+
+    &.read {
+      color: $read;
+    }
+
+    &.digits {
+      color: $digits;
     }
 
     &.continuous {
       color: $continuous;
-    }
-
-    &.say-as {
-      &.name {
-        color: $say-as-text;
-      }
-
-      &.address {
-        color: $say-as-text;
-      }
-
-      &.digits {
-        color: $say-as-digits;
-      }
-
-      &.characters {
-        color: $say-as-characters;
-      }
-    }
-
-    &.break {
-      color: $break;
-    }
-
-    &.prosody {
-      &.rate {
-        color: $prosody-rate;
-      }
-
-      &.volume {
-        color: $prosody-volume;
-      }
     }
   }
 
@@ -115,7 +73,6 @@
     content: attr(data-tag-remark);
   }
 
-  // 括号样式
   .boundary {
     &.start::before {
       content: '【';

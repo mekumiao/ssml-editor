@@ -4,8 +4,8 @@ type EmptyText = {
   text: ''
 }
 
-export interface Polyphone extends BaseElement {
-  type: 'polyphone'
+export interface Speaker extends BaseElement {
+  type: 'speaker'
   domId: string
   value: string
   pinyin: string
@@ -17,10 +17,10 @@ export interface Continuous extends BaseElement {
   domId: string
 }
 
-export interface SayAs extends BaseElement {
-  type: 'say-as'
+export interface Read extends BaseElement {
+  type: 'read'
   domId: string
-  interpret: 'name' | 'address' | 'characters' | 'digits'
+  selecte: 'z' | 't' | 'all'
 }
 
 export interface Break extends BaseElement {

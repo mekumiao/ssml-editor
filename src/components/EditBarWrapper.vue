@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EditBarButton from './EditBarButton.vue'
-import { handleContinuous, handlePolyphone, handleSayAs } from '@/module/menu'
+import { handleSpeaker } from '@/module/menu'
 </script>
 
 <template>
@@ -13,33 +13,13 @@ import { handleContinuous, handlePolyphone, handleSayAs } from '@/module/menu'
       <EditBarButton
         text="多音字"
         icon="speaker"
-        @click="(editor) => handlePolyphone(editor)"
+        @click="(editor) => handleSpeaker(editor)"
       ></EditBarButton>
-      <EditBarButton
-        text="重音"
-        icon="read"
-        @click="(editor) => handleSayAs(editor, 'digits')"
-      ></EditBarButton>
-      <EditBarButton
-        text="数字符号"
-        icon="digital"
-        @click="(editor) => handleSayAs(editor, 'digits')"
-      ></EditBarButton>
-      <EditBarButton
-        text="连读"
-        icon="continuous"
-        @click="(editor) => handleContinuous(editor)"
-      ></EditBarButton>
-      <EditBarButton
-        text="别名"
-        icon="alias"
-        @click="(editor) => handleSayAs(editor, 'characters')"
-      ></EditBarButton>
-      <EditBarButton
-        text="音标"
-        icon="english"
-        @click="(editor) => handlePolyphone(editor)"
-      ></EditBarButton>
+      <EditBarButton text="重音" icon="read"></EditBarButton>
+      <EditBarButton text="数字符号" icon="digital"></EditBarButton>
+      <EditBarButton text="连读" icon="continuous"></EditBarButton>
+      <EditBarButton text="别名" icon="alias"></EditBarButton>
+      <EditBarButton text="音标" icon="english"></EditBarButton>
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">
@@ -109,4 +89,3 @@ import { handleContinuous, handlePolyphone, handleSayAs } from '@/module/menu'
   }
 }
 </style>
-@/module/ssml/menu/continuous-menu@/module/ssml/menu/polyphone-menu

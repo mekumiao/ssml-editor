@@ -13,7 +13,9 @@ import $, {
   find,
   hide,
   click,
-  off
+  off,
+  is,
+  parents
 } from 'dom7'
 
 if (hide) $.fn.hide = hide
@@ -32,6 +34,8 @@ if (removeClass) $.fn.removeClass = removeClass
 if (children) $.fn.children = children
 if (each) $.fn.each = each
 if (find) $.fn.find = find
+if (is) $.fn.is = is
+if (parents) $.fn.parents = parents
 
 export { type Dom7Array } from 'dom7'
 export default $
