@@ -12,14 +12,15 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent, ref, withModifiers } from 'vue'
+import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import EditBarButton from '../../components/EditBarButton.vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-speaker')
 }
 
-export class SpeakerFn {
-  private getValue(editor: IDomEditor): string | null {
+class SpeakerFn {
+  getValue(editor: IDomEditor): string | null {
     const { selection } = editor
     if (selection == null) return null
     return SlateEditor.string(editor, selection)
@@ -36,7 +37,7 @@ export class SpeakerFn {
     return false
   }
 
-  exec(editor: IDomEditor) {
+  exec(editor: IDomEditor, pinyin: string) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
@@ -47,7 +48,7 @@ export class SpeakerFn {
       type: 'speaker',
       domId: genDomID(),
       value: value,
-      pinyin: 'de5',
+      pinyin: pinyin,
       children: [{ text: '' }]
     }
 
@@ -89,12 +90,68 @@ export class SpeakerFn {
   }
 }
 
-export const SpeakerView = defineComponent({
+type PyList = { id: string; text: string }[]
+
+function fetchSpeaker(hanzi: string): Promise<PyList> {
+  return Promise.resolve(
+    {
+      我: [
+        { id: '1', text: 'wo1' },
+        { id: '2', text: 'wo2' },
+        { id: '3', text: 'wo3' }
+      ],
+      的: [
+        { id: '1', text: 'de1' },
+        { id: '2', text: 'de2' },
+        { id: '3', text: 'de3' }
+      ]
+    }[hanzi] || []
+  )
+}
+
+export default defineComponent({
   setup() {
-    const count = ref(0)
-    const inc = () => {
-      count.value++
-    }
-    return () => <div onClick={withModifiers(inc, ['self'])}>{count.value}</div>
+    const fn = new SpeakerFn()
+    const editorRef = inject<ShallowRef>('editor')
+    const pyList = ref<PyList>([])
+    const visiblePopover = ref<boolean>(false)
+
+    return () => (
+      <EditBarButton
+        text="多音字"
+        icon="speaker"
+        isPopover={!!pyList.value.length}
+        visiblePopover={visiblePopover.value}
+        onUpdate:visiblePopover={(value) => {
+          visiblePopover.value = value
+        }}
+        onClick={async (editor) => {
+          const text = fn.getValue(editor)
+          if (text) {
+            pyList.value = await fetchSpeaker(text)
+          } else {
+            pyList.value = []
+          }
+        }}
+      >
+        <div class={['flex', 'flex-col']}>
+          {pyList.value.map(({ id, text }) => {
+            return (
+              <div
+                key={id}
+                class={['btn', 'radius', 'ssml-menu', 'item']}
+                onClick={() => {
+                  fn.exec(editorRef?.value, text)
+                  visiblePopover.value = false
+                }}
+                onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
+              >
+                {text}
+              </div>
+            )
+          })}
+        </div>
+      </EditBarButton>
+    )
   }
 })

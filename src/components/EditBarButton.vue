@@ -1,9 +1,22 @@
 <script setup lang="ts">
 import type { IDomEditor } from '@wangeditor/editor'
 import { inject, type ShallowRef } from 'vue'
+import { ElPopover } from 'element-plus'
 
-const props = defineProps<{ text: string; icon: string; disabled?: boolean }>()
-const emit = defineEmits<{ click: [editor: IDomEditor] }>()
+const emit = defineEmits<{
+  click: [editor: IDomEditor]
+  'update:visiblePopover': [value: boolean]
+}>()
+const props = withDefaults(
+  defineProps<{
+    text: string
+    icon: string
+    disabled?: boolean
+    isPopover?: boolean
+    visiblePopover?: boolean
+  }>(),
+  { disabled: false, isPopover: true, visiblePopover: false }
+)
 
 const editorRef = inject<ShallowRef<IDomEditor>>('editor')
 
@@ -15,17 +28,28 @@ const handleClick = () => {
 </script>
 
 <template>
-  <div
-    class="btn edit-bar-button"
-    :class="{ disabled: disabled }"
-    @click="handleClick"
-    @mousedown.prevent
+  <ElPopover
+    placement="bottom"
+    trigger="click"
+    :disabled="!isPopover"
+    :visible="visiblePopover"
+    :on-update:visible="(value) => emit('update:visiblePopover', value)"
   >
-    <div class="button">
-      <span class="size font-size-3 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
-    </div>
-    <div class="content">{{ text }}</div>
-  </div>
+    <template #reference>
+      <div
+        class="btn edit-bar-button"
+        :class="{ disabled: disabled }"
+        @click="handleClick"
+        @mousedown.prevent
+      >
+        <div class="button">
+          <span class="size font-size-3 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
+        </div>
+        <div class="content">{{ text }}</div>
+      </div>
+    </template>
+    <slot></slot>
+  </ElPopover>
 </template>
 
 <style lang="scss" scoped>

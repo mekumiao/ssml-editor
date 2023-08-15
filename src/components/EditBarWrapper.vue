@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EditBarButton from './EditBarButton.vue'
-import { handleSpeaker } from '@/module/menu'
+import { SpeakerMenu } from '@/module/menu'
 </script>
 
 <template>
@@ -10,11 +10,8 @@ import { handleSpeaker } from '@/module/menu'
     </div>
     <div class="divider divider-green"></div>
     <div class="tool-list">
-      <EditBarButton
-        text="多音字"
-        icon="speaker"
-        @click="(editor) => handleSpeaker(editor)"
-      ></EditBarButton>
+      <SpeakerMenu></SpeakerMenu>
+
       <EditBarButton text="重音" icon="read"></EditBarButton>
       <EditBarButton text="数字符号" icon="digital"></EditBarButton>
       <EditBarButton text="连读" icon="continuous"></EditBarButton>

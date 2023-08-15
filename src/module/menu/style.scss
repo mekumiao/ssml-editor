@@ -1,0 +1,12 @@
+.ssml-menu {
+  &.item {
+    text-align: left;
+    padding: 5px 8px;
+    font-size: 18px;
+    // border-radius: 5px;
+
+    &:hover {
+      background-color: var(--tool-btn-hover-bg-color);
+    }
+  }
+}
