@@ -12,6 +12,7 @@ import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
 import { defineComponent } from 'vue'
 import EditBarButton from '@/components/EditBarButton.vue'
+import { ElMessage } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-continuous')
@@ -67,7 +68,7 @@ export class ContinuousFn {
         }
       })
 
-      $body.off('click', domId, handler)
+      // $body.off('click', domId, handler)
     })
 
     $body.on('click', domId, handler)
@@ -78,15 +79,18 @@ export default defineComponent({
   setup() {
     const fn = new ContinuousFn()
 
-    return () => (
-      <EditBarButton
-        text="连读"
-        icon="continuous"
-        isPopover={false}
-        onClick={async (editor) => {
-          if (!fn.isDisabled(editor)) fn.exec(editor)
-        }}
-      ></EditBarButton>
-    )
+    function handleClick(editor: IDomEditor) {
+      if (fn.isDisabled(editor)) {
+        ElMessage.warning({
+          message: '请选择多个中文字符或者多个多个英文单词',
+          grouping: true,
+          type: 'warning'
+        })
+        return
+      }
+      fn.exec(editor)
+    }
+
+    return () => <EditBarButton text="连读" icon="continuous" onClick={handleClick}></EditBarButton>
   }
 })

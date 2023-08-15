@@ -14,6 +14,7 @@ import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
 import EditBarButton from '../../components/EditBarButton.vue'
+import { ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-speaker')
@@ -83,16 +84,16 @@ class SpeakerFn {
       })
       SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
 
-      $body.off('click', domId, handler)
+      // $body.off('click', domId, handler)
     })
 
     $body.on('click', domId, handler)
   }
 }
 
-type PyList = { id: string; text: string }[]
+type IdText = { id: string; text: string }
 
-function fetchSpeaker(hanzi: string): Promise<PyList> {
+function fetchSpeaker(hanzi: string): Promise<IdText[]> {
   return Promise.resolve(
     {
       我: [
@@ -113,47 +114,84 @@ export default defineComponent({
   setup() {
     const fn = new SpeakerFn()
     const editorRef = inject<ShallowRef>('editor')
-    const pyList = ref<PyList>([])
-    const visiblePopover = ref<boolean>(false)
+    const pyList = ref<IdText[]>([])
+    const popover = ref<PopoverInstance>()
+    const visible = ref(false)
+
+    function show() {
+      if (visible.value) return
+      visible.value = true
+    }
+
+    function hide() {
+      if (!visible.value) return
+      visible.value = false
+    }
+
+    async function handleClick(editor: IDomEditor) {
+      const text = fn.getValue(editor)
+      if (text) {
+        pyList.value = await fetchSpeaker(text)
+      } else {
+        pyList.value = []
+      }
+
+      if (fn.isDisabled(editor)) {
+        ElMessage.warning({
+          message: '选中一个中文字符，并且有不能在其他语句之内',
+          grouping: true,
+          type: 'warning'
+        })
+        return
+      }
+
+      if (pyList.value.length == 0) {
+        ElMessage.warning({
+          message: '选中的字符没有不是多音字',
+          grouping: true,
+          type: 'warning'
+        })
+        return
+      }
+
+      show()
+    }
 
     return () => (
-      <EditBarButton
-        text="多音字"
-        icon="speaker"
-        isPopover={!!pyList.value.length}
-        visiblePopover={visiblePopover.value}
-        onUpdate:visiblePopover={(value) => {
-          visiblePopover.value = value
-        }}
-        onClick={async (editor) => {
-          const text = fn.getValue(editor)
-          if (text) {
-            pyList.value = await fetchSpeaker(text)
-          } else {
-            pyList.value = []
-          }
-        }}
+      <ElPopover
+        visible={visible.value}
+        ref={popover}
+        onUpdate:visible={(value) => (visible.value = value)}
+        trigger="contextmenu"
+        hideAfter={0}
       >
-        <div class={['flex', 'flex-col']}>
-          {pyList.value.map(({ id, text }) => {
-            return (
-              <div
-                key={id}
-                class={['btn', 'radius', 'ssml-menu', 'item']}
-                onClick={() => {
-                  if (!fn.isDisabled(editorRef?.value)) {
-                    fn.exec(editorRef?.value, text)
-                  }
-                  visiblePopover.value = false
-                }}
-                onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
-              >
-                {text}
-              </div>
-            )
-          })}
-        </div>
-      </EditBarButton>
+        {{
+          reference: () => (
+            <EditBarButton text="多音字" icon="speaker" onClick={handleClick}></EditBarButton>
+          ),
+          default: () => (
+            <div class={['flex', 'flex-col']}>
+              {pyList.value.map(({ id, text }) => {
+                return (
+                  <div
+                    key={id}
+                    class={['btn', 'radius', 'ssml-menu', 'item']}
+                    onClick={() => {
+                      if (!fn.isDisabled(editorRef?.value)) {
+                        fn.exec(editorRef?.value, text)
+                      }
+                      hide()
+                    }}
+                    onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
+                  >
+                    {text}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        }}
+      </ElPopover>
     )
   }
 })

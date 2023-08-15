@@ -10,13 +10,16 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
+import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import EditBarButton from '@/components/EditBarButton.vue'
+import { ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-read')
 }
 
 export class ReadFn {
-  private getValue(editor: IDomEditor): string | null {
+  getValue(editor: IDomEditor): string | null {
     const { selection } = editor
     if (selection == null) return ''
     return SlateEditor.string(editor, selection)
@@ -33,7 +36,7 @@ export class ReadFn {
     return false
   }
 
-  exec(editor: IDomEditor, selecte: Read['selecte']) {
+  exec(editor: IDomEditor, idtext: IdText) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
@@ -43,7 +46,8 @@ export class ReadFn {
     const node: Read = {
       type: 'read',
       domId: genDomID(),
-      selecte: selecte,
+      selecte: idtext.id,
+      remark: idtext.remark,
       children: [{ text: value }]
     }
 
@@ -65,11 +69,86 @@ export class ReadFn {
         }
       })
 
-      $body.off('click', domId, handler)
+      // $body.off('click', domId, handler)
     })
 
     $body.on('click', domId, handler)
   }
 }
 
-export {}
+type IdText = { id: Read['selecte']; text: string; remark: string }
+
+const readList: IdText[] = [
+  { id: 'z', text: '重音', remark: '重' },
+  { id: 't', text: '拖音', remark: '拖' },
+  { id: 'all', text: '重音+拖音', remark: '重+拖' }
+]
+
+export default defineComponent({
+  setup() {
+    const fn = new ReadFn()
+    const editorRef = inject<ShallowRef>('editor')
+    const visible = ref(false)
+    const popover = ref<PopoverInstance>()
+
+    function show() {
+      if (visible.value) return
+      visible.value = true
+    }
+
+    function hide() {
+      if (!visible.value) return
+      visible.value = false
+    }
+
+    function handleClick(editor: IDomEditor) {
+      if (fn.isDisabled(editor)) {
+        ElMessage.warning({
+          message: '请先选择文本',
+          grouping: true,
+          type: 'warning'
+        })
+        return
+      }
+
+      show()
+    }
+
+    return () => (
+      <ElPopover
+        visible={visible.value}
+        ref={popover}
+        onUpdate:visible={(value) => (visible.value = value)}
+        trigger="contextmenu"
+        hideAfter={0}
+      >
+        {{
+          reference: () => (
+            <EditBarButton text="重音" icon="read" onClick={handleClick}></EditBarButton>
+          ),
+          default: () => (
+            <div class={['flex', 'flex-col']}>
+              {readList.map(({ id, text, remark }) => {
+                return (
+                  <div
+                    key={id}
+                    class={['btn', 'radius', 'ssml-menu', 'item']}
+                    onClick={() => {
+                      if (!fn.isDisabled(editorRef?.value)) {
+                        fn.exec(editorRef?.value, { id, text, remark })
+                      }
+                      hide()
+                    }}
+                    onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
+                  >
+                    {text}
+                  </div>
+                )
+              })}
+            </div>
+          )
+        }}
+      </ElPopover>
+    )
+  }
+})

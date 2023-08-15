@@ -21,6 +21,7 @@ export interface Read extends BaseElement {
   type: 'read'
   domId: string
   selecte: 'z' | 't' | 'all'
+  remark: string
 }
 
 export interface Break extends BaseElement {

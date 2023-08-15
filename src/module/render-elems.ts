@@ -33,8 +33,7 @@ export function renderContinuous(elem: SlateElement, children: VNode[] | null): 
 }
 
 export function renderRead(elem: SlateElement, children: VNode[] | null): VNode {
-  const { type, domId, selecte } = elem as Read
-  const remark = { z: '重', t: '拖', all: '重+拖' }[selecte]
+  const { type, domId, remark } = elem as Read
 
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${type}`, { ...noSelectStyle }, [
