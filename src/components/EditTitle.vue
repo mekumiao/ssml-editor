@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import { ElButton, ElDialog } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
-import { computed, ref } from 'vue'
+import { computed, inject, ref, type ShallowRef } from 'vue'
 import { formatXML } from '@/utils/format'
+import type { IDomEditor } from '@wangeditor/editor'
 
 defineProps<{ characterTotal: number; characterMax: number }>()
 
+const editorRef = inject<ShallowRef<IDomEditor>>('editor')
 const dialogVisible = ref(false)
 const ssmlValue = ref('')
 
@@ -16,8 +18,10 @@ const ssml = computed(() => {
 })
 
 const handleGenSSML = () => {
-  ssmlValue.value = window.editor.getHtml()
-  dialogVisible.value = true
+  if (editorRef) {
+    ssmlValue.value = editorRef.value.getHtml()
+    dialogVisible.value = true
+  }
 }
 </script>
 

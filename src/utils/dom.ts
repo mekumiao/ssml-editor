@@ -36,8 +36,6 @@ if (find) $.fn.find = find
 export { type Dom7Array } from 'dom7'
 export default $
 
-window.$ = $
-
 import DOMNode = globalThis.Node
 import DOMComment = globalThis.Comment
 import DOMElement = globalThis.Element

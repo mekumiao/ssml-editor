@@ -1,20 +1,13 @@
-import {
-  Boot,
-  SlateEditor,
-  DomEditor,
-  SlateTransforms,
-  SlateNode,
-  SlateText,
-  SlateRange
-} from '@wangeditor/editor'
-import module from './ssml'
-export { handleContinuous, handlePolyphone, handleSayAs } from './ssml'
+import { type IModuleConf } from '@wangeditor/editor'
+import { renderElems } from './render-elems'
+import { elemToHtmls } from './elem-to-htmls'
+import withSSML from './plugin'
+import './style.scss'
 
-window.SlateEditor = SlateEditor
-window.SlateNode = SlateNode
-window.SlateText = SlateText
-window.DomEditor = DomEditor
-window.SlateTransforms = SlateTransforms
-window.SlateRange = SlateRange
+const module: Partial<IModuleConf> = {
+  editorPlugin: withSSML,
+  renderElems: renderElems,
+  elemsToHtml: elemToHtmls
+}
 
-Boot.registerModule(module)
+export default module

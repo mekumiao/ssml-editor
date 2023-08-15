@@ -23,7 +23,6 @@ onBeforeUnmount(() => {
 
 const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor
-  window.editor = editor
   const config = editor.getConfig()
   config.hoverbarKeys = undefined
   emit('onCreated', editor)

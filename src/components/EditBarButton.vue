@@ -1,9 +1,15 @@
 <script setup lang="ts">
+import type { IDomEditor } from '@wangeditor/editor'
+import { inject, type ShallowRef } from 'vue'
+
 const props = defineProps<{ text: string; icon: string; disabled?: boolean }>()
-const emit = defineEmits<{ click: [evt: MouseEvent] }>()
-const handleClick = (evt: MouseEvent) => {
-  if (!props.disabled) {
-    emit('click', evt)
+const emit = defineEmits<{ click: [editor: IDomEditor] }>()
+
+const editorRef = inject<ShallowRef<IDomEditor>>('editor')
+
+const handleClick = () => {
+  if (!props.disabled && editorRef) {
+    emit('click', editorRef?.value)
   }
 }
 </script>

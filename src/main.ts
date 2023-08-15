@@ -1,21 +1,28 @@
-import './assets/main.scss'
 import 'element-plus/dist/index.css'
 
-import './module'
-
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import App from './App.vue'
+import {
+  Boot,
+  SlateEditor,
+  DomEditor,
+  SlateTransforms,
+  SlateNode,
+  SlateText,
+  SlateRange
+} from '@wangeditor/editor'
+import module, { $ } from './index'
 
-import ElementPlus from 'element-plus'
-import * as ElementPlusIconsVue from '@element-plus/icons-vue'
+Boot.registerModule(module)
+
+window.$ = $
+window.SlateEditor = SlateEditor
+window.SlateNode = SlateNode
+window.SlateText = SlateText
+window.DomEditor = DomEditor
+window.SlateTransforms = SlateTransforms
+window.SlateRange = SlateRange
 
 const app = createApp(App)
-
-app.use(createPinia())
-app.use(ElementPlus, { size: 'default', zIndex: 3000 })
-for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
-  app.component(key, component)
-}
 
 app.mount('#app')

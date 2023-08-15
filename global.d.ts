@@ -1,8 +1,6 @@
-declare type IDomEditor = import('@wangeditor/editor').IDomEditor
-
-declare global {
+export declare global {
   interface Window {
-    editor: IDomEditor
+    editor: any
     SlateEditor: any
     DomEditor: any
     SlateTransforms: any
@@ -12,5 +10,3 @@ declare global {
     $: any
   }
 }
-
-export declare let editor: IDomEditor

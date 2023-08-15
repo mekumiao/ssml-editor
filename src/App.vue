@@ -1,9 +1,14 @@
 <script setup lang="ts">
-import EditView from './components/edit-view'
+import type { IDomEditor } from '@wangeditor/editor'
+import { EditView } from './index'
+
+const handleCreated = (editor: IDomEditor) => {
+  window.editor = editor
+}
 </script>
 
 <template>
-  <EditView></EditView>
+  <EditView @on-created="handleCreated"></EditView>
 </template>
 
 <style scoped></style>

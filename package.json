@@ -1,7 +1,8 @@
 {
   "name": "ssml-editor",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "run-p type-check build-only",
@@ -17,7 +18,6 @@
     "@wangeditor/editor-for-vue": "file:.yalc/@wangeditor/editor-for-vue",
     "element-plus": "^2.3.9",
     "lodash.throttle": "^4.1.1",
-    "pinia": "^2.1.4",
     "snabbdom": "^3.5.1",
     "vue": "^3.3.4",
     "xml-formatter": "^3.5.0"
