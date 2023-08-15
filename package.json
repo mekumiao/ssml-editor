@@ -19,7 +19,8 @@
     "lodash.throttle": "^4.1.1",
     "pinia": "^2.1.4",
     "snabbdom": "^3.5.1",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "xml-formatter": "^3.5.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.3.2",

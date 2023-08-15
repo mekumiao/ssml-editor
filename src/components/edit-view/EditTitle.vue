@@ -1,8 +1,24 @@
 <script setup lang="ts">
-import { ElButton } from 'element-plus'
+import { ElButton, ElDialog } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
+import { computed, ref } from 'vue'
+import { formatXML } from '@/utils/format'
 
 defineProps<{ characterTotal: number; characterMax: number }>()
+
+const dialogVisible = ref(false)
+const ssmlValue = ref('')
+
+const ssml = computed(() => {
+  return formatXML(
+    `<speak volume="50" pitch="0" rate="0" voice="zhiyuan">${ssmlValue.value}</speak>`
+  )
+})
+
+const handleGenSSML = () => {
+  ssmlValue.value = window.editor.getHtml()
+  dialogVisible.value = true
+}
 </script>
 
 <template>
@@ -19,7 +35,7 @@ defineProps<{ characterTotal: number; characterMax: number }>()
     <div class="operation-wrapper">
       <ElButton type="primary" :icon="Share">分享</ElButton>
       <div class="menu-divider"></div>
-      <ElButton type="primary">配音</ElButton>
+      <ElButton type="primary" @click="handleGenSSML">配音</ElButton>
       <ElButton>下载音频</ElButton>
       <ElButton>下载视频</ElButton>
       <ElButton>下载字幕</ElButton>
@@ -27,6 +43,15 @@ defineProps<{ characterTotal: number; characterMax: number }>()
       <div class="w w-2"></div>
     </div>
   </div>
+
+  <ElDialog v-model="dialogVisible" title="查看SSML" width="50%">
+    <pre class="ssml-code">{{ ssml }}</pre>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="dialogVisible = false"> 确定 </el-button>
+      </span>
+    </template>
+  </ElDialog>
 </template>
 
 <style lang="scss" scoped>
@@ -60,5 +85,10 @@ defineProps<{ characterTotal: number; characterMax: number }>()
     margin: 0 14px;
     background: #e1e1e1;
   }
+}
+
+.ssml-code {
+  height: 400px;
+  overflow-y: auto;
 }
 </style>
