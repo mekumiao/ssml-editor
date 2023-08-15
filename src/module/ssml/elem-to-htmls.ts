@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { SlateElement } from '@wangeditor/editor'
 import type { Polyphone, SayAs } from './custom-types'
 
@@ -10,8 +11,8 @@ function continuousToHtml(elem: SlateElement, childrenHtml: string): string {
 }
 
 function polyphoneToHtml(elem: SlateElement, childrenHtml: string): string {
-  const { pinyin } = elem as Polyphone
-  return `<phoneme alphabet="py" ph="${pinyin}">${childrenHtml}</phoneme>`
+  const { pinyin, value } = elem as Polyphone
+  return `<phoneme alphabet="py" ph="${pinyin}">${value}</phoneme>`
 }
 
 function renderSayAsToHtml(elem: SlateElement, childrenHtml: string): string {
