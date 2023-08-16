@@ -33,6 +33,8 @@ export class DigitalFn {
     const value = SlateEditor.string(editor, selection)
     if (value.length <= 0) return true
 
+    if (Number.isNaN(Number(value))) return true
+
     return false
   }
 
@@ -77,10 +79,10 @@ export class DigitalFn {
   }
 }
 
-const digitalList: IdText[] = [
-  { id: 'z', text: '重音', remark: '重' },
-  { id: 't', text: '拖音', remark: '拖' },
-  { id: 'all', text: '重音+拖音', remark: '重+拖' }
+const idTextList: IdText[] = [
+  { id: 'value', text: '读数值', remark: '读数值' },
+  { id: 'digits', text: '读数字', remark: '读数字' },
+  { id: 'telephone', text: '读手机号', remark: '读手机号' }
 ]
 
 export default defineComponent({
@@ -103,7 +105,7 @@ export default defineComponent({
     function handleClick(editor: IDomEditor) {
       if (fn.isDisabled(editor)) {
         ElMessage.warning({
-          message: '请先选择文本',
+          message: '请选择纯数字文本',
           grouping: true,
           type: 'warning'
         })
@@ -123,11 +125,11 @@ export default defineComponent({
       >
         {{
           reference: () => (
-            <EditBarButton text="重音" icon="digital" onClick={handleClick}></EditBarButton>
+            <EditBarButton text="数字符号" icon="digital" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
             <div class={['flex', 'flex-col']}>
-              {digitalList.map(({ id, text, remark }) => {
+              {idTextList.map(({ id, text, remark }) => {
                 return (
                   <div
                     key={id}

@@ -1,7 +1,7 @@
 .ssml-wrap {
   $speaker: #e86136;
   $read: #d31b39;
-  $digits: #e18d17;
+  $digital: #e18d17;
   $continuous: #05b3b1;
   $alias: #d4ac00;
   $english: #d4ac00;
@@ -28,9 +28,9 @@
       color: $read;
     }
 
-    &.digits {
-      background-color: $digits;
-      color: $digits;
+    &.digital {
+      background-color: $digital;
+      color: $digital;
     }
 
     &.continuous {
