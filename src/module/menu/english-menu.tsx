@@ -15,6 +15,7 @@ import $ from '@/utils/dom'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
 import EditBarButton from '../../components/EditBarButton.vue'
 import { ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
+import { selectionTrimEnd } from '../helper'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-english')
@@ -35,8 +36,7 @@ class EnglishEn {
     const value = SlateEditor.string(editor, selection)
     if (value.length <= 0) return true
 
-    const pattern = new RegExp('[A-Za-z]+')
-    if (!pattern.test(value)) return true
+    if (!/^[A-Za-z]+$/gi.test(value)) return true
 
     return false
   }
@@ -76,7 +76,6 @@ class EnglishEn {
           return (n as P).domId === node.domId
         }
       })
-      console.log(nodeEntity)
       if (nodeEntity == null) return
 
       const preNodeEntity = SlateEditor.previous(editor, {
@@ -122,6 +121,7 @@ export default defineComponent({
     }
 
     async function handleClick(editor: IDomEditor) {
+      selectionTrimEnd(editor)
       if (fn.isDisabled(editor)) {
         ElMessage.warning({
           message: '请选择英文单词',

@@ -35,8 +35,7 @@ class SpeakerFn {
     const value = SlateEditor.string(editor, selection)
     if (value.length != 1) return true
 
-    const pattern = new RegExp('[\u4E00-\u9FA5]+')
-    if (!pattern.test(value)) return true
+    if (!/^[\u4E00-\u9FA5]+$/gi.test(value)) return true
 
     return false
   }
