@@ -47,6 +47,10 @@
       background-color: $english;
       color: $english;
     }
+    &.changespeed {
+      background-color: $changespeed;
+      color: $changespeed;
+    }
   }
 
   .bg-color:not(.ft-color) {

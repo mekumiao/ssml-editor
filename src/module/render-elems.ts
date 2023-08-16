@@ -1,6 +1,6 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement } from '@wangeditor/editor'
-import type { P, W, SayAs, Break, Sub } from './custom-types'
+import type { P, W, SayAs, Break, Sub, Prosody } from './custom-types'
 
 const noSelectStyle = { style: { userSelect: 'none' }, contentEditable: false }
 
@@ -81,6 +81,20 @@ function renderSub(elem: SlateElement, children: VNode[] | null): VNode {
   ])
 }
 
+function renderProsody(elem: SlateElement, children: VNode[] | null): VNode {
+  const { bgColor, domId, remark } = elem as Prosody
+
+  return h('span.ssml-wrap', [
+    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
+      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+    ]),
+    h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
+    h('span', children),
+    h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle })
+  ])
+}
+
 export const renderElems = [
   {
     type: 'ssml-p',
@@ -101,6 +115,10 @@ export const renderElems = [
   {
     type: 'ssml-sub',
     renderElem: renderSub
+  },
+  {
+    type: 'ssml-prosody',
+    renderElem: renderProsody
   }
 ]
 

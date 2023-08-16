@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { SlateElement } from '@wangeditor/editor'
-import type { P, W, SayAs, Break } from './custom-types'
+import type { P, W, SayAs, Break, Sub, Prosody } from './custom-types'
 
 function insertBreak(childrenHtml: string): string {
   const _break = break2({ time: '300ms' } as any, '')
@@ -33,6 +33,16 @@ function break2(elem: SlateElement, childrenHtml: string): string {
   return `<break time="${time}" />`
 }
 
+function sub(elem: SlateElement, childrenHtml: string) {
+  const { value } = elem as Sub
+  return `<sub alias="${childrenHtml}">${value}</sub>`
+}
+
+function prosody(elem: SlateElement, childrenHtml: string) {
+  const { rate } = elem as Prosody
+  return `<prosody rate="${rate}">${childrenHtml}</prosody>`
+}
+
 export const elemToHtmls = [
   {
     type: 'paragraph',
@@ -53,6 +63,14 @@ export const elemToHtmls = [
   {
     type: 'ssml-break',
     elemToHtml: break2
+  },
+  {
+    type: 'ssml-sub',
+    elemToHtml: sub
+  },
+  {
+    type: 'ssml-prosody',
+    elemToHtml: prosody
   }
 ]
 

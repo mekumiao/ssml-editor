@@ -14,7 +14,7 @@
   margin: 2px 2px;
   display: block;
   text-align: center;
-  font-size: 14px;
+  font-size: 16px;
 
   &:not(.btn-text):hover {
     background-color: var(--tool-btn-hover-bg-color);
@@ -40,4 +40,15 @@
 .full {
   width: 100%;
   height: 100%;
+}
+
+.scroll {
+  &.scroll-y {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+  &.scroll-x {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
 }

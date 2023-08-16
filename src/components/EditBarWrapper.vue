@@ -6,7 +6,8 @@ import {
   ReadMenu,
   DigitalMenu,
   AliasMenu,
-  EnglishMenu
+  EnglishMenu,
+  ChangespeedMenu
 } from '@/module/menu'
 </script>
 
@@ -26,7 +27,7 @@ import {
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">
-      <EditBarButton text="局部变速" icon="changespeed" disabled></EditBarButton>
+      <ChangespeedMenu></ChangespeedMenu>
       <EditBarButton text="多人配音" icon="management" disabled></EditBarButton>
       <EditBarButton text="局部变音" icon="conversion" disabled></EditBarButton>
     </div>

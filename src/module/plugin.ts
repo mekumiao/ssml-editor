@@ -13,6 +13,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
     if (type === 'ssml-break') return true
     if (type === 'ssml-say-as') return true
     if (type === 'ssml-sub') return true
+    if (type === 'ssml-prosody') return true
 
     return isInline(elem)
   }
@@ -28,6 +29,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
     if (type === 'ssml-break') return true
     if (type === 'ssml-say-as') return false
     if (type === 'ssml-sub') return false
+    if (type === 'ssml-prosody') return false
 
     return isVoid(elem)
   }

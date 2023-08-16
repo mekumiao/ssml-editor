@@ -158,19 +158,13 @@ export default defineComponent({
     }
 
     return () => (
-      <ElPopover
-        visible={visible.value}
-        ref={popover}
-        onUpdate:visible={(value) => (visible.value = value)}
-        trigger="contextmenu"
-        hideAfter={0}
-      >
+      <ElPopover ref={popover} v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
             <EditBarButton text="多音字" icon="speaker" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
-            <div class={['flex', 'flex-col']}>
+            <div class="flex flex-col">
               {pyList.value.map(({ id, text }) => {
                 return (
                   <div

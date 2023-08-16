@@ -74,7 +74,6 @@ export class ReadFn {
         universal: false
       })
 
-      console.log(nodeEntity)
       if (nodeEntity == null) return
 
       const preNodeEntity = SlateEditor.previous(editor, {
@@ -144,10 +143,7 @@ export default defineComponent({
             <EditBarButton text="重音" icon="read" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
-            <div
-              class="flex flex-col"
-              onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
-            >
+            <div class="flex flex-col" onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}>
               {readList.map(({ id, text, remark }) => {
                 return (
                   <div

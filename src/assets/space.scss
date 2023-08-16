@@ -1,10 +1,10 @@
-@for $i from 1 to 21 {
+@for $i from 1 to 200 {
   .w.w-#{$i} {
     width: #{$i * 8}px;
   }
 }
 
-@for $i from 1 to 21 {
+@for $i from 1 to 200 {
   .h.h-#{$i} {
     height: #{$i * 8}px;
   }

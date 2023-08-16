@@ -161,7 +161,7 @@ export default defineComponent({
             <EditBarButton text="音标" icon="english" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
-            <div class={['flex', 'flex-col']}>
+            <div class="flex flex-col">
               {englishList.value.map(({ id, text }) => {
                 return (
                   <div

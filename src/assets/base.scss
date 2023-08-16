@@ -6,3 +6,27 @@
   --tool-yellow-color: #f6b601;
   --tool-btn-hover-bg-color: #e5e5e5;
 }
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(177, 177, 177, 0.5);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(162, 161, 161, 0.5);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-thumb:active {
+  background: rgba(184, 182, 182, 0.5);
+  border-radius: 8px;
+}

@@ -48,3 +48,11 @@ export interface Sub extends BaseElement {
   value: string
   bgColor: string
 }
+
+export interface Prosody extends BaseElement {
+  type: 'ssml-prosody'
+  domId: string
+  remark: string
+  rate: string
+  bgColor: string
+}

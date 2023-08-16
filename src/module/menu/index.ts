@@ -4,6 +4,15 @@ import ReadMenu from './read-menu'
 import DigitalMenu from './digital-menu'
 import AliasMenu from './alias-menu'
 import EnglishMenu from './english-menu'
+import ChangespeedMenu from './changespeed-menu'
 import './style.scss'
 
-export { SpeakerMenu, ContinuousMenu, ReadMenu, DigitalMenu, AliasMenu, EnglishMenu }
+export {
+  SpeakerMenu,
+  ContinuousMenu,
+  ReadMenu,
+  DigitalMenu,
+  AliasMenu,
+  EnglishMenu,
+  ChangespeedMenu
+}

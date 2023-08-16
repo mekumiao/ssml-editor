@@ -54,7 +54,6 @@ class AliasFn {
 
     SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
-    // editor.move(1)
 
     const $body = $('body')
     const domId = `#${node.domId}`
