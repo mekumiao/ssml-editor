@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/core'
-import type { Continuous, Read } from '../custom-types'
+import type { Continuous, IdText, Read } from '../custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -46,8 +46,9 @@ export class ReadFn {
     const node: Read = {
       type: 'read',
       domId: genDomID(),
-      selecte: idtext.id,
-      remark: idtext.remark,
+      inId: idtext.id,
+      inText: idtext.text,
+      inRemark: idtext.remark,
       children: [{ text: value }]
     }
 
@@ -75,8 +76,6 @@ export class ReadFn {
     $body.on('click', domId, handler)
   }
 }
-
-type IdText = { id: Read['selecte']; text: string; remark: string }
 
 const readList: IdText[] = [
   { id: 'z', text: '重音', remark: '重' },

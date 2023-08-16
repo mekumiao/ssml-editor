@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/core'
-import type { Speaker } from '../custom-types'
+import type { IdText, Speaker } from '../custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -48,7 +48,7 @@ class SpeakerFn {
     const node: Speaker = {
       type: 'speaker',
       domId: genDomID(),
-      value: value,
+      character: value,
       pinyin: pinyin,
       children: [{ text: '' }]
     }
@@ -79,7 +79,7 @@ class SpeakerFn {
       })
       if (preNodeEntity == null) return
 
-      SlateTransforms.insertText(editor, nodeEntity[0].value, {
+      SlateTransforms.insertText(editor, nodeEntity[0].character, {
         at: SlateEditor.end(editor, preNodeEntity[1])
       })
       SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
@@ -91,20 +91,18 @@ class SpeakerFn {
   }
 }
 
-type IdText = { id: string; text: string }
-
 function fetchSpeaker(hanzi: string): Promise<IdText[]> {
   return Promise.resolve(
     {
       我: [
-        { id: '1', text: 'wo1' },
-        { id: '2', text: 'wo2' },
-        { id: '3', text: 'wo3' }
+        { id: '1', text: 'wo1', remark: '' },
+        { id: '2', text: 'wo2', remark: '' },
+        { id: '3', text: 'wo3', remark: '' }
       ],
       的: [
-        { id: '1', text: 'de1' },
-        { id: '2', text: 'de2' },
-        { id: '3', text: 'de3' }
+        { id: '1', text: 'de1', remark: '' },
+        { id: '2', text: 'de2', remark: '' },
+        { id: '3', text: 'de3', remark: '' }
       ]
     }[hanzi] || []
   )

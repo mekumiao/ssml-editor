@@ -11,13 +11,13 @@ function continuousToHtml(elem: SlateElement, childrenHtml: string): string {
 }
 
 function speakerToHtml(elem: SlateElement, childrenHtml: string): string {
-  const { pinyin, value } = elem as Speaker
-  return `<phoneme alphabet="py" ph="${pinyin}">${value}</phoneme>`
+  const { pinyin, character } = elem as Speaker
+  return `<phoneme alphabet="py" ph="${pinyin}">${character}</phoneme>`
 }
 
 function renderReadToHtml(elem: SlateElement, childrenHtml: string): string {
-  const { selecte } = elem as Read
-  return `<say-as interpret-as="${selecte}">${childrenHtml}</say-as>`
+  const { inId } = elem as Read
+  return `<say-as interpret-as="${inId}">${childrenHtml}</say-as>`
 }
 
 export const elemToHtmls = [

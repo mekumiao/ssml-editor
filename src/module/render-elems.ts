@@ -5,7 +5,7 @@ import type { Speaker, Continuous, Read } from './custom-types'
 const noSelectStyle = { style: { userSelect: 'none' }, contentEditable: false }
 
 export function renderSpeaker(elem: SlateElement): VNode {
-  const { value, pinyin, domId, type } = elem as Speaker
+  const { character, pinyin, domId, type } = elem as Speaker
 
   return h('span.ssml-wrap', { ...noSelectStyle }, [
     h(`span.tag.bg-color.${type}`, [
@@ -13,7 +13,7 @@ export function renderSpeaker(elem: SlateElement): VNode {
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${type}`),
-    h('span', value),
+    h('span', character),
     h(`span.boundary.end.ft-color.${type}`)
   ])
 }
@@ -33,11 +33,11 @@ export function renderContinuous(elem: SlateElement, children: VNode[] | null): 
 }
 
 export function renderRead(elem: SlateElement, children: VNode[] | null): VNode {
-  const { type, domId, remark } = elem as Read
+  const { type, domId, inRemark } = elem as Read
 
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${type}`, { ...noSelectStyle }, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': inRemark } }),
       h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${type}`, { ...noSelectStyle }),

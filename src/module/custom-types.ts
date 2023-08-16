@@ -4,10 +4,12 @@ type EmptyText = {
   text: ''
 }
 
+export type IdText = { id: string; text: string; remark: string }
+
 export interface Speaker extends BaseElement {
   type: 'speaker'
   domId: string
-  value: string
+  character: string
   pinyin: string
   children: EmptyText[]
 }
@@ -20,20 +22,15 @@ export interface Continuous extends BaseElement {
 export interface Read extends BaseElement {
   type: 'read'
   domId: string
-  selecte: 'z' | 't' | 'all'
-  remark: string
+  inId: string
+  inText: string
+  inRemark: string
 }
 
-export interface Break extends BaseElement {
-  type: 'break'
+export interface Digital extends BaseElement {
+  type: 'digital'
   domId: string
-  time: 'none' | 'short' | 'medium' | 'long'
-  children: EmptyText[]
-}
-
-export interface Prosody extends BaseElement {
-  type: 'prosody'
-  domId: string
-  rate: number
-  volume: number
+  inId: string
+  inText: string
+  inRemark: string
 }
