@@ -37,9 +37,15 @@
       background-color: $continuous;
       color: $continuous;
     }
+
     &.alias {
       background-color: $alias;
       color: $alias;
+    }
+
+    &.english {
+      background-color: $english;
+      color: $english;
     }
   }
 
