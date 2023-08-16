@@ -65,7 +65,7 @@ export class ReadFn {
       event.preventDefault()
 
       const [nodeEntity] = SlateEditor.nodes<W>(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-w')) return false

@@ -35,6 +35,9 @@ class SpeakerFn {
     const value = SlateEditor.string(editor, selection)
     if (value.length != 1) return true
 
+    const pattern = new RegExp('[\u4E00-\u9FA5]+')
+    if (!pattern.test(value)) return true
+
     return false
   }
 
@@ -66,7 +69,7 @@ class SpeakerFn {
       event.preventDefault()
 
       const [nodeEntity] = SlateEditor.nodes<P>(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-p')) return false
@@ -92,20 +95,19 @@ class SpeakerFn {
 }
 
 function fetchSpeaker(hanzi: string): Promise<IdText[]> {
-  return Promise.resolve(
-    {
-      我: [
-        { id: '1', text: 'wo1', remark: 'wo1' },
-        { id: '2', text: 'wo2', remark: 'wo2' },
-        { id: '3', text: 'wo3', remark: 'wo3' }
-      ],
-      的: [
-        { id: '1', text: 'de1', remark: 'de1' },
-        { id: '2', text: 'de2', remark: 'de2' },
-        { id: '3', text: 'de3', remark: 'de3' }
-      ]
-    }[hanzi] || []
-  )
+  const list = {
+    我: [
+      { id: '1', text: 'wo1', remark: 'wo1' },
+      { id: '2', text: 'wo2', remark: 'wo2' },
+      { id: '3', text: 'wo3', remark: 'wo3' }
+    ],
+    的: [
+      { id: '1', text: 'de1', remark: 'de1' },
+      { id: '2', text: 'de2', remark: 'de2' },
+      { id: '3', text: 'de3', remark: 'de3' }
+    ]
+  } as Record<string, IdText[]>
+  return Promise.resolve(list[hanzi] || list['我'])
 }
 
 export default defineComponent({

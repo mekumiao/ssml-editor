@@ -62,7 +62,7 @@ export class ContinuousFn {
       event.preventDefault()
 
       SlateTransforms.unwrapNodes(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-w')) return false

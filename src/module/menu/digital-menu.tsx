@@ -64,7 +64,7 @@ export class DigitalFn {
       event.preventDefault()
 
       SlateTransforms.unwrapNodes(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-say-as')) return false

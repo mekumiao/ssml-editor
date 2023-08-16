@@ -51,7 +51,7 @@ export class RhythmFn {
       event.preventDefault()
 
       const [nodeEntity] = SlateEditor.nodes<Break>(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-break')) return false

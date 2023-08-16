@@ -12,7 +12,9 @@ const mode = ref('simple')
 const editorRef = shallowRef<IDomEditor>()
 const children = ref()
 
-const valueHtml = ref('地球在极其遥远的未来可能面临一些威胁，但目前不太可能突然消失。')
+const valueHtml = ref(`地球在极其遥远的未来可能面临一些威胁，但目前不太可能突然消失。
+The Earth may face some threats in the extremely distant future, but it is currently unlikely to suddenly disappear.
+`)
 const editorConfig = { maxLength: props.maxLength, placeholder: '请输入内容...' } as IEditorConfig
 
 onBeforeUnmount(() => {

@@ -66,7 +66,7 @@ class AliasFn {
       event.preventDefault()
 
       const [nodeEntity] = SlateEditor.nodes<Sub>(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-sub')) return false

@@ -69,13 +69,14 @@ class EnglishEn {
       event.preventDefault()
 
       const [nodeEntity] = SlateEditor.nodes<P>(editor, {
-        at: [0],
+        at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-p')) return false
           return (n as P).domId === node.domId
         }
       })
+      console.log(nodeEntity)
       if (nodeEntity == null) return
 
       const preNodeEntity = SlateEditor.previous(editor, {
@@ -95,12 +96,11 @@ class EnglishEn {
 }
 
 function fetchEnglish(word: string): Promise<IdText[]> {
-  return Promise.resolve(
-    {
-      translate: [{ id: '1', text: 'wərd', remark: 'wərd' }],
-      global: [{ id: '2', text: 'ˈɡlōbəl', remark: 'ˈɡlōbəl' }]
-    }[word] || []
-  )
+  const list = {
+    translate: [{ id: '1', text: 'wərd', remark: 'wərd' }],
+    global: [{ id: '2', text: 'ˈɡlōbəl', remark: 'ˈɡlōbəl' }]
+  } as Record<string, IdText[]>
+  return Promise.resolve(list[word] || list['translate'])
 }
 
 export default defineComponent({
