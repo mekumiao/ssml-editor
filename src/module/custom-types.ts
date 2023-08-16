@@ -45,6 +45,7 @@ export interface Sub extends BaseElement {
   type: 'ssml-sub'
   domId: string
   remark: string
+  alias: string
   value: string
   bgColor: string
 }

@@ -57,28 +57,37 @@ function renderBreak(elem: SlateElement): VNode {
   ])
 }
 
-function renderSub(elem: SlateElement, children: VNode[] | null): VNode {
+function renderSub(elem: SlateElement): VNode {
   const { domId, remark, bgColor, value } = elem as Sub
 
-  return h('span.ssml-wrap', [
-    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
+  return h('span.ssml-wrap', { ...noSelectStyle }, [
+    h(`span.tag.bg-color.${bgColor}`, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
       h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
     ]),
-    h(`span.tag-remark.ft-color.${bgColor}`, {
-      ...noSelectStyle,
-      attrs: { 'data-tag-remark': '<' }
-    }),
-    h('span', children),
-
-    h(`span.tag-remark.ft-color.${bgColor}`, {
-      ...noSelectStyle,
-      attrs: { 'data-tag-remark': '>' }
-    }),
-    h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }, null),
-    h('span.tag-remark', { ...noSelectStyle, attrs: { 'data-tag-remark': value } }),
-    h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle }, null)
+    h(`span.boundary.start.ft-color.${bgColor}`),
+    h('span', value),
+    h(`span.boundary.end.ft-color.${bgColor}`)
   ])
+  // return h('span.ssml-wrap', [
+  //   h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
+  //     h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
+  //     h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
+  //   ]),
+  //   h(`span.tag-remark.ft-color.${bgColor}`, {
+  //     ...noSelectStyle,
+  //     attrs: { 'data-tag-remark': '<' }
+  //   }),
+  //   h('span', children),
+
+  //   h(`span.tag-remark.ft-color.${bgColor}`, {
+  //     ...noSelectStyle,
+  //     attrs: { 'data-tag-remark': '>' }
+  //   }),
+  //   h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }, null),
+  //   h('span.tag-remark', { ...noSelectStyle, attrs: { 'data-tag-remark': value } }),
+  //   h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle }, null)
+  // ])
 }
 
 function renderProsody(elem: SlateElement, children: VNode[] | null): VNode {

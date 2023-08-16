@@ -6,13 +6,16 @@ import {
   SlateEditor,
   SlateRange,
   SlateElement,
-  DomEditor
+  DomEditor,
+  SlateText,
+  SlatePath
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent } from 'vue'
+import { defineComponent, inject, ref, shallowRef, withModifiers, type ShallowRef } from 'vue'
 import EditBarButton from '../../components/EditBarButton.vue'
-import { ElMessage } from 'element-plus'
+import { ElForm, ElIcon, ElInput, ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
+import { Promotion } from '@element-plus/icons-vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-alias')
@@ -36,7 +39,7 @@ class AliasFn {
     return false
   }
 
-  exec(editor: IDomEditor) {
+  exec(editor: IDomEditor, alias: string) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
@@ -46,10 +49,11 @@ class AliasFn {
     const node: Sub = {
       type: 'ssml-sub',
       domId: genDomID(),
-      remark: '别名',
+      remark: `[${alias}]`,
+      alias: alias,
       value: value,
       bgColor: 'alias',
-      children: [{ text: value }]
+      children: [{ text: '' }]
     }
 
     SlateTransforms.delete(editor)
@@ -61,7 +65,7 @@ class AliasFn {
     const handler = throttle((event: Event) => {
       event.preventDefault()
 
-      SlateTransforms.unwrapNodes(editor, {
+      const [nodeEntity] = SlateEditor.nodes<Sub>(editor, {
         at: [0],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
@@ -69,6 +73,18 @@ class AliasFn {
           return (n as Sub).domId === node.domId
         }
       })
+      if (nodeEntity == null) return
+
+      const preNodeEntity = SlateEditor.previous(editor, {
+        at: nodeEntity[1],
+        match: (n) => SlateText.isText(n)
+      })
+      if (preNodeEntity == null) return
+
+      SlateTransforms.insertText(editor, nodeEntity[0].value, {
+        at: SlateEditor.end(editor, preNodeEntity[1])
+      })
+      SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
     })
 
     $body.on('click', domId, handler)
@@ -78,22 +94,22 @@ class AliasFn {
 export default defineComponent({
   setup() {
     const fn = new AliasFn()
-    // const editorRef = inject<ShallowRef<IDomEditor>>('editor')
-    // const aliasRef = ref<HTMLElement>()
-    // const alias = ref('')
-    // const popover = ref<PopoverInstance>()
-    // const visible = ref(false)
-    // const editorSelection = shallowRef()
+    const editorRef = inject<ShallowRef<IDomEditor>>('editor')
+    const aliasRef = ref<HTMLElement>()
+    const alias = ref('')
+    const popover = ref<PopoverInstance>()
+    const visible = ref(false)
+    const editorSelection = shallowRef()
 
-    // function show() {
-    //   if (visible.value) return
-    //   visible.value = true
-    // }
+    function show() {
+      if (visible.value) return
+      visible.value = true
+    }
 
-    // function hide() {
-    //   if (!visible.value) return
-    //   visible.value = false
-    // }
+    function hide() {
+      if (!visible.value) return
+      visible.value = false
+    }
 
     async function handleClick(editor: IDomEditor) {
       if (fn.isDisabled(editor)) {
@@ -105,50 +121,52 @@ export default defineComponent({
         return
       }
 
-      // show()
-      // editorSelection.value = editor.selection
-      // aliasRef.value?.focus()
-
-      fn.exec(editor)
+      show()
+      editorSelection.value = editor.selection
+      aliasRef.value?.focus()
     }
 
-    // const onSubmit = {
-    //   onSubmit: withModifiers(() => {
-    //     hide()
-    //     const editor = editorRef?.value
-    //     const aliasValue = alias.value
-    //     alias.value = ''
-    //     if (!editor) return
-    //     editor.select(editorSelection.value)
-    //     if (fn.isDisabled(editor)) return
-    //     fn.exec(editor, aliasValue)
-    //   }, ['prevent'])
-    // } as any
+    const onSubmit = {
+      onSubmit: withModifiers(() => {
+        hide()
+        const editor = editorRef?.value
+        const aliasValue = alias.value
+        alias.value = ''
+        if (!editor) return
+        editor.select(editorSelection.value)
+        if (fn.isDisabled(editor)) return
+        fn.exec(editor, aliasValue)
+      }, ['prevent'])
+    } as any
 
     return () => (
-      <EditBarButton text="别名" icon="alias" onClick={handleClick}></EditBarButton>
-      // <ElPopover
-      //   ref={popover}
-      //   v-model:visible={visible.value}
-      //   trigger="contextmenu"
-      //   placement="right-end"
-      //   hideAfter={0}
-      //   width={200}
-      // >
-      //   {{
-      //     reference: () => (
-      //       <EditBarButton text="别名" icon="alias" onClick={handleClick}></EditBarButton>
-      //     ),
-      //     default: () => (
-      //       <ElForm {...onSubmit} class="flex flex-row">
-      //         <ElInput ref={aliasRef} v-model={alias.value}></ElInput>
-      //         <button type="submit" class="btn btn-plain">
-      //           确认
-      //         </button>
-      //       </ElForm>
-      //     )
-      //   }}
-      // </ElPopover>
+      <ElPopover
+        ref={popover}
+        v-model:visible={visible.value}
+        trigger="contextmenu"
+        placement="right-end"
+        hideAfter={0}
+        width={200}
+      >
+        {{
+          reference: () => (
+            <EditBarButton text="别名" icon="alias" onClick={handleClick}></EditBarButton>
+          ),
+          default: () => (
+            <ElForm {...onSubmit} class="flex flex-row">
+              <ElInput ref={aliasRef} v-model={alias.value}>
+                {{
+                  append: () => (
+                    <ElIcon>
+                      <Promotion></Promotion>
+                    </ElIcon>
+                  )
+                }}
+              </ElInput>
+            </ElForm>
+          )
+        }}
+      </ElPopover>
     )
   }
 })

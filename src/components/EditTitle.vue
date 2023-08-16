@@ -28,7 +28,7 @@ const handleGenSSML = () => {
 <template>
   <div class="edit-title">
     <div class="title-wrapper">
-      <div class="title-author">测试配音</div>
+      <div class="title-author">SSML编辑器</div>
       <div class="h h-1"></div>
       <div class="author">
         <!-- <div>已保存</div>
@@ -37,13 +37,13 @@ const handleGenSSML = () => {
       </div>
     </div>
     <div class="operation-wrapper">
-      <ElButton type="primary" :icon="Share">分享</ElButton>
+      <ElButton type="primary" :icon="Share" disabled>分享</ElButton>
       <div class="menu-divider"></div>
       <ElButton type="primary" @click="handleGenSSML">配音</ElButton>
-      <ElButton>下载音频</ElButton>
-      <ElButton>下载视频</ElButton>
-      <ElButton>下载字幕</ElButton>
-      <ElButton>声音转换</ElButton>
+      <ElButton disabled>下载音频</ElButton>
+      <ElButton disabled>下载视频</ElButton>
+      <ElButton disabled>下载字幕</ElButton>
+      <ElButton disabled>声音转换</ElButton>
       <div class="w w-2"></div>
     </div>
   </div>

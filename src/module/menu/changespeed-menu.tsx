@@ -62,6 +62,7 @@ class SpeakerFn {
       event.preventDefault()
 
       SlateTransforms.unwrapNodes(editor, {
+        at: [0],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-prosody')) return false

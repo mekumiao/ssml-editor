@@ -20,7 +20,7 @@ function w(elem: SlateElement, childrenHtml: string): string {
 
 function p(elem: SlateElement, childrenHtml: string): string {
   const { word, phoneme } = elem as P
-  return `<p alphabet="py" ph="${phoneme}">${word}</p>`
+  return `<p ph="${phoneme}">${word}</p>`
 }
 
 function sayAs(elem: SlateElement, childrenHtml: string): string {
@@ -34,8 +34,8 @@ function break2(elem: SlateElement, childrenHtml: string): string {
 }
 
 function sub(elem: SlateElement, childrenHtml: string) {
-  const { value } = elem as Sub
-  return `<sub alias="${childrenHtml}">${value}</sub>`
+  const { alias, value } = elem as Sub
+  return `<sub alias="${alias}">${value}</sub>`
 }
 
 function prosody(elem: SlateElement, childrenHtml: string) {

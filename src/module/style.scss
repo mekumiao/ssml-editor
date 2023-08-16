@@ -15,6 +15,10 @@
   $bgm: #3547ed;
 
   display: inline-block;
+  box-sizing: border-box;
+  border: 0px;
+  // margin: 0px 2px;
+  // padding: 0px 2px;
 
   .bg-color,
   .ft-color {

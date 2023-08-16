@@ -85,8 +85,6 @@ class SpeakerFn {
         at: SlateEditor.end(editor, preNodeEntity[1])
       })
       SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
-
-      // $body.off('click', domId, handler)
     })
 
     $body.on('click', domId, handler)
