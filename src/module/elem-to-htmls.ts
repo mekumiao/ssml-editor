@@ -13,9 +13,9 @@ function paragraph(elem: SlateElement, childrenHtml: string) {
 }
 
 function w(elem: SlateElement, childrenHtml: string): string {
-  const { phoneme } = elem as W
+  const { phoneme, value } = elem as W
 
-  return phoneme ? `<w phoneme="${phoneme}">${childrenHtml}</w>` : `<w>${childrenHtml}</w>`
+  return phoneme ? `<w phoneme="${phoneme}">${value}</w>` : `<w>${childrenHtml}</w>`
 }
 
 function p(elem: SlateElement, childrenHtml: string): string {

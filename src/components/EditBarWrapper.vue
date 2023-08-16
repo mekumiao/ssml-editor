@@ -7,7 +7,8 @@ import {
   DigitalMenu,
   AliasMenu,
   EnglishMenu,
-  ChangespeedMenu
+  ChangespeedMenu,
+  RhythmMenu
 } from '@/module/menu'
 </script>
 
@@ -33,7 +34,7 @@ import {
     </div>
     <div class="divider divider-orange"></div>
     <div class="tool-list">
-      <EditBarButton text="停顿调节" icon="rhythm" disabled></EditBarButton>
+      <RhythmMenu></RhythmMenu>
       <EditBarButton text="插入静音" icon="mute" disabled></EditBarButton>
       <EditBarButton text="符号静音" icon="symbol" disabled></EditBarButton>
       <!-- <EditBarButton text="段落静音" icon="icon-play" disabled></EditBarButton>

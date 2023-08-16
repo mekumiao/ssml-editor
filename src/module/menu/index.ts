@@ -5,6 +5,7 @@ import DigitalMenu from './digital-menu'
 import AliasMenu from './alias-menu'
 import EnglishMenu from './english-menu'
 import ChangespeedMenu from './changespeed-menu'
+import RhythmMenu from './rhythm-menu'
 import './style.scss'
 
 export {
@@ -14,5 +15,6 @@ export {
   DigitalMenu,
   AliasMenu,
   EnglishMenu,
-  ChangespeedMenu
+  ChangespeedMenu,
+  RhythmMenu
 }

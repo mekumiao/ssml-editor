@@ -55,6 +55,10 @@
       background-color: $changespeed;
       color: $changespeed;
     }
+    &.rhythm {
+      background-color: $rhythm;
+      color: $rhythm;
+    }
   }
 
   .bg-color:not(.ft-color) {
