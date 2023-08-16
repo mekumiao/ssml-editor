@@ -97,14 +97,14 @@ function fetchSpeaker(hanzi: string): Promise<IdText[]> {
   return Promise.resolve(
     {
       我: [
-        { id: '1', text: 'wo1', remark: '' },
-        { id: '2', text: 'wo2', remark: '' },
-        { id: '3', text: 'wo3', remark: '' }
+        { id: '1', text: 'wo1', remark: 'wo1' },
+        { id: '2', text: 'wo2', remark: 'wo2' },
+        { id: '3', text: 'wo3', remark: 'wo3' }
       ],
       的: [
-        { id: '1', text: 'de1', remark: '' },
-        { id: '2', text: 'de2', remark: '' },
-        { id: '3', text: 'de3', remark: '' }
+        { id: '1', text: 'de1', remark: 'de1' },
+        { id: '2', text: 'de2', remark: 'de2' },
+        { id: '3', text: 'de3', remark: 'de3' }
       ]
     }[hanzi] || []
   )
@@ -175,7 +175,7 @@ export default defineComponent({
                 return (
                   <div
                     key={id}
-                    class={['btn', 'radius', 'ssml-menu', 'item']}
+                    class="btn full"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
                         fn.exec(editorRef?.value, text)

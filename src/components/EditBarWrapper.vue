@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import EditBarButton from './EditBarButton.vue'
-import { SpeakerMenu, ContinuousMenu, ReadMenu, DigitalMenu } from '@/module/menu'
+import { SpeakerMenu, ContinuousMenu, ReadMenu, DigitalMenu, AliasMenu } from '@/module/menu'
 </script>
 
 <template>
@@ -14,7 +14,7 @@ import { SpeakerMenu, ContinuousMenu, ReadMenu, DigitalMenu } from '@/module/men
       <ReadMenu></ReadMenu>
       <DigitalMenu></DigitalMenu>
       <ContinuousMenu></ContinuousMenu>
-      <EditBarButton text="别名" icon="alias" disabled></EditBarButton>
+      <AliasMenu></AliasMenu>
       <EditBarButton text="音标" icon="english" disabled></EditBarButton>
     </div>
     <div class="divider divider-cyan"></div>

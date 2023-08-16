@@ -37,6 +37,10 @@
       background-color: $continuous;
       color: $continuous;
     }
+    &.alias {
+      background-color: $alias;
+      color: $alias;
+    }
   }
 
   .bg-color:not(.ft-color) {
@@ -58,7 +62,7 @@
       opacity: 0.6;
     }
 
-    .btn-close {
+    .btn-text {
       display: inline-block;
       padding-left: 4px;
     }

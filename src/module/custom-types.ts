@@ -40,3 +40,11 @@ export interface P extends BaseElement {
   phoneme: string
   bgColor: string
 }
+
+export interface Sub extends BaseElement {
+  type: 'ssml-sub'
+  domId: string
+  remark: string
+  value: string
+  bgColor: string
+}

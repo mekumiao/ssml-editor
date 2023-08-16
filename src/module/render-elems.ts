@@ -1,6 +1,6 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement } from '@wangeditor/editor'
-import type { P, W, SayAs, Break } from './custom-types'
+import type { P, W, SayAs, Break, Sub } from './custom-types'
 
 const noSelectStyle = { style: { userSelect: 'none' }, contentEditable: false }
 
@@ -10,7 +10,7 @@ function renderP(elem: SlateElement): VNode {
   return h('span.ssml-wrap', { ...noSelectStyle }, [
     h(`span.tag.bg-color.${bgColor}`, [
       h('span.tag-remark', { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`),
     h('span', word),
@@ -24,7 +24,7 @@ function renderW(elem: SlateElement, children: VNode[] | null): VNode {
   return h('span.ssml-wrap', !children ? { ...noSelectStyle } : {}, [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
     h('span', children || value),
@@ -38,7 +38,7 @@ function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode {
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
     h('span', children),
@@ -52,8 +52,32 @@ function renderBreak(elem: SlateElement): VNode {
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-close`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ])
+  ])
+}
+
+function renderSub(elem: SlateElement, children: VNode[] | null): VNode {
+  const { domId, remark, bgColor, value } = elem as Sub
+
+  return h('span.ssml-wrap', [
+    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
+      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
+    ]),
+    h(`span.tag-remark.ft-color.${bgColor}`, {
+      ...noSelectStyle,
+      attrs: { 'data-tag-remark': '<' }
+    }),
+    h('span', children),
+
+    h(`span.tag-remark.ft-color.${bgColor}`, {
+      ...noSelectStyle,
+      attrs: { 'data-tag-remark': '>' }
+    }),
+    h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }, null),
+    h('span.tag-remark', { ...noSelectStyle, attrs: { 'data-tag-remark': value } }),
+    h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle }, null)
   ])
 }
 
@@ -73,6 +97,10 @@ export const renderElems = [
   {
     type: 'ssml-break',
     renderElem: renderBreak
+  },
+  {
+    type: 'ssml-sub',
+    renderElem: renderSub
   }
 ]
 

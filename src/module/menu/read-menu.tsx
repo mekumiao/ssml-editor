@@ -6,7 +6,9 @@ import {
   SlateEditor,
   SlateRange,
   SlateElement,
-  DomEditor
+  DomEditor,
+  SlateText,
+  SlatePath
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
@@ -62,14 +64,29 @@ export class ReadFn {
     const handler = throttle((event: Event) => {
       event.preventDefault()
 
-      SlateTransforms.unwrapNodes(editor, {
+      const [nodeEntity] = SlateEditor.nodes<W>(editor, {
         at: [0],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
           if (!DomEditor.checkNodeType(n, 'ssml-w')) return false
           return (n as W).domId === node.domId
-        }
+        },
+        universal: false
       })
+
+      console.log(nodeEntity)
+      if (nodeEntity == null) return
+
+      const preNodeEntity = SlateEditor.previous(editor, {
+        at: nodeEntity[1],
+        match: (n) => SlateText.isText(n)
+      })
+      if (preNodeEntity == null) return
+
+      SlateTransforms.insertText(editor, value, {
+        at: SlateEditor.end(editor, preNodeEntity[1])
+      })
+      SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
 
       // $body.off('click', domId, handler)
     })
@@ -127,12 +144,15 @@ export default defineComponent({
             <EditBarButton text="重音" icon="read" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
-            <div class={['flex', 'flex-col']}>
+            <div
+              class="flex flex-col"
+              onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
+            >
               {readList.map(({ id, text, remark }) => {
                 return (
                   <div
                     key={id}
-                    class={['btn', 'radius', 'ssml-menu', 'item']}
+                    class="btn full"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
                         fn.exec(editorRef?.value, { id, text, remark })
