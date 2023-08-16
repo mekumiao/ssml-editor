@@ -1,41 +1,58 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import type { SlateElement } from '@wangeditor/editor'
-import type { Speaker, Read } from './custom-types'
+import type { P, W, SayAs, Break } from './custom-types'
 
-function paragraphToHtml(elem: SlateElement, childrenHtml: string) {
+function insertBreak(childrenHtml: string): string {
+  const _break = break2({ time: '300ms' } as any, '')
+  return childrenHtml.replaceAll(/[,.，。]/gi, (substring) => substring + _break)
+}
+
+function paragraph(elem: SlateElement, childrenHtml: string) {
+  // return `<s>${insertBreak(childrenHtml)}</s>`
   return `<s>${childrenHtml}</s>`
 }
 
-function continuousToHtml(elem: SlateElement, childrenHtml: string): string {
-  return `<w>${childrenHtml}</w>`
+function w(elem: SlateElement, childrenHtml: string): string {
+  const { phoneme } = elem as W
+
+  return phoneme ? `<w phoneme="${phoneme}">${childrenHtml}</w>` : `<w>${childrenHtml}</w>`
 }
 
-function speakerToHtml(elem: SlateElement, childrenHtml: string): string {
-  const { pinyin, character } = elem as Speaker
-  return `<phoneme alphabet="py" ph="${pinyin}">${character}</phoneme>`
+function p(elem: SlateElement, childrenHtml: string): string {
+  const { word, phoneme } = elem as P
+  return `<p alphabet="py" ph="${phoneme}">${word}</p>`
 }
 
-function renderReadToHtml(elem: SlateElement, childrenHtml: string): string {
-  const { inId } = elem as Read
-  return `<say-as interpret-as="${inId}">${childrenHtml}</say-as>`
+function sayAs(elem: SlateElement, childrenHtml: string): string {
+  const { interpretAs } = elem as SayAs
+  return `<say-as interpret-as="${interpretAs}">${childrenHtml}</say-as>`
+}
+
+function break2(elem: SlateElement, childrenHtml: string): string {
+  const { time } = elem as Break
+  return `<break time="${time}" />`
 }
 
 export const elemToHtmls = [
   {
     type: 'paragraph',
-    elemToHtml: paragraphToHtml
+    elemToHtml: paragraph
   },
   {
-    type: 'read',
-    elemToHtml: renderReadToHtml
+    type: 'ssml-w',
+    elemToHtml: w
   },
   {
-    type: 'speaker',
-    elemToHtml: speakerToHtml
+    type: 'ssml-p',
+    elemToHtml: p
   },
   {
-    type: 'continuous',
-    elemToHtml: continuousToHtml
+    type: 'ssml-say-as',
+    elemToHtml: sayAs
+  },
+  {
+    type: 'ssml-break',
+    elemToHtml: break2
   }
 ]
 

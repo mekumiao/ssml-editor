@@ -16,40 +16,35 @@
 
   display: inline-block;
 
-  .bg-color {
-    &.speaker {
-      background-color: $speaker;
-    }
-
-    &.read {
-      background-color: $read;
-    }
-
-    &.digits {
-      background-color: $digits;
-    }
-
-    &.continuous {
-      background-color: $continuous;
-    }
-  }
-
+  .bg-color,
   .ft-color {
     &.speaker {
+      background-color: $speaker;
       color: $speaker;
     }
 
     &.read {
+      background-color: $read;
       color: $read;
     }
 
     &.digits {
+      background-color: $digits;
       color: $digits;
     }
 
     &.continuous {
+      background-color: $continuous;
       color: $continuous;
     }
+  }
+
+  .bg-color:not(.ft-color) {
+    color: white;
+  }
+
+  .ft-color:not(.bg-color) {
+    background-color: transparent;
   }
 
   .tag {

@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/core'
-import type { Continuous, IdText, Read } from '../custom-types'
+import type { W, IdText } from '../custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -43,12 +43,13 @@ export class ReadFn {
     const value = this.getValue(editor)
     if (value == null) return
 
-    const node: Read = {
-      type: 'read',
+    const node: W = {
+      type: 'ssml-w',
       domId: genDomID(),
-      inId: idtext.id,
-      inText: idtext.text,
-      inRemark: idtext.remark,
+      phoneme: idtext.id,
+      remark: idtext.remark,
+      value: value,
+      bgColor: 'read',
       children: [{ text: value }]
     }
 
@@ -65,8 +66,8 @@ export class ReadFn {
         at: [0],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'read')) return false
-          return (n as Continuous).domId === node.domId
+          if (!DomEditor.checkNodeType(n, 'ssml-w')) return false
+          return (n as W).domId === node.domId
         }
       })
 

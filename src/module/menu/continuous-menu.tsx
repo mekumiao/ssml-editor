@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/core'
-import type { Continuous } from '../custom-types'
+import type { W } from '../custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -44,10 +44,12 @@ export class ContinuousFn {
     const value = this.getValue(editor)
     if (value == null) return
 
-    const node: Continuous = {
-      type: 'continuous',
+    const node: W = {
+      type: 'ssml-w',
       domId: genDomID(),
-      children: [{ text: value }]
+      children: [{ text: value }],
+      remark: '连读',
+      bgColor: 'continuous'
     }
 
     SlateTransforms.delete(editor)
@@ -63,8 +65,8 @@ export class ContinuousFn {
         at: [0],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'continuous')) return false
-          return (n as Continuous).domId === node.domId
+          if (!DomEditor.checkNodeType(n, 'ssml-w')) return false
+          return (n as W).domId === node.domId
         }
       })
 

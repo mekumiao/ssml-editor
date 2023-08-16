@@ -6,31 +6,37 @@ type EmptyText = {
 
 export type IdText = { id: string; text: string; remark: string }
 
-export interface Speaker extends BaseElement {
-  type: 'speaker'
+export interface SayAs extends BaseElement {
+  type: 'ssml-say-as'
   domId: string
-  character: string
-  pinyin: string
+  remark: string
+  interpretAs: string
+  bgColor: string
+}
+
+export interface Break extends BaseElement {
+  type: 'ssml-break'
+  domId: string
+  remark: string
+  time: string
   children: EmptyText[]
+  bgColor: string
 }
 
-export interface Continuous extends BaseElement {
-  type: 'continuous'
+export interface W extends BaseElement {
+  type: 'ssml-w'
   domId: string
+  remark: string
+  phoneme?: string
+  value?: string
+  bgColor: string
 }
 
-export interface Read extends BaseElement {
-  type: 'read'
+export interface P extends BaseElement {
+  type: 'ssml-p'
   domId: string
-  inId: string
-  inText: string
-  inRemark: string
-}
-
-export interface Digital extends BaseElement {
-  type: 'digital'
-  domId: string
-  inId: string
-  inText: string
-  inRemark: string
+  remark: string
+  word: string
+  phoneme: string
+  bgColor: string
 }
