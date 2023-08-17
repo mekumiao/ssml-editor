@@ -4,6 +4,74 @@
 
 ## 开始
 
+### 一、环境
+
+```sh
+npm install -g yalc
+
+npm install -g pnpm
+```
+
+### 二、开始
+
+1.克隆项目
+
+```sh
+git clone https://gogs.sdaxia.top/mekumiao/ssml-editor.git
+
+git clone https://gogs.sdaxia.top/mekumiao/wangEditor-for-vue3.git
+```
+
+2.编译项目
+
+```sh
+# wangEditor-for-vue3
+yarn && yarn build && yalc publish
+
+# ssml-editor
+yalc update && pnpm i && pnpm build && yalc publish
+
+# 到此项目便成功发布到本地
+```
+
+3.创建自己的`vue3`项目
+
+安装依赖
+
+```sh
+# 使用此命令创建项目时依次选择 vue3 > typescript
+pnpm vite create
+
+# 安装ssml-editor及依赖
+yalc add ssml-editor @wangeditor/editor-for-vue
+
+pnpm i @wangeditor/editor element-plus xml-formatter
+```
+
+导入包
+
+```ts
+//src/main.ts
+
+import { createApp } from 'vue'
+import App from './App.vue'
+
+import 'element-plus/dist/index.css'
+import '@wangeditor/editor/dist/css/style.css'
+import 'vue-vite-plugin-temp/dist/style.css'
+
+import { Boot } from '@wangeditor/editor'
+import { SSMLModule, EditorMenuPlugin } from 'vue-vite-plugin-temp'
+
+Boot.registerModule(SSMLModule)
+
+const app = createApp(App)
+
+app.use(EditorMenuPlugin)
+
+app.mount('#app')
+```
+
 ## 参考
 
 1. [阿里TTS](https://ai.aliyun.com/nls/tts)
