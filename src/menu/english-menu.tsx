@@ -1,17 +1,7 @@
-import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/editor'
 import type { IdText, P } from '../core/custom-types'
-import {
-  SlateTransforms,
-  SlateEditor,
-  SlateRange,
-  SlateElement,
-  DomEditor,
-  SlatePath,
-  SlateText
-} from '@wangeditor/editor'
+import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import $ from '@/utils/dom'
 import {
   defineComponent,
   inject,
@@ -22,9 +12,10 @@ import {
 } from 'vue'
 import EditBarButton from './EditBarButton.vue'
 import { selectionTrimEnd } from '../core/helper'
+import { bindClose, unpackVoid } from './helper'
 
 function genDomID(): string {
-  return genRandomStr('w-e-insert-english')
+  return genRandomStr('w-e-dom-english')
 }
 
 class EnglishEn {
@@ -68,35 +59,9 @@ class EnglishEn {
     SlateTransforms.insertNodes(editor, node)
     editor.move(1)
 
-    const $body = $('body')
-    const domId = `#${node.domId}`
-
-    const handler = throttle((event: Event) => {
-      event.preventDefault()
-
-      const [nodeEntity] = SlateEditor.nodes<P>(editor, {
-        at: [],
-        match: (n) => {
-          if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'ssml-p')) return false
-          return (n as P).domId === node.domId
-        }
-      })
-      if (nodeEntity == null) return
-
-      const preNodeEntity = SlateEditor.previous(editor, {
-        at: nodeEntity[1],
-        match: (n) => SlateText.isText(n)
-      })
-      if (preNodeEntity == null) return
-
-      SlateTransforms.insertText(editor, nodeEntity[0].word, {
-        at: SlateEditor.end(editor, preNodeEntity[1])
-      })
-      SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
-    })
-
-    $body.on('click', domId, handler)
+    bindClose<P>(editor, 'ssml-p', node.domId, (nodeEntity) =>
+      unpackVoid(editor, nodeEntity, (elem) => elem.word)
+    )
   }
 }
 

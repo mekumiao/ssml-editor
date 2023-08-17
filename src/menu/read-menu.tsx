@@ -1,17 +1,7 @@
-import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/editor'
 import type { W, IdText } from '../core/custom-types'
-import {
-  SlateTransforms,
-  SlateEditor,
-  SlateRange,
-  SlateElement,
-  DomEditor,
-  SlateText,
-  SlatePath
-} from '@wangeditor/editor'
+import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import $ from '@/utils/dom'
 import {
   defineComponent,
   inject,
@@ -21,9 +11,10 @@ import {
   resolveDynamicComponent
 } from 'vue'
 import EditBarButton from './EditBarButton.vue'
+import { bindClose, unpackVoid } from './helper'
 
 function genDomID(): string {
-  return genRandomStr('w-e-insert-read')
+  return genRandomStr('w-e-dom-read')
 }
 
 export class ReadFn {
@@ -64,39 +55,9 @@ export class ReadFn {
     SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
 
-    const $body = $('body')
-    const domId = `#${node.domId}`
-
-    const handler = throttle((event: Event) => {
-      event.preventDefault()
-
-      const [nodeEntity] = SlateEditor.nodes<W>(editor, {
-        at: [],
-        match: (n) => {
-          if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'ssml-w')) return false
-          return (n as W).domId === node.domId
-        },
-        universal: false
-      })
-
-      if (nodeEntity == null) return
-
-      const preNodeEntity = SlateEditor.previous(editor, {
-        at: nodeEntity[1],
-        match: (n) => SlateText.isText(n)
-      })
-      if (preNodeEntity == null) return
-
-      SlateTransforms.insertText(editor, value, {
-        at: SlateEditor.end(editor, preNodeEntity[1])
-      })
-      SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
-
-      // $body.off('click', domId, handler)
-    })
-
-    $body.on('click', domId, handler)
+    bindClose<W>(editor, 'ssml-w', node.domId, (nodeEntity) =>
+      unpackVoid(editor, nodeEntity, () => value)
+    )
   }
 }
 

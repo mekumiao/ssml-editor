@@ -1,15 +1,14 @@
 import type { SlateElement } from '@wangeditor/editor'
-import type { P, W, SayAs, Break, Sub, Prosody } from './custom-types'
+import type { P, W, SayAs, Break, Sub, Prosody, SSMLElementType } from './custom-types'
 
 function insertBreak(childrenHtml: string): string {
-  const _break = break2({ time: '300ms' } as any, '')
-
-  return childrenHtml.replaceAll(/[,.，。]/gi, (substring) => substring + _break)
+  // const _break = break2({ time: '300ms' } as any, '')
+  // return childrenHtml.replaceAll(/[,.，。]/gi, (substring) => substring + _break)
+  return childrenHtml
 }
 
-function paragraph(elem: SlateElement, childrenHtml: string) {
-  // return `<s>${insertBreak(childrenHtml)}</s>`
-  return `<s>${childrenHtml}</s>`
+function paragraph(_elem: SlateElement, childrenHtml: string) {
+  return `<s>${insertBreak(childrenHtml)}</s>`
 }
 
 function w(elem: SlateElement, childrenHtml: string): string {
@@ -18,7 +17,7 @@ function w(elem: SlateElement, childrenHtml: string): string {
   return phoneme ? `<w phoneme="${phoneme}">${value}</w>` : `<w>${childrenHtml}</w>`
 }
 
-function p(elem: SlateElement, childrenHtml: string): string {
+function p(elem: SlateElement): string {
   const { word, phoneme } = elem as P
   return `<p ph="${phoneme}">${word}</p>`
 }
@@ -28,12 +27,12 @@ function sayAs(elem: SlateElement, childrenHtml: string): string {
   return `<say-as interpret-as="${interpretAs}">${childrenHtml}</say-as>`
 }
 
-function break2(elem: SlateElement, childrenHtml: string): string {
+function break2(elem: SlateElement): string {
   const { time } = elem as Break
   return `<break time="${time}" />`
 }
 
-function sub(elem: SlateElement, childrenHtml: string) {
+function sub(elem: SlateElement) {
   const { alias, value } = elem as Sub
   return `<sub alias="${alias}">${value}</sub>`
 }
@@ -43,7 +42,10 @@ function prosody(elem: SlateElement, childrenHtml: string) {
   return `<prosody rate="${rate}">${childrenHtml}</prosody>`
 }
 
-export const elemToHtmls = [
+export const elemToHtmls: {
+  type: SSMLElementType
+  elemToHtml: (elem: SlateElement, childrenHtml: string) => string
+}[] = [
   {
     type: 'paragraph',
     elemToHtml: paragraph

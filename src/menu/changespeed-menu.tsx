@@ -1,15 +1,7 @@
-import throttle from 'lodash.throttle'
 import { type IDomEditor } from '@wangeditor/editor'
 import type { IdText, P, Prosody } from '../core/custom-types'
-import {
-  SlateTransforms,
-  SlateEditor,
-  SlateRange,
-  SlateElement,
-  DomEditor
-} from '@wangeditor/editor'
+import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import $ from '@/utils/dom'
 import {
   defineComponent,
   inject,
@@ -19,9 +11,10 @@ import {
   resolveDynamicComponent
 } from 'vue'
 import EditBarButton from './EditBarButton.vue'
+import { bindClose } from './helper'
 
 function genDomID(): string {
-  return genRandomStr('w-e-insert-changespeed')
+  return genRandomStr('w-e-dom-changespeed')
 }
 
 class SpeakerFn {
@@ -61,23 +54,9 @@ class SpeakerFn {
     SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
 
-    const $body = $('body')
-    const domId = `#${node.domId}`
-
-    const handler = throttle((event: Event) => {
-      event.preventDefault()
-
-      SlateTransforms.unwrapNodes(editor, {
-        at: [],
-        match: (n) => {
-          if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'ssml-prosody')) return false
-          return (n as P).domId === node.domId
-        }
-      })
+    bindClose<P>(editor, 'ssml-prosody', node.domId, (nodeEntity) => {
+      SlateTransforms.unwrapNodes(editor, { at: nodeEntity[1] })
     })
-
-    $body.on('click', domId, handler)
   }
 }
 

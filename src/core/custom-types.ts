@@ -6,15 +6,23 @@ type EmptyText = {
 
 export type IdText = { id: string; text: string; remark: string }
 
-export interface SayAs extends SlateElement {
-  type: 'ssml-say-as'
+type UnionTypesMap<T extends { type: string }> = T extends any ? T['type'] : never
+
+export type SSMLElementType = UnionTypesMap<SayAs | Break | W | P | Sub | Prosody> | 'paragraph'
+
+export interface SSMLBaseElement extends SlateElement {
+  type: SSMLElementType
   domId: string
   remark: string
-  interpretAs: string
   bgColor: string
 }
 
-export interface Break extends SlateElement {
+export interface SayAs extends SSMLBaseElement {
+  type: 'ssml-say-as'
+  interpretAs: string
+}
+
+export interface Break extends SSMLBaseElement {
   type: 'ssml-break'
   domId: string
   remark: string
@@ -23,37 +31,25 @@ export interface Break extends SlateElement {
   bgColor: string
 }
 
-export interface W extends SlateElement {
+export interface W extends SSMLBaseElement {
   type: 'ssml-w'
-  domId: string
-  remark: string
   phoneme?: string
   value?: string
-  bgColor: string
 }
 
-export interface P extends SlateElement {
+export interface P extends SSMLBaseElement {
   type: 'ssml-p'
-  domId: string
-  remark: string
   word: string
   phoneme: string
-  bgColor: string
 }
 
-export interface Sub extends SlateElement {
+export interface Sub extends SSMLBaseElement {
   type: 'ssml-sub'
-  domId: string
-  remark: string
   alias: string
   value: string
-  bgColor: string
 }
 
-export interface Prosody extends SlateElement {
+export interface Prosody extends SSMLBaseElement {
   type: 'ssml-prosody'
-  domId: string
-  remark: string
   rate: string
-  bgColor: string
 }

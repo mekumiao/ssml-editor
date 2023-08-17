@@ -53,18 +53,18 @@ function fetchEnglish(word: string): Promise<IdText[]> {
       <ReadMenu :popover="ElPopover" @error="handleError"></ReadMenu>
       <DigitalMenu :popover="ElPopover" @error="handleError"></DigitalMenu>
       <ContinuousMenu @error="handleError"></ContinuousMenu>
-      <AliasMenu :popover="ElPopover" :input="EditInput"></AliasMenu>
-      <EnglishMenu :popover="ElPopover" :fetch="fetchEnglish"></EnglishMenu>
+      <AliasMenu :popover="ElPopover" :input="EditInput" @error="handleError"></AliasMenu>
+      <EnglishMenu :popover="ElPopover" :fetch="fetchEnglish" @error="handleError"></EnglishMenu>
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">
-      <ChangespeedMenu :popover="ElPopover"></ChangespeedMenu>
+      <ChangespeedMenu :popover="ElPopover" @error="handleError"></ChangespeedMenu>
       <EditBarButton text="多人配音" icon="management" disabled></EditBarButton>
       <EditBarButton text="局部变音" icon="conversion" disabled></EditBarButton>
     </div>
     <div class="divider divider-orange"></div>
     <div class="tool-list">
-      <RhythmMenu :popover="ElPopover"></RhythmMenu>
+      <RhythmMenu :popover="ElPopover" @error="handleError"></RhythmMenu>
       <EditBarButton text="插入静音" icon="mute" disabled></EditBarButton>
       <EditBarButton text="符号静音" icon="symbol" disabled></EditBarButton>
       <!-- <EditBarButton text="段落静音" icon="icon-play" disabled></EditBarButton>

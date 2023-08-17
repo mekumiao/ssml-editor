@@ -1,6 +1,6 @@
 import { h, type VNode } from 'snabbdom'
-import { SlateElement } from '@wangeditor/editor'
-import type { P, W, SayAs, Break, Sub, Prosody } from './custom-types'
+import { SlateElement, type IDomEditor } from '@wangeditor/editor'
+import type { P, W, SayAs, Break, Sub, Prosody, SSMLElementType } from './custom-types'
 
 const noSelectStyle = { style: { userSelect: 'none' }, contentEditable: false }
 
@@ -104,7 +104,10 @@ function renderProsody(elem: SlateElement, children: VNode[] | null): VNode {
   ])
 }
 
-export const renderElems = [
+export const renderElems: {
+  type: SSMLElementType
+  renderElem: (elem: SlateElement, children: VNode[] | null, editor: IDomEditor) => VNode
+}[] = [
   {
     type: 'ssml-p',
     renderElem: renderP

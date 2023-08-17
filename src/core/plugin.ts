@@ -1,5 +1,9 @@
 import { DomEditor, type IDomEditor } from '@wangeditor/editor'
-import type { W } from './custom-types'
+import type { SSMLElementType, W } from './custom-types'
+
+function isType(type: string, dest: SSMLElementType) {
+  return type === dest
+}
 
 function withSSML<T extends IDomEditor>(editor: T) {
   const { isInline, isVoid, deleteBackward, deleteForward, insertBreak } = editor
@@ -8,12 +12,12 @@ function withSSML<T extends IDomEditor>(editor: T) {
   newEditor.isInline = (elem) => {
     const type = DomEditor.getNodeType(elem)
 
-    if (type === 'ssml-w') return true
-    if (type === 'ssml-p') return true
-    if (type === 'ssml-break') return true
-    if (type === 'ssml-say-as') return true
-    if (type === 'ssml-sub') return true
-    if (type === 'ssml-prosody') return true
+    if (isType(type, 'ssml-w')) return true
+    if (isType(type, 'ssml-p')) return true
+    if (isType(type, 'ssml-break')) return true
+    if (isType(type, 'ssml-say-as')) return true
+    if (isType(type, 'ssml-sub')) return true
+    if (isType(type, 'ssml-prosody')) return true
 
     return isInline(elem)
   }
@@ -21,15 +25,15 @@ function withSSML<T extends IDomEditor>(editor: T) {
   newEditor.isVoid = (elem) => {
     const type = DomEditor.getNodeType(elem)
 
-    if (type === 'ssml-w') {
+    if (isType(type, 'ssml-w')) {
       const { phoneme } = elem as W
       return !!phoneme
     }
-    if (type === 'ssml-p') return true
-    if (type === 'ssml-break') return true
-    if (type === 'ssml-say-as') return false
-    if (type === 'ssml-sub') return true
-    if (type === 'ssml-prosody') return false
+    if (isType(type, 'ssml-p')) return true
+    if (isType(type, 'ssml-break')) return true
+    if (isType(type, 'ssml-say-as')) return false
+    if (isType(type, 'ssml-sub')) return true
+    if (isType(type, 'ssml-prosody')) return false
 
     return isVoid(elem)
   }
