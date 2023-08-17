@@ -58,10 +58,10 @@ import App from './App.vue'
 
 import 'element-plus/dist/index.css'
 import '@wangeditor/editor/dist/css/style.css'
-import 'vue-vite-plugin-temp/dist/style.css'
+import 'ssml-editor/dist/style.css'
 
 import { Boot } from '@wangeditor/editor'
-import { SSMLModule, EditorMenuPlugin } from 'vue-vite-plugin-temp'
+import { SSMLModule, EditorMenuPlugin } from 'ssml-editor'
 
 Boot.registerModule(SSMLModule)
 
