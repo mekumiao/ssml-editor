@@ -1,29 +1,35 @@
 import throttle from 'lodash.throttle'
-import { type IDomEditor } from '@wangeditor/core'
-import type { W, IdText } from '../custom-types'
+import { type IDomEditor } from '@wangeditor/editor'
+import type { IdText, P } from '../core/custom-types'
 import {
   SlateTransforms,
   SlateEditor,
   SlateRange,
   SlateElement,
   DomEditor,
-  SlateText,
-  SlatePath
+  SlatePath,
+  SlateText
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
-import EditBarButton from '@/components/EditBarButton.vue'
-import { ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
+import {
+  defineComponent,
+  inject,
+  ref,
+  withModifiers,
+  type ShallowRef,
+  resolveDynamicComponent
+} from 'vue'
+import EditBarButton from './EditBarButton.vue'
 
 function genDomID(): string {
-  return genRandomStr('w-e-insert-read')
+  return genRandomStr('w-e-insert-speaker')
 }
 
-export class ReadFn {
+class SpeakerFn {
   getValue(editor: IDomEditor): string | null {
     const { selection } = editor
-    if (selection == null) return ''
+    if (selection == null) return null
     return SlateEditor.string(editor, selection)
   }
 
@@ -33,30 +39,33 @@ export class ReadFn {
     if (SlateRange.isCollapsed(selection)) return true
 
     const value = SlateEditor.string(editor, selection)
-    if (value.length <= 0) return true
+    if (value.length != 1) return true
+
+    if (!/^[\u4E00-\u9FA5]+$/gi.test(value)) return true
 
     return false
   }
 
-  exec(editor: IDomEditor, idtext: IdText) {
+  exec(editor: IDomEditor, pinyin: string) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
     const value = this.getValue(editor)
     if (value == null) return
 
-    const node: W = {
-      type: 'ssml-w',
+    const node: P = {
+      type: 'ssml-p',
       domId: genDomID(),
-      phoneme: idtext.id,
-      remark: idtext.remark,
-      value: value,
-      bgColor: 'read',
-      children: [{ text: value }]
+      word: value,
+      phoneme: pinyin,
+      remark: pinyin,
+      bgColor: 'speaker',
+      children: [{ text: '' }]
     }
 
     SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
+    editor.move(1)
 
     const $body = $('body')
     const domId = `#${node.domId}`
@@ -64,16 +73,14 @@ export class ReadFn {
     const handler = throttle((event: Event) => {
       event.preventDefault()
 
-      const [nodeEntity] = SlateEditor.nodes<W>(editor, {
+      const [nodeEntity] = SlateEditor.nodes<P>(editor, {
         at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'ssml-w')) return false
-          return (n as W).domId === node.domId
-        },
-        universal: false
+          if (!DomEditor.checkNodeType(n, 'ssml-p')) return false
+          return (n as P).domId === node.domId
+        }
       })
-
       if (nodeEntity == null) return
 
       const preNodeEntity = SlateEditor.previous(editor, {
@@ -82,30 +89,40 @@ export class ReadFn {
       })
       if (preNodeEntity == null) return
 
-      SlateTransforms.insertText(editor, value, {
+      SlateTransforms.insertText(editor, nodeEntity[0].word, {
         at: SlateEditor.end(editor, preNodeEntity[1])
       })
       SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
-
-      // $body.off('click', domId, handler)
     })
 
     $body.on('click', domId, handler)
   }
 }
 
-const readList: IdText[] = [
-  { id: 'z', text: '重音', remark: '重' },
-  { id: 't', text: '拖音', remark: '拖' },
-  { id: 'all', text: '重音+拖音', remark: '重+拖' }
-]
+function fetchSpeaker(hanzi: string): Promise<IdText[]> {
+  const list = {
+    我: [
+      { id: '1', text: 'wo1', remark: 'wo1' },
+      { id: '2', text: 'wo2', remark: 'wo2' },
+      { id: '3', text: 'wo3', remark: 'wo3' }
+    ],
+    的: [
+      { id: '1', text: 'de1', remark: 'de1' },
+      { id: '2', text: 'de2', remark: 'de2' },
+      { id: '3', text: 'de3', remark: 'de3' }
+    ]
+  } as Record<string, IdText[]>
+  return Promise.resolve(list[hanzi] || list['我'])
+}
 
 export default defineComponent({
-  setup() {
-    const fn = new ReadFn()
+  emits: ['error'],
+  props: ['popover', 'fetch'],
+  setup(props, { emit }) {
+    const fn = new SpeakerFn()
     const editorRef = inject<ShallowRef>('editor')
+    const pyList = ref<IdText[]>([])
     const visible = ref(false)
-    const popover = ref<PopoverInstance>()
 
     function show() {
       if (visible.value) return
@@ -117,41 +134,39 @@ export default defineComponent({
       visible.value = false
     }
 
-    function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        ElMessage.warning({
-          message: '请先选择文本',
-          grouping: true,
-          type: 'warning'
-        })
-        return
+    async function handleClick(editor: IDomEditor) {
+      const text = fn.getValue(editor)
+      if (text) {
+        pyList.value = await (props.fetch || fetchSpeaker)(text)
+      } else {
+        pyList.value = []
       }
+
+      if (fn.isDisabled(editor)) return emit('error', '选中一个中文字符，并且有不能在其他语句之内')
+
+      if (pyList.value.length == 0) return emit('error', '选中的字符没有不是多音字')
 
       show()
     }
 
+    const MyPopover = resolveDynamicComponent(props.popover) as any
+
     return () => (
-      <ElPopover
-        visible={visible.value}
-        ref={popover}
-        onUpdate:visible={(value) => (visible.value = value)}
-        trigger="contextmenu"
-        hideAfter={0}
-      >
+      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
-            <EditBarButton text="重音" icon="read" onClick={handleClick}></EditBarButton>
+            <EditBarButton text="多音字" icon="speaker" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
-            <div class="flex flex-col" onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}>
-              {readList.map(({ id, text, remark }) => {
+            <div class="flex flex-col">
+              {pyList.value.map(({ id, text }) => {
                 return (
                   <div
                     key={id}
                     class="btn full"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, { id, text, remark })
+                        fn.exec(editorRef?.value, text)
                       }
                       hide()
                     }}
@@ -164,7 +179,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </ElPopover>
+      </MyPopover>
     )
   }
 })

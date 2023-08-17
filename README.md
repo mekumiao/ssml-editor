@@ -1,128 +1,32 @@
-# ssml-editor
+# Vue 3 + TypeScript + Vite
 
-模仿[魔音工坊](https://www.moyin.com/overview/article-voice)的`ssml`编辑器
+## 踩坑记录
 
-## 开始
+### 项目中的`tsconfig.json`文件中不能添加扩展，否者会导致`build`包失败
 
-## 参考
-
-1. [阿里TTS](https://ai.aliyun.com/nls/tts)
-2. [wangEditor 5](https://www.wangeditor.com/)
-3. [slate-table](https://github.com/lqs469/slate-table.git)
-4. [wangEditor](https://github.com/wangeditor-team/wangEditor.git)
-5. [node](https://docs.slatejs.org/api/nodes/node) [transforms](https://docs.slatejs.org/api/transforms) slatejs [normalizing](https://docs.slatejs.org/concepts/11-normalizing)
-
-## 常见操作
-
-```ts
-// 从指定位置查找
-const { selection } = editor
-const [node] = SlateEditor.nodes(editor, {
-  at: location,
-  match: (n) => {
-    const type = DomEditor.getNodeType(n)
-    return type === 'table'
-  }
-})
-
-// 根据type查找node
-const cell = DomEditor.getSelectedNodeByType(newEditor, 'table-cell')
-
-// 根据node查找path
-const path = DomEditor.findPath(newEditor, cell)
-
-// 获取path位置的起点
-const start = SlateEditor.start(editor, path)
-// 获取path位置的终点
-const end = SlateEditor.end(editor, path)
-
-// 设置焦点
-editor.select(end)
-// 或者选中多个字符
-editor.select({ anchor: start, focus: end })
-
-// 渲染方法
-function renderContinuous(elem: SlateElement, children: VNode[] | null, editor: IDomEditor): VNode {
-  return createWrap('continuous', '连读', children)
+```json
+{
+  "extends": "@vue/tsconfig/tsconfig.dom.json"
+  // ...
 }
 ```
 
-## 其他代码
+猜测：可能是链接里边的属性冲突了，具体不知道是哪些属性
 
-```ts
-// import { createVNode, render } from 'vue'
-// import { ElButton } from 'element-plus'
+### 打包时推断`*d.ts`声明文件使用库`vite-plugin-dts`不能用`3.x.x`版本的，否者产物不可用
 
-// const node = document.createElement('div')
-// const vnode = createVNode(ElButton, { text: 'xxxxx' })
-// render(vnode, node)
-// console.log(node)
-// console.log(vnode)
+推荐使用`2.x.x`版本
 
-// Transforms.splitNodes(editor, { at: prePath })
+> package.json
 
-// Transforms.wrapNodes(editor, word, { at: prePath })
-// Transforms.insertNodes(editor, word, { at: prePath })
-// editor.move(1)
-
-// const [, path] = Editor.node(editor, selection)
-// const newPath = SlatePath.next(SlatePath.next(path))
-
-// console.log(Editor.node(editor, newPath))
-
-// editor.select(path)
-
-// SlatePath.parent(path)
-
-// const block = SlateEditor.above(editor, { match: (n) => SlateEditor.isBlock(editor, n) })
-// if (block == null) return
-// console.log(block)
-
-// const blockStart = SlateEditor.start(editor, block[1])
-// const blockEnd = SlateEditor.end(editor, block[1])
-// const range: SlateRange = { anchor: blockStart, focus: blockEnd }
-// const [, prePath] = Editor.node(editor, selection)
-
-// const entitys = Editor.nodes(editor, {
-//   // at: selection!,
-//   match: (n) => {
-//     console.log(DomEditor.getNodeType(n))
-//     return true
-//   },
-//   universal: false
-// })
-
-// if (entitys) {
-//   console.log('entitys', entitys)
-
-//   for (const iterator of entitys) {
-//     console.log(iterator)
-//   }
-// }
-
-// const [textNode] = Editor.nodes(editor, {
-//   match: (n) => {
-//     console.log(n)
-//     return SlateText.isText(n) && n.text == ''
-//   },
-//   universal: false,
-//   mode: 'highest'
-// })
-// console.log(textNode)
-
-// Transforms.select(editor,)
-
-// Transforms.wrapNodes(editor, word, { at: selection!, mode: 'highest' })
-
-// const [cellEntry] = Editor.nodes(editor, {
-//   match: (n) => DomEditor.checkNodeType(n, 'table-cell'),
-//   universal: true
-// })
-// const [cellNode, cellPath] = cellEntry
-
-// const tableNode = DomEditor.getSelectedNodeByType(editor, 'table')
-// if (tableNode == null) {
-//   // 选区未处于 table cell node ，则禁用
-//   return true
-// }
+```json
+{
+  "devDependencies": {
+    // **
+    "vite-plugin-dts": "^2.3.0"
+    // **
+  }
+}
 ```
+
+### 使用 `@types/node:18`版本会报错，请使用 `@types/node:20`

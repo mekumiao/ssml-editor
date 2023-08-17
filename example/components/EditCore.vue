@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import '@wangeditor/editor/dist/css/style.css'
-
 import { onBeforeUnmount, ref, shallowRef } from 'vue'
 import { Editor } from '@wangeditor/editor-for-vue'
 import { type IDomEditor, type IEditorConfig } from '@wangeditor/editor'

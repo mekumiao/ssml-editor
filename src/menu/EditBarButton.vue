@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { IDomEditor } from '@wangeditor/editor'
+import { type IDomEditor } from '@wangeditor/editor'
 import { inject, type ShallowRef } from 'vue'
 
 const emit = defineEmits<{

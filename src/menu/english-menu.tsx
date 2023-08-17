@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
-import { type IDomEditor } from '@wangeditor/core'
-import type { IdText, P } from '../custom-types'
+import { type IDomEditor } from '@wangeditor/editor'
+import type { IdText, P } from '../core/custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -12,10 +12,16 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
-import EditBarButton from '../../components/EditBarButton.vue'
-import { ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
-import { selectionTrimEnd } from '../helper'
+import {
+  defineComponent,
+  inject,
+  ref,
+  withModifiers,
+  type ShallowRef,
+  resolveDynamicComponent
+} from 'vue'
+import EditBarButton from './EditBarButton.vue'
+import { selectionTrimEnd } from '../core/helper'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-english')
@@ -103,11 +109,12 @@ function fetchEnglish(word: string): Promise<IdText[]> {
 }
 
 export default defineComponent({
-  setup() {
+  emits: ['error'],
+  props: ['popover', 'fetch'],
+  setup(props, { emit }) {
     const fn = new EnglishEn()
     const editorRef = inject<ShallowRef>('editor')
     const englishList = ref<IdText[]>([])
-    const popover = ref<PopoverInstance>()
     const visible = ref(false)
 
     function show() {
@@ -122,40 +129,22 @@ export default defineComponent({
 
     async function handleClick(editor: IDomEditor) {
       selectionTrimEnd(editor)
-      if (fn.isDisabled(editor)) {
-        ElMessage.warning({
-          message: '请选择英文单词',
-          grouping: true,
-          type: 'warning'
-        })
-        return
-      }
+      if (fn.isDisabled(editor)) return emit('error', '请选择英文单词')
 
       const text = fn.getValue(editor)
       if (text) {
-        englishList.value = await fetchEnglish(text)
+        englishList.value = await (props.fetch || fetchEnglish)(text)
 
-        if (englishList.value.length <= 0) {
-          ElMessage.warning({
-            message: '找不到单词的音标',
-            grouping: true,
-            type: 'warning'
-          })
-          return
-        }
+        if (englishList.value.length <= 0) return emit('error', '找不到单词的音标')
 
         show()
       }
     }
 
+    const MyPopover = resolveDynamicComponent(props.popover) as any
+
     return () => (
-      <ElPopover
-        visible={visible.value}
-        ref={popover}
-        onUpdate:visible={(value) => (visible.value = value)}
-        trigger="contextmenu"
-        hideAfter={0}
-      >
+      <MyPopover visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
             <EditBarButton text="音标" icon="english" onClick={handleClick}></EditBarButton>
@@ -182,7 +171,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </ElPopover>
+      </MyPopover>
     )
   }
 })

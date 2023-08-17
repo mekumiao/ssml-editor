@@ -2,8 +2,8 @@
 import { ElButton, ElDialog } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
 import { computed, inject, ref, type ShallowRef } from 'vue'
-import { formatXML } from '@/utils/format'
 import type { IDomEditor } from '@wangeditor/editor'
+import xmlFormat from 'xml-formatter'
 
 defineProps<{ characterTotal: number; characterMax: number }>()
 
@@ -12,8 +12,14 @@ const dialogVisible = ref(false)
 const ssmlValue = ref('')
 
 const ssml = computed(() => {
-  return formatXML(
-    `<speak volume="50" pitch="0" rate="0" voice="zhiyuan">${ssmlValue.value}</speak>`
+  return xmlFormat(
+    `<speak volume="50" pitch="0" rate="0" voice="zhiyuan">${ssmlValue.value}</speak>`,
+    {
+      indentation: '    ',
+      filter: (node) => node.type !== 'Comment',
+      collapseContent: false,
+      lineSeparator: '\n'
+    }
   )
 })
 

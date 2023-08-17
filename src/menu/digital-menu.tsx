@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
-import { type IDomEditor } from '@wangeditor/core'
-import type { IdText, P, Prosody } from '../custom-types'
+import { type IDomEditor } from '@wangeditor/editor'
+import type { SayAs, IdText } from '../core/custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -11,17 +11,17 @@ import {
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
-import EditBarButton from '../../components/EditBarButton.vue'
-import { ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
+import EditBarButton from './EditBarButton.vue'
+import { resolveDynamicComponent } from 'vue'
 
 function genDomID(): string {
-  return genRandomStr('w-e-insert-changespeed')
+  return genRandomStr('w-e-insert-digital')
 }
 
-class SpeakerFn {
+export class DigitalFn {
   getValue(editor: IDomEditor): string | null {
     const { selection } = editor
-    if (selection == null) return null
+    if (selection == null) return ''
     return SlateEditor.string(editor, selection)
   }
 
@@ -31,24 +31,26 @@ class SpeakerFn {
     if (SlateRange.isCollapsed(selection)) return true
 
     const value = SlateEditor.string(editor, selection)
-    if (value.length <= 1) return true
+    if (value.length <= 0) return true
+
+    if (Number.isNaN(Number(value))) return true
 
     return false
   }
 
-  exec(editor: IDomEditor, rate: string) {
+  exec(editor: IDomEditor, idtext: IdText) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
     const value = this.getValue(editor)
     if (value == null) return
 
-    const node: Prosody = {
-      type: 'ssml-prosody',
+    const node: SayAs = {
+      type: 'ssml-say-as',
       domId: genDomID(),
-      remark: rate,
-      rate: rate,
-      bgColor: 'changespeed',
+      interpretAs: idtext.id,
+      remark: idtext.remark,
+      bgColor: 'digital',
       children: [{ text: value }]
     }
 
@@ -65,8 +67,8 @@ class SpeakerFn {
         at: [],
         match: (n) => {
           if (!SlateElement.isElement(n)) return false
-          if (!DomEditor.checkNodeType(n, 'ssml-prosody')) return false
-          return (n as P).domId === node.domId
+          if (!DomEditor.checkNodeType(n, 'ssml-say-as')) return false
+          return (n as SayAs).domId === node.domId
         }
       })
     })
@@ -75,71 +77,52 @@ class SpeakerFn {
   }
 }
 
-function fetchRates(): Promise<IdText[]> {
-  const res = [] as IdText[]
-  for (let index = 2; index <= 40; index++) {
-    const text = `${(index * 0.05).toFixed(2)}x`
-    res.push({ id: index.toString(), text: text, remark: text })
-  }
-  return Promise.resolve(res)
-}
+const idTextList: IdText[] = [
+  { id: 'value', text: '读数值', remark: '读数值' },
+  { id: 'digits', text: '读数字', remark: '读数字' },
+  { id: 'telephone', text: '读手机号', remark: '读手机号' }
+]
 
 export default defineComponent({
-  setup() {
-    const fn = new SpeakerFn()
+  emits: ['error'],
+  props: ['popover'],
+  setup(props, { emit }) {
+    const fn = new DigitalFn()
     const editorRef = inject<ShallowRef>('editor')
-    const rates = ref<IdText[]>([])
-    const popover = ref<PopoverInstance>()
     const visible = ref(false)
 
-    function show() {
-      if (visible.value) return
-      visible.value = true
+    function toggle() {
+      visible.value = !visible.value
     }
 
-    function hide() {
-      if (!visible.value) return
-      visible.value = false
-    }
-
-    async function handleClick(editor: IDomEditor) {
-      rates.value = await fetchRates()
+    function handleClick(editor: IDomEditor) {
       if (fn.isDisabled(editor)) {
-        ElMessage.warning({
-          message: '选中一个中文字符，并且有不能在其他语句之内',
-          grouping: true,
-          type: 'warning'
-        })
+        emit('error', '请选择纯数字文本')
         return
       }
-
-      show()
+      toggle()
     }
 
+    const MyPopover = resolveDynamicComponent(props.popover) as any
+
     return () => (
-      <ElPopover
-        style={{ padding: '0px' }}
-        ref={popover}
-        v-model:visible={visible.value}
-        trigger="contextmenu"
-        hideAfter={0}
-      >
+      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
-            <EditBarButton text="局部变速" icon="changespeed" onClick={handleClick}></EditBarButton>
+            <EditBarButton text="数字符号" icon="digital" onClick={handleClick}></EditBarButton>
           ),
           default: () => (
-            <div class="flex flex-col h h-50 scroll scroll-y">
-              {rates.value.map(({ id, text }) => {
+            <div class="flex flex-col">
+              {idTextList.map(({ id, text, remark }) => {
                 return (
                   <div
                     key={id}
-                    class="btn full"
+                    class="btn radius ssml-menu item full"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, text)
+                        fn.exec(editorRef?.value, { id, text, remark })
                       }
-                      hide()
+                      toggle()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
@@ -150,7 +133,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </ElPopover>
+      </MyPopover>
     )
   }
 })

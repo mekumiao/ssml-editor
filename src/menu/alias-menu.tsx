@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
-import { type IDomEditor } from '@wangeditor/core'
-import type { Sub } from '../custom-types'
+import { type IDomEditor } from '@wangeditor/editor'
+import type { Sub } from '../core/custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -12,10 +12,9 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent, inject, ref, shallowRef, withModifiers, type ShallowRef } from 'vue'
-import EditBarButton from '../../components/EditBarButton.vue'
-import { ElForm, ElIcon, ElInput, ElMessage, ElPopover, type PopoverInstance } from 'element-plus'
-import { Promotion } from '@element-plus/icons-vue'
+import { defineComponent, inject, ref, shallowRef, type ShallowRef } from 'vue'
+import EditBarButton from './EditBarButton.vue'
+import { resolveDynamicComponent } from 'vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-alias')
@@ -92,12 +91,12 @@ class AliasFn {
 }
 
 export default defineComponent({
-  setup() {
+  emits: ['error'],
+  props: ['popover', 'input'],
+  setup(props, { emit }) {
     const fn = new AliasFn()
     const editorRef = inject<ShallowRef<IDomEditor>>('editor')
-    const aliasRef = ref<HTMLElement>()
-    const alias = ref('')
-    const popover = ref<PopoverInstance>()
+    const inputRef = ref()
     const visible = ref(false)
     const editorSelection = shallowRef()
 
@@ -113,35 +112,29 @@ export default defineComponent({
 
     async function handleClick(editor: IDomEditor) {
       if (fn.isDisabled(editor)) {
-        ElMessage.warning({
-          message: '选中一个中文字符，并且有不能在其他语句之内',
-          grouping: true,
-          type: 'warning'
-        })
+        emit('error', '选中一个中文字符，并且有不能在其他语句之内')
         return
       }
 
       show()
       editorSelection.value = editor.selection
-      aliasRef.value?.focus()
+      inputRef.value.focus()
     }
 
-    const onSubmit = {
-      onSubmit: withModifiers(() => {
-        hide()
-        const editor = editorRef?.value
-        const aliasValue = alias.value
-        alias.value = ''
-        if (!editor) return
-        editor.select(editorSelection.value)
-        if (fn.isDisabled(editor)) return
-        fn.exec(editor, aliasValue)
-      }, ['prevent'])
-    } as any
+    const onSubmit = (text: string | null) => {
+      hide()
+      const editor = editorRef?.value
+      if (!editor || !text) return
+      editor.select(editorSelection.value)
+      if (fn.isDisabled(editor)) return
+      fn.exec(editor, text)
+    }
+
+    const MyPopover = resolveDynamicComponent(props.popover) as any
+    const MyInput = resolveDynamicComponent(props.input) as any
 
     return () => (
-      <ElPopover
-        ref={popover}
+      <MyPopover
         v-model:visible={visible.value}
         trigger="contextmenu"
         placement="right-end"
@@ -152,21 +145,9 @@ export default defineComponent({
           reference: () => (
             <EditBarButton text="别名" icon="alias" onClick={handleClick}></EditBarButton>
           ),
-          default: () => (
-            <ElForm {...onSubmit} class="flex flex-row">
-              <ElInput ref={aliasRef} v-model={alias.value}>
-                {{
-                  append: () => (
-                    <ElIcon>
-                      <Promotion></Promotion>
-                    </ElIcon>
-                  )
-                }}
-              </ElInput>
-            </ElForm>
-          )
+          default: () => <MyInput ref={inputRef} onSubmit={onSubmit}></MyInput>
         }}
-      </ElPopover>
+      </MyPopover>
     )
   }
 })

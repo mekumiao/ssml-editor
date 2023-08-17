@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
-import { type IDomEditor } from '@wangeditor/core'
-import type { W } from '../custom-types'
+import { type IDomEditor } from '@wangeditor/editor'
+import type { W } from '../core/custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -11,8 +11,7 @@ import {
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
 import { defineComponent } from 'vue'
-import EditBarButton from '@/components/EditBarButton.vue'
-import { ElMessage } from 'element-plus'
+import EditBarButton from './EditBarButton.vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-continuous')
@@ -69,8 +68,6 @@ export class ContinuousFn {
           return (n as W).domId === node.domId
         }
       })
-
-      // $body.off('click', domId, handler)
     })
 
     $body.on('click', domId, handler)
@@ -78,18 +75,12 @@ export class ContinuousFn {
 }
 
 export default defineComponent({
-  setup() {
+  emits: ['error'],
+  setup(props, { emit }) {
     const fn = new ContinuousFn()
 
     function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        ElMessage.warning({
-          message: '请选择多个中文字符或者多个多个英文单词',
-          grouping: true,
-          type: 'warning'
-        })
-        return
-      }
+      if (fn.isDisabled(editor)) return emit('error', '请选择多个中文字符或者多个多个英文单词')
       fn.exec(editor)
     }
 

@@ -1,6 +1,6 @@
 import throttle from 'lodash.throttle'
-import { type IDomEditor } from '@wangeditor/core'
-import type { Break, IdText } from '../custom-types'
+import { type IDomEditor } from '@wangeditor/editor'
+import type { Break, IdText } from '../core/custom-types'
 import {
   SlateTransforms,
   SlateEditor,
@@ -10,9 +10,15 @@ import {
 } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import $ from '@/utils/dom'
-import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
-import EditBarButton from '@/components/EditBarButton.vue'
-import { ElMessage, ElPopover } from 'element-plus'
+import {
+  defineComponent,
+  inject,
+  ref,
+  withModifiers,
+  type ShallowRef,
+  resolveDynamicComponent
+} from 'vue'
+import EditBarButton from './EditBarButton.vue'
 
 function genDomID(): string {
   return genRandomStr('w-e-insert-rhythm')
@@ -74,7 +80,9 @@ const idTextList: IdText[] = [
 ]
 
 export default defineComponent({
-  setup() {
+  emits: ['error'],
+  props: ['popover'],
+  setup(props, { emit }) {
     const fn = new RhythmFn()
     const editorRef = inject<ShallowRef>('editor')
     const visible = ref(false)
@@ -91,19 +99,16 @@ export default defineComponent({
 
     function handleClick(editor: IDomEditor) {
       if (fn.isDisabled(editor)) {
-        ElMessage.warning({
-          message: '不能选择文本',
-          grouping: true,
-          type: 'warning'
-        })
+        emit('error', '不能选择文本')
         return
       }
 
       show()
     }
+    const MyPopover = resolveDynamicComponent(props.popover) as any
 
     return () => (
-      <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
+      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
             <EditBarButton text="停顿调节" icon="rhythm" onClick={handleClick}></EditBarButton>
@@ -130,7 +135,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </ElPopover>
+      </MyPopover>
     )
   }
 })

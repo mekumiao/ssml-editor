@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import type { SlateElement } from '@wangeditor/editor'
 import type { P, W, SayAs, Break, Sub, Prosody } from './custom-types'
 
 function insertBreak(childrenHtml: string): string {
   const _break = break2({ time: '300ms' } as any, '')
+
   return childrenHtml.replaceAll(/[,.，。]/gi, (substring) => substring + _break)
 }
 
