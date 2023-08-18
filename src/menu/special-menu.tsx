@@ -1,9 +1,9 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { Sub } from '../core/custom-types'
+import type { Audio } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, ref, shallowRef, type PropType, inject, type ShallowRef } from 'vue'
-import { bindClose, unpackVoid } from './helper'
+import { bindClose } from './helper'
 import { BarButton, BarSearch } from '@/components'
 import { ElDialog } from 'element-plus'
 
@@ -28,28 +28,27 @@ class SpecialFn {
     return SlateEditor.string(editor, selection).length > 0
   }
 
-  exec(editor: IDomEditor, special: string) {
+  exec(editor: IDomEditor, opt: Options) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
     const value = this.getValue(editor)
     if (value == null) return
 
-    const node: Sub = {
-      type: 'ssml-sub',
+    const node: Audio = {
+      type: 'ssml-audio',
       domId: genDomID(),
-      remark: `[${special}]`,
-      alias: special,
-      value: value,
+      src: opt.value,
+      remark: opt.label,
       bgColor: 'special',
       children: [{ text: '' }]
     }
 
-    SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
+    editor.move(1)
 
-    bindClose<Sub>(editor, 'ssml-sub', node.domId, (nodeEntity) =>
-      unpackVoid(editor, nodeEntity, (elem) => elem.value)
+    bindClose<Audio>(editor, 'ssml-audio', node.domId, (nodeEntity) =>
+      SlateTransforms.delete(editor, { at: nodeEntity[1] })
     )
   }
 }
@@ -95,12 +94,13 @@ export default defineComponent({
       oldSelection.value = editor.selection
     }
 
-    const handleSubmit = (value: string) => {
+    const handleSubmit = (value: Options) => {
       visible.value = false
       const editor = editorRef?.value
       if (!editor || !value) return
       editor.select(oldSelection.value)
       if (fn.isDisabled(editor)) return
+
       fn.exec(editor, value)
     }
 
@@ -109,6 +109,7 @@ export default defineComponent({
         <BarButton text="音效" icon="special" onClick={handleClick}></BarButton>
         <ElDialog v-model={visible.value} width={500}>
           <BarSearch
+            menuItemLabel={{ first: '默认音效', second: '自定义音效', last: '最近音效' }}
             scenes={props.scenes}
             styles={props.styles}
             dataList={dataList.value}

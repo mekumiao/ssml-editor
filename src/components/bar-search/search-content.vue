@@ -1,16 +1,23 @@
 <script setup lang="ts">
 import { ElMenu, ElMenuItem, ElOption, ElSelect, ElInput, ElForm } from 'element-plus'
 import { ref } from 'vue'
+import { Search } from '@element-plus/icons-vue'
 
 type MenuKey = 'first' | 'second' | 'last'
-type Option = { value: string; label: string }
+type Options = { value: string; label: string }
+type MenuItemLabel = { [k in MenuKey]: string }
 
 const emit = defineEmits<{
-  submit: [value: Option]
+  submit: [value: Options]
   fetch: [filter: { search: string; menuKey: MenuKey; scene: string; style: string }]
 }>()
 
-defineProps<{ scenes: Option[]; styles: Option[]; dataList: Option[] }>()
+defineProps<{
+  menuItemLabel: MenuItemLabel
+  scenes: Options[]
+  styles: Options[]
+  dataList: Options[]
+}>()
 
 const searchInput = ref('')
 const sceneSelect = ref('')
@@ -31,7 +38,7 @@ function handleMenuSelect(key: MenuKey) {
   handleFetchData()
 }
 
-function handleSubmit(value: Option) {
+function handleSubmit(value: Options) {
   emit('submit', value)
 }
 </script>
@@ -39,7 +46,7 @@ function handleSubmit(value: Option) {
 <template>
   <div class="search-content">
     <ElForm @submit.prevent="handleFetchData">
-      <ElInput v-model="searchInput"></ElInput>
+      <ElInput :placeholder="'搜索'" v-model="searchInput" :suffix-icon="Search"></ElInput>
     </ElForm>
     <div class="menu">
       <ElMenu
@@ -47,9 +54,9 @@ function handleSubmit(value: Option) {
         default-active="first"
         @select="(index: string) => handleMenuSelect(index as MenuKey)"
       >
-        <ElMenuItem index="first">默认音效</ElMenuItem>
-        <ElMenuItem index="second">自定义音效</ElMenuItem>
-        <ElMenuItem index="last">近期使用</ElMenuItem>
+        <ElMenuItem index="first">{{ menuItemLabel.first }}</ElMenuItem>
+        <ElMenuItem index="second">{{ menuItemLabel.second }}</ElMenuItem>
+        <ElMenuItem index="last">{{ menuItemLabel.last }}</ElMenuItem>
       </ElMenu>
     </div>
     <div class="h h-1"></div>
@@ -75,11 +82,14 @@ function handleSubmit(value: Option) {
     <div class="content flex flex-col">
       <div
         @click="handleSubmit(item)"
-        class="btn full p-4"
+        class="btn full p-4 item"
         v-for="(item, index) in dataList"
         :key="index"
       >
-        {{ item.label }}
+        <div class="w-2"></div>
+        <span class="iconfont icon-play"></span>
+        <div class="w-1"></div>
+        <div>{{ item.label }}</div>
       </div>
     </div>
   </div>
@@ -90,6 +100,14 @@ function handleSubmit(value: Option) {
   div {
     font-size: 15px;
     padding: 5px;
+    text-align: left;
+  }
+
+  .item {
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
   }
 }
 </style>

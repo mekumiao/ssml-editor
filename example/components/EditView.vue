@@ -20,13 +20,18 @@ const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor
   characterTotal.value = editor.getText().length
   emit('onCreated', editor)
+
+  editor.on('updateBgm', (value: Options) => {
+    bgm.value = value
+  })
+
+  editor.on('removeBgm', () => {
+    bgm.value = null
+  })
 }
 
 const handleChange = (editor: IDomEditor) => {
   characterTotal.value = editor.getText().length
-  editor.on('updateBgm', (value: Options) => {
-    bgm.value = value
-  })
   emit('onChange', editor)
 }
 </script>

@@ -10,11 +10,11 @@ import {
 import throttle from 'lodash.throttle'
 import $ from '@/utils/dom'
 import type { NodeEntry } from 'slate'
-import type { SSMLBaseElement, SSMLElementType } from '@/core/custom-types'
+import type { SSMLBaseElement } from '@/core/custom-types'
 
-export function bindClose<T extends SlateElement>(
+export function bindClose<T extends SSMLBaseElement>(
   editor: IDomEditor,
-  type: SSMLElementType,
+  type: T['type'],
   domId: string,
   callback: (node: NodeEntry<T>) => void
 ) {
@@ -29,9 +29,9 @@ export function bindClose<T extends SlateElement>(
   )
 }
 
-export function findByDomId<T extends SlateElement>(
+export function findByDomId<T extends SSMLBaseElement>(
   editor: IDomEditor,
-  type: SSMLElementType,
+  type: T['type'],
   domId: string
 ): NodeEntry<T> | null {
   const [nodeEntity] = SlateEditor.nodes<T>(editor, {

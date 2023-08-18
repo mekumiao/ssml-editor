@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { IdText, P, Prosody } from '../core/custom-types'
+import type { IdText, Prosody } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
@@ -48,7 +48,9 @@ class SpeakerFn {
     SlateTransforms.delete(editor)
     SlateTransforms.insertNodes(editor, node)
 
-    bindClose<P>(editor, 'ssml-prosody', node.domId, (nodeEntity) => {
+    // SlateTransforms.wrapNodes(editor, node, { voids: false })
+
+    bindClose<Prosody>(editor, 'ssml-prosody', node.domId, (nodeEntity) => {
       SlateTransforms.unwrapNodes(editor, { at: nodeEntity[1] })
     })
   }

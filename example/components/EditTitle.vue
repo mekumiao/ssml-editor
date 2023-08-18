@@ -30,6 +30,10 @@ const handleGenSSML = () => {
     dialogVisible.value = true
   }
 }
+
+const handleRemoveBgm = () => {
+  editorRef?.value?.emit('removeBgm')
+}
 </script>
 
 <template>
@@ -42,7 +46,7 @@ const handleGenSSML = () => {
         <div>|</div>
         <div>{{ characterTotal }}/{{ characterMax }}字</div>
         <div class="w-2"></div>
-        <ElTag closable size="small" v-if="bgm">{{ bgm.label }}</ElTag>
+        <ElTag closable size="small" @close="handleRemoveBgm" v-if="bgm">{{ bgm.label }}</ElTag>
       </div>
     </div>
     <div class="operation-wrapper">
@@ -85,6 +89,7 @@ const handleGenSSML = () => {
     flex-direction: row;
     font-size: 12px;
     color: #999999;
+    height: 10px;
   }
 }
 

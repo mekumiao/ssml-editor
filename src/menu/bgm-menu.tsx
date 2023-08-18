@@ -5,7 +5,7 @@ import { ElDialog } from 'element-plus'
 
 export type MenuKey = 'first' | 'second' | 'last'
 
-export type Option = { value: string; label: string }
+export type Options = { value: string; label: string }
 
 export default defineComponent({
   emits: ['error'],
@@ -21,13 +21,13 @@ export default defineComponent({
       >,
       required: true
     },
-    scenes: { type: Object as PropType<Option[]>, required: true },
-    styles: { type: Object as PropType<Option[]>, required: true }
+    scenes: { type: Object as PropType<Options[]>, required: true },
+    styles: { type: Object as PropType<Options[]>, required: true }
   },
   setup(props, { emit }) {
     const visible = ref(false)
     const oldSelection = shallowRef()
-    const dataList = ref<Option[]>([])
+    const dataList = ref<Options[]>([])
 
     const editorRef = inject<ShallowRef<IDomEditor>>('editor')
 
@@ -38,7 +38,7 @@ export default defineComponent({
       oldSelection.value = editor.selection
     }
 
-    const handleSubmit = (value: Option) => {
+    const handleSubmit = (value: Options) => {
       visible.value = false
       const editor = editorRef?.value
       if (!editor || !value) {
@@ -54,6 +54,7 @@ export default defineComponent({
         <BarButton text="配乐" icon="bgm" onClick={handleClick}></BarButton>
         <ElDialog v-model={visible.value} width={500}>
           <BarSearch
+            menuItemLabel={{ first: '默认配乐', second: '自定义配乐', last: '最近配乐' }}
             scenes={props.scenes}
             styles={props.styles}
             dataList={dataList.value}

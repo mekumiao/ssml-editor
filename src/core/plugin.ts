@@ -1,8 +1,16 @@
 import { DomEditor, type IDomEditor } from '@wangeditor/editor'
 import type { SSMLElementType, W } from './custom-types'
 
-type Speak = { volume: string; pitch: string; rate: string; voice: string }
-type Option = { value: string; label: string }
+type Speak = {
+  volume: string
+  pitch: string
+  rate: string
+  voice: string
+  bgm: string
+  bgmRemark: string
+  backgroundMusicVolume: string
+}
+type Options = { value: string; label: string }
 
 function isType(type: string, dest: SSMLElementType) {
   return type === dest
@@ -21,6 +29,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
     if (isType(type, 'ssml-say-as')) return true
     if (isType(type, 'ssml-sub')) return true
     if (isType(type, 'ssml-prosody')) return true
+    if (isType(type, 'ssml-audio')) return true
 
     return isInline(elem)
   }
@@ -37,6 +46,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
     if (isType(type, 'ssml-say-as')) return false
     if (isType(type, 'ssml-sub')) return true
     if (isType(type, 'ssml-prosody')) return false
+    if (isType(type, 'ssml-audio')) return true
 
     return isVoid(elem)
   }
@@ -53,24 +63,32 @@ function withSSML<T extends IDomEditor>(editor: T) {
     insertBreak()
   }
 
-  const speak = {} as Speak
-  const bgm = {} as Option
+  const speak: Partial<Speak> = { voice: '', volume: '', pitch: '' }
 
-  editor.on('updateSpeak', (value: Speak) => {
+  editor.on('updateSpeak', (value: Partial<Speak>) => {
     Object.assign(speak, value)
   })
 
-  editor.on('updateBgm', (value: Option) => {
-    Object.assign(bgm, value)
+  editor.on('updateBgm', (value: Partial<Options>) => {
+    speak.bgm = value.value
+    speak.bgmRemark = value.label
   })
 
   editor.on('removeBgm', () => {
-    Object.assign(bgm, { value: '', label: '' })
+    speak.bgm = undefined
+    speak.bgmRemark = undefined
   })
 
   newEditor.getHtml = () => {
-    const xml = getHtml()
-    return `<speak volume="${speak.volume}" pitch="${speak.pitch}" rate="${speak.rate}" voice="${speak.voice}">${xml}</speak>`
+    const el = []
+    for (const key in speak) {
+      if (Object.prototype.hasOwnProperty.call(speak, key)) {
+        //@ts-ignore
+        const element = speak[key]
+        if (element) el.push(`${key}=${element}`)
+      }
+    }
+    return `<speak ${el.join(' ')}>${getHtml()}</speak>`
   }
 
   newEditor.apply = (operation) => {
