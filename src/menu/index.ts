@@ -7,5 +7,6 @@ export { default as EnglishMenu } from './english-menu'
 export { default as ChangespeedMenu } from './changespeed-menu'
 export { default as RhythmMenu } from './rhythm-menu'
 export { default as SpecialMenu } from './special-menu'
+export { default as MuteMenu } from './mute-menu'
 
 import './style.scss'

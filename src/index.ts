@@ -9,7 +9,8 @@ import {
   EnglishMenu,
   ChangespeedMenu,
   RhythmMenu,
-  SpecialMenu
+  SpecialMenu,
+  MuteMenu
 } from './menu'
 
 export { default as SSMLModule, type IdText } from './core'
@@ -28,6 +29,7 @@ export const EditorMenuPlugin = {
     app.component('ChangespeedMenu', ChangespeedMenu)
     app.component('RhythmMenu', RhythmMenu)
     app.component('SpecialMenu', SpecialMenu)
+    app.component('MuteMenu', MuteMenu)
   }
 }
 
@@ -45,7 +47,8 @@ export {
   EnglishMenu,
   ChangespeedMenu,
   RhythmMenu,
-  SpecialMenu
+  SpecialMenu,
+  MuteMenu
 }
 
 import './assets/main.scss'

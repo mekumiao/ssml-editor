@@ -10,6 +10,7 @@ import {
   ChangespeedMenu,
   RhythmMenu,
   SpecialMenu,
+  MuteMenu,
   type IdText
 } from '@/index'
 import { ElMessage } from 'element-plus'
@@ -66,8 +67,8 @@ function fetchEnglish(word: string): Promise<IdText[]> {
     <div class="divider divider-orange"></div>
     <div class="tool-list">
       <RhythmMenu @error="handleError"></RhythmMenu>
-      <BarButton text="插入静音" icon="mute" disabled></BarButton>
-      <BarButton text="符号静音" icon="symbol" disabled></BarButton>
+      <MuteMenu @error="handleError"></MuteMenu>
+      <!-- <BarButton text="符号静音" icon="symbol" disabled></BarButton> -->
       <!-- <BarButton text="段落静音" icon="icon-play" disabled></BarButton>
       <BarButton text="解说模式" icon="icon-play" disabled></BarButton> -->
     </div>

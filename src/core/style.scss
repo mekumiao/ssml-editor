@@ -59,6 +59,10 @@
       background-color: $rhythm;
       color: $rhythm;
     }
+    &.mute {
+      background-color: $mute;
+      color: $mute;
+    }
   }
 
   .bg-color:not(.ft-color) {

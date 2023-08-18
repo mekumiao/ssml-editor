@@ -85,7 +85,7 @@ export default defineComponent({
       inputRef.value.focus()
     }
 
-    const onSubmit = (text: string | null) => {
+    function handleSubmit(text: string | null) {
       hide()
       const editor = editorRef?.value
       if (!editor || !text) return
@@ -104,7 +104,7 @@ export default defineComponent({
       >
         {{
           reference: () => <BarButton text="别名" icon="alias" onClick={handleClick}></BarButton>,
-          default: () => <BarInput ref={inputRef} onSubmit={onSubmit}></BarInput>
+          default: () => <BarInput ref={inputRef} onSubmit={handleSubmit}></BarInput>
         }}
       </ElPopover>
     )
