@@ -1,6 +1,5 @@
 <script setup lang="ts">
-import { ElForm, ElButton, ElInput } from 'element-plus'
-import { Promotion } from '@element-plus/icons-vue'
+import { ElForm, ElInput } from 'element-plus'
 import { ref } from 'vue'
 
 const emit = defineEmits<{ submit: [value: string] }>()
@@ -25,11 +24,7 @@ defineExpose({
 
 <template>
   <ElForm class="flex flex-row" @submit.prevent="handleSubmit">
-    <ElInput :type="type" ref="inputRef" v-model="inputValue">
-      <template #append>
-        <ElButton @onClick="handleSubmit" :icon="Promotion"></ElButton>
-      </template>
-    </ElInput>
+    <ElInput :type="type" ref="inputRef" v-model="inputValue"></ElInput>
   </ElForm>
 </template>
 
