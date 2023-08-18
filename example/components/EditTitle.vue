@@ -12,15 +12,12 @@ const dialogVisible = ref(false)
 const ssmlValue = ref('')
 
 const ssml = computed(() => {
-  return xmlFormat(
-    `<speak volume="50" pitch="0" rate="0" voice="zhiyuan">${ssmlValue.value}</speak>`,
-    {
-      indentation: '    ',
-      filter: (node) => node.type !== 'Comment',
-      collapseContent: false,
-      lineSeparator: '\n'
-    }
-  )
+  return xmlFormat(ssmlValue.value, {
+    indentation: '    ',
+    filter: (node) => node.type !== 'Comment',
+    collapseContent: false,
+    lineSeparator: '\n'
+  })
 })
 
 const handleGenSSML = () => {

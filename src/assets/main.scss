@@ -33,8 +33,14 @@
   cursor: not-allowed;
 }
 
-.btn.radius {
+.btn.btn-radius {
   border-radius: 5px;
+}
+
+@for $i from 1 to 15 {
+  .btn.btn-radius-#{$i} {
+    border-radius: #{$i * 2}px;
+  }
 }
 
 .full {

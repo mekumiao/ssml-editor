@@ -26,9 +26,9 @@ defineExpose({
 <template>
   <ElForm class="flex flex-row" @submit.prevent="handleSubmit">
     <ElInput :type="type" ref="inputRef" v-model="inputValue">
-      <!-- <template #append>
+      <template #append>
         <ElButton @onClick="handleSubmit" :icon="Promotion"></ElButton>
-      </template> -->
+      </template>
     </ElInput>
   </ElForm>
 </template>

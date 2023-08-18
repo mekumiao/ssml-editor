@@ -2,10 +2,10 @@ import { type IDomEditor } from '@wangeditor/editor'
 import type { Sub } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import { defineComponent, inject, ref, shallowRef, type ShallowRef } from 'vue'
+import { defineComponent, ref } from 'vue'
 import { bindClose, unpackVoid } from './helper'
+import { BarButton, BarSearch } from '@/components'
 import { ElPopover } from 'element-plus'
-import { BarButton, BarInput } from '@/components'
 
 // 音效功能
 
@@ -23,12 +23,9 @@ class SpecialFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isCollapsed(selection)) return true
+    if (SlateRange.isExpanded(selection)) return true
 
-    const value = SlateEditor.string(editor, selection)
-    if (value.length <= 0) return true
-
-    return false
+    return SlateEditor.string(editor, selection).length > 0
   }
 
   exec(editor: IDomEditor, alias: string) {
@@ -61,52 +58,43 @@ export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
     const fn = new SpecialFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>('editor')
-    const inputRef = ref()
     const visible = ref(false)
-    const editorSelection = shallowRef()
+    // const editorSelection = shallowRef()
 
-    function show() {
-      if (visible.value) return
-      visible.value = true
-    }
+    // function show() {
+    //   if (visible.value) return
+    //   visible.value = true
+    // }
 
-    function hide() {
-      if (!visible.value) return
-      visible.value = false
-    }
+    // function hide() {
+    //   if (!visible.value) return
+    //   visible.value = false
+    // }
 
     async function handleClick(editor: IDomEditor) {
       if (fn.isDisabled(editor)) {
-        emit('error', '选中一个中文字符，并且有不能在其他语句之内')
+        emit('error', '请选中编辑区，并且不能选中文字')
         return
       }
 
-      show()
-      editorSelection.value = editor.selection
-      inputRef.value.focus()
+      // show()
+      // editorSelection.value = editor.selection
     }
 
-    const onSubmit = (text: string | null) => {
-      hide()
-      const editor = editorRef?.value
-      if (!editor || !text) return
-      editor.select(editorSelection.value)
-      if (fn.isDisabled(editor)) return
-      fn.exec(editor, text)
-    }
+    // const onSubmit = (text: string | null) => {
+    //   hide()
+    //   const editor = editorRef?.value
+    //   if (!editor || !text) return
+    //   editor.select(editorSelection.value)
+    //   if (fn.isDisabled(editor)) return
+    //   fn.exec(editor, text)
+    // }
 
     return () => (
-      <ElPopover
-        v-model:visible={visible.value}
-        trigger="contextmenu"
-        placement="right-end"
-        hideAfter={0}
-        width={200}
-      >
+      <ElPopover v-model:visible={visible.value} trigger="click" hideAfter={0} width={500}>
         {{
           reference: () => <BarButton text="音效" icon="special" onClick={handleClick}></BarButton>,
-          default: () => <BarInput ref={inputRef} onSubmit={onSubmit}></BarInput>
+          default: () => <BarSearch></BarSearch>
         }}
       </ElPopover>
     )

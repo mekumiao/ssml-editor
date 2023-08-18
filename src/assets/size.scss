@@ -1,5 +1,5 @@
-@for $i from 1 to 10 {
-  .size.font-size-#{$i} {
-    font-size: #{$i * 10}px;
+@for $i from 1 to 100 {
+  .font-size-#{$i} {
+    font-size: #{$i}px;
   }
 }

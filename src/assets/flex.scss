@@ -10,6 +10,10 @@
     flex-direction: column;
     align-items: center;
   }
+
+  &.flex-wrap {
+    flex-wrap: wrap;
+  }
 }
 
 .inline-flex {

@@ -16,7 +16,10 @@ import {
 import { ElMessage } from 'element-plus'
 
 function handleError(error: string) {
-  ElMessage.warning(error)
+  ElMessage.warning({
+    message: error,
+    grouping: true
+  })
 }
 
 function fetchSpeaker(hanzi: string): Promise<IdText[]> {

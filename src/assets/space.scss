@@ -1,11 +1,31 @@
 @for $i from 1 to 200 {
-  .w.w-#{$i} {
+  .w-#{$i} {
     width: #{$i * 8}px;
   }
 }
 
 @for $i from 1 to 200 {
-  .h.h-#{$i} {
+  .h-#{$i} {
     height: #{$i * 8}px;
   }
+}
+
+@for $i from 1 to 200 {
+  .m-#{$i} {
+    margin: #{$i}px;
+  }
+}
+
+@for $i from 1 to 200 {
+  .p-#{$i} {
+    padding: #{$i}px;
+  }
+}
+
+.w-full {
+  width: 100%;
+}
+
+.h-full {
+  height: 100%;
 }
