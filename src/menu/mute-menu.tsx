@@ -5,7 +5,7 @@ import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef, shallowRef } from 'vue'
 import { BarButton, BarInput } from '@/components'
 import { bindClose } from './helper'
-import { ElInput, ElPopover } from 'element-plus'
+import { ElPopover } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-mute')
