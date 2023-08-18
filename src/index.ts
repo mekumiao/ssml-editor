@@ -1,6 +1,6 @@
 import type { App } from 'vue'
+import { BarButton, BarInput } from './components'
 import {
-  EditBarButton,
   SpeakerMenu,
   ContinuousMenu,
   ReadMenu,
@@ -8,14 +8,17 @@ import {
   AliasMenu,
   EnglishMenu,
   ChangespeedMenu,
-  RhythmMenu
+  RhythmMenu,
+  SpecialMenu
 } from './menu'
 
 export { default as SSMLModule, type IdText } from './core'
 
 export const EditorMenuPlugin = {
   install: (app: App) => {
-    app.component('EditBarButton', EditBarButton)
+    app.component('BarButton', BarButton)
+    app.component('BarInput', BarInput)
+
     app.component('SpeakerMenu', SpeakerMenu)
     app.component('ContinuousMenu', ContinuousMenu)
     app.component('ReadMenu', ReadMenu)
@@ -24,10 +27,16 @@ export const EditorMenuPlugin = {
     app.component('EnglishMenu', EnglishMenu)
     app.component('ChangespeedMenu', ChangespeedMenu)
     app.component('RhythmMenu', RhythmMenu)
+    app.component('SpecialMenu', SpecialMenu)
   }
 }
 
 export {
+  // components
+  BarButton,
+  BarInput,
+
+  // menu
   SpeakerMenu,
   ContinuousMenu,
   ReadMenu,
@@ -35,7 +44,8 @@ export {
   AliasMenu,
   EnglishMenu,
   ChangespeedMenu,
-  RhythmMenu
+  RhythmMenu,
+  SpecialMenu
 }
 
 import './assets/main.scss'

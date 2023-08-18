@@ -2,16 +2,10 @@ import { type IDomEditor } from '@wangeditor/editor'
 import type { W, IdText } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import {
-  defineComponent,
-  inject,
-  ref,
-  withModifiers,
-  type ShallowRef,
-  resolveDynamicComponent
-} from 'vue'
-import EditBarButton from './EditBarButton.vue'
+import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import { BarButton } from '@/components'
 import { bindClose, unpackVoid } from './helper'
+import { ElPopover } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-read')
@@ -69,8 +63,7 @@ const readList: IdText[] = [
 
 export default defineComponent({
   emits: ['error'],
-  props: ['popover'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const fn = new ReadFn()
     const editorRef = inject<ShallowRef>('editor')
     const visible = ref(false)
@@ -94,14 +87,10 @@ export default defineComponent({
       show()
     }
 
-    const MyPopover = resolveDynamicComponent(props.popover) as any
-
     return () => (
-      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
+      <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
-          reference: () => (
-            <EditBarButton text="重音" icon="read" onClick={handleClick}></EditBarButton>
-          ),
+          reference: () => <BarButton text="重音" icon="read" onClick={handleClick}></BarButton>,
           default: () => (
             <div class="flex flex-col" onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}>
               {readList.map(({ id, text, remark }) => {
@@ -124,7 +113,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </MyPopover>
+      </ElPopover>
     )
   }
 })

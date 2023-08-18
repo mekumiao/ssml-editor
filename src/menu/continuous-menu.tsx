@@ -3,7 +3,7 @@ import type { W } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent } from 'vue'
-import EditBarButton from './EditBarButton.vue'
+import { BarButton } from '@/components'
 import { bindClose } from './helper'
 
 function genDomID(): string {
@@ -55,7 +55,7 @@ export class ContinuousFn {
 
 export default defineComponent({
   emits: ['error'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const fn = new ContinuousFn()
 
     function handleClick(editor: IDomEditor) {
@@ -63,6 +63,6 @@ export default defineComponent({
       fn.exec(editor)
     }
 
-    return () => <EditBarButton text="连读" icon="continuous" onClick={handleClick}></EditBarButton>
+    return () => <BarButton text="连读" icon="continuous" onClick={handleClick}></BarButton>
   }
 })

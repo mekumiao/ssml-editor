@@ -2,17 +2,11 @@ import { type IDomEditor } from '@wangeditor/editor'
 import type { IdText, P } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import {
-  defineComponent,
-  inject,
-  ref,
-  withModifiers,
-  type ShallowRef,
-  resolveDynamicComponent
-} from 'vue'
-import EditBarButton from './EditBarButton.vue'
+import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import { BarButton } from '@/components'
 import { selectionTrimEnd } from '../core/helper'
 import { bindClose, unpackVoid } from './helper'
+import { ElPopover } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-english')
@@ -106,14 +100,10 @@ export default defineComponent({
       }
     }
 
-    const MyPopover = resolveDynamicComponent(props.popover) as any
-
     return () => (
-      <MyPopover visible={visible.value} trigger="contextmenu" hideAfter={0}>
+      <ElPopover visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
-          reference: () => (
-            <EditBarButton text="音标" icon="english" onClick={handleClick}></EditBarButton>
-          ),
+          reference: () => <BarButton text="音标" icon="english" onClick={handleClick}></BarButton>,
           default: () => (
             <div class="flex flex-col">
               {englishList.value.map(({ id, text }) => {
@@ -136,7 +126,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </MyPopover>
+      </ElPopover>
     )
   }
 })

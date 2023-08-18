@@ -3,8 +3,8 @@ import type { SayAs, IdText } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
-import EditBarButton from './EditBarButton.vue'
-import { resolveDynamicComponent } from 'vue'
+import { BarButton } from '@/components'
+import { ElPopover } from 'element-plus'
 import { bindClose } from './helper'
 
 function genDomID(): string {
@@ -64,8 +64,7 @@ const idTextList: IdText[] = [
 
 export default defineComponent({
   emits: ['error'],
-  props: ['popover'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const fn = new DigitalFn()
     const editorRef = inject<ShallowRef>('editor')
     const visible = ref(false)
@@ -82,13 +81,11 @@ export default defineComponent({
       toggle()
     }
 
-    const MyPopover = resolveDynamicComponent(props.popover) as any
-
     return () => (
-      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
+      <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
-            <EditBarButton text="数字符号" icon="digital" onClick={handleClick}></EditBarButton>
+            <BarButton text="数字符号" icon="digital" onClick={handleClick}></BarButton>
           ),
           default: () => (
             <div class="flex flex-col">
@@ -112,7 +109,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </MyPopover>
+      </ElPopover>
     )
   }
 })

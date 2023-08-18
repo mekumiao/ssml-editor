@@ -3,15 +3,17 @@ import type { Sub } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, shallowRef, type ShallowRef } from 'vue'
-import { BarButton, BarInput } from '@/components'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
+import { BarButton, BarInput } from '@/components'
+
+// 音效功能
 
 function genDomID(): string {
-  return genRandomStr('w-e-dom-alias')
+  return genRandomStr('w-e-dom-special')
 }
 
-class AliasFn {
+class SpecialFn {
   getValue(editor: IDomEditor): string | null {
     const { selection } = editor
     if (selection == null) return null
@@ -58,7 +60,7 @@ class AliasFn {
 export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
-    const fn = new AliasFn()
+    const fn = new SpecialFn()
     const editorRef = inject<ShallowRef<IDomEditor>>('editor')
     const inputRef = ref()
     const visible = ref(false)
@@ -103,7 +105,7 @@ export default defineComponent({
         width={200}
       >
         {{
-          reference: () => <BarButton text="别名" icon="alias" onClick={handleClick}></BarButton>,
+          reference: () => <BarButton text="音效" icon="special" onClick={handleClick}></BarButton>,
           default: () => <BarInput ref={inputRef} onSubmit={onSubmit}></BarInput>
         }}
       </ElPopover>

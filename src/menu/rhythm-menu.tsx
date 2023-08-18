@@ -10,8 +10,9 @@ import {
   type ShallowRef,
   resolveDynamicComponent
 } from 'vue'
-import EditBarButton from './EditBarButton.vue'
+import { BarButton, BarInput } from '@/components'
 import { bindClose } from './helper'
+import { ElPopover } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-rhythm')
@@ -57,8 +58,7 @@ const idTextList: IdText[] = [
 
 export default defineComponent({
   emits: ['error'],
-  props: ['popover'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const fn = new RhythmFn()
     const editorRef = inject<ShallowRef>('editor')
     const visible = ref(false)
@@ -81,13 +81,12 @@ export default defineComponent({
 
       show()
     }
-    const MyPopover = resolveDynamicComponent(props.popover) as any
 
     return () => (
-      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
+      <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
-            <EditBarButton text="停顿调节" icon="rhythm" onClick={handleClick}></EditBarButton>
+            <BarButton text="停顿调节" icon="rhythm" onClick={handleClick}></BarButton>
           ),
           default: () => (
             <div class="flex flex-col">
@@ -111,7 +110,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </MyPopover>
+      </ElPopover>
     )
   }
 })

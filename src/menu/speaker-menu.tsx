@@ -2,16 +2,10 @@ import { type IDomEditor } from '@wangeditor/editor'
 import type { IdText, P } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import {
-  defineComponent,
-  inject,
-  ref,
-  withModifiers,
-  type ShallowRef,
-  resolveDynamicComponent
-} from 'vue'
-import EditBarButton from './EditBarButton.vue'
+import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import { BarButton } from '@/components'
 import { bindClose, unpackVoid } from './helper'
+import { ElPopover } from 'element-plus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-speaker')
@@ -82,7 +76,7 @@ function fetchSpeaker(hanzi: string): Promise<IdText[]> {
 
 export default defineComponent({
   emits: ['error'],
-  props: ['popover', 'fetch'],
+  props: ['fetch'],
   setup(props, { emit }) {
     const fn = new SpeakerFn()
     const editorRef = inject<ShallowRef>('editor')
@@ -114,13 +108,11 @@ export default defineComponent({
       show()
     }
 
-    const MyPopover = resolveDynamicComponent(props.popover) as any
-
     return () => (
-      <MyPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
+      <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
-            <EditBarButton text="多音字" icon="speaker" onClick={handleClick}></EditBarButton>
+            <BarButton text="多音字" icon="speaker" onClick={handleClick}></BarButton>
           ),
           default: () => (
             <div class="flex flex-col">
@@ -144,7 +136,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </MyPopover>
+      </ElPopover>
     )
   }
 })

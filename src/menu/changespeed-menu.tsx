@@ -2,15 +2,9 @@ import { type IDomEditor } from '@wangeditor/editor'
 import type { IdText, P, Prosody } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import {
-  defineComponent,
-  inject,
-  ref,
-  withModifiers,
-  type ShallowRef,
-  resolveDynamicComponent
-} from 'vue'
-import EditBarButton from './EditBarButton.vue'
+import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import { BarButton } from '@/components'
+import { ElPopover } from 'element-plus'
 import { bindClose } from './helper'
 
 function genDomID(): string {
@@ -71,8 +65,7 @@ function fetchRates(): Promise<IdText[]> {
 
 export default defineComponent({
   emits: ['error'],
-  props: ['popover'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
     const fn = new SpeakerFn()
     const editorRef = inject<ShallowRef>('editor')
     const rates = ref<IdText[]>([])
@@ -98,10 +91,8 @@ export default defineComponent({
       show()
     }
 
-    const MyPopover = resolveDynamicComponent(props.popover) as any
-
     return () => (
-      <MyPopover
+      <ElPopover
         style={{ padding: '0px' }}
         v-model:visible={visible.value}
         trigger="contextmenu"
@@ -109,7 +100,7 @@ export default defineComponent({
       >
         {{
           reference: () => (
-            <EditBarButton text="局部变速" icon="changespeed" onClick={handleClick}></EditBarButton>
+            <BarButton text="局部变速" icon="changespeed" onClick={handleClick}></BarButton>
           ),
           default: () => (
             <div class="flex flex-col h h-50 scroll scroll-y">
@@ -133,7 +124,7 @@ export default defineComponent({
             </div>
           )
         }}
-      </MyPopover>
+      </ElPopover>
     )
   }
 })

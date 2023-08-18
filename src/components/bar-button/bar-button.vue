@@ -2,10 +2,7 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { inject, type ShallowRef } from 'vue'
 
-const emit = defineEmits<{
-  click: [editor: IDomEditor]
-  'update:visiblePopover': [value: boolean]
-}>()
+const emit = defineEmits<{ click: [editor: IDomEditor] }>()
 const props = withDefaults(
   defineProps<{
     text: string
@@ -26,7 +23,7 @@ const handleClick = () => {
 
 <template>
   <div
-    class="btn edit-bar-button"
+    class="btn bar-button"
     :class="{ disabled: disabled }"
     @click="handleClick"
     @mousedown.prevent
@@ -39,7 +36,7 @@ const handleClick = () => {
 </template>
 
 <style lang="scss" scoped>
-.edit-bar-button {
+.bar-button {
   display: flex;
   flex-direction: column;
   justify-content: center;
