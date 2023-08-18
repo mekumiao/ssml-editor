@@ -1,54 +1,19 @@
-import type { App } from 'vue'
-import { BarButton, BarInput } from './components'
-import {
-  SpeakerMenu,
-  ContinuousMenu,
-  ReadMenu,
-  DigitalMenu,
-  AliasMenu,
-  EnglishMenu,
-  ChangespeedMenu,
-  RhythmMenu,
-  SpecialMenu,
-  MuteMenu
-} from './menu'
+import type { App, Plugin } from 'vue'
 
-export { default as SSMLModule, type IdText } from './core'
+import EditorComponentsPlugin from './components'
+import EditorMenuPlugin from './menu'
 
-export const EditorMenuPlugin = {
-  install: (app: App) => {
-    app.component('BarButton', BarButton)
-    app.component('BarInput', BarInput)
+export * from './components'
+export * from './menu'
+export * from './core'
 
-    app.component('SpeakerMenu', SpeakerMenu)
-    app.component('ContinuousMenu', ContinuousMenu)
-    app.component('ReadMenu', ReadMenu)
-    app.component('DigitalMenu', DigitalMenu)
-    app.component('AliasMenu', AliasMenu)
-    app.component('EnglishMenu', EnglishMenu)
-    app.component('ChangespeedMenu', ChangespeedMenu)
-    app.component('RhythmMenu', RhythmMenu)
-    app.component('SpecialMenu', SpecialMenu)
-    app.component('MuteMenu', MuteMenu)
+export { default as EditorCoreModule } from './core'
+
+export default {
+  install(app: App) {
+    app.use(EditorComponentsPlugin)
+    app.use(EditorMenuPlugin)
   }
-}
-
-export {
-  // components
-  BarButton,
-  BarInput,
-
-  // menu
-  SpeakerMenu,
-  ContinuousMenu,
-  ReadMenu,
-  DigitalMenu,
-  AliasMenu,
-  EnglishMenu,
-  ChangespeedMenu,
-  RhythmMenu,
-  SpecialMenu,
-  MuteMenu
-}
+} as Plugin
 
 import './assets/main.scss'

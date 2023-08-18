@@ -63,6 +63,10 @@
       background-color: $mute;
       color: $mute;
     }
+    &.special {
+      background-color: $special;
+      color: $special;
+    }
   }
 
   .bg-color:not(.ft-color) {

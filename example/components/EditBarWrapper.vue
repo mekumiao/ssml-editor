@@ -14,6 +14,8 @@ import {
   type IdText
 } from '@/index'
 import { ElMessage } from 'element-plus'
+import { ref } from 'vue'
+import {} from '@/index'
 
 function handleError(error: string) {
   ElMessage.warning({
@@ -45,6 +47,32 @@ function fetchEnglish(word: string): Promise<IdText[]> {
   } as Record<string, IdText[]>
   return Promise.resolve(list[word] || list['translate'])
 }
+
+const sceneOptions = ref([
+  { value: '', label: '全部场景' },
+  { value: '2', label: '场景2' },
+  { value: '3', label: '场景3' }
+])
+
+const styleOptions = ref([
+  { value: '', label: '全部风格' },
+  { value: '2', label: '风格2' },
+  { value: '3', label: '风格3' }
+])
+
+function fetchSpecial(filter: {
+  search: string
+  menuKey: 'first' | 'second' | 'last'
+  scene: string
+  style: string
+}): Promise<{ value: string; label: string }[]> {
+  return Promise.resolve([
+    { value: '1', label: `${filter.search || '测试'}音效1` },
+    { value: '2', label: `${filter.menuKey || '测试'}音效2` },
+    { value: '3', label: `${filter.scene || '测试'}音效3` },
+    { value: '4', label: `${filter.style || '测试'}音效4` }
+  ])
+}
 </script>
 
 <template>
@@ -71,22 +99,17 @@ function fetchEnglish(word: string): Promise<IdText[]> {
     <div class="tool-list">
       <RhythmMenu @error="handleError"></RhythmMenu>
       <MuteMenu @error="handleError"></MuteMenu>
-      <!-- <BarButton text="符号静音" icon="symbol" disabled></BarButton> -->
-      <!-- <BarButton text="段落静音" icon="icon-play" disabled></BarButton>
-      <BarButton text="解说模式" icon="icon-play" disabled></BarButton> -->
     </div>
     <div class="divider divider-purple"></div>
     <div class="tool-list">
-      <SpecialMenu @error="handleError"></SpecialMenu>
+      <SpecialMenu
+        @error="handleError"
+        :fetch="fetchSpecial"
+        :scenes="sceneOptions"
+        :styles="styleOptions"
+      ></SpecialMenu>
       <BarButton text="配乐" icon="bgm" disabled></BarButton>
     </div>
-    <!-- <div class="divider divider-yellow"></div>
-    <div class="tool-list">
-      <BarButton text="批量替换" icon="icon-play"></BarButton>
-      <BarButton text="查看拼音" icon="icon-play"></BarButton>
-      <BarButton text="敏感词" icon="icon-play"></BarButton>
-      <BarButton text="评论" icon="icon-play"></BarButton>
-    </div> -->
   </div>
 </template>
 

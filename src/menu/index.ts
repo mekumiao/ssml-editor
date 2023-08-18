@@ -1,12 +1,42 @@
-export { default as SpeakerMenu } from './speaker-menu'
-export { default as ContinuousMenu } from './continuous-menu'
-export { default as ReadMenu } from './read-menu'
-export { default as DigitalMenu } from './digital-menu'
-export { default as AliasMenu } from './alias-menu'
-export { default as EnglishMenu } from './english-menu'
-export { default as ChangespeedMenu } from './changespeed-menu'
-export { default as RhythmMenu } from './rhythm-menu'
-export { default as SpecialMenu } from './special-menu'
-export { default as MuteMenu } from './mute-menu'
+import type { App, Plugin } from 'vue'
+
+import SpeakerMenu from './speaker-menu'
+import ContinuousMenu from './continuous-menu'
+import ReadMenu from './read-menu'
+import DigitalMenu from './digital-menu'
+import AliasMenu from './alias-menu'
+import EnglishMenu from './english-menu'
+import ChangespeedMenu from './changespeed-menu'
+import RhythmMenu from './rhythm-menu'
+import SpecialMenu from './special-menu'
+import MuteMenu from './mute-menu'
+
+export default {
+  install: (app: App) => {
+    app.component('SpeakerMenu', SpeakerMenu)
+    app.component('ContinuousMenu', ContinuousMenu)
+    app.component('ReadMenu', ReadMenu)
+    app.component('DigitalMenu', DigitalMenu)
+    app.component('AliasMenu', AliasMenu)
+    app.component('EnglishMenu', EnglishMenu)
+    app.component('ChangespeedMenu', ChangespeedMenu)
+    app.component('RhythmMenu', RhythmMenu)
+    app.component('SpecialMenu', SpecialMenu)
+    app.component('MuteMenu', MuteMenu)
+  }
+} as Plugin
+
+export {
+  SpeakerMenu,
+  ContinuousMenu,
+  ReadMenu,
+  DigitalMenu,
+  AliasMenu,
+  EnglishMenu,
+  ChangespeedMenu,
+  RhythmMenu,
+  SpecialMenu,
+  MuteMenu
+}
 
 import './style.scss'

@@ -3,13 +3,11 @@ import { renderElems } from './render-elems'
 import { elemToHtmls } from './elem-to-htmls'
 import withSSML from './plugin'
 
-const module: Partial<IModuleConf> = {
+export default {
   editorPlugin: withSSML,
   renderElems: renderElems,
   elemsToHtml: elemToHtmls
-}
-
-export default module
+} as Partial<IModuleConf>
 
 export * from './custom-types'
 
