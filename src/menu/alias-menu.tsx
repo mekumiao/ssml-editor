@@ -39,7 +39,7 @@ class AliasFn {
     const node: Sub = {
       type: 'ssml-sub',
       domId: genDomID(),
-      remark: `[${alias}]`,
+      remark: `(${alias})`,
       alias: alias,
       value: value,
       bgColor: 'alias',

@@ -67,10 +67,22 @@ function fetchSpecial(filter: {
   style: string
 }): Promise<{ value: string; label: string }[]> {
   return Promise.resolve([
-    { value: '1', label: `${filter.search || '测试'}音效1` },
-    { value: '2', label: `${filter.menuKey || '测试'}音效2` },
-    { value: '3', label: `${filter.scene || '测试'}音效3` },
-    { value: '4', label: `${filter.style || '测试'}音效4` }
+    {
+      value: 'https://download.samplelib.com/wav/sample-3s.wav#1',
+      label: `${filter.search || '测试'}音效1`
+    },
+    {
+      value: 'https://download.samplelib.com/wav/sample-3s.wav#2',
+      label: `${filter.menuKey || '测试'}音效2`
+    },
+    {
+      value: 'https://download.samplelib.com/wav/sample-3s.wav#3',
+      label: `${filter.scene || '测试'}音效3`
+    },
+    {
+      value: 'https://download.samplelib.com/wav/sample-3s.wav#4',
+      label: `${filter.style || '测试'}音效4`
+    }
   ])
 }
 
@@ -81,10 +93,22 @@ function fetchBgm(filter: {
   style: string
 }): Promise<{ value: string; label: string }[]> {
   return Promise.resolve([
-    { value: '1', label: `${filter.search || '测试'}背景音乐1` },
-    { value: '2', label: `${filter.menuKey || '测试'}背景音乐2` },
-    { value: '3', label: `${filter.scene || '测试'}背景音乐3` },
-    { value: '4', label: `${filter.style || '测试'}背景音乐4` }
+    {
+      value: 'https://download.samplelib.com/wav/sample-6s.wav#1',
+      label: `${filter.search || '测试'}背景音乐1`
+    },
+    {
+      value: 'https://download.samplelib.com/wav/sample-6s.wav#2',
+      label: `${filter.menuKey || '测试'}背景音乐2`
+    },
+    {
+      value: 'https://download.samplelib.com/wav/sample-6s.wav#3',
+      label: `${filter.scene || '测试'}背景音乐3`
+    },
+    {
+      value: 'https://download.samplelib.com/wav/sample-6s.wav#4',
+      label: `${filter.style || '测试'}背景音乐4`
+    }
   ])
 }
 </script>

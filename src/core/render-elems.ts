@@ -10,7 +10,7 @@ function renderP(elem: SlateElement): VNode {
   return h('span.ssml-wrap', { ...noSelectStyle }, [
     h(`span.tag.bg-color.${bgColor}`, [
       h('span.tag-remark', { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`),
     h('span', word),
@@ -24,7 +24,7 @@ function renderW(elem: SlateElement, children: VNode[] | null): VNode {
   return h('span.ssml-wrap', !children ? { ...noSelectStyle } : {}, [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
     h('span', children || value),
@@ -38,7 +38,7 @@ function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode {
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
     h('span', children),
@@ -52,7 +52,7 @@ function renderBreak(elem: SlateElement): VNode {
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ])
   ])
 }
@@ -63,7 +63,7 @@ function renderSub(elem: SlateElement): VNode {
   return h('span.ssml-wrap', { ...noSelectStyle }, [
     h(`span.tag.bg-color.${bgColor}`, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`),
     h('span', value),
@@ -72,7 +72,7 @@ function renderSub(elem: SlateElement): VNode {
   // return h('span.ssml-wrap', [
   //   h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
   //     h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-  //     h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
+  //     h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
   //   ]),
   //   h(`span.tag-remark.ft-color.${bgColor}`, {
   //     ...noSelectStyle,
@@ -96,7 +96,7 @@ function renderProsody(elem: SlateElement, children: VNode[] | null): VNode {
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ]),
     h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
     h('span', children),
@@ -109,8 +109,9 @@ function renderAudio(elem: SlateElement): VNode {
 
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
+      h(`span#${domId}-play.btn.btn-text`, h('span.iconfont.icon-play', null)),
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
     ])
   ])
 }

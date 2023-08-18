@@ -6,6 +6,7 @@ import EditorMenuPlugin from './menu'
 export * from './components'
 export * from './menu'
 export * from './core'
+export * from './utils'
 
 export { default as EditorCoreModule } from './core'
 

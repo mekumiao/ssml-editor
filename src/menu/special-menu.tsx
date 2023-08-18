@@ -3,9 +3,10 @@ import type { Audio } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, ref, shallowRef, type PropType, inject, type ShallowRef } from 'vue'
-import { bindClose } from './helper'
+import { bindClose, bindPlay } from './helper'
 import { BarButton, BarSearch } from '@/components'
 import { ElDialog } from 'element-plus'
+import { playSound } from '@/utils/play'
 
 // 音效功能
 
@@ -50,6 +51,8 @@ class SpecialFn {
     bindClose<Audio>(editor, 'ssml-audio', node.domId, (nodeEntity) =>
       SlateTransforms.delete(editor, { at: nodeEntity[1] })
     )
+
+    bindPlay<Audio>(editor, 'ssml-audio', node.domId, (nodeEntity) => playSound(nodeEntity[0].src))
   }
 }
 
@@ -88,9 +91,9 @@ export default defineComponent({
         return
       }
 
+      visible.value = true
       dataList.value = await props.fetch({ search: '', menuKey: 'first', scene: '', style: '' })
 
-      visible.value = true
       oldSelection.value = editor.selection
     }
 

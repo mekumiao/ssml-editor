@@ -1,5 +1,5 @@
 import type { SlateElement } from '@wangeditor/editor'
-import type { P, W, SayAs, Break, Sub, Prosody, SSMLElementType } from './custom-types'
+import type { P, W, SayAs, Break, Sub, Prosody, SSMLElementType, Audio } from './custom-types'
 
 function insertBreak(childrenHtml: string): string {
   // const _break = break2({ time: '300ms' } as any, '')
@@ -42,6 +42,11 @@ function prosody(elem: SlateElement, childrenHtml: string) {
   return `<prosody rate="${rate}">${childrenHtml}</prosody>`
 }
 
+function audio(elem: SlateElement) {
+  const { src } = elem as Audio
+  return `<audio src="${src}" />`
+}
+
 export const elemToHtmls: {
   type: SSMLElementType
   elemToHtml: (elem: SlateElement, childrenHtml: string) => string
@@ -73,6 +78,10 @@ export const elemToHtmls: {
   {
     type: 'ssml-prosody',
     elemToHtml: prosody
+  },
+  {
+    type: 'ssml-audio',
+    elemToHtml: audio
   }
 ]
 

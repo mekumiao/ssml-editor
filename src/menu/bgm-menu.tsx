@@ -32,9 +32,9 @@ export default defineComponent({
     const editorRef = inject<ShallowRef<IDomEditor>>('editor')
 
     async function handleClick(editor: IDomEditor) {
+      visible.value = true
       dataList.value = await props.fetch({ search: '', menuKey: 'first', scene: '', style: '' })
 
-      visible.value = true
       oldSelection.value = editor.selection
     }
 

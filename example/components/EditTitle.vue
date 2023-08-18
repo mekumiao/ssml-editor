@@ -4,6 +4,7 @@ import { Share } from '@element-plus/icons-vue'
 import { computed, inject, ref, type ShallowRef } from 'vue'
 import type { IDomEditor } from '@wangeditor/editor'
 import xmlFormat from 'xml-formatter'
+import { playSound } from '@/index'
 
 defineProps<{
   characterTotal: number
@@ -46,13 +47,24 @@ const handleRemoveBgm = () => {
         <div>|</div>
         <div>{{ characterTotal }}/{{ characterMax }}字</div>
         <div class="w-2"></div>
-        <ElTag closable size="small" @close="handleRemoveBgm" v-if="bgm">{{ bgm.label }}</ElTag>
+        <ElTag
+          class="bgm-txt p-2"
+          closable
+          size="small"
+          @click="() => bgm && bgm.value && playSound(bgm.value)"
+          @close="handleRemoveBgm"
+          v-if="bgm"
+        >
+          <span class="iconfont icon-play font-size-12 p1"></span>
+          <div class="inline-block w-1 p-1"></div>
+          <span>{{ bgm.label }}</span>
+        </ElTag>
       </div>
     </div>
     <div class="operation-wrapper">
       <ElButton type="primary" :icon="Share" disabled>分享</ElButton>
       <div class="menu-divider"></div>
-      <ElButton type="primary" @click="handleGenSSML">配音</ElButton>
+      <ElButton type="primary" @click="handleGenSSML">查看SSML</ElButton>
       <ElButton disabled>下载音频</ElButton>
       <ElButton disabled>下载视频</ElButton>
       <ElButton disabled>下载字幕</ElButton>
@@ -108,5 +120,17 @@ const handleRemoveBgm = () => {
 .ssml-code {
   height: 400px;
   overflow-y: auto;
+}
+
+.inline-block {
+  display: inline-block;
+}
+
+.iconfont.icon-play {
+  cursor: pointer;
+}
+
+.bgm-txt {
+  cursor: pointer;
 }
 </style>
