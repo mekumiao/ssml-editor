@@ -12,8 +12,7 @@ import {
   SpecialMenu,
   type IdText
 } from '@/index'
-import { ElMessage, ElPopover } from 'element-plus'
-import EditInput from './EditInput.vue'
+import { ElMessage } from 'element-plus'
 
 function handleError(error: string) {
   ElMessage.warning(error)
@@ -51,22 +50,22 @@ function fetchEnglish(word: string): Promise<IdText[]> {
     </div>
     <div class="divider divider-green"></div>
     <div class="tool-list">
-      <SpeakerMenu :popover="ElPopover" @error="handleError" :fetch="fetchSpeaker"></SpeakerMenu>
-      <ReadMenu :popover="ElPopover" @error="handleError"></ReadMenu>
-      <DigitalMenu :popover="ElPopover" @error="handleError"></DigitalMenu>
+      <SpeakerMenu @error="handleError" :fetch="fetchSpeaker"></SpeakerMenu>
+      <ReadMenu @error="handleError"></ReadMenu>
+      <DigitalMenu @error="handleError"></DigitalMenu>
       <ContinuousMenu @error="handleError"></ContinuousMenu>
-      <AliasMenu :popover="ElPopover" :input="EditInput" @error="handleError"></AliasMenu>
-      <EnglishMenu :popover="ElPopover" :fetch="fetchEnglish" @error="handleError"></EnglishMenu>
+      <AliasMenu @error="handleError"></AliasMenu>
+      <EnglishMenu :fetch="fetchEnglish" @error="handleError"></EnglishMenu>
     </div>
     <div class="divider divider-cyan"></div>
     <div class="tool-list">
-      <ChangespeedMenu :popover="ElPopover" @error="handleError"></ChangespeedMenu>
+      <ChangespeedMenu @error="handleError"></ChangespeedMenu>
       <BarButton text="多人配音" icon="management" disabled></BarButton>
       <BarButton text="局部变音" icon="conversion" disabled></BarButton>
     </div>
     <div class="divider divider-orange"></div>
     <div class="tool-list">
-      <RhythmMenu :popover="ElPopover" @error="handleError"></RhythmMenu>
+      <RhythmMenu @error="handleError"></RhythmMenu>
       <BarButton text="插入静音" icon="mute" disabled></BarButton>
       <BarButton text="符号静音" icon="symbol" disabled></BarButton>
       <!-- <BarButton text="段落静音" icon="icon-play" disabled></BarButton>
@@ -74,7 +73,7 @@ function fetchEnglish(word: string): Promise<IdText[]> {
     </div>
     <div class="divider divider-purple"></div>
     <div class="tool-list">
-      <SpecialMenu :popover="ElPopover" @error="handleError" :input="EditInput"></SpecialMenu>
+      <SpecialMenu @error="handleError"></SpecialMenu>
       <BarButton text="配乐" icon="bgm" disabled></BarButton>
     </div>
     <!-- <div class="divider divider-yellow"></div>
