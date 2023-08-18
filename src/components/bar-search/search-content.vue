@@ -3,14 +3,14 @@ import { ElMenu, ElMenuItem, ElOption, ElSelect, ElInput, ElForm } from 'element
 import { ref } from 'vue'
 
 type MenuKey = 'first' | 'second' | 'last'
-type Options = { value: string; label: string }
+type Option = { value: string; label: string }
 
 const emit = defineEmits<{
-  submit: [value: string]
+  submit: [value: Option]
   fetch: [filter: { search: string; menuKey: MenuKey; scene: string; style: string }]
 }>()
 
-defineProps<{ scenes: Options[]; styles: Options[]; dataList: Options[] }>()
+defineProps<{ scenes: Option[]; styles: Option[]; dataList: Option[] }>()
 
 const searchInput = ref('')
 const sceneSelect = ref('')
@@ -31,7 +31,7 @@ function handleMenuSelect(key: MenuKey) {
   handleFetchData()
 }
 
-function handleSelect(value: string) {
+function handleSubmit(value: Option) {
   emit('submit', value)
 }
 </script>
@@ -74,7 +74,7 @@ function handleSelect(value: string) {
     <div class="h-1"></div>
     <div class="content flex flex-col">
       <div
-        @click="handleSelect(item.value)"
+        @click="handleSubmit(item)"
         class="btn full p-4"
         v-for="(item, index) in dataList"
         :key="index"

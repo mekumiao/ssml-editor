@@ -10,6 +10,7 @@ import ChangespeedMenu from './changespeed-menu'
 import RhythmMenu from './rhythm-menu'
 import SpecialMenu from './special-menu'
 import MuteMenu from './mute-menu'
+import BgmMenu from './bgm-menu'
 
 export default {
   install: (app: App) => {
@@ -23,6 +24,7 @@ export default {
     app.component('RhythmMenu', RhythmMenu)
     app.component('SpecialMenu', SpecialMenu)
     app.component('MuteMenu', MuteMenu)
+    app.component('BgmMenu', BgmMenu)
   }
 } as Plugin
 
@@ -36,7 +38,8 @@ export {
   ChangespeedMenu,
   RhythmMenu,
   SpecialMenu,
-  MuteMenu
+  MuteMenu,
+  BgmMenu
 }
 
 import './style.scss'

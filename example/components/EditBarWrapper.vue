@@ -11,11 +11,11 @@ import {
   RhythmMenu,
   SpecialMenu,
   MuteMenu,
+  BgmMenu,
   type IdText
 } from '@/index'
 import { ElMessage } from 'element-plus'
 import { ref } from 'vue'
-import {} from '@/index'
 
 function handleError(error: string) {
   ElMessage.warning({
@@ -73,6 +73,20 @@ function fetchSpecial(filter: {
     { value: '4', label: `${filter.style || '测试'}音效4` }
   ])
 }
+
+function fetchBgm(filter: {
+  search: string
+  menuKey: 'first' | 'second' | 'last'
+  scene: string
+  style: string
+}): Promise<{ value: string; label: string }[]> {
+  return Promise.resolve([
+    { value: '1', label: `${filter.search || '测试'}背景音乐1` },
+    { value: '2', label: `${filter.menuKey || '测试'}背景音乐2` },
+    { value: '3', label: `${filter.scene || '测试'}背景音乐3` },
+    { value: '4', label: `${filter.style || '测试'}背景音乐4` }
+  ])
+}
 </script>
 
 <template>
@@ -108,7 +122,12 @@ function fetchSpecial(filter: {
         :scenes="sceneOptions"
         :styles="styleOptions"
       ></SpecialMenu>
-      <BarButton text="配乐" icon="bgm" disabled></BarButton>
+      <BgmMenu
+        @error="handleError"
+        :fetch="fetchBgm"
+        :scenes="sceneOptions"
+        :styles="styleOptions"
+      ></BgmMenu>
     </div>
   </div>
 </template>

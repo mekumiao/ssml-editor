@@ -2,6 +2,7 @@ import { DomEditor, type IDomEditor } from '@wangeditor/editor'
 import type { SSMLElementType, W } from './custom-types'
 
 type Speak = { volume: string; pitch: string; rate: string; voice: string }
+type Option = { value: string; label: string }
 
 function isType(type: string, dest: SSMLElementType) {
   return type === dest
@@ -53,9 +54,18 @@ function withSSML<T extends IDomEditor>(editor: T) {
   }
 
   const speak = {} as Speak
+  const bgm = {} as Option
 
-  editor.on('updateSpeak', (sk: Speak) => {
-    Object.assign(speak, sk)
+  editor.on('updateSpeak', (value: Speak) => {
+    Object.assign(speak, value)
+  })
+
+  editor.on('updateBgm', (value: Option) => {
+    Object.assign(bgm, value)
+  })
+
+  editor.on('removeBgm', () => {
+    Object.assign(bgm, { value: '', label: '' })
   })
 
   newEditor.getHtml = () => {

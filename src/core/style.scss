@@ -67,6 +67,10 @@
       background-color: $special;
       color: $special;
     }
+    &.bgm {
+      background-color: $bgm;
+      color: $bgm;
+    }
   }
 
   .bg-color:not(.ft-color) {

@@ -1,11 +1,15 @@
 <script setup lang="ts">
-import { ElButton, ElDialog } from 'element-plus'
+import { ElButton, ElDialog, ElTag } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
 import { computed, inject, ref, type ShallowRef } from 'vue'
 import type { IDomEditor } from '@wangeditor/editor'
 import xmlFormat from 'xml-formatter'
 
-defineProps<{ characterTotal: number; characterMax: number }>()
+defineProps<{
+  characterTotal: number
+  characterMax: number
+  bgm?: { value: string; label: string } | null
+}>()
 
 const editorRef = inject<ShallowRef<IDomEditor>>('editor')
 const dialogVisible = ref(false)
@@ -34,9 +38,11 @@ const handleGenSSML = () => {
       <div class="title-author">SSML编辑器</div>
       <div class="h h-1"></div>
       <div class="author">
-        <!-- <div>已保存</div>
-        <div>|</div> -->
+        <div>已保存</div>
+        <div>|</div>
         <div>{{ characterTotal }}/{{ characterMax }}字</div>
+        <div class="w-2"></div>
+        <ElTag closable size="small" v-if="bgm">{{ bgm.label }}</ElTag>
       </div>
     </div>
     <div class="operation-wrapper">
