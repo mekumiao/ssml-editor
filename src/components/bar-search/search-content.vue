@@ -52,7 +52,7 @@ const dataList = ref([{ text: '测试1' }, { text: '测试2' }, { text: '测试3
 </template>
 
 <style lang="scss" scoped>
-.content{
+.content {
   text-align: center;
   align-items: center;
 }
