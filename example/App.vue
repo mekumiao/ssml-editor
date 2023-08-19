@@ -1,9 +1,7 @@
-<script setup lang="ts">
-import EditView from './components/EditView.vue'
-</script>
+<script setup lang="ts"></script>
 
 <template>
-  <EditView></EditView>
+  <EditorView></EditorView>
 </template>
 
 <style scoped></style>

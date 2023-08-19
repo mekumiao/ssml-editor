@@ -4,7 +4,7 @@ import { Share } from '@element-plus/icons-vue'
 import { computed, inject, ref, type ShallowRef } from 'vue'
 import type { IDomEditor } from '@wangeditor/editor'
 import xmlFormat from 'xml-formatter'
-import { playSound } from '@/index'
+import { playSound } from '@/utils'
 
 defineProps<{
   characterTotal: number

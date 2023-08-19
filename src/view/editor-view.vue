@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import EditTitle from './EditTitle.vue'
-import EditCore from './EditCore.vue'
-import EditBarWrapper from './EditBarWrapper.vue'
+import EditorTitle from './editor-title.vue'
+import EditorCore from './editor-core.vue'
+import BarView from './bar-view.vue'
 import type { IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef, provide } from 'vue'
 
@@ -38,19 +38,19 @@ const handleChange = (editor: IDomEditor) => {
 
 <template>
   <div class="edit-view">
-    <EditTitle
+    <EditorTitle
       :bgm="bgm"
       :character-total="characterTotal"
       :character-max="characterMax"
-    ></EditTitle>
+    ></EditorTitle>
     <div class="edit-box">
-      <EditBarWrapper></EditBarWrapper>
+      <BarView></BarView>
       <div class="h h-1"></div>
-      <EditCore
+      <EditorCore
         @on-change="handleChange"
         :max-length="characterMax"
         @on-created="handleCreated"
-      ></EditCore>
+      ></EditorCore>
     </div>
   </div>
 </template>

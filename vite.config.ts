@@ -31,7 +31,7 @@ export default defineConfig({
     })
   ],
   build: {
-    cssCodeSplit: true,
+    // cssCodeSplit: true,
     lib: {
       entry: 'src/index.ts',
       name: 'SSMLEditor',
@@ -42,7 +42,7 @@ export default defineConfig({
       input: {
         main: resolve(__dirname, 'src/index.ts')
       },
-      external: ['vue', '@wangeditor/editor'],
+      external: ['vue', '@wangeditor/editor', 'element-plus', '@element-plus/icons-vue'],
       output: {
         assetFileNames: (assetInfo) => {
           if (assetInfo.name === 'index.css') return 'style.css'
@@ -50,7 +50,10 @@ export default defineConfig({
         },
         exports: 'named',
         globals: {
-          vue: 'Vue'
+          vue: 'Vue',
+          '@wangeditor/editor': 'wangEditor',
+          'element-plus': 'ElementPlus',
+          '@element-plus/icons-vue': 'ElementPlusIconsVue'
         }
       }
     }
