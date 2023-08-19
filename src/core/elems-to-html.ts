@@ -47,10 +47,7 @@ function audio(elem: SlateElement) {
   return `<audio src="${src}" />`
 }
 
-export const elemToHtmls: {
-  type: SSMLElementType
-  elemToHtml: (elem: SlateElement, childrenHtml: string) => string
-}[] = [
+export default [
   {
     type: 'paragraph',
     elemToHtml: paragraph
@@ -83,6 +80,7 @@ export const elemToHtmls: {
     type: 'ssml-audio',
     elemToHtml: audio
   }
-]
-
-export {}
+] as {
+  type: SSMLElementType
+  elemToHtml: (elem: SlateElement, childrenHtml: string) => string
+}[]

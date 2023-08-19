@@ -1,12 +1,14 @@
 import { type IModuleConf } from '@wangeditor/editor'
 import { renderElems } from './render-elems'
-import { elemToHtmls } from './elem-to-htmls'
+import elemsToHtml from './elems-to-html'
+import parseElemsHtml from './parse-elems-html'
 import withSSML from './plugin'
 
 export default {
   editorPlugin: withSSML,
   renderElems: renderElems,
-  elemsToHtml: elemToHtmls
+  elemsToHtml: elemsToHtml,
+  parseElemsHtml: parseElemsHtml
 } as Partial<IModuleConf>
 
 export * from './custom-types'
