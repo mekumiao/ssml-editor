@@ -4,14 +4,6 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
-dependencies:
-  bootstrap:
-    specifier: ^5.3.1
-    version: 5.3.1(@popperjs/core@2.11.8)
-  lodash.throttle:
-    specifier: ^4.1.1
-    version: 4.1.1
-
 devDependencies:
   '@element-plus/icons-vue':
     specifier: ^2.1.0
@@ -52,9 +44,9 @@ devDependencies:
   '@wangeditor/editor':
     specifier: ^5.1.23
     version: 5.1.23
-  '@wangeditor/editor-for-vue':
-    specifier: file:.yalc/@wangeditor/editor-for-vue
-    version: file:.yalc/@wangeditor/editor-for-vue(@wangeditor/editor@5.1.23)(vue@3.3.4)
+  bootstrap:
+    specifier: ^5.3.1
+    version: 5.3.1(@popperjs/core@2.11.8)
   dom7:
     specifier: ^3.0.0
     version: 3.0.0
@@ -67,6 +59,9 @@ devDependencies:
   eslint-plugin-vue:
     specifier: ^9.15.1
     version: 9.15.1(eslint@8.45.0)
+  lodash.throttle:
+    specifier: ^4.1.1
+    version: 4.1.1
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
@@ -806,7 +801,7 @@ packages:
 
   /@popperjs/core@2.11.8:
     resolution: {integrity: sha512-P1st0aksCrn9sGZhp8GMYwBnQsbvAWsZAX44oXNNvLHGqAOcoVxmjZiohstwQ7SqKnbR47akdNi+uleWD8+g6A==}
-    dev: false
+    dev: true
 
   /@rollup/pluginutils@4.2.1:
     resolution: {integrity: sha512-iKnFXr7NkdZAIHiIWE+BX5ULi/ucVFYWD6TbAV+rZctiRTY2PL6tsIKhoIOaoskiWAkgu+VsbXgUVDNLHf+InQ==}
@@ -1681,7 +1676,7 @@ packages:
       '@popperjs/core': ^2.11.8
     dependencies:
       '@popperjs/core': 2.11.8
-    dev: false
+    dev: true
 
   /bplist-parser@0.2.0:
     resolution: {integrity: sha512-z0M+byMThzQmD9NILRniCUXYsYpjwnlO8N5uCFaCqIOpqRsJCrQL9NK3JsD67CN5a08nF5oIL2bD6loTdHOuKw==}
@@ -3005,6 +3000,7 @@ packages:
 
   /lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
+    dev: true
 
   /lodash.toarray@4.4.0:
     resolution: {integrity: sha512-QyffEA3i5dma5q2490+SgCvDN0pXLmRGSyAANuVi0HQ01Pkfr9fuoKQW8wm1wGBnJITs/mS7wQvS6VshUEBFCw==}
@@ -4209,16 +4205,4 @@ packages:
       validator: 13.11.0
     optionalDependencies:
       commander: 9.5.0
-    dev: true
-
-  file:.yalc/@wangeditor/editor-for-vue(@wangeditor/editor@5.1.23)(vue@3.3.4):
-    resolution: {directory: .yalc/@wangeditor/editor-for-vue, type: directory}
-    id: file:.yalc/@wangeditor/editor-for-vue
-    name: '@wangeditor/editor-for-vue'
-    peerDependencies:
-      '@wangeditor/editor': '>=5.1.0'
-      vue: ^3.0.5
-    dependencies:
-      '@wangeditor/editor': 5.1.23
-      vue: 3.3.4
     dev: true

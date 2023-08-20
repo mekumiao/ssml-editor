@@ -63,6 +63,11 @@ function withSSML<T extends IDomEditor>(editor: T) {
     insertBreak()
   }
 
+  newEditor.normalizeNode = (entry) => {
+    console.log(entry[0], entry[1])
+    // normalizeNode(entry)
+  }
+
   const speak: Partial<Speak> = { voice: '', volume: '', pitch: '' }
 
   editor.on('updateSpeak', (value: Partial<Speak>) => {
