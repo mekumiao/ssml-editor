@@ -1,0 +1,9 @@
+.clickable {
+  &:not(.disabled) {
+    cursor: pointer;
+  }
+
+  &:hover {
+    background-color: var(--tool-btn-hover-bg-color);
+  }
+}

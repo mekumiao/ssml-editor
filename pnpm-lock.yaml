@@ -59,6 +59,9 @@ devDependencies:
   eslint-plugin-vue:
     specifier: ^9.15.1
     version: 9.15.1(eslint@8.45.0)
+  event-emitter:
+    specifier: ^0.3.5
+    version: 0.3.5
   lodash.throttle:
     specifier: ^4.1.1
     version: 4.1.1
