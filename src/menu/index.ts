@@ -12,6 +12,8 @@ import { SpecialMenu, SpecialDragBox } from './special-menu'
 import MuteMenu from './mute-menu'
 import { BgmMenu, BgmDragBox } from './bgm-menu'
 import { SensitiveMenu, SensitiveDragBox } from './sensitive-menu'
+import { ManagementMenu, ManagementDragBox } from './management-menu'
+import { ConversionMenu, ConversionDragBox } from './conversion-menu'
 
 export default {
   install: (app: App) => {
@@ -30,6 +32,10 @@ export default {
     app.component('BgmDragBox', BgmDragBox)
     app.component('SensitiveMenu', SensitiveMenu)
     app.component('SensitiveDragBox', SensitiveDragBox)
+    app.component('ManagementMenu', ManagementMenu)
+    app.component('ManagementDragBox', ManagementDragBox)
+    app.component('ConversionMenu', ConversionMenu)
+    app.component('ConversionDragBox', ConversionDragBox)
   }
 } as Plugin
 
@@ -48,7 +54,11 @@ export {
   BgmMenu,
   BgmDragBox,
   SensitiveMenu,
-  SensitiveDragBox
+  SensitiveDragBox,
+  ManagementMenu,
+  ManagementDragBox,
+  ConversionMenu,
+  ConversionDragBox
 }
 
 import './style.scss'

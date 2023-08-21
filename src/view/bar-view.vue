@@ -12,9 +12,17 @@ import {
   SpecialMenu,
   MuteMenu,
   BgmMenu,
-  SensitiveMenu
+  SensitiveMenu,
+  ConversionMenu,
+  ManagementMenu
 } from '../menu'
-import { SpecialDragBox, BgmDragBox, SensitiveDragBox } from '@/menu'
+import {
+  SpecialDragBox,
+  BgmDragBox,
+  SensitiveDragBox,
+  ManagementDragBox,
+  ConversionDragBox
+} from '@/menu'
 
 import { type IdText } from '../core'
 import { ElMessage } from 'element-plus'
@@ -77,8 +85,8 @@ function fetchEnglish(word: string): Promise<IdText[]> {
       </BarWrapperGroup>
       <BarWrapperGroup divider="orange">
         <ChangespeedMenu @error="handleError"></ChangespeedMenu>
-        <BarButton text="多人配音" icon="management" disabled></BarButton>
-        <BarButton text="局部变音" icon="conversion" disabled></BarButton>
+        <ManagementMenu></ManagementMenu>
+        <ConversionMenu></ConversionMenu>
       </BarWrapperGroup>
       <BarWrapperGroup divider="purple">
         <RhythmMenu @error="handleError"></RhythmMenu>
@@ -93,9 +101,11 @@ function fetchEnglish(word: string): Promise<IdText[]> {
       </BarWrapperGroup>
     </BarWrapper>
   </div>
-  <SpecialDragBox></SpecialDragBox>
   <BgmDragBox></BgmDragBox>
+  <SpecialDragBox></SpecialDragBox>
   <SensitiveDragBox></SensitiveDragBox>
+  <ManagementDragBox></ManagementDragBox>
+  <ConversionDragBox></ConversionDragBox>
 </template>
 
 <style lang="scss" scoped></style>
