@@ -1,74 +1,16 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { P } from '../../core/custom-types'
-import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { genRandomStr } from '@/utils/random'
-import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
+import { defineComponent, inject, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { selectionTrimEnd } from '../../core/helper'
-import { bindClose, unpackVoid } from '../helper'
 import { ElPopover } from 'element-plus'
 import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
 import { emitter } from '@/event-bus'
-
-function genDomID(): string {
-  return genRandomStr('w-e-dom-english')
-}
-
-class EnglishEn {
-  getValue(editor: IDomEditor): string | null {
-    const { selection } = editor
-    if (selection == null) return null
-    return SlateEditor.string(editor, selection)
-  }
-
-  isDisabled(editor: IDomEditor): boolean {
-    const { selection } = editor
-    if (selection == null) return true
-    if (SlateRange.isCollapsed(selection)) return true
-
-    const value = SlateEditor.string(editor, selection)
-    if (value.length <= 0) return true
-console.log(value)
-    if (!/^[A-Za-z]+$/gi.test(value)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请选择英文单词')
-      return true
-    }
-
-    return false
-  }
-
-  exec(editor: IDomEditor, pinyin: string) {
-    if (this.isDisabled(editor)) return
-    const { selection } = editor
-    if (selection == null) return
-    const value = this.getValue(editor)
-    if (value == null) return
-
-    const node: P = {
-      type: 'ssml-p',
-      domId: genDomID(),
-      word: value,
-      phoneme: pinyin,
-      remark: pinyin,
-      bgColor: 'english',
-      children: [{ text: '' }]
-    }
-
-    SlateTransforms.delete(editor)
-    SlateTransforms.insertNodes(editor, node)
-    editor.move(1)
-
-    bindClose<P>(editor, 'ssml-p', node.domId, (nodeEntity) =>
-      unpackVoid(editor, nodeEntity, (elem) => elem.word)
-    )
-  }
-}
+import { EnglishEn } from './english-fn'
 
 export default defineComponent({
   setup() {
-    const fn = new EnglishEn()
+    const fn = shallowRef<EnglishEn>()
     const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const englishList = ref<LabelValue[]>([])
     const visible = ref(false)
 
@@ -82,12 +24,12 @@ export default defineComponent({
       visible.value = false
     }
 
-    async function handleClick() {
-      if (!editorRef.value) return
-      selectionTrimEnd(editorRef?.value)
+    async function handleClick(editor: IDomEditor) {
+      fn.value ??= new EnglishEn(editor)
+      selectionTrimEnd(editor)
 
-      if (fn.isDisabled(editorRef.value)) return
-      const text = fn.getValue(editorRef.value)
+      if (fn.value.isDisabled()) return
+      const text = fn.value.getValue()
       if (text) {
         englishList.value = await config.fetchEnglish(text)
 
@@ -111,8 +53,8 @@ export default defineComponent({
                     key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (editorRef && !fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, value)
+                      if (fn.value && !fn.value.isDisabled()) {
+                        fn.value.exec({ label, value })
                       }
                       hide()
                     }}

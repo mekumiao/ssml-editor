@@ -2,38 +2,45 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
-import { DigitalFn } from './digital-fn'
+import { ReadFn } from './read-fn'
 
-const options: LabelValue[] = [
-  { value: 'value', label: '读数值' },
-  { value: 'digits', label: '读数字' },
-  { value: 'telephone', label: '读手机号' }
+const readList: LabelValue[] = [
+  { label: '重音', value: '重' },
+  { label: '拖音', value: '拖' },
+  { label: '重音+拖音', value: '重+拖' }
 ]
 
 export default defineComponent({
   setup() {
-    const fn = shallowRef<DigitalFn>()
+    const fn = shallowRef<ReadFn>()
     const visible = ref(false)
 
-    function toggle() {
-      visible.value = !visible.value
+    function show() {
+      if (visible.value) return
+      visible.value = true
+    }
+
+    function hide() {
+      if (!visible.value) return
+      visible.value = false
     }
 
     function handleClick(editor: IDomEditor) {
-      fn.value ??= new DigitalFn(editor)
+      fn.value ??= new ReadFn(editor)
       if (fn.value.isDisabled()) return
-      toggle()
+      show()
     }
 
     return () => (
       <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
-          reference: () => (
-            <BarButton text="数字符号" icon="digital" onClick={handleClick}></BarButton>
-          ),
+          reference: () => <BarButton text="重音" icon="read" onClick={handleClick}></BarButton>,
           default: () => (
-            <div class="d-flex flex-column">
-              {options.map(({ label, value }) => {
+            <div
+              class="d-flex flex-column"
+              onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
+            >
+              {readList.map(({ label, value }) => {
                 return (
                   <div
                     key={value}
@@ -42,7 +49,7 @@ export default defineComponent({
                       if (fn.value && !fn.value.isDisabled()) {
                         fn.value.exec({ label, value })
                       }
-                      toggle()
+                      hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >

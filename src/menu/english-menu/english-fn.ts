@@ -13,6 +13,10 @@ export class EnglishEn extends BaseFn {
     super(editor)
   }
 
+  public getValue(): string {
+    return super.getValue()
+  }
+
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
     const selection = this.selection()!

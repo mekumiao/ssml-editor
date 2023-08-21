@@ -1,1 +1,1 @@
-export { default as DigitalFn } from './digital-menu'
+export { default as DigitalMenu } from './digital-menu'

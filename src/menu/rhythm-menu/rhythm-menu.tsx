@@ -2,34 +2,40 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
-import { DigitalFn } from './digital-fn'
+import { RhythmFn } from './rhythm-fn'
 
 const options: LabelValue[] = [
-  { value: 'value', label: '读数值' },
-  { value: 'digits', label: '读数字' },
-  { value: 'telephone', label: '读手机号' }
+  { value: '200ms', label: '短' },
+  { value: '300ms', label: '中' },
+  { value: '500ms', label: '长' }
 ]
 
 export default defineComponent({
   setup() {
-    const fn = shallowRef<DigitalFn>()
+    const fn = shallowRef<RhythmFn>()
     const visible = ref(false)
 
-    function toggle() {
-      visible.value = !visible.value
+    function show() {
+      if (visible.value) return
+      visible.value = true
+    }
+
+    function hide() {
+      if (!visible.value) return
+      visible.value = false
     }
 
     function handleClick(editor: IDomEditor) {
-      fn.value ??= new DigitalFn(editor)
+      fn.value ??= new RhythmFn(editor)
       if (fn.value.isDisabled()) return
-      toggle()
+      show()
     }
 
     return () => (
       <ElPopover v-model:visible={visible.value} trigger="contextmenu" hideAfter={0}>
         {{
           reference: () => (
-            <BarButton text="数字符号" icon="digital" onClick={handleClick}></BarButton>
+            <BarButton text="停顿调节" icon="rhythm" onClick={handleClick}></BarButton>
           ),
           default: () => (
             <div class="d-flex flex-column">
@@ -42,7 +48,7 @@ export default defineComponent({
                       if (fn.value && !fn.value.isDisabled()) {
                         fn.value.exec({ label, value })
                       }
-                      toggle()
+                      hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >

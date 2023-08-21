@@ -1,12 +1,16 @@
-import type { Break } from '../../core/custom-types'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { bindClose } from '../helper'
+import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
+import BaseFn from '../base-fn'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
-import BaseFn from '../base-fn'
+import type { Break } from '@/core/custom-types'
+import { bindClose } from '../helper'
 
-export class MuteFn extends BaseFn {
-  protected key: string = 'mute'
+export class RhythmFn extends BaseFn {
+  protected key: string = 'rhythm'
+
+  public constructor(editor: IDomEditor) {
+    super(editor)
+  }
 
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
@@ -27,7 +31,7 @@ export class MuteFn extends BaseFn {
       domId: this.genDomID(),
       time: opt.value,
       remark: opt.label,
-      bgColor: 'mute',
+      bgColor: 'rhythm',
       children: [{ text: '' }]
     }
 
