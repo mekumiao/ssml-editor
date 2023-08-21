@@ -33,7 +33,12 @@ function createStyle(x: number, y: number) {
 
 <template>
   <Teleport to="body">
-    <div ref="boxRef" class="card shadow brag-box z-3" style="position: fixed" :style="moveStyle">
+    <div
+      ref="boxRef"
+      class="card shadow brag-box z-3 user-select-none"
+      style="position: fixed"
+      :style="moveStyle"
+    >
       <slot></slot>
     </div>
   </Teleport>

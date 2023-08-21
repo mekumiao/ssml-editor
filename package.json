@@ -44,6 +44,8 @@
     "@vueuse/components": "^10.3.0",
     "@vueuse/core": "^10.3.0",
     "@wangeditor/editor": "^5.1.23",
+    "axios": "^1.4.0",
+    "axios-mock-adapter": "^1.21.5",
     "bootstrap": "^5.3.1",
     "dom7": "^3.0.0",
     "element-plus": "^2.3.9",

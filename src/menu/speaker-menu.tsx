@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { IdText, P } from '../core/custom-types'
+import type { P } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
@@ -58,29 +58,12 @@ class SpeakerFn {
   }
 }
 
-function fetchSpeaker(hanzi: string): Promise<IdText[]> {
-  const list = {
-    我: [
-      { id: '1', text: 'wo1', remark: 'wo1' },
-      { id: '2', text: 'wo2', remark: 'wo2' },
-      { id: '3', text: 'wo3', remark: 'wo3' }
-    ],
-    的: [
-      { id: '1', text: 'de1', remark: 'de1' },
-      { id: '2', text: 'de2', remark: 'de2' },
-      { id: '3', text: 'de3', remark: 'de3' }
-    ]
-  } as Record<string, IdText[]>
-  return Promise.resolve(list[hanzi] || list['我'])
-}
-
 export default defineComponent({
-  emits: ['error'],
-  props: ['fetch'],
-  setup(props, { emit }) {
+  setup(_props, { emit }) {
+    const config = inject<SSMLEditorConfig>('ssml-editor-config')!
     const fn = new SpeakerFn()
     const editorRef = inject<ShallowRef>('editor')
-    const pyList = ref<IdText[]>([])
+    const pyList = ref<LabelValue[]>([])
     const visible = ref(false)
 
     function show() {
@@ -96,7 +79,7 @@ export default defineComponent({
     async function handleClick(editor: IDomEditor) {
       const text = fn.getValue(editor)
       if (text) {
-        pyList.value = await (props.fetch || fetchSpeaker)(text)
+        pyList.value = await config.fetchSpeaker(text)
       } else {
         pyList.value = []
       }
@@ -116,20 +99,20 @@ export default defineComponent({
           ),
           default: () => (
             <div class="d-flex flex-column">
-              {pyList.value.map(({ id, text }) => {
+              {pyList.value.map(({ label, value }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, text)
+                        fn.exec(editorRef?.value, label)
                       }
                       hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}
