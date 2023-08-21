@@ -82,20 +82,25 @@
   }
 
   .tag {
+    display: inline-block;
     border-radius: 5px;
     margin: 0px 2px;
     padding: 0px 5px;
     color: white;
+    width: fit-content;
 
     .iconfont {
       color: #e2fafa;
       opacity: 0.6;
     }
 
-    .btn-text {
-      display: inline-block;
-      padding-left: 4px;
+    .btn-close {
+      font-size: 0rem;
     }
+  }
+
+  .tag-remark {
+    display: inline-block;
   }
 
   .tag-remark::before {

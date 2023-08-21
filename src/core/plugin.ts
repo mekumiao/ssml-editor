@@ -16,7 +16,16 @@ function isType(type: string, dest: SSMLElementType) {
 }
 
 function withSSML<T extends IDomEditor>(editor: T) {
-  const { isInline, isVoid, deleteBackward, deleteForward, insertBreak, getHtml, apply } = editor
+  const {
+    isInline,
+    isVoid,
+    deleteBackward,
+    deleteForward,
+    insertBreak,
+    getHtml,
+    apply,
+    normalizeNode
+  } = editor
   const newEditor = editor
 
   newEditor.isInline = (elem) => {
@@ -63,8 +72,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
   }
 
   newEditor.normalizeNode = (entry) => {
-    // console.log(entry[0], entry[1])
-    // normalizeNode(entry)
+    normalizeNode(entry)
   }
 
   const speak: Partial<Speak> = { voice: '', volume: '', pitch: '' }

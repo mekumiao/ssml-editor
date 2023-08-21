@@ -70,12 +70,7 @@ function createStyle(x: number, y: number) {
 <template>
   <Teleport to="body">
     <div v-show="visible" class="drag-box-mask" @click="handleVisible">
-      <div
-        ref="boxRef"
-        class="card shadow brag-box"
-        style="position: fixed"
-        :style="moveStyle"
-      >
+      <div ref="boxRef" class="card shadow brag-box" style="position: fixed" :style="moveStyle">
         <div class="w-100 text-end me-2">
           <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
         </div>
@@ -87,7 +82,7 @@ function createStyle(x: number, y: number) {
 
 <style lang="scss" scoped>
 .drag-box-mask {
-  background-color: transparent;
+  background-color: rgba(229, 229, 229, 0.15);
   width: 100%;
   height: 100%;
   position: absolute;

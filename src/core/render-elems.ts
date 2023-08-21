@@ -1,119 +1,96 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor } from '@wangeditor/editor'
-import type { P, W, SayAs, Break, Sub, Prosody, SSMLElementType, Audio } from './custom-types'
+import type {
+  P,
+  W,
+  SayAs,
+  Break,
+  Sub,
+  Prosody,
+  SSMLElementType,
+  Audio,
+  SSMLBaseElement
+} from './custom-types'
 
 const noSelectStyle = { style: { userSelect: 'none' }, contentEditable: false }
 
-function renderP(elem: SlateElement): VNode {
-  const { domId, bgColor, remark, word } = elem as P
-
-  return h('span.ssml-wrap', { ...noSelectStyle }, [
-    h(`span.tag.bg-color.${bgColor}`, [
-      h('span.tag-remark', { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+function createVoid(args: SSMLBaseElement & { plain: string }) {
+  return h('span.ssml-wrap', [
+    h(`span.tag.bg-color.${args.bgColor}`, { ...noSelectStyle }, [
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': args.remark } }),
+      h(`span#${args.domId}-close.btn-close`, h('span.iconfont.icon-roundclosefill', null))
     ]),
-    h(`span.boundary.start.ft-color.${bgColor}`),
-    h('span', word),
-    h(`span.boundary.end.ft-color.${bgColor}`)
+    h(`span.boundary.start.ft-color.${args.bgColor}`, { ...noSelectStyle }),
+    h('span', args.plain),
+    h(`span.boundary.end.ft-color.${args.bgColor}`, { ...noSelectStyle })
   ])
+}
+
+function createWithChildren(args: SSMLBaseElement, children: VNode[]) {
+  return h('span.ssml-wrap', [
+    h(`span.tag.bg-color.${args.bgColor}`, { ...noSelectStyle }, [
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': args.remark } }),
+      h(`span#${args.domId}-close.btn-close`, h('span.iconfont.icon-roundclosefill', null))
+    ]),
+    h(`span.boundary.start.ft-color.${args.bgColor}`, { ...noSelectStyle }),
+    h('span', children),
+    h(`span.boundary.end.ft-color.${args.bgColor}`, { ...noSelectStyle })
+  ])
+}
+
+function createSingle(args: SSMLBaseElement) {
+  return h('span.ssml-wrap', [
+    h(`span.tag.bg-color.${args.bgColor}`, { ...noSelectStyle }, [
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': args.remark } }),
+      h(`span#${args.domId}-close.btn-close`, h('span.iconfont.icon-roundclosefill', null))
+    ])
+  ])
+}
+
+function createSingleWithPlay(args: SSMLBaseElement) {
+  return h('span.ssml-wrap', [
+    h(`span.tag.bg-color.${args.bgColor}`, { ...noSelectStyle }, [
+      h(`span#${args.domId}-play.btn-text`, h('span.iconfont.icon-play', null)),
+      h(`span.tag-remark`, { attrs: { 'data-tag-remark': args.remark } }),
+      h(`span#${args.domId}-close.btn-text`, h('span.iconfont.icon-roundclosefill', null))
+    ])
+  ])
+}
+
+function renderP(elem: SlateElement): VNode {
+  const el = elem as P
+  return createVoid({ ...el, plain: el.word })
 }
 
 function renderW(elem: SlateElement, children: VNode[] | null): VNode {
-  const { bgColor, domId, remark, value } = elem as W
-
-  return h('span.ssml-wrap', !children ? { ...noSelectStyle } : {}, [
-    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
-    ]),
-    h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
-    h('span', children || value),
-    h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle })
-  ])
+  if (children) {
+    return createWithChildren(elem as W, children)
+  }
+  const el = elem as W
+  return createVoid({ ...el, plain: el.value! })
 }
 
 function renderSayAs(elem: SlateElement, children: VNode[] | null): VNode {
-  const { bgColor, domId, remark } = elem as SayAs
-
-  return h('span.ssml-wrap', [
-    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
-    ]),
-    h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
-    h('span', children),
-    h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle })
-  ])
+  if (!children) throw Error('children is not null')
+  return createWithChildren(elem as SayAs, children)
 }
 
 function renderBreak(elem: SlateElement): VNode {
-  const { domId, remark, bgColor } = elem as Break
-
-  return h('span.ssml-wrap', [
-    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
-    ])
-  ])
+  return createSingle(elem as Break)
 }
 
 function renderSub(elem: SlateElement): VNode {
-  const { domId, remark, bgColor, value } = elem as Sub
-
-  return h('span.ssml-wrap', { ...noSelectStyle }, [
-    h(`span.tag.bg-color.${bgColor}`, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
-    ]),
-    h(`span.boundary.start.ft-color.${bgColor}`),
-    h('span', value),
-    h(`span.boundary.end.ft-color.${bgColor}`)
-  ])
-  // return h('span.ssml-wrap', [
-  //   h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
-  //     h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-  //     h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill'))
-  //   ]),
-  //   h(`span.tag-remark.ft-color.${bgColor}`, {
-  //     ...noSelectStyle,
-  //     attrs: { 'data-tag-remark': '<' }
-  //   }),
-  //   h('span', children),
-
-  //   h(`span.tag-remark.ft-color.${bgColor}`, {
-  //     ...noSelectStyle,
-  //     attrs: { 'data-tag-remark': '>' }
-  //   }),
-  //   h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }, null),
-  //   h('span.tag-remark', { ...noSelectStyle, attrs: { 'data-tag-remark': value } }),
-  //   h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle }, null)
-  // ])
+  const el = elem as Sub
+  return createVoid({ ...el, plain: el.value })
 }
 
 function renderProsody(elem: SlateElement, children: VNode[] | null): VNode {
-  const { bgColor, domId, remark } = elem as Prosody
-
-  return h('span.ssml-wrap', [
-    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
-    ]),
-    h(`span.boundary.start.ft-color.${bgColor}`, { ...noSelectStyle }),
-    h('span', children),
-    h(`span.boundary.end.ft-color.${bgColor}`, { ...noSelectStyle })
-  ])
+  if (!children) throw Error('children is not null')
+  return createWithChildren(elem as Prosody, children)
 }
 
 function renderAudio(elem: SlateElement): VNode {
-  const { bgColor, domId, remark } = elem as Audio
-
-  return h('span.ssml-wrap', [
-    h(`span.tag.bg-color.${bgColor}`, { ...noSelectStyle }, [
-      h(`span#${domId}-play.btn.btn-text`, h('span.iconfont.icon-play', null)),
-      h(`span.tag-remark`, { attrs: { 'data-tag-remark': remark } }),
-      h(`span#${domId}-close.btn.btn-text`, h('span.iconfont.icon-roundclosefill', null))
-    ])
-  ])
+  return createSingleWithPlay(elem as Audio)
 }
 
 export const renderElems: {

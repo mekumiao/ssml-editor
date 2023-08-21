@@ -105,12 +105,15 @@ export default defineComponent({
             <BarButton text="局部变速" icon="changespeed" onClick={handleClick}></BarButton>
           ),
           default: () => (
-            <div class="flex flex-col h h-50 scroll scroll-y">
+            <div
+              class="d-flex flex-column overflow-x-hidden overflow-y-scroll"
+              style="height:15rem"
+            >
               {rates.value.map(({ id, text }) => {
                 return (
                   <div
                     key={id}
-                    class="btn full"
+                    class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
                         fn.exec(editorRef?.value, text)

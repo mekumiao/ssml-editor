@@ -82,12 +82,12 @@ export default defineComponent({
             <BarButton text="停顿调节" icon="rhythm" onClick={handleClick}></BarButton>
           ),
           default: () => (
-            <div class="flex flex-col">
+            <div class="d-flex flex-column">
               {idTextList.map(({ id, text, remark }) => {
                 return (
                   <div
                     key={id}
-                    class="btn radius ssml-menu item full"
+                    class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
                         fn.exec(editorRef?.value, { id, text, remark })

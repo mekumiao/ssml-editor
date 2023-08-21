@@ -92,12 +92,12 @@ export default defineComponent({
         {{
           reference: () => <BarButton text="重音" icon="read" onClick={handleClick}></BarButton>,
           default: () => (
-            <div class="flex flex-col" onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}>
+            <div class="d-flex flex-column" onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}>
               {readList.map(({ id, text, remark }) => {
                 return (
                   <div
                     key={id}
-                    class="btn full"
+                    class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
                         fn.exec(editorRef?.value, { id, text, remark })

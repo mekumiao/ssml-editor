@@ -105,12 +105,12 @@ export default defineComponent({
         {{
           reference: () => <BarButton text="音标" icon="english" onClick={handleClick}></BarButton>,
           default: () => (
-            <div class="flex flex-col">
+            <div class="d-flex flex-column">
               {englishList.value.map(({ id, text }) => {
                 return (
                   <div
                     key={id}
-                    class="btn full"
+                    class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (!fn.isDisabled(editorRef?.value)) {
                         fn.exec(editorRef?.value, text)
