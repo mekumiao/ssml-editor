@@ -1,5 +1,5 @@
 import axios from 'axios'
-import './mock'
+import './mockServer'
 
 export function speaker(word: string): Promise<LabelValue[]> {
   return axios.get('/speaker', { params: { word } })
