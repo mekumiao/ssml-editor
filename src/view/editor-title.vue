@@ -5,7 +5,7 @@ import { computed, inject, ref, type ShallowRef } from 'vue'
 import type { IDomEditor } from '@wangeditor/editor'
 import xmlFormat from 'xml-formatter'
 import { playSound } from '@/utils'
-import { WANGEDITOR_EVENT } from '..'
+import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
 
 defineProps<{
   characterTotal: number
@@ -13,7 +13,7 @@ defineProps<{
   bgm?: { value: string; label: string } | null
 }>()
 
-const editorRef = inject<ShallowRef<IDomEditor>>('editor')
+const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
 const dialogVisible = ref(false)
 const ssmlValue = ref('')
 
@@ -34,7 +34,7 @@ const handleGenSSML = () => {
 }
 
 const handleRemoveBgm = () => {
-  editorRef?.value?.emit(WANGEDITOR_EVENT.REMOVE_BGM)
+  editorRef?.value.emit(WANGEDITOR_EVENT.REMOVE_BGM)
 }
 </script>
 

@@ -6,6 +6,7 @@ import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vu
 import { BarButton } from '@/components'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
+import { PROVIDER_KEY } from '..'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-speaker')
@@ -60,9 +61,9 @@ class SpeakerFn {
 
 export default defineComponent({
   setup(_props, { emit }) {
-    const config = inject<SSMLEditorConfig>('ssml-editor-config')!
+    const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
     const fn = new SpeakerFn()
-    const editorRef = inject<ShallowRef>('editor')
     const pyList = ref<LabelValue[]>([])
     const visible = ref(false)
 
@@ -105,8 +106,8 @@ export default defineComponent({
                     key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, label)
+                      if (editorRef && !fn.isDisabled(editorRef.value)) {
+                        fn.exec(editorRef.value, label)
                       }
                       hide()
                     }}

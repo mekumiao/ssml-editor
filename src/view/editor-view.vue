@@ -4,7 +4,7 @@ import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
-import { WANGEDITOR_EVENT } from '..'
+import { PROVIDER_KEY, WANGEDITOR_EVENT } from '..'
 
 const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
 
@@ -12,7 +12,7 @@ const characterTotal = ref(0)
 const editorRef = shallowRef<IDomEditor>()
 const bgm = ref<LabelValue | null>(null)
 
-provide('editor', editorRef)
+provide(PROVIDER_KEY.EDITOR, editorRef)
 
 const defaultHtml = `地球在极其遥远的未来可能面临一些威胁，但目前不太可能突然消失。
 The Earth may face some threats in the extremely distant future, but it is currently unlikely to suddenly disappear.

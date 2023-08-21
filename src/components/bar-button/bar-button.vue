@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { PROVIDER_KEY } from '@/constant'
 import { type IDomEditor } from '@wangeditor/editor'
 import { inject, type ShallowRef } from 'vue'
 
@@ -12,7 +13,7 @@ const props = withDefaults(
   { disabled: false }
 )
 
-const editorRef = inject<ShallowRef<IDomEditor>>('editor')
+const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
 
 const handleClick = () => {
   if (!props.disabled && editorRef) {

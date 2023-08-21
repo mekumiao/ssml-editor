@@ -1,11 +1,12 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { SayAs, IdText } from '../core/custom-types'
+import type { SayAs } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { bindClose } from './helper'
+import { PROVIDER_KEY } from '@/constant'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-digital')
@@ -31,7 +32,7 @@ export class DigitalFn {
     return false
   }
 
-  exec(editor: IDomEditor, idtext: IdText) {
+  exec(editor: IDomEditor, opt: LabelValue) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
@@ -41,8 +42,8 @@ export class DigitalFn {
     const node: SayAs = {
       type: 'ssml-say-as',
       domId: genDomID(),
-      interpretAs: idtext.id,
-      remark: idtext.remark,
+      interpretAs: opt.value,
+      remark: opt.label,
       bgColor: 'digital',
       children: [{ text: value }]
     }
@@ -56,17 +57,17 @@ export class DigitalFn {
   }
 }
 
-const idTextList: IdText[] = [
-  { id: 'value', text: '读数值', remark: '读数值' },
-  { id: 'digits', text: '读数字', remark: '读数字' },
-  { id: 'telephone', text: '读手机号', remark: '读手机号' }
+const options: LabelValue[] = [
+  { value: 'value', label: '读数值' },
+  { value: 'digits', label: '读数字' },
+  { value: 'telephone', label: '读手机号' }
 ]
 
 export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
     const fn = new DigitalFn()
-    const editorRef = inject<ShallowRef>('editor')
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
     const visible = ref(false)
 
     function toggle() {
@@ -89,20 +90,20 @@ export default defineComponent({
           ),
           default: () => (
             <div class="d-flex flex-column">
-              {idTextList.map(({ id, text, remark }) => {
+              {options.map(({ label, value }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, { id, text, remark })
+                      if (editorRef && !fn.isDisabled(editorRef.value)) {
+                        fn.exec(editorRef.value, { label, value })
                       }
                       toggle()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}

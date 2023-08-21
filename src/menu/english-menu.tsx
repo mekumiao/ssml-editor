@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { IdText, P } from '../core/custom-types'
+import type { P } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
@@ -7,6 +7,7 @@ import { BarButton } from '@/components'
 import { selectionTrimEnd } from '../core/helper'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
+import { PROVIDER_KEY } from '@/constant'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-english')
@@ -59,12 +60,12 @@ class EnglishEn {
   }
 }
 
-function fetchEnglish(word: string): Promise<IdText[]> {
+function fetchEnglish(word: string): Promise<LabelValue[]> {
   const list = {
-    translate: [{ id: '1', text: 'wərd', remark: 'wərd' }],
-    global: [{ id: '2', text: 'ˈɡlōbəl', remark: 'ˈɡlōbəl' }]
-  } as Record<string, IdText[]>
-  return Promise.resolve(list[word] || list['translate'])
+    world: [{ label: 'wərd', value: 'wərd' }],
+    global: [{ label: 'ˈɡlōbəl', value: 'ˈɡlōbəl' }]
+  } as Record<string, LabelValue[]>
+  return Promise.resolve(list[word] || list['world'])
 }
 
 export default defineComponent({
@@ -72,8 +73,8 @@ export default defineComponent({
   props: ['popover', 'fetch'],
   setup(props, { emit }) {
     const fn = new EnglishEn()
-    const editorRef = inject<ShallowRef>('editor')
-    const englishList = ref<IdText[]>([])
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const englishList = ref<LabelValue[]>([])
     const visible = ref(false)
 
     function show() {
@@ -106,20 +107,20 @@ export default defineComponent({
           reference: () => <BarButton text="音标" icon="english" onClick={handleClick}></BarButton>,
           default: () => (
             <div class="d-flex flex-column">
-              {englishList.value.map(({ id, text }) => {
+              {englishList.value.map(({ label, value }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, text)
+                      if (editorRef && !fn.isDisabled(editorRef?.value)) {
+                        fn.exec(editorRef?.value, value)
                       }
                       hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}

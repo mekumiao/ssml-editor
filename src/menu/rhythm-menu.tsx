@@ -1,11 +1,12 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { Break, IdText } from '../core/custom-types'
+import type { Break } from '../core/custom-types'
 import { SlateTransforms, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { bindClose } from './helper'
 import { ElPopover } from 'element-plus'
+import { PROVIDER_KEY } from '@/constant'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-rhythm')
@@ -20,7 +21,7 @@ export class RhythmFn {
     return false
   }
 
-  exec(editor: IDomEditor, idtext: IdText) {
+  exec(editor: IDomEditor, opt: LabelValue) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
@@ -28,8 +29,8 @@ export class RhythmFn {
     const node: Break = {
       type: 'ssml-break',
       domId: genDomID(),
-      time: idtext.id,
-      remark: idtext.remark,
+      time: opt.value,
+      remark: opt.label,
       bgColor: 'rhythm',
       children: [{ text: '' }]
     }
@@ -43,17 +44,17 @@ export class RhythmFn {
   }
 }
 
-const idTextList: IdText[] = [
-  { id: '200ms', text: '短', remark: '短' },
-  { id: '300ms', text: '中', remark: '中' },
-  { id: '500ms', text: '长', remark: '长' }
+const options: LabelValue[] = [
+  { value: '200ms', label: '短' },
+  { value: '300ms', label: '中' },
+  { value: '500ms', label: '长' }
 ]
 
 export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
     const fn = new RhythmFn()
-    const editorRef = inject<ShallowRef>('editor')
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
     const visible = ref(false)
 
     function show() {
@@ -83,20 +84,20 @@ export default defineComponent({
           ),
           default: () => (
             <div class="d-flex flex-column">
-              {idTextList.map(({ id, text, remark }) => {
+              {options.map(({ label, value }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, { id, text, remark })
+                      if (editorRef && !fn.isDisabled(editorRef.value)) {
+                        fn.exec(editorRef.value, { label, value })
                       }
                       hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}

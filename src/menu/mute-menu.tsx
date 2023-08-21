@@ -1,11 +1,12 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { Break, IdText } from '../core/custom-types'
+import type { Break } from '../core/custom-types'
 import { SlateTransforms, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef, shallowRef } from 'vue'
 import { BarButton, BarInput } from '@/components'
 import { bindClose } from './helper'
 import { ElPopover } from 'element-plus'
+import { PROVIDER_KEY } from '@/constant'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-mute')
@@ -43,20 +44,20 @@ export class MuteFn {
   }
 }
 
-const idTextList: IdText[] = [
-  { id: '150ms', text: '150ms', remark: '150ms' },
-  { id: '200ms', text: '200ms', remark: '200ms' },
-  { id: '300ms', text: '300ms', remark: '300ms' },
-  { id: '400ms', text: '400ms', remark: '400ms' },
-  { id: '500ms', text: '500ms', remark: '500ms' },
-  { id: '600ms', text: '600ms', remark: '600ms' }
+const options: LabelValue[] = [
+  { value: '150ms', label: '150ms' },
+  { value: '200ms', label: '200ms' },
+  { value: '300ms', label: '300ms' },
+  { value: '400ms', label: '400ms' },
+  { value: '500ms', label: '500ms' },
+  { value: '600ms', label: '600ms' }
 ]
 
 export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
     const fn = new MuteFn()
-    const editorRef = inject<ShallowRef>('editor')
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
     if (!editorRef) emit('error', '请注入editor')
     const visible = ref(false)
     const inputRef = ref()
@@ -101,15 +102,15 @@ export default defineComponent({
           ),
           default: () => (
             <div class="d-flex flex-column">
-              {idTextList.map(({ id, text }) => {
+              {options.map(({ value, label }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
-                    onClick={() => handleSubmit(id)}
+                    onClick={() => handleSubmit(value)}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}

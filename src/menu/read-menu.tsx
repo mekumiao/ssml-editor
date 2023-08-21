@@ -1,11 +1,12 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { W, IdText } from '../core/custom-types'
+import type { W } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
+import { PROVIDER_KEY } from '@/constant'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-read')
@@ -29,7 +30,7 @@ export class ReadFn {
     return false
   }
 
-  exec(editor: IDomEditor, idtext: IdText) {
+  exec(editor: IDomEditor, opt: LabelValue) {
     if (this.isDisabled(editor)) return
     const { selection } = editor
     if (selection == null) return
@@ -39,8 +40,8 @@ export class ReadFn {
     const node: W = {
       type: 'ssml-w',
       domId: genDomID(),
-      phoneme: idtext.id,
-      remark: idtext.remark,
+      phoneme: opt.value,
+      remark: opt.label,
       value: value,
       bgColor: 'read',
       children: [{ text: value }]
@@ -55,17 +56,17 @@ export class ReadFn {
   }
 }
 
-const readList: IdText[] = [
-  { id: 'z', text: '重音', remark: '重' },
-  { id: 't', text: '拖音', remark: '拖' },
-  { id: 'all', text: '重音+拖音', remark: '重+拖' }
+const readList: LabelValue[] = [
+  { label: '重音', value: '重' },
+  { label: '拖音', value: '拖' },
+  { label: '重音+拖音', value: '重+拖' }
 ]
 
 export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
     const fn = new ReadFn()
-    const editorRef = inject<ShallowRef>('editor')
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
     const visible = ref(false)
 
     function show() {
@@ -92,21 +93,24 @@ export default defineComponent({
         {{
           reference: () => <BarButton text="重音" icon="read" onClick={handleClick}></BarButton>,
           default: () => (
-            <div class="d-flex flex-column" onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}>
-              {readList.map(({ id, text, remark }) => {
+            <div
+              class="d-flex flex-column"
+              onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
+            >
+              {readList.map(({ label, value }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, { id, text, remark })
+                      if (editorRef && !fn.isDisabled(editorRef.value)) {
+                        fn.exec(editorRef.value, { label, value })
                       }
                       hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}

@@ -1,11 +1,12 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { IdText, Prosody } from '../core/custom-types'
+import type { Prosody } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
 import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { bindClose } from './helper'
+import { PROVIDER_KEY } from '@/constant'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-changespeed')
@@ -56,11 +57,11 @@ class SpeakerFn {
   }
 }
 
-function fetchRates(): Promise<IdText[]> {
-  const res = [] as IdText[]
+function fetchRates(): Promise<LabelValue[]> {
+  const res = [] as LabelValue[]
   for (let index = 2; index <= 40; index++) {
     const text = `${(index * 0.05).toFixed(2)}x`
-    res.push({ id: index.toString(), text: text, remark: text })
+    res.push({ value: index.toString(), label: text })
   }
   return Promise.resolve(res)
 }
@@ -69,8 +70,8 @@ export default defineComponent({
   emits: ['error'],
   setup(_props, { emit }) {
     const fn = new SpeakerFn()
-    const editorRef = inject<ShallowRef>('editor')
-    const rates = ref<IdText[]>([])
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const rates = ref<LabelValue[]>([])
     const visible = ref(false)
 
     function show() {
@@ -109,20 +110,20 @@ export default defineComponent({
               class="d-flex flex-column overflow-x-hidden overflow-y-scroll"
               style="height:15rem"
             >
-              {rates.value.map(({ id, text }) => {
+              {rates.value.map(({ label, value }) => {
                 return (
                   <div
-                    key={id}
+                    key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      if (!fn.isDisabled(editorRef?.value)) {
-                        fn.exec(editorRef?.value, text)
+                      if (editorRef && !fn.isDisabled(editorRef.value)) {
+                        fn.exec(editorRef.value, label)
                       }
                       hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}
                   >
-                    {text}
+                    {label}
                   </div>
                 )
               })}
