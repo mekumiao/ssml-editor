@@ -8,7 +8,7 @@ import { ElInput, ElForm } from 'element-plus'
 import { ref } from 'vue'
 
 const searchInput = ref('')
-const isCollapse = ref(false)
+const isCollapse = ref(true)
 const isDragging = ref(false)
 
 function handleDragging(value: boolean) {

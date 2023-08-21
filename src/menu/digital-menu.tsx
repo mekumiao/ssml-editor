@@ -6,7 +6,8 @@ import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vu
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { bindClose } from './helper'
-import { PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-digital')
@@ -22,7 +23,10 @@ export class DigitalFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isCollapsed(selection)) return true
+    if (SlateRange.isCollapsed(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '请选择纯数字文本')
+      return true
+    }
 
     const value = SlateEditor.string(editor, selection)
     if (value.length <= 0) return true
@@ -65,18 +69,17 @@ const options: LabelValue[] = [
 
 export default defineComponent({
   emits: ['error'],
-  setup(_props, { emit }) {
+  setup() {
     const fn = new DigitalFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const visible = ref(false)
 
     function toggle() {
       visible.value = !visible.value
     }
 
-    function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        emit('error', '请选择纯数字文本')
+    function handleClick() {
+      if (fn.isDisabled(editorRef.value)) {
         return
       }
       toggle()

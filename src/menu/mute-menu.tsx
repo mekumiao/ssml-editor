@@ -6,7 +6,8 @@ import { defineComponent, inject, ref, withModifiers, type ShallowRef, shallowRe
 import { BarButton, BarInput } from '@/components'
 import { bindClose } from './helper'
 import { ElPopover } from 'element-plus'
-import { PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-mute')
@@ -16,7 +17,10 @@ export class MuteFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isExpanded(selection)) return true
+    if (SlateRange.isExpanded(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '不能选中文本')
+      return true
+    }
 
     return false
   }
@@ -54,11 +58,9 @@ const options: LabelValue[] = [
 ]
 
 export default defineComponent({
-  emits: ['error'],
-  setup(_props, { emit }) {
+  setup() {
     const fn = new MuteFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
-    if (!editorRef) emit('error', '请注入editor')
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const visible = ref(false)
     const inputRef = ref()
 
@@ -74,14 +76,11 @@ export default defineComponent({
       visible.value = false
     }
 
-    function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        emit('error', '不能选择文本')
-        return
-      }
+    function handleClick() {
+      if (fn.isDisabled(editorRef.value)) return
 
       show()
-      editorSelection.value = editor.selection
+      editorSelection.value = editorRef.value.selection
       inputRef.value.focus()
     }
 

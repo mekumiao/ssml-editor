@@ -6,7 +6,8 @@ import { defineComponent, inject, ref, shallowRef, type ShallowRef } from 'vue'
 import { BarButton, BarInput } from '@/components'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
-import { PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-alias')
@@ -22,7 +23,10 @@ class AliasFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isCollapsed(selection)) return true
+    if (SlateRange.isCollapsed(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
+      return true
+    }
 
     const value = SlateEditor.string(editor, selection)
     if (value.length <= 0) return true
@@ -57,10 +61,9 @@ class AliasFn {
 }
 
 export default defineComponent({
-  emits: ['error'],
-  setup(_props, { emit }) {
+  setup() {
     const fn = new AliasFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const inputRef = ref()
     const visible = ref(false)
     const editorSelection = shallowRef()
@@ -75,14 +78,13 @@ export default defineComponent({
       visible.value = false
     }
 
-    async function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        emit('error', '选中一个中文字符，并且有不能在其他语句之内')
+    async function handleClick() {
+      if (fn.isDisabled(editorRef.value)) {
         return
       }
 
       show()
-      editorSelection.value = editor.selection
+      editorSelection.value = editorRef.value.selection
       inputRef.value.focus()
     }
 

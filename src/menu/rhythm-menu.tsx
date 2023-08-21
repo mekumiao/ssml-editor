@@ -6,7 +6,8 @@ import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vu
 import { BarButton } from '@/components'
 import { bindClose } from './helper'
 import { ElPopover } from 'element-plus'
-import { PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-rhythm')
@@ -16,7 +17,10 @@ export class RhythmFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isExpanded(selection)) return true
+    if (SlateRange.isExpanded(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '不能选中文本')
+      return true
+    }
 
     return false
   }
@@ -52,9 +56,9 @@ const options: LabelValue[] = [
 
 export default defineComponent({
   emits: ['error'],
-  setup(_props, { emit }) {
+  setup() {
     const fn = new RhythmFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const visible = ref(false)
 
     function show() {
@@ -67,11 +71,8 @@ export default defineComponent({
       visible.value = false
     }
 
-    function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        emit('error', '不能选择文本')
-        return
-      }
+    function handleClick() {
+      if (fn.isDisabled(editorRef.value)) return
 
       show()
     }

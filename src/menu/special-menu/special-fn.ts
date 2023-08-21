@@ -1,46 +1,23 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { genRandomStr, playSound } from '@/utils'
+import { SlateTransforms, SlateRange } from '@wangeditor/editor'
+import { playSound } from '@/utils'
 import type { Audio } from '@/core'
 import { bindClose, bindPlay } from '../helper'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
+import BaseFn from '../base-fn'
 
 // 音效功能
-
-function genDomID(): string {
-  return genRandomStr('w-e-dom-special')
-}
-
-export default class SpecialFn {
-  private readonly editor: IDomEditor
-  private oldSelection?: SlateRange
+export class SpecialFn extends BaseFn {
+  protected key: string = 'special'
 
   public constructor(editor: IDomEditor) {
-    this.editor = editor
+    super(editor)
   }
 
-  recordSelection() {
-    this.oldSelection = this.editor.selection as SlateRange
-  }
-
-  private getSelection() {
-    const { selection } = this.editor
-    return selection ?? (this.oldSelection as SlateRange)
-  }
-
-  getValue(): string | null {
-    const { selection } = this.editor
-    if (selection == null) return null
-    return SlateEditor.string(this.editor, selection)
-  }
-
-  isDisabled(): boolean {
-    const selection = this.getSelection()
-    if (selection == null) {
-      emitter.emit(EMITTER_EVENT.ERROR, '未选中编辑器')
-      return true
-    }
+  public isDisabled(): boolean {
+    if (super.isDisabled()) return true
+    const selection = this.selection()!
     if (SlateRange.isExpanded(selection)) {
       emitter.emit(EMITTER_EVENT.ERROR, '不能框选文字')
       return true
@@ -50,14 +27,14 @@ export default class SpecialFn {
 
   exec(opt: LabelValue) {
     if (this.isDisabled()) return
-    this.editor.select(this.getSelection())
+    this.editor.select(this.selection()!)
 
     const value = this.getValue()
     if (value == null) return
 
     const node: Audio = {
       type: 'ssml-audio',
-      domId: genDomID(),
+      domId: this.genDomID(),
       src: opt.value,
       remark: opt.label,
       bgColor: 'special',

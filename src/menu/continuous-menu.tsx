@@ -2,9 +2,11 @@ import { type IDomEditor } from '@wangeditor/editor'
 import type { W } from '../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils/random'
-import { defineComponent } from 'vue'
+import { defineComponent, inject, type ShallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { bindClose } from './helper'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT, PROVIDER_KEY } from '..'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-continuous')
@@ -20,7 +22,10 @@ export class ContinuousFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isCollapsed(selection)) return true
+    if (SlateRange.isCollapsed(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '请选择多个中文字符或者多个多个英文单词')
+      return true
+    }
 
     const value = SlateEditor.string(editor, selection)
     if (value.length < 2) return true
@@ -54,13 +59,12 @@ export class ContinuousFn {
 }
 
 export default defineComponent({
-  emits: ['error'],
-  setup(_props, { emit }) {
+  setup() {
     const fn = new ContinuousFn()
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
 
-    function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) return emit('error', '请选择多个中文字符或者多个多个英文单词')
-      fn.exec(editor)
+    function handleClick() {
+      fn.exec(editorRef.value)
     }
 
     return () => <BarButton text="连读" icon="continuous" onClick={handleClick}></BarButton>

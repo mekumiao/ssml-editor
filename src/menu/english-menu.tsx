@@ -7,7 +7,8 @@ import { BarButton } from '@/components'
 import { selectionTrimEnd } from '../core/helper'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
-import { PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-english')
@@ -27,8 +28,11 @@ class EnglishEn {
 
     const value = SlateEditor.string(editor, selection)
     if (value.length <= 0) return true
-
-    if (!/^[A-Za-z]+$/gi.test(value)) return true
+console.log(value)
+    if (!/^[A-Za-z]+$/gi.test(value)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '请选择英文单词')
+      return true
+    }
 
     return false
   }
@@ -60,20 +64,11 @@ class EnglishEn {
   }
 }
 
-function fetchEnglish(word: string): Promise<LabelValue[]> {
-  const list = {
-    world: [{ label: 'wərd', value: 'wərd' }],
-    global: [{ label: 'ˈɡlōbəl', value: 'ˈɡlōbəl' }]
-  } as Record<string, LabelValue[]>
-  return Promise.resolve(list[word] || list['world'])
-}
-
 export default defineComponent({
-  emits: ['error'],
-  props: ['popover', 'fetch'],
-  setup(props, { emit }) {
+  setup() {
     const fn = new EnglishEn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const englishList = ref<LabelValue[]>([])
     const visible = ref(false)
 
@@ -87,15 +82,18 @@ export default defineComponent({
       visible.value = false
     }
 
-    async function handleClick(editor: IDomEditor) {
-      selectionTrimEnd(editor)
-      if (fn.isDisabled(editor)) return emit('error', '请选择英文单词')
+    async function handleClick() {
+      if (!editorRef.value) return
+      selectionTrimEnd(editorRef?.value)
 
-      const text = fn.getValue(editor)
+      if (fn.isDisabled(editorRef.value)) return
+      const text = fn.getValue(editorRef.value)
       if (text) {
-        englishList.value = await (props.fetch || fetchEnglish)(text)
+        englishList.value = await config.fetchEnglish(text)
 
-        if (englishList.value.length <= 0) return emit('error', '找不到单词的音标')
+        if (englishList.value.length <= 0) {
+          return emitter.emit(EMITTER_EVENT.ERROR, '找不到单词的音标')
+        }
 
         show()
       }

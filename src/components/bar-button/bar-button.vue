@@ -13,12 +13,10 @@ const props = withDefaults(
   { disabled: false }
 )
 
-const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
 
 const handleClick = () => {
-  if (!props.disabled && editorRef) {
-    emit('click', editorRef?.value)
-  }
+  if (!props.disabled) emit('click', editorRef.value)
 }
 </script>
 

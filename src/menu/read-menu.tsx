@@ -6,7 +6,8 @@ import { defineComponent, inject, ref, withModifiers, type ShallowRef } from 'vu
 import { BarButton } from '@/components'
 import { bindClose, unpackVoid } from './helper'
 import { ElPopover } from 'element-plus'
-import { PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 function genDomID(): string {
   return genRandomStr('w-e-dom-read')
@@ -22,10 +23,10 @@ export class ReadFn {
   isDisabled(editor: IDomEditor): boolean {
     const { selection } = editor
     if (selection == null) return true
-    if (SlateRange.isCollapsed(selection)) return true
-
-    const value = SlateEditor.string(editor, selection)
-    if (value.length <= 0) return true
+    if (SlateRange.isCollapsed(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '请先选择文本')
+      return true
+    }
 
     return false
   }
@@ -63,10 +64,9 @@ const readList: LabelValue[] = [
 ]
 
 export default defineComponent({
-  emits: ['error'],
-  setup(_props, { emit }) {
+  setup() {
     const fn = new ReadFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
+    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
     const visible = ref(false)
 
     function show() {
@@ -79,11 +79,8 @@ export default defineComponent({
       visible.value = false
     }
 
-    function handleClick(editor: IDomEditor) {
-      if (fn.isDisabled(editor)) {
-        emit('error', '请先选择文本')
-        return
-      }
+    function handleClick() {
+      if (fn.isDisabled(editorRef.value)) return
 
       show()
     }
