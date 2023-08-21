@@ -14,6 +14,7 @@ import { BgmMenu, BgmDragBox } from './bgm-menu'
 import { SensitiveMenu, SensitiveDragBox } from './sensitive-menu'
 import { ManagementMenu, ManagementDragBox } from './management-menu'
 import { ConversionMenu, ConversionDragBox } from './conversion-menu'
+import { TryPlay } from './try-play'
 
 export default {
   install: (app: App) => {
@@ -36,6 +37,7 @@ export default {
     app.component('ManagementDragBox', ManagementDragBox)
     app.component('ConversionMenu', ConversionMenu)
     app.component('ConversionDragBox', ConversionDragBox)
+    app.component('TryPlay', TryPlay)
   }
 } as Plugin
 
@@ -58,7 +60,8 @@ export {
   ManagementMenu,
   ManagementDragBox,
   ConversionMenu,
-  ConversionDragBox
+  ConversionDragBox,
+  TryPlay
 }
 
 import './style.scss'

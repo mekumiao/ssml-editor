@@ -21,7 +21,8 @@ import {
   BgmDragBox,
   SensitiveDragBox,
   ManagementDragBox,
-  ConversionDragBox
+  ConversionDragBox,
+  TryPlay
 } from '@/menu'
 
 import { type IdText } from '../core'
@@ -106,6 +107,7 @@ function fetchEnglish(word: string): Promise<IdText[]> {
   <SensitiveDragBox></SensitiveDragBox>
   <ManagementDragBox></ManagementDragBox>
   <ConversionDragBox></ConversionDragBox>
+  <TryPlay></TryPlay>
 </template>
 
 <style lang="scss" scoped></style>
