@@ -3,10 +3,18 @@ import { useDraggable } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useElementSize, useWindowSize } from '@vueuse/core'
 
+const emit = defineEmits<{ dragging: [value: boolean] }>()
+
 const boxRef = ref<HTMLElement>()
 
 const { x, y } = useDraggable(boxRef, {
-  initialValue: { x: 40, y: 40 }
+  initialValue: { x: 40, y: 40 },
+  onStart: () => {
+    emit('dragging', true)
+  },
+  onEnd: () => {
+    emit('dragging', false)
+  }
 })
 
 const { width: boxWidth, height: boxHeight } = useElementSize(boxRef)
@@ -35,7 +43,7 @@ function createStyle(x: number, y: number) {
   <Teleport to="body">
     <div
       ref="boxRef"
-      class="card shadow brag-box z-3 user-select-none"
+      class="fixed-panel z-3 user-select-none"
       style="position: fixed"
       :style="moveStyle"
     >
