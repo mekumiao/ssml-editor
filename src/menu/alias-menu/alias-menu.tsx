@@ -2,6 +2,7 @@ import { defineComponent, ref, shallowRef } from 'vue'
 import { BarButton, BarInput } from '@/components'
 import { ElPopover } from 'element-plus'
 import { AliasFn } from './alias-fn'
+import type { IDomEditor } from '@wangeditor/editor'
 
 export default defineComponent({
   setup() {
@@ -19,17 +20,18 @@ export default defineComponent({
       visible.value = false
     }
 
-    async function handleClick() {
-      if (!fn.value || fn.value.isDisabled()) return
-
-      show()
+    async function handleClick(editor: IDomEditor) {
+      fn.value ??= new AliasFn(editor)
+      if (fn.value.isDisabled()) return
       fn.value.record()
+      show()
       inputRef.value.focus()
     }
 
     function handleSubmit(text: string | null) {
       hide()
       if (text) {
+        fn.value?.restore()
         fn.value?.exec({ value: text, label: text })
       }
     }

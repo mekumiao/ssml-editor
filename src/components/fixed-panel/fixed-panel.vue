@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { useDraggable } from '@vueuse/core'
+import { useDraggable, isClient } from '@vueuse/core'
 import { computed, ref } from 'vue'
 import { useElementSize, useWindowSize } from '@vueuse/core'
 
@@ -7,8 +7,12 @@ const emit = defineEmits<{ dragging: [value: boolean] }>()
 
 const boxRef = ref<HTMLElement>()
 
+const innerWidth = isClient ? window.innerWidth : 200
+const innerHeight = isClient ? window.innerHeight : 200
+
 const { x, y } = useDraggable(boxRef, {
-  initialValue: { x: 40, y: 40 },
+  initialValue: { x: innerWidth - 100, y: innerHeight / 2 },
+  preventDefault: true,
   onStart: () => {
     emit('dragging', true)
   },

@@ -27,7 +27,6 @@ export class SpecialFn extends BaseFn {
 
   exec(opt: LabelValue) {
     if (this.isDisabled()) return
-    this.editor.select(this.selection()!)
 
     const value = this.getValue()
     if (value == null) return

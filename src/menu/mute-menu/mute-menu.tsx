@@ -40,6 +40,7 @@ export default defineComponent({
     function handleSubmit(text: string | null) {
       hide()
       if (!text) return
+      fn.value?.restore()
       fn.value?.exec({ value: text, label: text })
     }
 

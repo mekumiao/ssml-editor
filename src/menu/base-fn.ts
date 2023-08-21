@@ -32,6 +32,10 @@ export default abstract class BaseFn {
     this.oldSelection = this.editor.selection as SlateRange
   }
 
+  public restore() {
+    this.oldSelection && this.editor.select(this.oldSelection)
+  }
+
   public isDisabled(): boolean {
     const selection = this.selection()
     if (selection == null) {

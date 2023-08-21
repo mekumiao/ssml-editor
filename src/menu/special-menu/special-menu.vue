@@ -23,7 +23,10 @@ const handleClick = (editor: IDomEditor) => {
 }
 
 function handleSpecialMenuSubmit(opt: LabelValue) {
-  fn.value && !fn.value.isDisabled() && fn.value.exec(opt)
+  if (fn.value && !fn.value.isDisabled()) {
+    fn.value.restore()
+    fn.value.exec(opt)
+  }
 }
 
 onMounted(() => {

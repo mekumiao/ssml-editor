@@ -3,7 +3,7 @@ import { FixedPanel } from '@/components'
 import AnchorList from './anchor-list.vue'
 import TagList from './tag-list.vue'
 import TagItem from './tag-item.vue'
-import AnchorAvatar from './anchor-avatar.vue'
+import TryPlayCircle from './try-play-circle.vue'
 import { ElInput, ElForm } from 'element-plus'
 import { ref } from 'vue'
 
@@ -28,12 +28,8 @@ function toggleCollapse() {
 
 <template>
   <FixedPanel @dragging="handleDragging">
-    <div
-      v-show="isCollapse"
-      @click="() => !isDragging && toggleCollapse()"
-      class="try-play-collapse rounded-circle"
-    >
-      <AnchorAvatar></AnchorAvatar>
+    <div v-show="isCollapse" @click="() => !isDragging && toggleCollapse()">
+      <TryPlayCircle></TryPlayCircle>
     </div>
     <div v-show="!isCollapse" class="try-play card shadow px-2 pb-2">
       <div class="try-play-header d-flex flex-row justify-content-end">
@@ -62,17 +58,6 @@ function toggleCollapse() {
 </template>
 
 <style lang="scss" scoped>
-.try-play-collapse {
-  height: 10vh;
-  width: 10vh;
-  background-color: #2254a1;
-
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-}
-
 .try-play {
   width: 130vh;
   height: 70vh;

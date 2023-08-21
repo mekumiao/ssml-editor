@@ -10,7 +10,7 @@ export function playSound(src: string) {
     const embed = document.embedPlay
 
     //浏览器不支持 audion，则使用 embed 播放
-    embed.volume = 100
+    embed.volume = 50
     //embed.play();这个不需要
   } else {
     //非IE内核浏览器
