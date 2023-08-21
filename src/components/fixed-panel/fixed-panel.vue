@@ -34,9 +34,6 @@ function createStyle(x: number, y: number) {
 <template>
   <Teleport to="body">
     <div ref="boxRef" class="card shadow brag-box z-3" style="position: fixed" :style="moveStyle">
-      <div class="w-100 text-end me-2">
-        <span class="btn iconfont icon-close fs-5"></span>
-      </div>
       <slot></slot>
     </div>
   </Teleport>
