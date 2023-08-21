@@ -4,14 +4,13 @@ import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
-
-type Options = { value: string; label: string }
+import { SpecialDragBox, BgmDragBox } from '@/menu'
 
 const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
 
 const characterTotal = ref(0)
 const editorRef = shallowRef<IDomEditor>()
-const bgm = ref<Options | null>(null)
+const bgm = ref<LabelValue | null>(null)
 
 provide('editor', editorRef)
 
@@ -28,7 +27,7 @@ const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor
   emit('onCreated', editor)
 
-  editor.on('updateBgm', (value: Options) => {
+  editor.on('updateBgm', (value: LabelValue) => {
     bgm.value = value
   })
 
@@ -61,6 +60,8 @@ const handleChange = (editor: IDomEditor) => {
           @created="handleCreated"
         ></EditorCore>
       </div>
+      <SpecialDragBox></SpecialDragBox>
+      <BgmDragBox></BgmDragBox>
     </div>
   </div>
 </template>

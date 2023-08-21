@@ -23,15 +23,15 @@ const handleClick = () => {
 
 <template>
   <div
-    class="btn bar-button"
+    class="bar-button px-2 py-1"
     :class="{ disabled: disabled }"
     @click="handleClick"
     @mousedown.prevent
   >
-    <div class="button">
-      <span class="font-size-30 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
+    <div class="bar-button-icon">
+      <span class="fs-3 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
     </div>
-    <div class="content">{{ text }}</div>
+    <div class="fw-normal" style="font-size: 0.85rem">{{ text }}</div>
   </div>
 </template>
 
@@ -41,9 +41,9 @@ const handleClick = () => {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  height: 4.5rem;
 
-  border-radius: 10px;
-  padding: 5px 8px;
+  border-radius: 0.5rem;
 
   &.disabled {
     color: #a7a5a5;
@@ -53,13 +53,9 @@ const handleClick = () => {
     background-color: #e5e5e5;
   }
 
-  .button {
+  .bar-button-icon {
     width: 30px;
     height: 30px;
-  }
-
-  .content {
-    font-size: 12px;
   }
 }
 </style>

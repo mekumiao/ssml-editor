@@ -8,9 +8,9 @@ import AliasMenu from './alias-menu'
 import EnglishMenu from './english-menu'
 import ChangespeedMenu from './changespeed-menu'
 import RhythmMenu from './rhythm-menu'
-import SpecialMenu from './special-menu'
+import { SpecialMenu, SpecialDragBox } from './special-menu'
 import MuteMenu from './mute-menu'
-import BgmMenu from './bgm-menu'
+import { BgmMenu, BgmDragBox } from './bgm-menu'
 
 export default {
   install: (app: App) => {
@@ -23,8 +23,10 @@ export default {
     app.component('ChangespeedMenu', ChangespeedMenu)
     app.component('RhythmMenu', RhythmMenu)
     app.component('SpecialMenu', SpecialMenu)
+    app.component('SpecialDragBox', SpecialDragBox)
     app.component('MuteMenu', MuteMenu)
     app.component('BgmMenu', BgmMenu)
+    app.component('BgmDragBox', BgmDragBox)
   }
 } as Plugin
 
@@ -38,8 +40,10 @@ export {
   ChangespeedMenu,
   RhythmMenu,
   SpecialMenu,
+  SpecialDragBox,
   MuteMenu,
-  BgmMenu
+  BgmMenu,
+  BgmDragBox
 }
 
 import './style.scss'

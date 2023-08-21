@@ -16,7 +16,16 @@ import {
 
 import { type IdText } from '../core'
 import { ElMessage } from 'element-plus'
-import { ref } from 'vue'
+import { onMounted, onUnmounted } from 'vue'
+import { emitter } from '@/event-bus'
+
+onMounted(() => {
+  emitter.on('editor-error', handleError)
+})
+
+onUnmounted(() => {
+  emitter.off('editor-error', handleError)
+})
 
 function handleError(error: string) {
   ElMessage.warning({
@@ -48,70 +57,6 @@ function fetchEnglish(word: string): Promise<IdText[]> {
   } as Record<string, IdText[]>
   return Promise.resolve(list[word] || list['translate'])
 }
-
-const sceneOptions = ref([
-  { value: '', label: '全部场景' },
-  { value: '2', label: '场景2' },
-  { value: '3', label: '场景3' }
-])
-
-const styleOptions = ref([
-  { value: '', label: '全部风格' },
-  { value: '2', label: '风格2' },
-  { value: '3', label: '风格3' }
-])
-
-function fetchSpecial(filter: {
-  search: string
-  menuKey: 'first' | 'second' | 'last'
-  scene: string
-  style: string
-}): Promise<{ value: string; label: string }[]> {
-  return Promise.resolve([
-    {
-      value: 'https://download.samplelib.com/wav/sample-3s.wav#1',
-      label: `${filter.search || '测试'}音效1`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-3s.wav#2',
-      label: `${filter.menuKey || '测试'}音效2`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-3s.wav#3',
-      label: `${filter.scene || '测试'}音效3`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-3s.wav#4',
-      label: `${filter.style || '测试'}音效4`
-    }
-  ])
-}
-
-function fetchBgm(filter: {
-  search: string
-  menuKey: 'first' | 'second' | 'last'
-  scene: string
-  style: string
-}): Promise<{ value: string; label: string }[]> {
-  return Promise.resolve([
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#1',
-      label: `${filter.search || '测试'}背景音乐1`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#2',
-      label: `${filter.menuKey || '测试'}背景音乐2`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#3',
-      label: `${filter.scene || '测试'}背景音乐3`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#4',
-      label: `${filter.style || '测试'}背景音乐4`
-    }
-  ])
-}
 </script>
 
 <template>
@@ -138,18 +83,8 @@ function fetchBgm(filter: {
         <MuteMenu @error="handleError"></MuteMenu>
       </BarWrapperGroup>
       <BarWrapperGroup divider="yellow">
-        <SpecialMenu
-          @error="handleError"
-          :fetch="fetchSpecial"
-          :scenes="sceneOptions"
-          :styles="styleOptions"
-        ></SpecialMenu>
-        <BgmMenu
-          @error="handleError"
-          :fetch="fetchBgm"
-          :scenes="sceneOptions"
-          :styles="styleOptions"
-        ></BgmMenu>
+        <SpecialMenu></SpecialMenu>
+        <BgmMenu></BgmMenu>
       </BarWrapperGroup>
     </BarWrapper>
   </div>

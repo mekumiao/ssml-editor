@@ -1,1 +1,1 @@
-export { default as BarSearch } from './search-content.vue'
+export { default as BarSearch } from './bar-search.vue'

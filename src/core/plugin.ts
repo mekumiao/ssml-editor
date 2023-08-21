@@ -10,7 +10,6 @@ type Speak = {
   bgmRemark: string
   backgroundMusicVolume: string
 }
-type Options = { value: string; label: string }
 
 function isType(type: string, dest: SSMLElementType) {
   return type === dest
@@ -64,7 +63,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
   }
 
   newEditor.normalizeNode = (entry) => {
-    console.log(entry[0], entry[1])
+    // console.log(entry[0], entry[1])
     // normalizeNode(entry)
   }
 
@@ -74,7 +73,7 @@ function withSSML<T extends IDomEditor>(editor: T) {
     Object.assign(speak, value)
   })
 
-  editor.on('updateBgm', (value: Partial<Options>) => {
+  editor.on('updateBgm', (value: Partial<LabelValue>) => {
     speak.bgm = value.value
     speak.bgmRemark = value.label
   })
