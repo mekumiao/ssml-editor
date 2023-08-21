@@ -1,52 +1,8 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { Break } from '../core/custom-types'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { genRandomStr } from '@/utils/random'
-import { defineComponent, inject, ref, withModifiers, type ShallowRef, shallowRef } from 'vue'
+import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton, BarInput } from '@/components'
-import { bindClose } from './helper'
 import { ElPopover } from 'element-plus'
-import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
-import { emitter } from '@/event-bus'
-
-function genDomID(): string {
-  return genRandomStr('w-e-dom-mute')
-}
-
-export class MuteFn {
-  isDisabled(editor: IDomEditor): boolean {
-    const { selection } = editor
-    if (selection == null) return true
-    if (SlateRange.isExpanded(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '不能选中文本')
-      return true
-    }
-
-    return false
-  }
-
-  exec(editor: IDomEditor, mute: string) {
-    if (this.isDisabled(editor)) return
-    const { selection } = editor
-    if (selection == null) return
-
-    const node: Break = {
-      type: 'ssml-break',
-      domId: genDomID(),
-      time: mute,
-      remark: mute,
-      bgColor: 'mute',
-      children: [{ text: '' }]
-    }
-
-    SlateTransforms.insertNodes(editor, node)
-    editor.move(1)
-
-    bindClose(editor, 'ssml-break', node.domId, (nodeEntity) => {
-      SlateTransforms.delete(editor, { at: nodeEntity[1] })
-    })
-  }
-}
+import { MuteFn } from './mute-fn'
 
 const options: LabelValue[] = [
   { value: '150ms', label: '150ms' },
@@ -59,12 +15,9 @@ const options: LabelValue[] = [
 
 export default defineComponent({
   setup() {
-    const fn = new MuteFn()
-    const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
+    const fn = shallowRef<MuteFn>()
     const visible = ref(false)
     const inputRef = ref()
-
-    const editorSelection = shallowRef()
 
     function show() {
       if (visible.value) return
@@ -76,21 +29,18 @@ export default defineComponent({
       visible.value = false
     }
 
-    function handleClick() {
-      if (fn.isDisabled(editorRef.value)) return
-
+    function handleClick(editor: IDomEditor) {
+      fn.value ??= new MuteFn(editor)
+      if (fn.value.isDisabled()) return
       show()
-      editorSelection.value = editorRef.value.selection
+      fn.value.record()
       inputRef.value.focus()
     }
 
     function handleSubmit(text: string | null) {
       hide()
-      const editor = editorRef?.value
-      if (!editor || !text) return
-      editor.select(editorSelection.value)
-      if (fn.isDisabled(editor)) return
-      fn.exec(editor, text)
+      if (!text) return
+      fn.value?.exec({ value: text, label: text })
     }
 
     return () => (
