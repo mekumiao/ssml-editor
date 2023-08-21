@@ -63,7 +63,7 @@ function handleSubmit(value: LabelValue) {
 </script>
 
 <template>
-  <div class="search-content vh-50 user-select-none">
+  <div class="search-content vh-50">
     <div class="ps-2 w-75">
       <ElForm @submit.prevent="handleFetchData">
         <ElInput

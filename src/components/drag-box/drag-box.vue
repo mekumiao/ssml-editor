@@ -69,7 +69,7 @@ function createStyle(x: number, y: number) {
 
 <template>
   <Teleport to="body">
-    <div v-show="visible" class="drag-box-mask" @click="handleVisible">
+    <div v-show="visible" class="drag-box-mask user-select-none" @click="handleVisible">
       <div ref="boxRef" class="card shadow brag-box" style="position: fixed" :style="moveStyle">
         <div class="w-100 text-end me-2">
           <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
