@@ -4,6 +4,7 @@ import { genRandomStr, playSound } from '@/utils'
 import type { Audio } from '@/core'
 import { bindClose, bindPlay } from '../helper'
 import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
 
 // 音效功能
 
@@ -37,11 +38,11 @@ export default class SpecialFn {
   isDisabled(): boolean {
     const selection = this.getSelection()
     if (selection == null) {
-      emitter.emit('editor-error', '未选中编辑器')
+      emitter.emit(EMITTER_EVENT.ERROR, '未选中编辑器')
       return true
     }
     if (SlateRange.isExpanded(selection)) {
-      emitter.emit('editor-error', '不能框选文字')
+      emitter.emit(EMITTER_EVENT.ERROR, '不能框选文字')
       return true
     }
     return false

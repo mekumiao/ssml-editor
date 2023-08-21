@@ -3,6 +3,7 @@ import { DragBox, BarSearch } from '@/components'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { emitter } from '@/event-bus'
 import { type Position } from '@vueuse/core'
+import { EMITTER_EVENT } from '@/constant'
 
 const visible = ref(false)
 const position = ref<Position>({ x: 20, y: 20 })
@@ -20,11 +21,11 @@ const styles = [
 const dataList = ref<LabelValue[]>()
 
 onMounted(() => {
-  emitter.on('special-menu-click', handleSpecialMenuClick)
+  emitter.on(EMITTER_EVENT.SPECIAL_MENU_CLICK, handleSpecialMenuClick)
 })
 
 onUnmounted(() => {
-  emitter.off('special-menu-click', handleSpecialMenuClick)
+  emitter.off(EMITTER_EVENT.SPECIAL_MENU_CLICK, handleSpecialMenuClick)
 })
 
 function fetchSpecial(filter: {
@@ -61,7 +62,7 @@ async function handleSpecialMenuClick(pot: Position) {
 
 function handleSubmit(value: LabelValue) {
   visible.value = false
-  emitter.emit('special-drag-box-submit', value)
+  emitter.emit(EMITTER_EVENT.SPECIAL_DRAG_BOX_SUBMIT, value)
 }
 </script>
 

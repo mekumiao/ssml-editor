@@ -4,6 +4,7 @@ import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
+import { WANGEDITOR_EVENT } from '..'
 
 const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
 
@@ -26,11 +27,11 @@ const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor
   emit('onCreated', editor)
 
-  editor.on('updateBgm', (value: LabelValue) => {
+  editor.on(WANGEDITOR_EVENT.UPDATE_BGM, (value: LabelValue) => {
     bgm.value = value
   })
 
-  editor.on('removeBgm', () => {
+  editor.on(WANGEDITOR_EVENT.REMOVE_BGM, () => {
     bgm.value = null
   })
 }

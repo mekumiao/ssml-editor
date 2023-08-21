@@ -5,6 +5,7 @@ import { computed, inject, ref, type ShallowRef } from 'vue'
 import type { IDomEditor } from '@wangeditor/editor'
 import xmlFormat from 'xml-formatter'
 import { playSound } from '@/utils'
+import { WANGEDITOR_EVENT } from '..'
 
 defineProps<{
   characterTotal: number
@@ -33,7 +34,7 @@ const handleGenSSML = () => {
 }
 
 const handleRemoveBgm = () => {
-  editorRef?.value?.emit('removeBgm')
+  editorRef?.value?.emit(WANGEDITOR_EVENT.REMOVE_BGM)
 }
 </script>
 

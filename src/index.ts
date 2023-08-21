@@ -3,7 +3,8 @@ import type { App, Plugin } from 'vue'
 import EditorComponentsPlugin from './components'
 import EditorMenuPlugin from './menu'
 import EditorView from './view'
-import { PROVIDER_KEY } from './constant'
+import { PROVIDER_KEY, EMITTER_EVENT } from './constant'
+import { emitter } from './event-bus'
 
 export * from './components'
 export * from './menu'
@@ -16,8 +17,12 @@ export { default as EditorCoreModule } from './core'
 
 export default {
   install(app: App, config?: SSMLEditorConfig) {
-    console.log(config)
-    app.provide(PROVIDER_KEY.EDITORCONFIG, config ?? {})
+    const editorConfig = config ?? ({} as SSMLEditorConfig)
+
+    app.provide(PROVIDER_KEY.EDITORCONFIG, editorConfig)
+
+    emitter.on(EMITTER_EVENT.ERROR, editorConfig.handleError)
+
     app.use(EditorComponentsPlugin)
     app.use(EditorMenuPlugin)
     app.use(EditorView)

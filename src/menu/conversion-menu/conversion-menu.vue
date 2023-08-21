@@ -4,6 +4,7 @@ import { emitter } from '@/event-bus'
 import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
 import { useElementBounding } from '@vueuse/core'
+import { EMITTER_EVENT } from '@/constant'
 
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
@@ -12,22 +13,23 @@ const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
   edirorRef.value = editor
-  emitter.emit('bgm-menu-click', {
+  emitter.emit(EMITTER_EVENT.CONVERSION_MENU_CLICK, {
     x: x.value - 200,
     y: y.value + height.value
   })
 }
 
 function handleMenuSubmit(opt: LabelValue) {
-  edirorRef.value?.emit('updateBgm', opt)
+  console.log(opt)
+  // edirorRef.value?.emit('updateBgm', opt)
 }
 
 onMounted(() => {
-  emitter.on('bgm-drag-box-submit', handleMenuSubmit)
+  emitter.on(EMITTER_EVENT.CONVERSION_DRAG_BOX_SUBMIT, handleMenuSubmit)
 })
 
 onUnmounted(() => {
-  emitter.off('gbm-drag-box-submit', handleMenuSubmit)
+  emitter.off(EMITTER_EVENT.CONVERSION_DRAG_BOX_SUBMIT, handleMenuSubmit)
 })
 </script>
 

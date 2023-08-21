@@ -5,6 +5,7 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import SpecialFn from './special-fn'
+import { EMITTER_EVENT } from '@/constant'
 
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
@@ -15,7 +16,7 @@ const handleClick = (editor: IDomEditor) => {
   fn.value ??= new SpecialFn(editor)
   if (fn.value.isDisabled()) return false
   fn.value.recordSelection()
-  emitter.emit('special-menu-click', {
+  emitter.emit(EMITTER_EVENT.SPECIAL_MENU_CLICK, {
     x: x.value - 200,
     y: y.value + height.value
   })
@@ -26,11 +27,11 @@ function handleSpecialMenuSubmit(opt: LabelValue) {
 }
 
 onMounted(() => {
-  emitter.on('special-drag-box-submit', handleSpecialMenuSubmit)
+  emitter.on(EMITTER_EVENT.SPECIAL_DRAG_BOX_SUBMIT, handleSpecialMenuSubmit)
 })
 
 onUnmounted(() => {
-  emitter.off('special-drag-box-submit', handleSpecialMenuSubmit)
+  emitter.off(EMITTER_EVENT.SPECIAL_DRAG_BOX_SUBMIT, handleSpecialMenuSubmit)
 })
 </script>
 

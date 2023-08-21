@@ -1,5 +1,6 @@
 import { DomEditor, type IDomEditor } from '@wangeditor/editor'
 import type { SSMLElementType, W } from './custom-types'
+import { WANGEDITOR_EVENT } from '@/constant'
 
 type Speak = {
   volume: string
@@ -77,16 +78,16 @@ function withSSML<T extends IDomEditor>(editor: T) {
 
   const speak: Partial<Speak> = { voice: '', volume: '', pitch: '' }
 
-  editor.on('updateSpeak', (value: Partial<Speak>) => {
+  editor.on(WANGEDITOR_EVENT.UPDATE_SPEAK, (value: Partial<Speak>) => {
     Object.assign(speak, value)
   })
 
-  editor.on('updateBgm', (value: Partial<LabelValue>) => {
+  editor.on(WANGEDITOR_EVENT.UPDATE_BGM, (value: Partial<LabelValue>) => {
     speak.bgm = value.value
     speak.bgmRemark = value.label
   })
 
-  editor.on('removeBgm', () => {
+  editor.on(WANGEDITOR_EVENT.REMOVE_BGM, () => {
     speak.bgm = undefined
     speak.bgmRemark = undefined
   })
