@@ -21,11 +21,11 @@ const styles = [
 const dataList = ref<LabelValue[]>()
 
 onMounted(() => {
-  emitter.on(EMITTER_EVENT.SPECIAL_MENU_CLICK, handleMenuClick)
+  emitter.on(EMITTER_EVENT.SENSITIVE_MENU_CLICK, handleMenuClick)
 })
 
 onUnmounted(() => {
-  emitter.off(EMITTER_EVENT.SPECIAL_MENU_CLICK, handleMenuClick)
+  emitter.off(EMITTER_EVENT.SENSITIVE_MENU_CLICK, handleMenuClick)
 })
 
 function fetchBgm(filter: {
