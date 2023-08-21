@@ -70,3 +70,7 @@
 .moyin-icon_bgm::before {
   content: '\e638';
 }
+
+.moyin-icon_sensitive::before {
+  content: '\e61f';
+}

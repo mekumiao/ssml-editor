@@ -1,7 +1,7 @@
 <script setup lang="ts">
 type DividerColor = 'green' | 'cyan' | 'orange' | 'purple' | 'yellow'
 
-withDefaults(defineProps<{ divider: DividerColor }>(), { divider: 'green' })
+defineProps<{ divider?: DividerColor }>()
 </script>
 
 <template>

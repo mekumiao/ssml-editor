@@ -11,8 +11,10 @@ import {
   RhythmMenu,
   SpecialMenu,
   MuteMenu,
-  BgmMenu
+  BgmMenu,
+  SensitiveMenu
 } from '../menu'
+import { SpecialDragBox, BgmDragBox, SensitiveDragBox } from '@/menu'
 
 import { type IdText } from '../core'
 import { ElMessage } from 'element-plus'
@@ -86,8 +88,14 @@ function fetchEnglish(word: string): Promise<IdText[]> {
         <SpecialMenu></SpecialMenu>
         <BgmMenu></BgmMenu>
       </BarWrapperGroup>
+      <BarWrapperGroup>
+        <SensitiveMenu></SensitiveMenu>
+      </BarWrapperGroup>
     </BarWrapper>
   </div>
+  <SpecialDragBox></SpecialDragBox>
+  <BgmDragBox></BgmDragBox>
+  <SensitiveDragBox></SensitiveDragBox>
 </template>
 
 <style lang="scss" scoped></style>

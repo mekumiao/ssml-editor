@@ -11,6 +11,7 @@ import RhythmMenu from './rhythm-menu'
 import { SpecialMenu, SpecialDragBox } from './special-menu'
 import MuteMenu from './mute-menu'
 import { BgmMenu, BgmDragBox } from './bgm-menu'
+import { SensitiveMenu, SensitiveDragBox } from './sensitive-menu'
 
 export default {
   install: (app: App) => {
@@ -27,6 +28,8 @@ export default {
     app.component('MuteMenu', MuteMenu)
     app.component('BgmMenu', BgmMenu)
     app.component('BgmDragBox', BgmDragBox)
+    app.component('SensitiveMenu', SensitiveMenu)
+    app.component('SensitiveDragBox', SensitiveDragBox)
   }
 } as Plugin
 
@@ -43,7 +46,9 @@ export {
   SpecialDragBox,
   MuteMenu,
   BgmMenu,
-  BgmDragBox
+  BgmDragBox,
+  SensitiveMenu,
+  SensitiveDragBox
 }
 
 import './style.scss'

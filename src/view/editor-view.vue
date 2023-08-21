@@ -4,7 +4,6 @@ import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
-import { SpecialDragBox, BgmDragBox } from '@/menu'
 
 const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
 
@@ -60,8 +59,6 @@ const handleChange = (editor: IDomEditor) => {
           @created="handleCreated"
         ></EditorCore>
       </div>
-      <SpecialDragBox></SpecialDragBox>
-      <BgmDragBox></BgmDragBox>
     </div>
   </div>
 </template>
