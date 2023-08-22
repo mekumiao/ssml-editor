@@ -1,13 +1,23 @@
-import type { Break } from '../../core/custom-types'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { bindClose } from '../helper'
+import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
+import type { Mute } from '@/core/mute'
+import { findByDomId } from '../helper'
 
 export class MuteFn extends BaseFn {
-  protected key: string = 'mute'
+  protected readonly key: string= 'mute'
+
+  public constructor(editor: IDomEditor) {
+    super(editor)
+    editor.on('ssml-mute-close', MuteFn.handleClose)
+  }
+
+  public static handleClose(editor: IDomEditor, item: Mute) {
+    const nodeEntity = findByDomId<Mute>(editor, 'ssml-mute', item.domId)
+    nodeEntity && SlateTransforms.delete(editor, { at: nodeEntity[1] })
+  }
 
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
@@ -23,8 +33,8 @@ export class MuteFn extends BaseFn {
   public exec(opt: LabelValue) {
     if (this.isDisabled()) return
 
-    const node: Break = {
-      type: 'ssml-break',
+    const node: Mute = {
+      type: 'ssml-mute',
       domId: this.genDomID(),
       time: opt.value,
       remark: opt.label,
@@ -34,9 +44,5 @@ export class MuteFn extends BaseFn {
 
     SlateTransforms.insertNodes(this.editor, node)
     this.editor.move(1)
-
-    bindClose(this.editor, 'ssml-break', node.domId, (nodeEntity) => {
-      SlateTransforms.delete(this.editor, { at: nodeEntity[1] })
-    })
   }
 }

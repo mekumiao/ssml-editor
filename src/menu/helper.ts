@@ -7,48 +7,8 @@ import {
   SlateTransforms,
   SlatePath
 } from '@wangeditor/editor'
-import throttle from 'lodash.throttle'
-import $ from '@/utils/dom'
 import type { NodeEntry } from 'slate'
-import type { SSMLBaseElement } from '@/core/custom-types'
-
-export type BindButtonType = 'close' | 'play'
-
-export function bind<T extends SSMLBaseElement>(
-  editor: IDomEditor,
-  btnType: BindButtonType,
-  type: T['type'],
-  domId: string,
-  callback: (node: NodeEntry<T>) => void
-) {
-  $('body').on(
-    'click',
-    `#${domId}-${btnType}`,
-    throttle((event: Event) => {
-      event.preventDefault()
-      const nodeEntity = findByDomId<T>(editor, type, domId)
-      return nodeEntity && callback(nodeEntity)
-    })
-  )
-}
-
-export function bindClose<T extends SSMLBaseElement>(
-  editor: IDomEditor,
-  type: T['type'],
-  domId: string,
-  callback: (node: NodeEntry<T>) => void
-) {
-  return bind<T>(editor, 'close', type, domId, callback)
-}
-
-export function bindPlay<T extends SSMLBaseElement>(
-  editor: IDomEditor,
-  type: T['type'],
-  domId: string,
-  callback: (node: NodeEntry<T>) => void
-) {
-  return bind<T>(editor, 'play', type, domId, callback)
-}
+import type { SSMLBaseElement } from '@/core/base'
 
 export function findByDomId<T extends SSMLBaseElement>(
   editor: IDomEditor,

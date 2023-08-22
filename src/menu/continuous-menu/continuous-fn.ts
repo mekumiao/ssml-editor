@@ -1,16 +1,22 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { W } from '../../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { bindClose } from '../helper'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import { EMITTER_EVENT } from '@/constant'
+import type { Continuous } from '@/core/continuous'
+import { findByDomId, unpackVoid } from '../helper'
 
 export class ContinuousFn extends BaseFn {
-  protected key: string = 'continuous'
+  protected readonly key: string= 'continuous'
 
   public constructor(editor: IDomEditor) {
     super(editor)
+    editor.on('ssml-continuous-close', ContinuousFn.handleClose)
+  }
+
+  public static handleClose(editor: IDomEditor, item: Continuous) {
+    const nodeEntity = findByDomId<Continuous>(editor, 'ssml-continuous', item.domId)
+    nodeEntity && unpackVoid<Continuous>(editor, nodeEntity, (elem) => elem.value)
   }
 
   public isDisabled(): boolean {
@@ -33,19 +39,17 @@ export class ContinuousFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: W = {
-      type: 'ssml-w',
+    const node: Continuous = {
+      type: 'ssml-continuous',
       domId: this.genDomID(),
-      children: [{ text: value }],
+      children: [{ text: '' }],
       remark: '连读',
+      value: value,
       bgColor: 'continuous'
     }
 
     SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
-
-    bindClose(this.editor, 'ssml-w', node.domId, (nodeEntity) => {
-      SlateTransforms.unwrapNodes(this.editor, { at: nodeEntity[1] })
-    })
+    this.editor.move(1)
   }
 }

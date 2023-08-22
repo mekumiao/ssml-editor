@@ -1,22 +1,29 @@
 import type { App, Plugin } from 'vue'
+import { Boot } from '@wangeditor/editor'
 
 import EditorComponentsPlugin from './components'
 import EditorMenuPlugin from './menu'
 import EditorView from './view'
 import { PROVIDER_KEY, EMITTER_EVENT } from './constant'
 import { emitter } from './event-bus'
-import { type SSMLEditorConfig } from './config'
+import type { SSMLEditorConfig } from './config'
+import {
+  AliasModule,
+  ChangespeedModule,
+  ContinuousModule,
+  DigitalModule,
+  EnglishModule,
+  MuteModule,
+  ReadModule,
+  RhythmModule,
+  SpeakerModule,
+  SpecialModule,
+  SpeakModule
+} from './core'
 
-export * from './components'
-export * from './menu'
-export * from './core'
-export * from './utils'
-export * from './view'
 export * from './constant'
 export * from './model'
 export * from './config'
-
-export { default as EditorCoreModule } from './core'
 
 export default {
   install(app: App, config?: SSMLEditorConfig) {
@@ -25,6 +32,18 @@ export default {
     app.provide(PROVIDER_KEY.EDITORCONFIG, editorConfig)
 
     emitter.on(EMITTER_EVENT.ERROR, editorConfig.handleError)
+
+    Boot.registerModule(AliasModule)
+    Boot.registerModule(ChangespeedModule)
+    Boot.registerModule(ContinuousModule)
+    Boot.registerModule(DigitalModule)
+    Boot.registerModule(EnglishModule)
+    Boot.registerModule(MuteModule)
+    Boot.registerModule(ReadModule)
+    Boot.registerModule(RhythmModule)
+    Boot.registerModule(SpeakerModule)
+    Boot.registerModule(SpecialModule)
+    Boot.registerModule(SpeakModule)
 
     app.use(EditorComponentsPlugin)
     app.use(EditorMenuPlugin)

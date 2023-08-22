@@ -1,16 +1,16 @@
-import { type IModuleConf } from '@wangeditor/editor'
-import { renderElems } from './render-elems'
-import elemsToHtml from './elems-to-html'
-import parseElemsHtml from './parse-elems-html'
-import withSSML from './plugin'
+export { default as AliasModule } from './alias'
+export { default as ChangespeedModule } from './changespeed'
+export { default as ContinuousModule } from './continuous'
+export { default as DigitalModule } from './digital'
+export { default as EnglishModule } from './english'
+export { default as MuteModule } from './mute'
+export { default as ReadModule } from './read'
+export { default as RhythmModule } from './rhythm'
+export { default as SpeakerModule } from './speaker'
+export { default as SpecialModule } from './special'
+export { default as SpeakModule } from './speak'
 
-export default {
-  editorPlugin: withSSML,
-  renderElems: renderElems,
-  elemsToHtml: elemsToHtml,
-  parseElemsHtml: parseElemsHtml
-} as Partial<IModuleConf>
-
+export * from './bind'
 export * from './custom-types'
 
 import './style.scss'

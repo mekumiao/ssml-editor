@@ -15,9 +15,6 @@ const bgm = ref<LabelValue | null>(null)
 
 provide(PROVIDER_KEY.EDITOR, editorRef)
 
-const defaultHtml = `地球在极其遥远的未来可能面临一些威胁，但目前不太可能突然消失。
-The Earth may face some threats in the extremely distant future, but it is currently unlikely to suddenly disappear.
-`
 const editorConfig = { maxLength: 5000, placeholder: '请输入内容...' } as IEditorConfig
 
 onUnmounted(() => {
@@ -55,7 +52,6 @@ const handleChange = (editor: IDomEditor) => {
       <div class="editor-core-container shadow pt-1">
         <EditorCore
           :editor-config="editorConfig"
-          :default-html="defaultHtml"
           @change="handleChange"
           @created="handleCreated"
         ></EditorCore>

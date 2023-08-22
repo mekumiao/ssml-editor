@@ -2,15 +2,20 @@ import { SlateRange, type IDomEditor, SlateEditor, SlateTransforms } from '@wang
 import BaseFn from '../base-fn'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
-import type { Sub } from '@/core/custom-types'
-import { bindClose, unpackVoid } from '../helper'
 import type { LabelValue } from '@/model'
+import type { Alias } from '@/core/alias'
+import { findByDomId, unpackVoid } from '../helper'
 
 export class AliasFn extends BaseFn {
-  protected key: string = 'alias'
+  protected readonly key: string= 'alias'
 
   public constructor(editor: IDomEditor) {
     super(editor)
+  }
+
+  public static handleClose(editor: IDomEditor, item: Alias) {
+    const nodeEntity = findByDomId<Alias>(editor, 'ssml-alias', item.domId)
+    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.value)
   }
 
   public isDisabled(): boolean {
@@ -34,10 +39,10 @@ export class AliasFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: Sub = {
-      type: 'ssml-sub',
+    const node: Alias = {
+      type: 'ssml-alias',
       domId: this.genDomID(),
-      remark: `(${opt.label})`,
+      remark: `(${opt.value})`,
       alias: opt.value,
       value: value,
       bgColor: 'alias',
@@ -46,9 +51,6 @@ export class AliasFn extends BaseFn {
 
     SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
-
-    bindClose<Sub>(this.editor, 'ssml-sub', node.domId, (nodeEntity) =>
-      unpackVoid(this.editor, nodeEntity, (elem) => elem.value)
-    )
+    this.editor.move(1)
   }
 }

@@ -1,8 +1,6 @@
-import type { Descendant } from 'slate'
-
 const EDITOR_KEY = '--editor-vdata'
 
-export function saveChildren(children: Descendant[]): void {
+export function saveChildren(children: any): void {
   const data = JSON.stringify(children)
   window.localStorage.setItem(EDITOR_KEY, data)
 }
@@ -12,8 +10,8 @@ export function readChildren() {
   if (data) {
     const vdata = JSON.parse(data)
     if (vdata instanceof Array) {
-      return vdata as Descendant[]
+      return vdata
     }
   }
-  return null
+  return undefined
 }

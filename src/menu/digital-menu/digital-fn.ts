@@ -1,17 +1,23 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { SayAs } from '../../core/custom-types'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { bindClose } from '../helper'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
+import type { Digital } from '@/core/digital'
+import { findByDomId, unpackVoid } from '../helper'
 
 export class DigitalFn extends BaseFn {
-  protected key: string = 'digital'
+  protected readonly key: string= 'digital'
 
   public constructor(editor: IDomEditor) {
     super(editor)
+    editor.on('ssml-digital-close', DigitalFn.handleClose)
+  }
+
+  public static handleClose(editor: IDomEditor, item: Digital) {
+    const nodeEntity = findByDomId<Digital>(editor, 'ssml-digital', item.domId)
+    nodeEntity && unpackVoid<Digital>(editor, nodeEntity, (elem) => elem.value)
   }
 
   public isDisabled(): boolean {
@@ -36,20 +42,18 @@ export class DigitalFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: SayAs = {
-      type: 'ssml-say-as',
+    const node: Digital = {
+      type: 'ssml-digital',
       domId: this.genDomID(),
       interpretAs: opt.value,
       remark: opt.label,
+      value: value,
       bgColor: 'digital',
-      children: [{ text: value }]
+      children: [{ text: '' }]
     }
 
     SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
-
-    bindClose(this.editor, 'ssml-say-as', node.domId, (nodeEntity) => {
-      SlateTransforms.unwrapNodes(this.editor, { at: nodeEntity[1] })
-    })
+    this.editor.move(1)
   }
 }

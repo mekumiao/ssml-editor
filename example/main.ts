@@ -5,13 +5,8 @@ import '@wangeditor/editor/dist/css/style.css'
 import '@/assets/main.scss'
 
 import EditorConfig from './config'
-import { Boot } from '@wangeditor/editor'
-import { default as SSMLEditorView, EditorCoreModule } from '@/index'
-
-Boot.registerModule(EditorCoreModule)
+import SSMLEditorView from '@/index'
 
 const app = createApp(App)
-
 app.use(SSMLEditorView, EditorConfig)
-
 app.mount('#app')

@@ -1,17 +1,23 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import type { P } from '../../core/custom-types'
 import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { bindClose, unpackVoid } from '../helper'
-import { EMITTER_EVENT } from '../..'
+import { findByDomId, unpackVoid } from '../helper'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
+import type { Speaker } from '@/core/speaker'
+import { EMITTER_EVENT } from '@/constant'
 
 export class SpeakerFn extends BaseFn {
-  protected key: string = 'speaker'
+  protected readonly key: string= 'speaker'
 
   public constructor(editor: IDomEditor) {
     super(editor)
+    editor.on('ssml-speaker-close', SpeakerFn.handleClose)
+  }
+
+  public static handleClose(editor: IDomEditor, value: Speaker) {
+    const nodeEntity = findByDomId<Speaker>(editor, 'ssml-speaker', value.domId)
+    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.word)
   }
 
   public getValue(): string {
@@ -43,8 +49,8 @@ export class SpeakerFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: P = {
-      type: 'ssml-p',
+    const node: Speaker = {
+      type: 'ssml-speaker',
       domId: this.genDomID(),
       word: value,
       phoneme: opt.value,
@@ -56,9 +62,5 @@ export class SpeakerFn extends BaseFn {
     SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
     this.editor.move(1)
-
-    bindClose<P>(this.editor, 'ssml-p', node.domId, (nodeEntity) => {
-      unpackVoid(this.editor, nodeEntity, (elem) => elem.word)
-    })
   }
 }

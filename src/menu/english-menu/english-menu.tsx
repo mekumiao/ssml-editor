@@ -5,13 +5,13 @@ import { selectionTrimEnd } from '../../core/helper'
 import { ElPopover } from 'element-plus'
 import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
 import { emitter } from '@/event-bus'
-import { EnglishEn } from './english-fn'
+import { EnglishFn } from './english-fn'
 import type { SSMLEditorConfig } from '@/config'
 import type { LabelValue } from '@/model'
 
 export default defineComponent({
   setup() {
-    const fn = shallowRef<EnglishEn>()
+    const fn = shallowRef<EnglishFn>()
     const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
     const englishList = ref<LabelValue[]>([])
     const visible = ref(false)
@@ -27,7 +27,7 @@ export default defineComponent({
     }
 
     async function handleClick(editor: IDomEditor) {
-      fn.value ??= new EnglishEn(editor)
+      fn.value ??= new EnglishFn(editor)
       selectionTrimEnd(editor)
 
       if (fn.value.isDisabled()) return

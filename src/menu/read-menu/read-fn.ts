@@ -1,13 +1,22 @@
-import type { W } from '../../core/custom-types'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { bindClose, unpackVoid } from '../helper'
+import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
+import { findByDomId, unpackVoid } from '../helper'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
+import type { Read } from '@/core/read'
 
 export class ReadFn extends BaseFn {
-  protected key: string = 'read'
+  protected readonly key: string = 'read'
+
+  public constructor(editor: IDomEditor) {
+    super(editor)
+  }
+
+  public static handleClose(editor: IDomEditor, item: Read) {
+    const nodeEntity = findByDomId<Read>(editor, 'ssml-read', item.domId)
+    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.value)
+  }
 
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
@@ -26,21 +35,18 @@ export class ReadFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: W = {
-      type: 'ssml-w',
+    const node: Read = {
+      type: 'ssml-read',
       domId: this.genDomID(),
       phoneme: opt.value,
       remark: opt.label,
       value: value,
       bgColor: 'read',
-      children: [{ text: value }]
+      children: [{ text: '' }]
     }
 
     SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
-
-    bindClose<W>(this.editor, 'ssml-w', node.domId, (nodeEntity) =>
-      unpackVoid(this.editor, nodeEntity, () => value)
-    )
+    this.editor.move(1)
   }
 }
