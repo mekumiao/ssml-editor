@@ -44,8 +44,8 @@ const { style } = withLimitView(
   boxRef,
   useDraggable(handleRef, {
     initialValue: {
-      x: 200,
-      y: 200
+      x: 100,
+      y: 100
     }
   })
 )
@@ -69,7 +69,7 @@ function searchInputFocus() {
   >
     <div class="px-2 pb-2">
       <div class="try-play-header d-flex flex-row justify-content-between align-items-center">
-        <div ref="handleRef" class="w-100 h-100"></div>
+        <div ref="handleRef" class="w-100 h-100 try-play-move"></div>
         <div @click="handleMinus" class="px-2 py-1 try-play-menu-close">
           <ElIcon color="white"><Minus></Minus></ElIcon>
         </div>
@@ -110,7 +110,9 @@ function searchInputFocus() {
 
   .try-play-header {
     height: 35px;
-    cursor: move;
+    .try-play-move {
+      cursor: move;
+    }
   }
 
   .try-play-body {
