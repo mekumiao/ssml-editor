@@ -5,6 +5,7 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import { EMITTER_EVENT } from '@/constant'
+import type { LabelValue } from '@/model'
 
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()

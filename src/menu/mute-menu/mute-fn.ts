@@ -4,6 +4,7 @@ import { bindClose } from '../helper'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
+import type { LabelValue } from '@/model'
 
 export class MuteFn extends BaseFn {
   protected key: string = 'mute'

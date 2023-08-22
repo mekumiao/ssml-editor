@@ -2,9 +2,11 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { defineComponent, inject, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
-import { EMITTER_EVENT, PROVIDER_KEY } from '../..'
 import { emitter } from '@/event-bus'
 import { SpeakerFn } from './speaker-fn'
+import type { SSMLEditorConfig } from '@/config'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import type { LabelValue } from '@/model'
 
 export default defineComponent({
   setup() {

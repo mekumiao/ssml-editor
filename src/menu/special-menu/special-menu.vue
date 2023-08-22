@@ -6,6 +6,7 @@ import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import { EMITTER_EVENT } from '@/constant'
 import { SpecialFn } from './special-fn'
+import type { LabelValue } from '@/model'
 
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()

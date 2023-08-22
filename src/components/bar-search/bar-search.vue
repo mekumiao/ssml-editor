@@ -3,6 +3,7 @@ import { ElMenu, ElMenuItem, ElOption, ElSelect, ElInput, ElForm } from 'element
 import { onMounted, ref, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
+import type { LabelValue } from '@/model'
 
 type MenuKey = 'first' | 'second' | 'last'
 type MenuItemLabel = { [k in MenuKey]: string }

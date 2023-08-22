@@ -4,6 +4,7 @@ import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import type { Sub } from '@/core/custom-types'
 import { bindClose, unpackVoid } from '../helper'
+import type { LabelValue } from '@/model'
 
 export class AliasFn extends BaseFn {
   protected key: string = 'alias'

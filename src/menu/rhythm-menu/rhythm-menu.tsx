@@ -3,6 +3,7 @@ import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { RhythmFn } from './rhythm-fn'
+import type { LabelValue } from '@/model'
 
 const options: LabelValue[] = [
   { value: '200ms', label: '短' },

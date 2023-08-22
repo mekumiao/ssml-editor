@@ -6,6 +6,8 @@ import { ElPopover } from 'element-plus'
 import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
 import { emitter } from '@/event-bus'
 import { EnglishEn } from './english-fn'
+import type { SSMLEditorConfig } from '@/config'
+import type { LabelValue } from '@/model'
 
 export default defineComponent({
   setup() {

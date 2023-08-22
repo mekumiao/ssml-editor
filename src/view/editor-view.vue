@@ -5,6 +5,7 @@ import BarView from './bar-view.vue'
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
 import { PROVIDER_KEY, WANGEDITOR_EVENT } from '..'
+import type { LabelValue } from '@/model'
 
 const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
 

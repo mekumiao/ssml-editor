@@ -5,6 +5,7 @@ import EditorMenuPlugin from './menu'
 import EditorView from './view'
 import { PROVIDER_KEY, EMITTER_EVENT } from './constant'
 import { emitter } from './event-bus'
+import { type SSMLEditorConfig } from './config'
 
 export * from './components'
 export * from './menu'
@@ -12,6 +13,8 @@ export * from './core'
 export * from './utils'
 export * from './view'
 export * from './constant'
+export * from './model'
+export * from './config'
 
 export { default as EditorCoreModule } from './core'
 

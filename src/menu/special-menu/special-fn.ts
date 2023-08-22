@@ -6,6 +6,7 @@ import { bindClose, bindPlay } from '../helper'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
+import type { LabelValue } from '@/model'
 
 // 音效功能
 export class SpecialFn extends BaseFn {

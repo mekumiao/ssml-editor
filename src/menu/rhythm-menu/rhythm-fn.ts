@@ -4,6 +4,7 @@ import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import type { Break } from '@/core/custom-types'
 import { bindClose } from '../helper'
+import type { LabelValue } from '@/model'
 
 export class RhythmFn extends BaseFn {
   protected key: string = 'rhythm'

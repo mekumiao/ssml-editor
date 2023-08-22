@@ -1,6 +1,7 @@
 import { DomEditor, type IDomEditor } from '@wangeditor/editor'
 import type { SSMLElementType, W } from './custom-types'
 import { WANGEDITOR_EVENT } from '@/constant'
+import type { LabelValue } from '@/model'
 
 type Speak = {
   volume: string

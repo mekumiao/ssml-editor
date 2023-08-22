@@ -3,6 +3,7 @@ import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton, BarInput } from '@/components'
 import { ElPopover } from 'element-plus'
 import { MuteFn } from './mute-fn'
+import type { LabelValue } from '@/model'
 
 const options: LabelValue[] = [
   { value: '150ms', label: '150ms' },

@@ -3,6 +3,7 @@ import { SlateEditor, SlateRange } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
+import type { LabelValue } from '@/model'
 
 export default abstract class BaseFn {
   private oldSelection: SlateRange | null = null

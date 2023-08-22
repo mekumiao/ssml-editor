@@ -5,6 +5,7 @@ import { bindClose, unpackVoid } from '../helper'
 import { EMITTER_EVENT } from '../..'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
+import type { LabelValue } from '@/model'
 
 export class SpeakerFn extends BaseFn {
   protected key: string = 'speaker'

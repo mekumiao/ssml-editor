@@ -1,5 +1,6 @@
 import axios from 'axios'
 import './mockServer'
+import type { LabelValue } from '@/model'
 
 export async function speaker(word: string): Promise<LabelValue[]> {
   const resp = await axios.get('/speaker', { params: { word } })

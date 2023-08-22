@@ -4,6 +4,7 @@ import { EMITTER_EVENT } from '@/constant'
 import type { Prosody } from '@/core/custom-types'
 import { bindClose } from '../helper'
 import { emitter } from '@/event-bus'
+import type { LabelValue } from '@/model'
 
 export class ChangespeedFn extends BaseFn {
   protected key: string = 'changespeed'

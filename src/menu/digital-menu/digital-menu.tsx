@@ -3,6 +3,7 @@ import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { DigitalFn } from './digital-fn'
+import type { LabelValue } from '@/model'
 
 const options: LabelValue[] = [
   { value: 'value', label: '读数值' },

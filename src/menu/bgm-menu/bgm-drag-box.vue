@@ -4,6 +4,7 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { emitter } from '@/event-bus'
 import { type Position } from '@vueuse/core'
 import { EMITTER_EVENT } from '@/constant'
+import type { LabelValue } from '@/model'
 
 const visible = ref(false)
 const position = ref<Position>({ x: 20, y: 20 })
