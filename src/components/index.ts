@@ -4,9 +4,10 @@ import { BarButton } from './bar-button'
 import { BarInput } from './bar-input'
 import { BarPopover } from './bar-popover'
 import { BarSearch } from './bar-search'
-import { FixedPanel } from './fixed-panel'
+import { FixedPanel, withLimitView } from './fixed-panel'
 import { BarWrapper, BarWrapperItem, BarWrapperGroup } from './bar-wrapper'
 import { DragBox } from './drag-box'
+import { CircleWindowToggle } from './circle-window-toggle'
 
 export default {
   install(app: App) {
@@ -31,5 +32,7 @@ export {
   BarWrapper,
   BarWrapperItem,
   BarWrapperGroup,
-  DragBox
+  DragBox,
+  withLimitView,
+  CircleWindowToggle
 }

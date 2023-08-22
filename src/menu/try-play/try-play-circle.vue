@@ -1,12 +1,57 @@
 <script setup lang="ts">
 import { ref } from 'vue'
+import { withLimitView } from '@/components'
+import { useDraggable } from '@vueuse/core'
 
 const src = ref<string>(`
   https://mobvoi-speech-public.mobvoi.com/headerImage/4314c841777e4d20901cd5d04a28e91a.png?iopcmd=thumbnail&type=8&width=80&height=80`)
+
+const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
+defineProps<{ visible: boolean }>()
+
+const boxRef = ref()
+const recordClientX = ref<number>(0)
+const recordClientY = ref<number>(0)
+
+const { style } = withLimitView(
+  boxRef,
+  useDraggable(boxRef, {
+    onStart: (_, event) => {
+      return isClick(event.clientX, event.clientY) ? false : undefined
+    }
+  })
+)
+
+function handleMouseup(event: MouseEvent) {
+  isClick(event.clientX, event.clientY) && emit('update:visible', false)
+}
+
+function handleMousedown(event: MouseEvent) {
+  recordClientX.value = event.clientX
+  recordClientY.value = event.clientY
+}
+
+function isClick(x: number, y: number) {
+  const offset = 10
+  const res =
+    x > recordClientX.value - offset &&
+    x < recordClientX.value + offset &&
+    y > recordClientY.value - offset &&
+    y < recordClientY.value + offset
+  return res
+}
 </script>
 
 <template>
-  <div class="try-play-circel rounded-circle overflow-hidden">
+  <div
+    v-show="visible"
+    ref="boxRef"
+    class="try-play-circel user-select-none rounded-circle overflow-hidden"
+    :style="style"
+    style="position: fixed"
+    @mousedown="handleMousedown"
+    @mouseup="handleMouseup"
+  >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
       <img :src="src" class="rounded-circle" />
       <div class="anchor-avatar-name text-white">膜厚渊</div>
