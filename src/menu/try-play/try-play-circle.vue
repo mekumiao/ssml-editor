@@ -16,6 +16,7 @@ const recordClientY = ref<number>(0)
 const { style } = withLimitView(
   boxRef,
   useDraggable(boxRef, {
+    initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
     onStart: (_, event) => {
       return isClick(event.clientX, event.clientY) ? false : undefined
     }
@@ -54,7 +55,7 @@ function isClick(x: number, y: number) {
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
       <img :src="src" class="rounded-circle" />
-      <div class="anchor-avatar-name text-white">膜厚渊</div>
+      <div class="anchor-avatar-name text-white">莫厚渊</div>
     </div>
   </div>
 </template>

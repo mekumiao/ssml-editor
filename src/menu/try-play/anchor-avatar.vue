@@ -8,7 +8,7 @@ const src = ref<string>(`
 <template>
   <div class="anchor-avatar d-flex flex-column justify-content-center">
     <img :src="src" class="rounded-circle" />
-    <div class="anchor-avatar-name text-white">膜厚渊</div>
+    <div class="anchor-avatar-name text-white">莫厚渊</div>
   </div>
 </template>
 
