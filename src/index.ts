@@ -18,7 +18,8 @@ import {
   RhythmModule,
   SpeakerModule,
   SpecialModule,
-  SpeakModule
+  SpeakModule,
+  GlobalPlugin
 } from './core'
 
 export * from './constant'
@@ -44,6 +45,7 @@ export default {
     Boot.registerModule(SpeakerModule)
     Boot.registerModule(SpecialModule)
     Boot.registerModule(SpeakModule)
+    Boot.registerPlugin(GlobalPlugin)
 
     app.use(EditorComponentsPlugin)
     app.use(EditorMenuPlugin)
