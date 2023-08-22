@@ -44,16 +44,15 @@ const handleChange = (editor: IDomEditor) => {
 </script>
 
 <template>
-  <div class="edit-view">
+  <div class="editor-view">
     <EditorTitle
       :bgm="bgm"
       :character-total="characterTotal"
       :character-max="editorConfig.maxLength || 0"
     ></EditorTitle>
-    <div class="edit-box">
+    <div class="editor-box">
       <BarView></BarView>
-      <div class="h h-1"></div>
-      <div class="editor">
+      <div class="editor-core-container pt-1">
         <EditorCore
           :editor-config="editorConfig"
           :default-html="defaultHtml"
@@ -66,8 +65,12 @@ const handleChange = (editor: IDomEditor) => {
 </template>
 
 <style lang="scss" scoped>
-.editor {
-  margin: 0 auto;
-  width: 800px;
+.editor-view {
+  .editor-box {
+    .editor-core-container {
+      margin: 0 auto;
+      width: 800px;
+    }
+  }
 }
 </style>

@@ -86,9 +86,8 @@ function handleSubmit(value: LabelValue) {
         <ElMenuItem index="last">{{ menuItemLabel.last }}</ElMenuItem>
       </ElMenu>
     </div>
-    <div class="h h-1"></div>
-    <div class="flex flex-row">
-      <ElSelect v-model="sceneSelect" @change="handleFetchData" class="m m-2" size="large">
+    <div class="flex flex-row pt-1">
+      <ElSelect v-model="sceneSelect" @change="handleFetchData" class="m-1" size="large">
         <ElOption
           v-for="item in scenes"
           :key="item.value"
@@ -96,7 +95,7 @@ function handleSubmit(value: LabelValue) {
           :value="item.value"
         />
       </ElSelect>
-      <ElSelect v-model="styleSelect" @change="handleFetchData" class="m m-2" size="large">
+      <ElSelect v-model="styleSelect" @change="handleFetchData" class="m-1" size="large">
         <ElOption
           v-for="item in styles"
           :key="item.value"
@@ -105,8 +104,7 @@ function handleSubmit(value: LabelValue) {
         />
       </ElSelect>
     </div>
-    <div class="h-"></div>
-    <div class="content-list w-90">
+    <div class="content-list pt-1 w-90">
       <div
         @click="handleSubmit(item)"
         class="content-list-item clickable ps-3"

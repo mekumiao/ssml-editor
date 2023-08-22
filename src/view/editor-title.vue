@@ -39,30 +39,28 @@ const handleRemoveBgm = () => {
 </script>
 
 <template>
-  <div class="edit-title">
-    <div class="title-wrapper">
-      <div class="title-author">SSML编辑器</div>
-      <div class="h h-1"></div>
-      <div class="author">
+  <div class="editor-title d-flex flex-row align-item-center justify-content-between">
+    <div class="title-wrapper d-flex flex-column justify-content-center ps-3">
+      <div class="title-author pb-1">SSML编辑器</div>
+      <div class="author d-flex flex-row align-items-center justify-content-start">
         <div>已保存</div>
         <div>|</div>
         <div>{{ characterTotal }}/{{ characterMax }}字</div>
-        <div class="w-2"></div>
         <ElTag
-          class="bgm-txt p-2"
+          class="bgm-txt ms-2"
           closable
           size="small"
           @click="() => bgm && bgm.value && playSound(bgm.value)"
           @close="handleRemoveBgm"
           v-if="bgm"
         >
-          <span class="iconfont icon-play font-size-12 p1"></span>
-          <div class="inline-block w-1 p-1"></div>
+          <span class="iconfont icon-play font-size-12 p-1"></span>
+          <div class="d-inline-block"></div>
           <span>{{ bgm.label }}</span>
         </ElTag>
       </div>
     </div>
-    <div class="operation-wrapper">
+    <div class="operation-wrapper d-flex flex-row justify-content-center align-items-center">
       <ElButton type="primary" :icon="Share" disabled>分享</ElButton>
       <div class="menu-divider"></div>
       <ElButton type="primary" @click="handleGenSSML">查看SSML</ElButton>
@@ -70,7 +68,7 @@ const handleRemoveBgm = () => {
       <ElButton disabled>下载视频</ElButton>
       <ElButton disabled>下载字幕</ElButton>
       <ElButton disabled>声音转换</ElButton>
-      <div class="w w-2"></div>
+      <div class="px-1"></div>
     </div>
   </div>
 
@@ -85,53 +83,40 @@ const handleRemoveBgm = () => {
 </template>
 
 <style lang="scss" scoped>
-.edit-title {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-}
+.editor-title {
+  height: 100px;
 
-.title-wrapper {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 10px;
+  .title-wrapper {
+    .author {
+      height: 20px;
+      font-size: 12px;
+      color: #999999;
+    }
+  }
 
-  .author {
+  .operation-wrapper {
     display: flex;
     flex-direction: row;
-    font-size: 12px;
-    color: #999999;
-    height: 10px;
+
+    .menu-divider {
+      height: 30px;
+      width: 1px;
+      margin: 0 14px;
+      background: #e1e1e1;
+    }
   }
-}
 
-.operation-wrapper {
-  display: flex;
-  flex-direction: row;
-
-  .menu-divider {
-    height: 30px;
-    width: 1px;
-    margin: 0 14px;
-    background: #e1e1e1;
+  .ssml-code {
+    height: 400px;
+    overflow-y: auto;
   }
-}
 
-.ssml-code {
-  height: 400px;
-  overflow-y: auto;
-}
+  .iconfont.icon-play {
+    cursor: pointer;
+  }
 
-.inline-block {
-  display: inline-block;
-}
-
-.iconfont.icon-play {
-  cursor: pointer;
-}
-
-.bgm-txt {
-  cursor: pointer;
+  .bgm-txt {
+    cursor: pointer;
+  }
 }
 </style>
