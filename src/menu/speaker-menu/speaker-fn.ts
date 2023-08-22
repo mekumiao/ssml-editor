@@ -8,7 +8,7 @@ import type { Speaker } from '@/core/speaker'
 import { EMITTER_EVENT } from '@/constant'
 
 export class SpeakerFn extends BaseFn {
-  protected readonly key: string= 'speaker'
+  protected readonly key: string = 'speaker'
 
   public constructor(editor: IDomEditor) {
     super(editor)

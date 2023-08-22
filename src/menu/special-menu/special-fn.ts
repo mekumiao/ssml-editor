@@ -10,7 +10,7 @@ import { findByDomId } from '../helper'
 
 // 音效功能
 export class SpecialFn extends BaseFn {
-  protected readonly key: string= 'special'
+  protected readonly key: string = 'special'
 
   public constructor(editor: IDomEditor) {
     super(editor)

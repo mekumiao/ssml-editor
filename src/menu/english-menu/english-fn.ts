@@ -8,7 +8,7 @@ import type { LabelValue } from '@/model'
 import type { English } from '@/core/english'
 
 export class EnglishFn extends BaseFn {
-  protected readonly key: string= 'english'
+  protected readonly key: string = 'english'
 
   public constructor(editor: IDomEditor) {
     super(editor)

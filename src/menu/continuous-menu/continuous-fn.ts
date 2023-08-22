@@ -7,7 +7,7 @@ import type { Continuous } from '@/core/continuous'
 import { findByDomId, unpackVoid } from '../helper'
 
 export class ContinuousFn extends BaseFn {
-  protected readonly key: string= 'continuous'
+  protected readonly key: string = 'continuous'
 
   public constructor(editor: IDomEditor) {
     super(editor)

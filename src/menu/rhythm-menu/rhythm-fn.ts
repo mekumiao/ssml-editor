@@ -7,7 +7,7 @@ import type { Rhythm } from '@/core/rhythm'
 import { findByDomId } from '../helper'
 
 export class RhythmFn extends BaseFn {
-  protected readonly key: string= 'rhythm'
+  protected readonly key: string = 'rhythm'
 
   public constructor(editor: IDomEditor) {
     super(editor)

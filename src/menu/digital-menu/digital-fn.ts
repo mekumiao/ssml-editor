@@ -8,7 +8,7 @@ import type { Digital } from '@/core/digital'
 import { findByDomId, unpackVoid } from '../helper'
 
 export class DigitalFn extends BaseFn {
-  protected readonly key: string= 'digital'
+  protected readonly key: string = 'digital'
 
   public constructor(editor: IDomEditor) {
     super(editor)

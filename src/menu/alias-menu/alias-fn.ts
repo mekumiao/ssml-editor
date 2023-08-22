@@ -7,7 +7,7 @@ import type { Alias } from '@/core/alias'
 import { findByDomId, unpackVoid } from '../helper'
 
 export class AliasFn extends BaseFn {
-  protected readonly key: string= 'alias'
+  protected readonly key: string = 'alias'
 
   public constructor(editor: IDomEditor) {
     super(editor)

@@ -7,7 +7,7 @@ import type { Changespeed } from '@/core/changespeed'
 import { findByDomId } from '../helper'
 
 export class ChangespeedFn extends BaseFn {
-  protected readonly key: string= 'changespeed'
+  protected readonly key: string = 'changespeed'
 
   public constructor(editor: IDomEditor) {
     super(editor)

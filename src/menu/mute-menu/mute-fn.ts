@@ -7,7 +7,7 @@ import type { Mute } from '@/core/mute'
 import { findByDomId } from '../helper'
 
 export class MuteFn extends BaseFn {
-  protected readonly key: string= 'mute'
+  protected readonly key: string = 'mute'
 
   public constructor(editor: IDomEditor) {
     super(editor)
