@@ -27,7 +27,7 @@ import {
 </script>
 
 <template>
-  <div class="content">
+  <div class="bar-view border-bottom border-1">
     <BarWrapper>
       <BarWrapperGroup divider="green">
         <BarButton text="24K高清音质" icon="play" disabled></BarButton>

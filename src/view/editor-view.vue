@@ -4,7 +4,7 @@ import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
-import { PROVIDER_KEY, WANGEDITOR_EVENT } from '..'
+import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 
 const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
@@ -52,7 +52,7 @@ const handleChange = (editor: IDomEditor) => {
     ></EditorTitle>
     <div class="editor-box">
       <BarView></BarView>
-      <div class="editor-core-container pt-1">
+      <div class="editor-core-container shadow pt-1">
         <EditorCore
           :editor-config="editorConfig"
           :default-html="defaultHtml"
@@ -67,9 +67,11 @@ const handleChange = (editor: IDomEditor) => {
 <style lang="scss" scoped>
 .editor-view {
   .editor-box {
+    background-color: var(--tool-bg-color);
+
     .editor-core-container {
       margin: 0 auto;
-      width: 800px;
+      width: 60vw;
     }
   }
 }
