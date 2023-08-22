@@ -67,7 +67,7 @@ function searchInputFocus() {
     style="position: fixed"
     class="try-play user-select-none card z-3 shadow"
   >
-    <div class="px-2 pb-2">
+    <div class="px-2 pb-2 overflow-hidden">
       <div class="try-play-header d-flex flex-row justify-content-between align-items-center">
         <div ref="handleRef" class="w-100 h-100 try-play-move"></div>
         <div @click="handleMinus" class="px-2 py-1 try-play-menu-close">
@@ -92,7 +92,7 @@ function searchInputFocus() {
               <TagItem>付费</TagItem>
             </div>
             <TagList></TagList>
-            <div class="py-1"></div>
+            <div class="py-1 border-top border-secondary"></div>
             <AnchorList></AnchorList>
           </div>
           <div class="try-play-right border border-secondary w-50">right</div>
@@ -104,8 +104,8 @@ function searchInputFocus() {
 
 <style lang="scss" scoped>
 .try-play {
-  width: 130vh;
-  height: 70vh;
+  width: 750px;
+  height: 430px;
   background-color: #2254a1;
 
   .try-play-header {

@@ -6,19 +6,18 @@ const src = ref<string>(`
 </script>
 
 <template>
-  <div class="anchor-avatar d-flex flex-column justify-content-center">
-    <img :src="src" class="rounded-circle" />
+  <div
+    class="anchor-avatar d-flex flex-column align-items-center text-center justify-content-center"
+  >
+    <img :src="src" class="rounded-circle" style="height: 40px" />
     <div class="anchor-avatar-name text-white">莫厚渊</div>
   </div>
 </template>
 
 <style lang="scss" scoped>
 .anchor-avatar {
-  width: 5vh;
-  height: 10vh;
-
   .anchor-avatar-name {
-    font-size: 0.5rem;
+    font-size: 12px;
   }
 }
 </style>

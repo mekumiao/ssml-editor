@@ -4,13 +4,17 @@ import TagItem from './tag-item.vue'
 
 <template>
   <div class="tag-list w-100">
-    <div class="w-100 d-flex flex-row">
+    <div
+      class="w-100 d-flex flex-row border-bottom border-secondary align-items-center"
+      style="height: 40px"
+    >
       <TagItem>全部</TagItem>
       <TagItem>男声</TagItem>
       <TagItem>女声</TagItem>
     </div>
     <div
-      class="tag-list-body w-100 d-flex flex-row flex-wrap align-items-start overflow-y-auto overflow-x-hidden"
+      style="height: 100px"
+      class="w-100 d-flex flex-row flex-wrap align-items-start overflow-y-auto overflow-x-hidden"
     >
       <TagItem>全部</TagItem>
       <TagItem>影视</TagItem>
@@ -64,12 +68,4 @@ import TagItem from './tag-item.vue'
   </div>
 </template>
 
-<style lang="scss" scoped>
-.tag-list {
-  height: 18vh;
-
-  .tag-list-body {
-    height: 13vh;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

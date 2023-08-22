@@ -3,7 +3,7 @@ defineProps<{ isActivate?: boolean }>()
 </script>
 
 <template>
-  <div class="tag-item p-2 text-white" :class="[isActivate ? 'activate' : null]">
+  <div class="tag-item p-2 text-white text-center" :class="[isActivate ? 'activate' : null]">
     <slot></slot>
   </div>
 </template>
@@ -13,7 +13,7 @@ defineProps<{ isActivate?: boolean }>()
   cursor: pointer;
   color: rgba(189, 195, 199, 0.8);
   font-size: 0.8rem;
-  width: 4vw;
+  width: 60px;
 }
 
 .activate {
