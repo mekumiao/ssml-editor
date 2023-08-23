@@ -14,7 +14,7 @@ import TagItem from './tag-item.vue'
     </div>
     <div
       style="height: 100px"
-      class="w-100 d-flex flex-row flex-wrap align-items-start overflow-y-auto overflow-x-hidden"
+      class="w-100 d-flex flex-row flex-wrap align-items-start overflow-y-auto overflow-x-hidden scrollbar-none"
     >
       <TagItem>全部</TagItem>
       <TagItem>影视</TagItem>

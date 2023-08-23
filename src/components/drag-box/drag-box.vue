@@ -30,12 +30,17 @@ onUnmounted(() => {
   window.addEventListener('keydown', handleKeyDownEsc)
 })
 
-function handleClose(ev: MouseEvent) {
+function handleMaskClick(ev: MouseEvent) {
   const target = ev.target as HTMLElement
   if (boxRef.value && !boxRef.value.contains(target) && props.visible) {
     emit('update:visible', false)
     emit('close')
   }
+}
+
+function handleClose() {
+  emit('update:visible', false)
+  emit('close')
 }
 
 function handleKeyDownEsc(event: KeyboardEvent) {
@@ -48,7 +53,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 
 <template>
   <Teleport to="body">
-    <div v-show="visible" class="drag-box-mask user-select-none" @click="handleClose">
+    <div v-show="visible" class="drag-box-mask user-select-none" @click="handleMaskClick">
       <div ref="boxRef" class="card shadow brag-box" style="position: fixed" :style="style">
         <div class="w-100 text-end me-2">
           <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>

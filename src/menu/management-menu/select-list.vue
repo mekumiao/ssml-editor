@@ -10,9 +10,12 @@ defineProps<{ modelValue: string; dataList: LabelValue[] }>()
     <div class="text-center d-flex flex-column justify-content-center fs-6" style="height: 60px">
       <slot></slot>
     </div>
-    <ul class="text-center w-100 border-start border-top border-bottom border-secondary-subtle">
+    <ul
+      class="text-center w-100 border-start border-top border-bottom border-secondary-subtle overflow-y-auto overflow-x-hidden scrollbar-none"
+      style="height: 180px"
+    >
       <li
-        class="clickable"
+        class="clickable select-item py-1"
         v-for="(item, index) in dataList"
         :class="{ activate: item.value === modelValue }"
         :key="index"
@@ -27,7 +30,11 @@ defineProps<{ modelValue: string; dataList: LabelValue[] }>()
 <style lang="scss" scoped>
 .select-list {
   .activate {
-    color: blue;
+    color: #3583fb;
+  }
+
+  .select-item {
+    font-size: 0.5rem;
   }
 }
 </style>

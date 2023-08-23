@@ -92,7 +92,7 @@ function searchInputFocus() {
           <AnchorList></AnchorList>
         </div>
         <div
-          class="try-play-right w-50 border-start rounded border-top border-secondary overflow-x-hidden overflow-y-auto"
+          class="try-play-right w-50 border-start rounded border-top border-secondary overflow-x-hidden overflow-y-auto scrollbar-none"
         >
           <SliderPanle></SliderPanle>
         </div>
@@ -131,15 +131,6 @@ $height: 390px;
 
     ::v-deep .el-input__wrapper {
       background-color: transparent;
-    }
-  }
-
-  .try-play-right {
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-      display: none;
     }
   }
 }

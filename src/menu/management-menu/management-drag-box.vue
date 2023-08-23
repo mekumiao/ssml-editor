@@ -14,6 +14,8 @@ const dragRef = ref()
 const visible = ref(false)
 const showMore = ref(false)
 
+const searchInput = ref('')
+
 const selType = ref('')
 const selSpeaker = ref('')
 const selRole = ref('')
@@ -61,21 +63,17 @@ async function handleMenuClick(pot: Position) {
   visible.value = true
 }
 
-function handleSubmit(value: LabelValue) {
-  visible.value = false
-  emitter.emit(EMITTER_EVENT.MANAGEMENT_DRAG_BOX_SUBMIT, value)
+function handleSearch() {
+  // 请求
 }
 </script>
 
 <template>
   <DragBox ref="dragRef" v-model:visible="visible" @close="handleClose">
-    <div style="width: 600px; height: 300px" class="position-relative px-2 pb-2">
-      <ElForm @submit.prevent="handleSubmit">
-        <ElInput placeholder="请输入名称快速查找配音师"></ElInput>
+    <div style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
+      <ElForm @submit.prevent="handleSearch">
+        <ElInput v-model="searchInput" placeholder="请输入名称快速查找配音师"></ElInput>
       </ElForm>
-      <div v-show="showMore" class="position-absolute bottom-0 end-0">
-        <ElButton>全部清空</ElButton>
-      </div>
       <div class="position-relative">
         <div class="position-absolute top-0 end-0">
           <ElButton size="small" :icon="More" @click="() => (showMore = !showMore)"></ElButton>
@@ -118,6 +116,11 @@ function handleSubmit(value: LabelValue) {
             <span class="my-3">语调</span>
           </SelectList>
         </div>
+      </div>
+
+      <div class="position-absolute bottom-0 end-0 d-flex flex-row justify-content-end me-4 mb-3">
+        <ElButton v-show="!showMore" type="primary">确定</ElButton>
+        <ElButton v-show="showMore" type="primary">全部清空</ElButton>
       </div>
     </div>
   </DragBox>
