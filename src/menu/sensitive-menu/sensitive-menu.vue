@@ -30,12 +30,12 @@ const dataList = ref<LabelValue[]>()
 const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
-  const pot = {
+  edirorRef.value = editor
+  dragRef.value.setPosition({
     x: x.value - 200,
     y: y.value + height.value
-  }
-  edirorRef.value = editor
-  dragRef.value.setPosition(pot)
+  })
+  visible.value = true
 }
 
 function handleSubmit(opt: LabelValue) {
@@ -45,7 +45,7 @@ function handleSubmit(opt: LabelValue) {
 
 <template>
   <DragBox ref="dragRef" v-model:visible="visible">
-    <template #refenence>
+    <template #reference>
       <BarButton ref="menuRef" text="敏感词" icon="sensitive" @click="handleClick"></BarButton>
     </template>
     <BarSearch
