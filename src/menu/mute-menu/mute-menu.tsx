@@ -33,16 +33,17 @@ export default defineComponent({
     function handleClick(editor: IDomEditor) {
       fn.value ??= new MuteFn(editor)
       if (fn.value.isDisabled()) return
-      show()
       fn.value.record()
+      show()
       inputRef.value.focus()
     }
 
     function handleSubmit(text: string | null) {
       hide()
       if (!text) return
-      fn.value?.restore()
+      fn.value?.reselect()
       fn.value?.exec({ value: text, label: text })
+      fn.value?.unrecord()
     }
 
     return () => (

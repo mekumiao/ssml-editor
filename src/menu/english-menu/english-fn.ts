@@ -27,7 +27,10 @@ export class EnglishFn extends BaseFn {
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
     const selection = this.selection()!
-    if (SlateRange.isCollapsed(selection)) return true
+    if (SlateRange.isCollapsed(selection)) {
+      emitter.emit(EMITTER_EVENT.ERROR, '请选择英文单词')
+      return true
+    }
 
     const value = SlateEditor.string(this.editor, selection)
     if (value.length <= 0) return true

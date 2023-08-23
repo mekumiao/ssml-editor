@@ -31,8 +31,9 @@ export default defineComponent({
     function handleSubmit(text: string | null) {
       hide()
       if (text) {
-        fn.value?.restore()
+        fn.value?.reselect()
         fn.value?.exec({ value: text, label: text })
+        fn.value?.unrecord()
       }
     }
 

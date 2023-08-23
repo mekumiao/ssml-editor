@@ -22,4 +22,3 @@ export type SSMLElementType =
   | UnionTypesMap<Rhythm>
   | UnionTypesMap<Speaker>
   | UnionTypesMap<Special>
-  | 'paragraph'

@@ -9,7 +9,9 @@ export default defineComponent({
 
     function handleClick(editor: IDomEditor) {
       fn.value ??= new ContinuousFn(editor)
+      if (fn.value.isDisabled()) return
       fn.value.exec()
+      fn.value.unrecord()
     }
 
     return () => <BarButton text="连读" icon="continuous" onClick={handleClick}></BarButton>

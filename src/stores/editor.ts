@@ -1,3 +1,6 @@
+import type { IDomEditor, SlateRange } from '@wangeditor/editor'
+import { ref } from 'vue'
+
 const EDITOR_KEY = '--editor-vdata'
 
 export function saveChildren(children: any): void {
@@ -14,4 +17,22 @@ export function readChildren() {
     }
   }
   return undefined
+}
+
+const selection = ref<SlateRange | null>()
+
+export function recoreSelection(editor: IDomEditor): void {
+  if (editor.selection) {
+    console.log(editor.selection)
+    selection.value = editor.selection as SlateRange
+  }
+}
+
+export function unrecordSelection() {
+  selection.value = null
+}
+
+export function getSelectionByRecord() {
+  if (selection.value) return selection.value
+  return null
 }

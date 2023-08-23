@@ -45,7 +45,7 @@ export default {
     Boot.registerModule(SpeakerModule)
     Boot.registerModule(SpecialModule)
     Boot.registerModule(SpeakModule)
-    Boot.registerPlugin(GlobalPlugin)
+    Boot.registerModule(GlobalPlugin)
 
     app.use(EditorComponentsPlugin)
     app.use(EditorMenuPlugin)

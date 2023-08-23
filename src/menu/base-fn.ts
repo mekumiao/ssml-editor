@@ -1,12 +1,12 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateEditor, SlateRange } from '@wangeditor/editor'
+import { SlateEditor } from '@wangeditor/editor'
 import { genRandomStr } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
+import { getSelectionByRecord, recoreSelection, unrecordSelection } from '@/stores'
 
 export default abstract class BaseFn {
-  private oldSelection: SlateRange | null = null
   protected readonly editor: IDomEditor
   protected abstract readonly key: string
 
@@ -20,7 +20,7 @@ export default abstract class BaseFn {
 
   protected selection() {
     const { selection } = this.editor
-    return selection ?? (this.oldSelection as SlateRange | null)
+    return selection ?? getSelectionByRecord()
   }
 
   protected getValue(): string {
@@ -30,11 +30,16 @@ export default abstract class BaseFn {
   }
 
   public record() {
-    this.oldSelection = this.editor.selection as SlateRange
+    recoreSelection(this.editor)
   }
 
-  public restore() {
-    this.oldSelection && this.editor.select(this.oldSelection)
+  public unrecord() {
+    unrecordSelection()
+  }
+
+  public reselect() {
+    const selection = this.selection()
+    selection && this.editor.select(selection)
   }
 
   public isDisabled(): boolean {
