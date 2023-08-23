@@ -27,13 +27,12 @@ const styles = [
   { value: '2', label: '风格2' },
   { value: '3', label: '风格3' }
 ] as LabelValue[]
-const dataList = ref<LabelValue[]>()
 
 const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
   fn.value ??= new SpecialFn(editor)
-  if (fn.value.isDisabled()) return false
+  if (fn.value.isDisabled()) return
   fn.value.record()
   dragRef.value.setPosition({
     x: x.value - 200,
@@ -61,7 +60,6 @@ function handleSubmit(opt: LabelValue) {
       :menuItemLabel="menuItemLabel"
       :scenes="scenes"
       :styles="styles"
-      :dataList="dataList"
       :fetch="config.fetchSpecial"
       @submit="handleSubmit"
     ></BarSearch>

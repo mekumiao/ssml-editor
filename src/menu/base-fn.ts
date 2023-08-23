@@ -4,7 +4,7 @@ import { genRandomStr } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
-import { getSelectionByRecord, recoreSelection, unrecordSelection } from '@/stores'
+import { getSelectionByRecord, recordSelection, unrecordSelection } from '@/stores'
 
 export default abstract class BaseFn {
   protected readonly editor: IDomEditor
@@ -30,7 +30,7 @@ export default abstract class BaseFn {
   }
 
   public record() {
-    recoreSelection(this.editor)
+    recordSelection(this.editor)
   }
 
   public unrecord() {

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElMenu, ElMenuItem, ElOption, ElSelect, ElInput, ElForm } from 'element-plus'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, toRaw, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
 import type { LabelValue } from '@/model'
@@ -41,7 +41,7 @@ watch(isVisible, (newValue) => {
 })
 
 onMounted(async () => {
-  await handleFetchData()
+  if (!dataListRef.value.length) await handleFetchData()
 })
 
 async function handleFetchData() {
@@ -106,7 +106,7 @@ function handleSubmit(value: LabelValue) {
     </div>
     <div class="content-list pt-1 w-90">
       <div
-        @click="handleSubmit(item)"
+        @click="handleSubmit(toRaw(item))"
         class="content-list-item clickable ps-3"
         v-for="(item, index) in dataListRef"
         :key="index"

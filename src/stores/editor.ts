@@ -1,5 +1,5 @@
 import type { IDomEditor, SlateRange } from '@wangeditor/editor'
-import { ref } from 'vue'
+import { toRaw } from 'vue'
 
 const EDITOR_KEY = '--editor-vdata'
 
@@ -19,20 +19,19 @@ export function readChildren() {
   return undefined
 }
 
-const selection = ref<SlateRange | null>()
+let selection: SlateRange | null
 
-export function recoreSelection(editor: IDomEditor): void {
+export function recordSelection(editor: IDomEditor): void {
   if (editor.selection) {
-    console.log(editor.selection)
-    selection.value = editor.selection as SlateRange
+    selection = editor.selection as SlateRange
   }
 }
 
 export function unrecordSelection() {
-  selection.value = null
+  selection = null
 }
 
 export function getSelectionByRecord() {
-  if (selection.value) return selection.value
+  if (selection) return toRaw(selection)
   return null
 }

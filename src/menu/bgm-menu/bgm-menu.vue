@@ -27,7 +27,6 @@ const styles = [
   { value: '2', label: '风格2' },
   { value: '3', label: '风格3' }
 ] as LabelValue[]
-const dataList = ref<LabelValue[]>()
 
 const { x, y, height } = useElementBounding(menuRef)
 
@@ -39,7 +38,6 @@ const handleClick = async (editor: IDomEditor) => {
   edirorRef.value = editor
   dragRef.value.setPosition(pot)
   visible.value = true
-  dataList.value ??= await config.fetchBgm({ search: '', menuKey: 'first', scene: '', style: '' })
 }
 
 function handleSubmit(opt: LabelValue) {
@@ -57,7 +55,6 @@ function handleSubmit(opt: LabelValue) {
       :menuItemLabel="menuItemLabel"
       :scenes="scenes"
       :styles="styles"
-      :dataList="dataList"
       :fetch="config.fetchBgm"
       @submit="handleSubmit"
     ></BarSearch>
