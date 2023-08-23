@@ -8,6 +8,7 @@ const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
 const props = defineProps<{ visible: boolean; initialValue?: Position }>()
 
 const boxRef = ref<HTMLElement>()
+const referenceRef = ref<HTMLElement>()
 
 const { position } = useDraggable(boxRef, {
   initialValue: props.initialValue
@@ -23,19 +24,25 @@ defineExpose({
 })
 
 onMounted(() => {
+  window.addEventListener('click', handleWindowClick)
   window.addEventListener('keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
+  window.addEventListener('click', handleWindowClick)
   window.addEventListener('keydown', handleKeyDownEsc)
 })
 
-function handleMaskClick(ev: MouseEvent) {
+function handleWindowClick(ev: MouseEvent) {
+  isOthreClick(ev) && handleClose()
+}
+
+function isOthreClick(ev: MouseEvent) {
   const target = ev.target as HTMLElement
-  if (boxRef.value && !boxRef.value.contains(target) && props.visible) {
-    emit('update:visible', false)
-    emit('close')
-  }
+  if (!boxRef.value || !referenceRef.value) return false
+  if (referenceRef.value.contains(target)) return false
+  if (boxRef.value.contains(target)) return false
+  return true
 }
 
 function handleClose() {
@@ -44,22 +51,26 @@ function handleClose() {
 }
 
 function handleKeyDownEsc(event: KeyboardEvent) {
-  if (event.code === 'Escape' && props.visible) {
-    emit('update:visible', false)
-    emit('close')
-  }
+  event.code === 'Escape' && handleClose()
 }
 </script>
 
 <template>
+  <div ref="referenceRef">
+    <slot name="reference"></slot>
+  </div>
   <Teleport to="body">
-    <div v-show="visible" class="drag-box-mask user-select-none" @click="handleMaskClick">
-      <div ref="boxRef" class="card shadow brag-box" style="position: fixed" :style="style">
-        <div class="w-100 text-end me-2">
-          <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
-        </div>
-        <slot></slot>
+    <div
+      v-show="visible"
+      ref="boxRef"
+      class="demotestname card shadow brag-box user-select-none"
+      style="position: fixed"
+      :style="style"
+    >
+      <div class="w-100 text-end me-2">
+        <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
       </div>
+      <slot></slot>
     </div>
   </Teleport>
 </template>

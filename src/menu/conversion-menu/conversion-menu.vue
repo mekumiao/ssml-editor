@@ -1,41 +1,42 @@
 <script setup lang="ts">
 import { BarButton } from '@/components'
-import { emitter } from '@/event-bus'
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
-import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
+import { DragBox } from '@/components'
+import ConversionContent from './conversion-content.vue'
 
+const dragRef = ref()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
+
+const visible = ref(false)
 
 const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
-  edirorRef.value = editor
-  emitter.emit(EMITTER_EVENT.CONVERSION_MENU_CLICK, {
+  const pot = {
     x: x.value - 200,
     y: y.value + height.value
-  })
+  }
+  edirorRef.value = editor
+  dragRef.value.setPosition(pot)
+  visible.value = true
 }
 
 function handleMenuSubmit(opt: LabelValue) {
   console.log(opt)
-  // edirorRef.value?.emit('updateBgm', opt)
 }
-
-onMounted(() => {
-  emitter.on(EMITTER_EVENT.CONVERSION_DRAG_BOX_SUBMIT, handleMenuSubmit)
-})
-
-onUnmounted(() => {
-  emitter.off(EMITTER_EVENT.CONVERSION_DRAG_BOX_SUBMIT, handleMenuSubmit)
-})
 </script>
 
 <template>
-  <BarButton ref="menuRef" text="局部变音" icon="conversion" @click="handleClick"></BarButton>
+  <DragBox ref="dragRef" v-model:visible="visible">
+    <template #reference>
+      <BarButton ref="menuRef" text="局部变音" icon="conversion" @click="handleClick"></BarButton>
+    </template>
+    <ConversionContent @submit="handleMenuSubmit"></ConversionContent>
+  </DragBox>
 </template>
 
 <style lang="scss" scoped></style>

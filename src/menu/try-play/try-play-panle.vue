@@ -129,7 +129,7 @@ $height: 390px;
       height: $height;
     }
 
-    ::v-deep .el-input__wrapper {
+    :deep(.el-input__wrapper) {
       background-color: transparent;
     }
   }

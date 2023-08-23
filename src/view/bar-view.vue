@@ -14,16 +14,9 @@ import {
   BgmMenu,
   SensitiveMenu,
   ConversionMenu,
-  ManagementMenu
-} from '../menu'
-import {
-  SpecialDragBox,
-  BgmDragBox,
-  SensitiveDragBox,
-  ManagementDragBox,
-  ConversionDragBox,
+  ManagementMenu,
   TryPlay
-} from '@/menu'
+} from '../menu'
 </script>
 
 <template>
@@ -58,11 +51,6 @@ import {
       </BarWrapperGroup>
     </BarWrapper>
   </div>
-  <BgmDragBox></BgmDragBox>
-  <SpecialDragBox></SpecialDragBox>
-  <SensitiveDragBox></SensitiveDragBox>
-  <ManagementDragBox></ManagementDragBox>
-  <ConversionDragBox></ConversionDragBox>
   <TryPlay></TryPlay>
 </template>
 

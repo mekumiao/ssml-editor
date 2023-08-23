@@ -25,7 +25,7 @@ defineProps<{
 </template>
 
 <style lang="scss">
-::v-deep .el-popover {
+:deep(.el-popover) {
   padding: 1px !important;
 }
 </style>

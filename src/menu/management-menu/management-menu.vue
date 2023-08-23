@@ -1,41 +1,40 @@
 <script setup lang="ts">
-import { BarButton } from '@/components'
-import { emitter } from '@/event-bus'
+import { BarButton, DragBox } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef, onMounted, onUnmounted } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
-import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
+import ManagementContent from './management-content.vue'
 
+const dragRef = ref()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
+const visible = ref(false)
 
 const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
-  edirorRef.value = editor
-  emitter.emit(EMITTER_EVENT.MANAGEMENT_MENU_CLICK, {
+  const pot = {
     x: x.value - 200,
     y: y.value + height.value
-  })
+  }
+  edirorRef.value = editor
+  dragRef.value.setPosition(pot)
+  visible.value = true
 }
 
-function handleMenuSubmit(opt: LabelValue) {
+function handleSubmit(opt: LabelValue) {
   console.log(opt)
-  // edirorRef.value?.emit('management', opt)
 }
-
-onMounted(() => {
-  emitter.on(EMITTER_EVENT.MANAGEMENT_DRAG_BOX_SUBMIT, handleMenuSubmit)
-})
-
-onUnmounted(() => {
-  emitter.off(EMITTER_EVENT.MANAGEMENT_DRAG_BOX_SUBMIT, handleMenuSubmit)
-})
 </script>
 
 <template>
-  <BarButton ref="menuRef" text="多人配音" icon="management" @click="handleClick"></BarButton>
+  <DragBox ref="dragRef" v-model:visible="visible">
+    <template #reference>
+      <BarButton ref="menuRef" text="多人配音" icon="management" @click="handleClick"></BarButton>
+    </template>
+    <ManagementContent @submit="handleSubmit"></ManagementContent>
+  </DragBox>
 </template>
 
 <style lang="scss" scoped></style>
