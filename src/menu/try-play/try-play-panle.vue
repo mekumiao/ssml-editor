@@ -41,15 +41,10 @@ function handleKeyDownEsc(event: KeyboardEvent) {
   }
 }
 
-const { style } = withLimitView(
-  boxRef,
-  useDraggable(handleRef, {
-    initialValue: {
-      x: 100,
-      y: 100
-    }
-  })
-)
+const { position } = useDraggable(handleRef, {
+  initialValue: { x: 100, y: 100 }
+})
+const { style } = withLimitView(boxRef, position)
 
 function handleMinus() {
   emit('update:visible', false)

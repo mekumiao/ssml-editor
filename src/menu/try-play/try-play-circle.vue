@@ -12,15 +12,13 @@ const boxRef = ref()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
 
-const { style } = withLimitView(
-  boxRef,
-  useDraggable(boxRef, {
-    initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
-    onStart: (_, event) => {
-      return isClick(event.clientX, event.clientY) ? false : undefined
-    }
-  })
-)
+const { position } = useDraggable(boxRef, {
+  initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
+  onStart: (_, event) => {
+    return isClick(event.clientX, event.clientY) ? false : undefined
+  }
+})
+const { style } = withLimitView(boxRef, position)
 
 function handleMouseup(event: MouseEvent) {
   isClick(event.clientX, event.clientY) && emit('update:visible', false)

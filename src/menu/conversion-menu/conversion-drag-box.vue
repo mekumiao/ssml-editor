@@ -6,8 +6,9 @@ import { type Position } from '@vueuse/core'
 import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 
+const dragRef = ref()
+
 const visible = ref(false)
-const position = ref<Position>({ x: 20, y: 20 })
 const menuItemLabel = { first: '默认配乐', second: '自定义配乐', last: '最近配乐' }
 const scenes = [
   { value: '', label: '全部场景' },
@@ -56,7 +57,7 @@ function fetchConversion(filter: {
 }
 
 async function handleMenuClick(pot: Position) {
-  position.value = pot
+  dragRef.value.setPosition(pot)
   visible.value = true
   dataList.value ??= await fetchConversion({ search: '', menuKey: 'first', scene: '', style: '' })
 }
@@ -68,7 +69,7 @@ function handleSubmit(value: LabelValue) {
 </script>
 
 <template>
-  <DragBox v-model:visible="visible" v-model:position="position">
+  <DragBox ref="dragRef" v-model:visible="visible">
     <BarSearch
       :menuItemLabel="menuItemLabel"
       :scenes="scenes"

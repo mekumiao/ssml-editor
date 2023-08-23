@@ -1,25 +1,48 @@
 <script setup lang="ts">
-import { DragBox, BarSearch } from '@/components'
+import { DragBox } from '@/components'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { emitter } from '@/event-bus'
 import { type Position } from '@vueuse/core'
 import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
+import { ElInput, ElForm, ElTag, ElButton, ElSelect, ElOption } from 'element-plus'
+import { More } from '@element-plus/icons-vue'
+import SelectList from './select-list.vue'
+
+const dragRef = ref()
 
 const visible = ref(false)
-const position = ref<Position>({ x: 20, y: 20 })
-const menuItemLabel = { first: '默认配乐', second: '自定义配乐', last: '最近配乐' }
-const scenes = [
-  { value: '', label: '全部场景' },
-  { value: '2', label: '场景2' },
-  { value: '3', label: '场景3' }
-] as LabelValue[]
-const styles = [
-  { value: '', label: '全部风格' },
-  { value: '2', label: '风格2' },
-  { value: '3', label: '风格3' }
-] as LabelValue[]
-const dataList = ref<LabelValue[]>()
+const showMore = ref(false)
+
+const selType = ref('')
+const selSpeaker = ref('')
+const selRole = ref('')
+const selStyle = ref('')
+const selSpeed = ref('')
+const selPitch = ref('')
+
+const dataListType = ref<LabelValue[]>([])
+const dataListSpeaker = ref<LabelValue[]>([])
+const dataListRole = ref<LabelValue[]>([])
+const dataListStyle = ref<LabelValue[]>([])
+const dataListSpeed = ref<LabelValue[]>([])
+const dataListPitch = ref<LabelValue[]>([])
+
+dataListType.value = [
+  { label: '全部类型', value: '' },
+  { label: '常规', value: '2' },
+  { label: '已购', value: '3' },
+  { label: '收藏', value: '4' },
+  { label: '我的', value: '5' },
+  { label: 'SVIP', value: '6' },
+  { label: '付费', value: '7' }
+]
+
+dataListSpeaker.value = dataListType.value
+dataListRole.value = dataListType.value
+dataListStyle.value = dataListType.value
+dataListSpeed.value = dataListType.value
+dataListPitch.value = dataListType.value
 
 onMounted(() => {
   emitter.on(EMITTER_EVENT.MANAGEMENT_MENU_CLICK, handleMenuClick)
@@ -29,36 +52,13 @@ onUnmounted(() => {
   emitter.off(EMITTER_EVENT.MANAGEMENT_MENU_CLICK, handleMenuClick)
 })
 
-function fetchManagement(filter: {
-  search: string
-  menuKey: 'first' | 'second' | 'last'
-  scene: string
-  style: string
-}): Promise<{ value: string; label: string }[]> {
-  return Promise.resolve([
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#1',
-      label: `${filter.search || '测试'}背景音乐1`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#2',
-      label: `${filter.menuKey || '测试'}背景音乐2`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#3',
-      label: `${filter.scene || '测试'}背景音乐3`
-    },
-    {
-      value: 'https://download.samplelib.com/wav/sample-6s.wav#4',
-      label: `${filter.style || '测试'}背景音乐4`
-    }
-  ])
+function handleClose() {
+  showMore.value = false
 }
 
 async function handleMenuClick(pot: Position) {
-  position.value = pot
+  dragRef.value.setPosition(pot)
   visible.value = true
-  dataList.value ??= await fetchManagement({ search: '', menuKey: 'first', scene: '', style: '' })
 }
 
 function handleSubmit(value: LabelValue) {
@@ -68,15 +68,58 @@ function handleSubmit(value: LabelValue) {
 </script>
 
 <template>
-  <DragBox v-model:visible="visible" v-model:position="position">
-    <BarSearch
-      :menuItemLabel="menuItemLabel"
-      :scenes="scenes"
-      :styles="styles"
-      :dataList="dataList"
-      :fetch="fetchManagement"
-      @submit="handleSubmit"
-    ></BarSearch>
+  <DragBox ref="dragRef" v-model:visible="visible" @close="handleClose">
+    <div style="width: 600px; height: 300px" class="position-relative px-2 pb-2">
+      <ElForm @submit.prevent="handleSubmit">
+        <ElInput placeholder="请输入名称快速查找配音师"></ElInput>
+      </ElForm>
+      <div v-show="showMore" class="position-absolute bottom-0 end-0">
+        <ElButton>全部清空</ElButton>
+      </div>
+      <div class="position-relative">
+        <div class="position-absolute top-0 end-0">
+          <ElButton size="small" :icon="More" @click="() => (showMore = !showMore)"></ElButton>
+        </div>
+        <ul
+          class="d-flex flex-row row-gap-1 column-gap-2 overflow-x-hidden"
+          :class="{ 'flex-wrap': showMore }"
+        >
+          <li><span class="text-nowrap">近期使用:</span></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+          <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+        </ul>
+        <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
+          <SelectList v-model="selSpeaker" :dataList="dataListSpeaker">
+            <ElSelect v-model="selType">
+              <ElOption
+                v-for="(item, index) in dataListType"
+                :value="item.value"
+                :label="item.label"
+                :key="index"
+              >
+              </ElOption>
+            </ElSelect>
+          </SelectList>
+          <SelectList v-model="selRole" :dataList="dataListRole">
+            <span class="my-3">角色</span>
+          </SelectList>
+          <SelectList v-model="selStyle" :dataList="dataListStyle">
+            <span class="my-3">风格</span>
+          </SelectList>
+          <SelectList v-model="selSpeed" :dataList="dataListSpeed">
+            <span class="my-3">语速</span>
+          </SelectList>
+          <SelectList v-model="selPitch" :dataList="dataListPitch">
+            <span class="my-3">语调</span>
+          </SelectList>
+        </div>
+      </div>
+    </div>
   </DragBox>
 </template>
 
