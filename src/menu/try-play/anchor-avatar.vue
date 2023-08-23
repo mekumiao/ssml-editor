@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 
-const src = ref<string>(`
-  https://mobvoi-speech-public.mobvoi.com/headerImage/4314c841777e4d20901cd5d04a28e91a.png?iopcmd=thumbnail&type=8&width=80&height=80`)
+const src = ref<string>(`https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png`)
 </script>
 
 <template>

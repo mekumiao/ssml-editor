@@ -2,6 +2,7 @@
 import AnchorList from './anchor-list.vue'
 import TagList from './tag-list.vue'
 import TagItem from './tag-item.vue'
+import SliderPanle from './slider-panle.vue'
 import { ElInput, ElForm, ElIcon } from 'element-plus'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { withLimitView } from '@/components'
@@ -67,35 +68,38 @@ function searchInputFocus() {
     style="position: fixed"
     class="try-play user-select-none card z-3 shadow"
   >
-    <div class="px-2 pb-2 overflow-hidden">
-      <div class="try-play-header d-flex flex-row justify-content-between align-items-center">
-        <div ref="handleRef" class="w-100 h-100 try-play-move"></div>
-        <div @click="handleMinus" class="px-2 py-1 try-play-menu-close">
+    <div class="box ms-2">
+      <div class="try-play-header text-center d-flex flex-row justify-content-between">
+        <div ref="handleRef" class="col-11 try-play-move"></div>
+        <div @click="handleMinus" class="col-1 try-play-menu-close">
           <ElIcon color="white"><Minus></Minus></ElIcon>
         </div>
       </div>
-      <div>
-        <div class="try-play-body w-100 h-100 d-flex flex-row">
-          <div class="try-play-left w-50">
-            <div>
-              <ElForm @submit.prevent>
-                <ElInput
-                  ref="searchInputRef"
-                  v-model="searchInput"
-                  placeholder="输入名称搜索"
-                ></ElInput>
-              </ElForm>
-            </div>
-            <div class="type-list d-flex flex-row border-bottom border-secondary">
-              <TagItem>热榜</TagItem>
-              <TagItem>SVIP</TagItem>
-              <TagItem>付费</TagItem>
-            </div>
-            <TagList></TagList>
-            <div class="py-1 border-top border-secondary"></div>
-            <AnchorList></AnchorList>
+      <div class="try-play-body d-flex flex-row">
+        <div class="try-play-left w-50 border-right border-secondary">
+          <div class="pe-1">
+            <ElForm @submit.prevent>
+              <ElInput
+                :input-style="{}"
+                ref="searchInputRef"
+                v-model="searchInput"
+                placeholder="输入名称搜索"
+              ></ElInput>
+            </ElForm>
           </div>
-          <div class="try-play-right border border-secondary w-50">right</div>
+          <div class="type-list d-flex flex-row border-bottom border-secondary">
+            <TagItem>热榜</TagItem>
+            <TagItem>SVIP</TagItem>
+            <TagItem>付费</TagItem>
+          </div>
+          <TagList></TagList>
+          <div class="py-1 border-top border-secondary"></div>
+          <AnchorList></AnchorList>
+        </div>
+        <div
+          class="try-play-right w-50 border-start rounded border-top border-secondary overflow-x-hidden overflow-y-auto"
+        >
+          <SliderPanle></SliderPanle>
         </div>
       </div>
     </div>
@@ -103,25 +107,44 @@ function searchInputFocus() {
 </template>
 
 <style lang="scss" scoped>
+$width: 890px;
+$height: 390px;
+
 .try-play {
-  width: 750px;
-  height: 430px;
+  width: $width;
   background-color: #2254a1;
 
   .try-play-header {
-    height: 35px;
     .try-play-move {
       cursor: move;
+    }
+
+    .try-play-menu-close {
+      &:hover {
+        cursor: pointer;
+      }
     }
   }
 
   .try-play-body {
-    height: 50vh;
+    height: $height;
+
+    .try-play-left,
+    .try-play-right {
+      height: $height;
+    }
+
+    ::v-deep .el-input__wrapper {
+      background-color: transparent;
+    }
   }
 
-  .try-play-menu-close {
-    &:hover {
-      cursor: pointer;
+  .try-play-right {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+      display: none;
     }
   }
 }

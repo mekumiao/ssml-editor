@@ -7,3 +7,14 @@
     background-color: var(--tool-btn-hover-bg-color);
   }
 }
+
+ol,
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+li {
+  list-style: none;
+}
