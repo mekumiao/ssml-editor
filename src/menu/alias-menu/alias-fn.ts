@@ -1,10 +1,17 @@
-import { SlateRange, type IDomEditor, SlateEditor, SlateTransforms } from '@wangeditor/editor'
+import {
+  SlateRange,
+  type IDomEditor,
+  SlateEditor,
+  SlateTransforms,
+  DomEditor
+} from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import type { LabelValue } from '@/model'
 import type { Alias } from '@/core/alias'
-import { findByDomId, unpackVoid } from '../helper'
+import { unpackVoid } from '../helper'
+import type { NodeEntry } from 'slate'
 
 export class AliasFn extends BaseFn {
   protected readonly key: string = 'alias'
@@ -14,8 +21,9 @@ export class AliasFn extends BaseFn {
   }
 
   public static handleClose(editor: IDomEditor, item: Alias) {
-    const nodeEntity = findByDomId<Alias>(editor, 'ssml-alias', item.domId)
-    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.value)
+    const path = DomEditor.findPath(editor, item)
+    const nodeEntry = SlateEditor.node(editor, path)
+    unpackVoid<Alias>(editor, nodeEntry as NodeEntry<Alias>, (elem) => elem.value)
   }
 
   public isDisabled(): boolean {

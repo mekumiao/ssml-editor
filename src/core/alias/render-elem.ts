@@ -7,8 +7,8 @@ export default {
   type: 'ssml-alias',
   renderElem: (elem: SlateElement, _children: VNode[] | null, editor: IDomEditor) => {
     const item = elem as Alias
-    return createVoid({ ...item, plain: item.value }, () =>
+    return createVoid({ ...item, plain: item.value }, () => {
       editor.emit('ssml-alias-close', editor, item)
-    )
+    })
   }
 }

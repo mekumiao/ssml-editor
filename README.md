@@ -118,6 +118,14 @@ function renderContinuous(elem: SlateElement, children: VNode[] | null, editor: 
 ## 其他代码
 
 ```ts
+const word = SlateEditor.string(editor, range)
+const nodeEntity = SlateEditor.node(editor, range)
+const path = DomEditor.findPath(editor, elem)
+const key = DomEditor.findKey(editor, elem)
+const nodeEntity2 = SlateEditor.node(editor, path)
+// const bb = DomEditor.findDocumentOrShadowRoot(editor)
+debugger
+
 // import { createVNode, render } from 'vue'
 // import { ElButton } from 'element-plus'
 

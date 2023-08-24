@@ -4,7 +4,10 @@ import throttle from 'lodash.throttle'
 
 export const userSelectNo = { style: { userSelect: 'none' }, contentEditable: false }
 
-export function createVoid(args: SSMLBaseElement & { plain: string }, onclose: VoidFunction) {
+export function createVoid(
+  args: SSMLBaseElement & { plain: string },
+  close: (event: Event) => void
+) {
   return h('span.ssml-wrap', { ...userSelectNo }, [
     h(`span.tag.bg-color.${args.bgColor}`, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': args.remark } }),
@@ -14,7 +17,7 @@ export function createVoid(args: SSMLBaseElement & { plain: string }, onclose: V
           on: {
             click: throttle((event: Event) => {
               event.preventDefault()
-              onclose()
+              close(event)
             })
           }
         },
@@ -30,7 +33,7 @@ export function createVoid(args: SSMLBaseElement & { plain: string }, onclose: V
 export function createWithChildren(
   args: SSMLBaseElement,
   children: VNode[] | null,
-  onclose: VoidFunction
+  close: (event: Event) => void
 ) {
   return h('span.ssml-wrap', [
     h(`span.tag.bg-color.${args.bgColor}`, { ...userSelectNo }, [
@@ -41,7 +44,7 @@ export function createWithChildren(
           on: {
             click: throttle((event: Event) => {
               event.preventDefault()
-              onclose()
+              close(event)
             })
           }
         },
@@ -54,7 +57,7 @@ export function createWithChildren(
   ])
 }
 
-export function createSingle(args: SSMLBaseElement, onclose: VoidFunction) {
+export function createSingle(args: SSMLBaseElement, close: (event: Event) => void) {
   return h('span.ssml-wrap', { ...userSelectNo }, [
     h(`span.tag.bg-color.${args.bgColor}`, [
       h(`span.tag-remark`, { attrs: { 'data-tag-remark': args.remark } }),
@@ -64,7 +67,7 @@ export function createSingle(args: SSMLBaseElement, onclose: VoidFunction) {
           on: {
             click: throttle((event: Event) => {
               event.preventDefault()
-              onclose()
+              close(event)
             })
           }
         },
@@ -76,7 +79,10 @@ export function createSingle(args: SSMLBaseElement, onclose: VoidFunction) {
 
 export function createSingleWithPlay(
   args: SSMLBaseElement,
-  on?: { close: VoidFunction; play: VoidFunction }
+  on?: {
+    close: (event: Event) => void
+    play: (event: Event) => void
+  }
 ) {
   return h('span.ssml-wrap', { ...userSelectNo }, [
     h(`span.tag.bg-color.${args.bgColor}`, [
@@ -86,7 +92,7 @@ export function createSingleWithPlay(
           on: {
             click: throttle((event: Event) => {
               event.preventDefault()
-              on?.play()
+              on?.play(event)
             })
           }
         },
@@ -99,7 +105,7 @@ export function createSingleWithPlay(
           on: {
             click: throttle((event: Event) => {
               event.preventDefault()
-              on?.close()
+              on?.close(event)
             })
           }
         },
