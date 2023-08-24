@@ -6,7 +6,7 @@ import { useElementBounding } from '@vueuse/core'
 import { PROVIDER_KEY } from '@/constant'
 import { SpecialFn } from './special-fn'
 import type { LabelValue } from '@/model'
-import type { SSMLEditorConfig } from '@/config'
+import type { GlobalEditorConfig } from '@/config'
 import { DragBox, BarSearch } from '@/components'
 
 const dragRef = ref()
@@ -14,7 +14,7 @@ const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
 
 const visible = ref(false)
-const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
 
 const menuItemLabel = { first: '默认音效', second: '自定义音效', last: '最近音效' }
 const scenes = [

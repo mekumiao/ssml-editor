@@ -4,13 +4,13 @@ import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { emitter } from '@/event-bus'
 import { SpeakerFn } from './speaker-fn'
-import type { SSMLEditorConfig } from '@/config'
+import type { GlobalEditorConfig } from '@/config'
 import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
 import type { LabelValue } from '@/model'
 
 export default defineComponent({
   setup() {
-    const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+    const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
     const fn = shallowRef<SpeakerFn>()
     const pyList = ref<LabelValue[]>([])
     const visible = ref(false)

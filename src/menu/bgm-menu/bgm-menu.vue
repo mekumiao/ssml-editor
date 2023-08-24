@@ -6,7 +6,7 @@ import { useElementBounding } from '@vueuse/core'
 import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
-import type { SSMLEditorConfig } from '@/config'
+import type { GlobalEditorConfig } from '@/config'
 
 const dragRef = ref()
 const menuRef = ref()
@@ -14,7 +14,7 @@ const edirorRef = shallowRef<IDomEditor>()
 
 const visible = ref(false)
 
-const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
 
 const menuItemLabel = { first: '默认配乐', second: '自定义配乐', last: '最近配乐' }
 const scenes = [

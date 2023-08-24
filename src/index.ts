@@ -6,7 +6,7 @@ import EditorMenuPlugin from './menu'
 import EditorView from './view'
 import { PROVIDER_KEY, EMITTER_EVENT } from './constant'
 import { emitter } from './event-bus'
-import type { SSMLEditorConfig } from './config'
+import { type SSMLEditorConfig, createGlobalEditorConfig } from './config'
 import {
   AliasModule,
   ChangespeedModule,
@@ -28,11 +28,9 @@ export * from './config'
 
 export default {
   install(app: App, config?: SSMLEditorConfig) {
-    const editorConfig = config ?? ({} as SSMLEditorConfig)
-
-    app.provide(PROVIDER_KEY.EDITORCONFIG, editorConfig)
-
-    emitter.on(EMITTER_EVENT.ERROR, editorConfig.handleError)
+    const globalEditorConfig = createGlobalEditorConfig(config)
+    app.provide(PROVIDER_KEY.EDITORCONFIG, globalEditorConfig)
+    emitter.on(EMITTER_EVENT.ERROR, globalEditorConfig.handleError)
 
     Boot.registerModule(AliasModule)
     Boot.registerModule(ChangespeedModule)

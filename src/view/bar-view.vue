@@ -12,7 +12,7 @@ import {
   SpecialMenu,
   MuteMenu,
   BgmMenu,
-  SensitiveMenu,
+  // SensitiveMenu,
   ConversionMenu,
   ManagementMenu,
   TryPlay
@@ -46,9 +46,9 @@ import {
         <SpecialMenu></SpecialMenu>
         <BgmMenu></BgmMenu>
       </BarWrapperGroup>
-      <BarWrapperGroup>
+      <!-- <BarWrapperGroup>
         <SensitiveMenu></SensitiveMenu>
-      </BarWrapperGroup>
+      </BarWrapperGroup> -->
     </BarWrapper>
   </div>
   <TryPlay></TryPlay>
