@@ -4,10 +4,17 @@ import { ElInput, ElForm, ElTag, ElButton, ElSelect, ElOption } from 'element-pl
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
 import { ref } from 'vue'
+import { speed, pitch } from './data'
 
 const showMore = ref(false)
 
 const searchInput = ref('')
+
+const selSpeakerRef = ref()
+const selRoleRef = ref()
+const selStyleRef = ref()
+const selSpeedRef = ref()
+const selPitchRef = ref()
 
 const selType = ref('')
 const selSpeaker = ref('')
@@ -20,8 +27,9 @@ const dataListType = ref<LabelValue[]>([])
 const dataListSpeaker = ref<LabelValue[]>([])
 const dataListRole = ref<LabelValue[]>([])
 const dataListStyle = ref<LabelValue[]>([])
-const dataListSpeed = ref<LabelValue[]>([])
-const dataListPitch = ref<LabelValue[]>([])
+
+const dataListSpeed = ref<LabelValue[]>(speed())
+const dataListPitch = ref<LabelValue[]>(pitch())
 
 dataListType.value = [
   { label: '全部类型', value: '' },
@@ -36,12 +44,48 @@ dataListType.value = [
 dataListSpeaker.value = dataListType.value
 dataListRole.value = dataListType.value
 dataListStyle.value = dataListType.value
-dataListSpeed.value = dataListType.value
-dataListPitch.value = dataListType.value
 
-function handleSearch() {
-  // 请求
+function handleSearch() {}
+function handleChangeType() {}
+function handleSelectSpeaker() {
+  selRole.value = ''
+  scrollIntoView(selSpeakerRef)
 }
+function handleSelectRole() {
+  selStyle.value = ''
+  scrollIntoView(selRoleRef)
+}
+function handleSelectStyle() {
+  selSpeed.value = '1.00'
+  selPitch.value = '0'
+  scrollIntoView(selStyleRef)
+}
+function handleSelectSpeed() {}
+function handleSelectPitch() {}
+
+async function scrollIntoView(without: any) {
+  console.log(without)
+  // await sleep(200)
+  // selSpeakerRef.value.scrollIntoViewTheItem()
+  // await sleep(200)
+  // selRoleRef.value.scrollIntoViewTheItem()
+  // await sleep(200)
+  // selStyleRef.value.scrollIntoViewTheItem()
+  // await sleep(200)
+  // selSpeedRef.value.scrollIntoViewTheItem()
+  // await sleep(200)
+  // selPitchRef.value.scrollIntoViewTheItem()
+
+  // if (without != selSpeakerRef.value) selSpeakerRef.value.scrollIntoViewTheItem()
+  // if (without != selRoleRef.value) selRoleRef.value.scrollIntoViewTheItem()
+  // if (without != selStyleRef.value) selStyleRef.value.scrollIntoViewTheItem()
+  // if (without != selSpeedRef.value) selSpeedRef.value.scrollIntoViewTheItem()
+  // if (without != selPitchRef.value) selPitchRef.value.scrollIntoViewTheItem()
+}
+
+// function sleep(time?: number) {
+//   return new Promise<void>((resolve) => setTimeout(() => resolve(), time ?? 0))
+// }
 </script>
 
 <template>
@@ -67,8 +111,13 @@ function handleSearch() {
         <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
       </ul>
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
-        <SelectList v-model="selSpeaker" :dataList="dataListSpeaker">
-          <ElSelect v-model="selType">
+        <SelectList
+          @update:modelValue="handleSelectSpeaker"
+          ref="selSpeakerRef"
+          v-model="selSpeaker"
+          :dataList="dataListSpeaker"
+        >
+          <ElSelect @change="handleChangeType" v-model="selType">
             <ElOption
               v-for="(item, index) in dataListType"
               :value="item.value"
@@ -78,16 +127,36 @@ function handleSearch() {
             </ElOption>
           </ElSelect>
         </SelectList>
-        <SelectList v-model="selRole" :dataList="dataListRole">
+        <SelectList
+          @update:modelValue="handleSelectRole"
+          ref="selRoleRef"
+          v-model="selRole"
+          :dataList="dataListRole"
+        >
           <span class="my-3">角色</span>
         </SelectList>
-        <SelectList v-model="selStyle" :dataList="dataListStyle">
+        <SelectList
+          @update:modelValue="handleSelectStyle"
+          ref="selStyleRef"
+          v-model="selStyle"
+          :dataList="dataListStyle"
+        >
           <span class="my-3">风格</span>
         </SelectList>
-        <SelectList v-model="selSpeed" :dataList="dataListSpeed">
+        <SelectList
+          @update:modelValue="handleSelectSpeed"
+          ref="selSpeedRef"
+          v-model="selSpeed"
+          :dataList="dataListSpeed"
+        >
           <span class="my-3">语速</span>
         </SelectList>
-        <SelectList v-model="selPitch" :dataList="dataListPitch">
+        <SelectList
+          @update:modelValue="handleSelectPitch"
+          ref="selPitchRef"
+          v-model="selPitch"
+          :dataList="dataListPitch"
+        >
           <span class="my-3">语调</span>
         </SelectList>
       </div>

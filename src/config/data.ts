@@ -1,4 +1,4 @@
-export const speed = {
+export const speed = () => ({
   0: '0',
   0.1: '0.1',
   0.2: '0.2',
@@ -16,9 +16,9 @@ export const speed = {
   1.5: '1.5',
   1.75: '1.75',
   2.0: '2.0'
-}
+})
 
-export const pitch = {
+export const pitch = () => ({
   0: '0',
   1: '1',
   2: '2',
@@ -40,4 +40,6 @@ export const pitch = {
   '-8': '-8',
   '-9': '-9',
   '-10': '-10'
-}
+})
+
+export const demoAvatar = () => 'https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png'

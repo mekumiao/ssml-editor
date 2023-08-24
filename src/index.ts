@@ -4,9 +4,9 @@ import { Boot } from '@wangeditor/editor'
 import EditorComponentsPlugin from './components'
 import EditorMenuPlugin from './menu'
 import EditorView from './view'
-import { PROVIDER_KEY, EMITTER_EVENT } from './constant'
+import { EMITTER_EVENT } from './constant'
 import { emitter } from './event-bus'
-import { type SSMLEditorConfig, createGlobalEditorConfig } from './config'
+import { type SSMLEditorConfig, provideGlobalConfig } from './config'
 import {
   AliasModule,
   ChangespeedModule,
@@ -28,8 +28,7 @@ export * from './config'
 
 export default {
   install(app: App, config?: SSMLEditorConfig) {
-    const globalEditorConfig = createGlobalEditorConfig(config)
-    app.provide(PROVIDER_KEY.EDITORCONFIG, globalEditorConfig)
+    const globalEditorConfig = provideGlobalConfig(app.provide, config)
     emitter.on(EMITTER_EVENT.ERROR, globalEditorConfig.handleError)
 
     Boot.registerModule(AliasModule)

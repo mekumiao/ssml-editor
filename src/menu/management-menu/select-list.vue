@@ -1,8 +1,29 @@
 <script setup lang="ts">
 import type { LabelValue } from '@/model'
+import { ref, toRaw } from 'vue'
 
-defineEmits<{ 'update:modelValue': [value: string] }>()
-defineProps<{ modelValue: string; dataList: LabelValue[] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
+const props = defineProps<{ modelValue: string; dataList: LabelValue[] }>()
+
+const listRef = ref<HTMLElement>()
+
+function handleSelect(item: LabelValue) {
+  emit('update:modelValue', item.value)
+}
+
+function scrollIntoViewTheItem() {
+  if (!listRef.value) return
+  for (let i = 0; i < props.dataList.length; i++) {
+    if (props.dataList[i].value === props.modelValue) {
+      listRef.value.children[i]?.scrollIntoView({ behavior: 'smooth' })
+      return
+    }
+  }
+}
+
+defineExpose({
+  scrollIntoViewTheItem
+})
 </script>
 
 <template>
@@ -11,6 +32,7 @@ defineProps<{ modelValue: string; dataList: LabelValue[] }>()
       <slot></slot>
     </div>
     <ul
+      ref="listRef"
       class="text-center w-100 border-start border-top border-bottom border-secondary-subtle overflow-y-auto overflow-x-hidden scrollbar-none"
       style="height: 180px"
     >
@@ -19,7 +41,7 @@ defineProps<{ modelValue: string; dataList: LabelValue[] }>()
         v-for="(item, index) in dataList"
         :class="{ activate: item.value === modelValue }"
         :key="index"
-        @click="$emit('update:modelValue', item.value)"
+        @click="handleSelect(toRaw(item))"
       >
         {{ item.label }}
       </li>

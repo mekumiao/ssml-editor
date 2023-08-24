@@ -1,5 +1,7 @@
 import type { Filter, LabelValue } from '@/model'
-import { speed, pitch } from './data'
+import { speed, pitch, demoAvatar } from './data'
+import { inject } from 'vue'
+import { PROVIDER_KEY } from '@/constant'
 
 type FetahFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetahFunction = (filter: Filter) => Promise<LabelValue[]>
@@ -25,5 +27,32 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
   const fetchBgm: FilterFetahFunction = config?.fetchBgm || resolveList<LabelValue>()
   const fetchSpecial: FilterFetahFunction = config?.fetchSpecial || resolveList<LabelValue>()
 
-  return { handleError, fetchSpeaker, fetchEnglish, fetchBgm, fetchSpecial, speed, pitch }
+  return {
+    handleError,
+    fetchSpeaker,
+    fetchEnglish,
+    fetchBgm,
+    fetchSpecial,
+    speed,
+    pitch,
+    demoAvatar
+  }
+}
+
+export function provideGlobalConfig(
+  provide: (key: string, config: GlobalEditorConfig) => void,
+  config?: SSMLEditorConfig
+) {
+  const globalConfig = createGlobalEditorConfig(config)
+  provide(PROVIDER_KEY.EDITORCONFIG, globalConfig)
+  return globalConfig
+}
+
+/**
+ * 必须在setup函数中调用
+ */
+export function injectGlobalConfig() {
+  const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)
+  if (config) return config
+  throw Error('请注入GlobalEditorConfig')
 }
