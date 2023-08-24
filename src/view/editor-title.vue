@@ -76,7 +76,7 @@ const handleRemoveBgm = () => {
     <pre class="ssml-code">{{ ssml }}</pre>
     <template #footer>
       <span class="dialog-footer">
-        <el-button type="primary" @click="dialogVisible = false"> 确定 </el-button>
+        <ElButton type="primary" @click="dialogVisible = false">确定</ElButton>
       </span>
     </template>
   </ElDialog>

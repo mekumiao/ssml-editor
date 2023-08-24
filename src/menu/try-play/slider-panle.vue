@@ -128,7 +128,7 @@ const intonationMarks = reactive<Marks>({
     </div>
     <div class="slider-box">
       <div>
-        <span> 语速：{{ pace }}x </span>
+        <span>语速：{{ pace }}x</span>
       </div>
       <ElSlider
         v-model="pace"
@@ -140,7 +140,7 @@ const intonationMarks = reactive<Marks>({
     </div>
     <div class="slider-box">
       <div>
-        <span> 语调：{{ intonation }}</span>
+        <span>语调：{{ intonation }}</span>
       </div>
       <ElSlider
         v-model="intonation"

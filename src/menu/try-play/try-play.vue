@@ -14,7 +14,7 @@ function handlePanleVisible(value: boolean) {
 
 <template>
   <Teleport to="body">
-    <TryPlayCircle v-model:visible="circleVisible"> </TryPlayCircle>
+    <TryPlayCircle v-model:visible="circleVisible"></TryPlayCircle>
     <TryPlayPanle :visible="!circleVisible" @update:visible="handlePanleVisible"></TryPlayPanle>
   </Teleport>
 </template>
