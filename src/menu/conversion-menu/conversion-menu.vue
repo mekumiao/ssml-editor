@@ -12,6 +12,7 @@ const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
 
 const visible = ref(false)
+const text = ref('ttttt')
 
 const { x, y, height } = useElementBounding(menuRef)
 
@@ -35,7 +36,7 @@ function handleMenuSubmit(opt: LabelValue) {
     <template #reference>
       <BarButton ref="menuRef" text="局部变音" icon="conversion" @click="handleClick"></BarButton>
     </template>
-    <ConversionContent @submit="handleMenuSubmit"></ConversionContent>
+    <ConversionContent :text="text" @submit="handleMenuSubmit"></ConversionContent>
   </DragBox>
 </template>
 
