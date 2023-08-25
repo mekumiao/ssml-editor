@@ -1,10 +1,8 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateEditor } from '@wangeditor/editor'
-import { genRandomStr } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
-import { getSelectionByRecord, recordSelection, unrecordSelection } from '@/stores'
 
 export default abstract class BaseFn {
   protected readonly editor: IDomEditor
@@ -14,36 +12,14 @@ export default abstract class BaseFn {
     this.editor = editor
   }
 
-  protected genDomID() {
-    return genRandomStr(`w-e-dom-${this.key}`)
-  }
-
-  protected selection() {
-    const { selection } = this.editor
-    return selection ?? getSelectionByRecord()
-  }
-
   protected getValue(): string {
-    const selection = this.selection()
+    const { selection } = this.editor
     if (selection == null) return ''
     return SlateEditor.string(this.editor, selection)
   }
 
-  public record() {
-    recordSelection(this.editor)
-  }
-
-  public unrecord() {
-    unrecordSelection()
-  }
-
-  public reselect() {
-    const selection = this.selection()
-    selection && this.editor.select(selection)
-  }
-
   public isDisabled(): boolean {
-    const selection = this.selection()
+    const { selection } = this.editor
     if (selection == null) {
       emitter.emit(EMITTER_EVENT.ERROR, '未选中编辑器')
       return true

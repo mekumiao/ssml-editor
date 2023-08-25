@@ -6,6 +6,7 @@ import type { IDomEditor } from '@wangeditor/editor'
 import xmlFormat from 'xml-formatter'
 import { playSound } from '@/utils'
 import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
+import { serializeToSSML } from '@/core'
 
 defineProps<{
   characterTotal: number
@@ -28,7 +29,7 @@ const ssml = computed(() => {
 
 const handleGenSSML = () => {
   if (editorRef) {
-    ssmlValue.value = editorRef.value.getHtml()
+    ssmlValue.value = serializeToSSML(editorRef.value.children)
     dialogVisible.value = true
   }
 }

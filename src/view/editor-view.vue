@@ -2,7 +2,7 @@
 import EditorTitle from './editor-title.vue'
 import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
-import type { IDomEditor, IEditorConfig } from '@wangeditor/editor'
+import { DomEditor, type IDomEditor, type IEditorConfig } from '@wangeditor/editor'
 import { ref, shallowRef, provide, onUnmounted } from 'vue'
 import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
@@ -35,7 +35,7 @@ const handleCreated = (editor: IDomEditor) => {
 }
 
 const handleChange = (editor: IDomEditor) => {
-  characterTotal.value = editor.getText().length
+  characterTotal.value = (editorConfig.maxLength || 0) - DomEditor.getLeftLengthOfMaxLength(editor)
   emit('onChange', editor)
 }
 </script>

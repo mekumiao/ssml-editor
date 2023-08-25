@@ -23,7 +23,6 @@ export default defineComponent({
     async function handleClick(editor: IDomEditor) {
       fn.value ??= new AliasFn(editor)
       if (fn.value.isDisabled()) return
-      fn.value.record()
       show()
       inputRef.value.focus()
     }
@@ -31,9 +30,7 @@ export default defineComponent({
     function handleSubmit(text: string | null) {
       hide()
       if (text) {
-        fn.value?.reselect()
         fn.value?.exec({ value: text, label: text })
-        fn.value?.unrecord()
       }
     }
 
