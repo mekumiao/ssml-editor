@@ -18,6 +18,7 @@ import type { Sub } from './sub'
 import type { MsttsBackgroundaudio } from './mstts-backgroundaudio'
 import type { Speak } from './speak'
 import type { Voice } from './voice'
+import type { W } from './w'
 
 function escapeText(text: string): string {
   const result = text
@@ -90,6 +91,10 @@ function serializeS(_node: S, children: string) {
   return `<s>${children}</s>`
 }
 
+function serializeW(_node: W, children: string) {
+  return `<w>${children}</w>`
+}
+
 function serializeSub(node: Sub, children: string) {
   return `<sub alias=${node.alias}>${children}</sub>`
 }
@@ -128,6 +133,8 @@ export function serializeNode(node: SlateNode): string {
         return serializeProsody(node as Prosody, children)
       case 'ssml-s':
         return serializeS(node as S, children)
+      case 'ssml-w':
+        return serializeW(node as W, children)
       case 'ssml-say-as':
         return serializeSayAs(node as SayAs, children)
       case 'ssml-sub':
