@@ -2,7 +2,6 @@
 import { onMounted, ref, toRaw } from 'vue'
 import { type IDomEditor, type IEditorConfig, createEditor } from '@wangeditor/editor'
 import { readChildren, saveChildren } from '@/stores'
-import { bind } from '@/core'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 const props = defineProps<{ editorConfig: IEditorConfig }>()
@@ -23,7 +22,6 @@ const initEditor = () => {
     config: {
       ...toRaw(props.editorConfig),
       onCreated(editor) {
-        bind(editor)
         emit('created', editor)
         editor.focus(true)
         const config = editor.getConfig()

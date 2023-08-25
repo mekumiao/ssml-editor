@@ -33,7 +33,6 @@ const { x, y, height } = useElementBounding(menuRef)
 const handleClick = (editor: IDomEditor) => {
   fn.value ??= new SpecialFn(editor)
   if (fn.value.isDisabled()) return
-  fn.value.record()
   dragRef.value.setPosition({
     x: x.value - 200,
     y: y.value + height.value
@@ -42,10 +41,9 @@ const handleClick = (editor: IDomEditor) => {
 }
 
 function handleSubmit(opt: LabelValue) {
+  fn.value?.restoreSelection()
   if (fn.value && !fn.value.isDisabled()) {
-    fn.value.reselect()
     fn.value.exec(opt)
-    fn.value.unrecord()
   }
   visible.value = false
 }

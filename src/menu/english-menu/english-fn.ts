@@ -1,23 +1,16 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { findByDomId, unpackVoid } from '../helper'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
-import type { English } from '@/core/english'
+import type { Phoneme } from '@/core'
 
 export class EnglishFn extends BaseFn {
   protected readonly key: string = 'english'
 
   public constructor(editor: IDomEditor) {
     super(editor)
-    editor.on('ssml-english-close', EnglishFn.handleClose)
-  }
-
-  public static handleClose(editor: IDomEditor, item: English) {
-    const nodeEntity = findByDomId<English>(editor, 'ssml-english', item.domId)
-    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.word)
   }
 
   public getValue(): string {
@@ -26,7 +19,8 @@ export class EnglishFn extends BaseFn {
 
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
-    const selection = this.selection()!
+    const { selection } = this.editor
+    if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
       emitter.emit(EMITTER_EVENT.ERROR, '请选择英文单词')
       return true
@@ -43,22 +37,18 @@ export class EnglishFn extends BaseFn {
   }
 
   public exec(opt: LabelValue) {
+    this.editor.restoreSelection()
     if (this.isDisabled()) return
     const value = this.getValue()
     if (value == null) return
 
-    const node: English = {
-      type: 'ssml-english',
-      domId: this.genDomID(),
-      word: value,
-      phoneme: opt.value,
+    const node: Phoneme = {
+      type: 'ssml-phoneme',
+      ph: opt.value,
       remark: opt.label,
-      bgColor: 'english',
-      children: [{ text: '' }]
+      children: [{ text: value }]
     }
 
-    SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
-    this.editor.move(1)
   }
 }

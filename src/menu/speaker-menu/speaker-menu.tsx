@@ -28,7 +28,6 @@ export default defineComponent({
     async function handleClick(editor: IDomEditor) {
       fn.value ??= new SpeakerFn(editor)
       if (fn.value?.isDisabled()) return
-      fn.value.record()
       const text = fn.value.getValue()
       if (text) {
         pyList.value = await config.fetchSpeaker(text)
@@ -37,7 +36,6 @@ export default defineComponent({
       }
 
       if (pyList.value.length == 0) {
-        fn.value.unrecord()
         return emitter.emit(EMITTER_EVENT.ERROR, '选中的字符没有不是多音字')
       }
 
@@ -59,9 +57,7 @@ export default defineComponent({
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (fn.value && !fn.value.isDisabled()) {
-                        fn.value.reselect()
                         fn.value.exec({ label, value })
-                        fn.value.unrecord()
                       }
                       hide()
                     }}

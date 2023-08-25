@@ -1,119 +1,74 @@
-.ssml-wrap {
-  $speaker: #e86136;
-  $read: #d31b39;
-  $digital: #e18d17;
-  $continuous: #05b3b1;
-  $alias: #d4ac00;
-  $english: #d4ac00;
-  $changespeed: #d4ac00;
-  $management: #d4ac00;
-  $conversion: #d4ac00;
-  $rhythm: #04a363;
-  $mute: #0e5dd5;
-  $symbol: #3547ed;
-  $special: #3547ed;
-  $bgm: #3547ed;
+.ssml-wrapper {
+  --ssml-voice: #e86136;
+  --ssml-audio: #d31b39;
+  --ssml-emphasis: #e18d17;
+  --ssml-phoneme: #05b3b1;
+  --ssml-prosody: #d4ac00;
+  --ssml-say-as: #d4ac00;
+  --ssml-sub: #d4ac00;
+  --ssml-p: #d4ac00;
+  --ssml-s: #d4ac00;
+  --ssml-w: #d4ac00;
+  --ssml-break: #04a363;
+  --ssml-mstts--express-as: #0e5dd5;
 
-  display: inline-block;
+  position: relative;
   box-sizing: border-box;
   border: 0px;
-  // margin: 0px 2px;
-  // padding: 0px 2px;
 
-  .bg-color,
-  .ft-color {
-    &.speaker {
-      background-color: $speaker;
-      color: $speaker;
-    }
-
-    &.read {
-      background-color: $read;
-      color: $read;
-    }
-
-    &.digital {
-      background-color: $digital;
-      color: $digital;
-    }
-
-    &.continuous {
-      background-color: $continuous;
-      color: $continuous;
-    }
-
-    &.alias {
-      background-color: $alias;
-      color: $alias;
-    }
-
-    &.english {
-      background-color: $english;
-      color: $english;
-    }
-    &.changespeed {
-      background-color: $changespeed;
-      color: $changespeed;
-    }
-    &.rhythm {
-      background-color: $rhythm;
-      color: $rhythm;
-    }
-    &.mute {
-      background-color: $mute;
-      color: $mute;
-    }
-    &.special {
-      background-color: $special;
-      color: $special;
-    }
-    &.bgm {
-      background-color: $bgm;
-      color: $bgm;
-    }
+  &:not(.no-line-height) {
+    line-height: 2.6rem;
+    vertical-align: top;
   }
 
-  .bg-color:not(.ft-color) {
+  .data-content::before {
+    content: attr(data-content);
+  }
+
+  .remark {
+    &:not(.left) {
+      position: absolute;
+      top: -18px;
+      left: 0px;
+    }
+
+    display: inline-flex;
+    flex-direction: row;
+    justify-content: start;
+    align-items: center;
+
+    padding: 0px 4px;
+    margin: 0;
+
+    line-height: normal;
+    font-size: 0.5rem;
+    border-radius: 3px;
+
     color: white;
-  }
+    height: 18px;
+    max-width: 150px;
+    white-space: nowrap;
 
-  .ft-color:not(.bg-color) {
-    background-color: transparent;
-  }
+    &:not(.left):hover {
+      z-index: 2;
+      max-width: 300px;
+    }
 
-  .tag {
-    display: inline-block;
-    border-radius: 5px;
-    margin: 0px 2px;
-    padding: 0px 5px;
-    color: white;
-    width: fit-content;
+    .data-content {
+      display: inline-block;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
 
     .iconfont {
       color: #e2fafa;
       opacity: 0.6;
-    }
+      font-size: 0.5rem;
 
-    .btn-close {
-      font-size: 0rem;
-    }
-  }
-
-  .tag-remark {
-    display: inline-block;
-  }
-
-  .tag-remark::before {
-    content: attr(data-tag-remark);
-  }
-
-  .boundary {
-    &.start::before {
-      content: '【';
-    }
-
-    &.end::before {
-      content: '】';
+      &:hover {
+        cursor: pointer;
+        opacity: 0.9;
+      }
     }
   }
 }
