@@ -52,9 +52,9 @@ export default <T extends IDomEditor>(editor: T) => {
    * 设置复制时设置文字片段格式
    */
   newEditor.setFragmentData = (data) => {
+    setFragmentData(data)
     const plain = data.getData('text/plain').replaceAll(/[\s]/gi, '')
     data.setData('text/plain', plain)
-    setFragmentData(data)
   }
 
   newEditor.insertText = (text) => {
