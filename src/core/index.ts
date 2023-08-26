@@ -1,17 +1,37 @@
-export { default as AliasModule } from './alias'
-export { default as ChangespeedModule } from './changespeed'
-export { default as ContinuousModule } from './continuous'
-export { default as DigitalModule } from './digital'
-export { default as EnglishModule } from './english'
-export { default as MuteModule } from './mute'
-export { default as ReadModule } from './read'
-export { default as RhythmModule } from './rhythm'
-export { default as SpeakerModule } from './speaker'
-export { default as SpecialModule } from './special'
-export { default as SpeakModule } from './speak'
-export { default as GlobalPlugin } from './plugin'
+import { Boot } from '@wangeditor/editor'
+import AudioModule from './audio'
+import BreakModule from './break'
+import EmphasisModule from './emphasis'
+import MsttsExpressAsModule from './mstts-express-as'
+import PModule from './p'
+import PhonemeModule from './phoneme'
+import ProsodyModule from './prosody'
+import SModule from './s'
+import SayAsModule from './say-as'
+import SubModule from './sub'
+import VoiceModule from './voice'
 
-export * from './bind'
+import plugin from './plugin'
+
 export * from './custom-types'
+export * from './serialize'
+
+export default {
+  install() {
+    Boot.registerModule(AudioModule)
+    Boot.registerModule(BreakModule)
+    Boot.registerModule(EmphasisModule)
+    Boot.registerModule(MsttsExpressAsModule)
+    Boot.registerModule(PModule)
+    Boot.registerModule(PhonemeModule)
+    Boot.registerModule(ProsodyModule)
+    Boot.registerModule(SModule)
+    Boot.registerModule(SayAsModule)
+    Boot.registerModule(SubModule)
+    Boot.registerModule(VoiceModule)
+    // 全局插件
+    Boot.registerPlugin(plugin)
+  }
+}
 
 import './style.scss'

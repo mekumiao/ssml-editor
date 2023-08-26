@@ -1,37 +1,28 @@
-import type { IDomEditor, SlateRange } from '@wangeditor/editor'
-import { toRaw } from 'vue'
+import type { IDomEditor } from '@wangeditor/editor'
+import { defineStore } from 'pinia'
+import { computed, shallowRef } from 'vue'
+import { type GlobalEditorConfig, createGlobalEditorConfig } from '@/config'
 
-const EDITOR_KEY = '--editor-vdata'
+export const useEditorStore = defineStore('--editor-config', () => {
+  const _editor = shallowRef<IDomEditor>()
+  const _globalEditConfig = shallowRef<GlobalEditorConfig>()
 
-export function saveChildren(children: any): void {
-  const data = JSON.stringify(children)
-  window.localStorage.setItem(EDITOR_KEY, data)
-}
+  const editor = computed(() => _editor.value)
 
-export function readChildren() {
-  const data = window.localStorage.getItem(EDITOR_KEY)
-  if (data) {
-    const vdata = JSON.parse(data)
-    if (vdata instanceof Array) {
-      return vdata
+  const globalEditConfig = computed(() => {
+    if (_globalEditConfig.value) {
+      return _globalEditConfig.value
     }
+    throw Error('请设置GlobalEditorConfig')
+  })
+
+  const setEditor = (editor: IDomEditor) => {
+    _editor.value = editor
   }
-  return undefined
-}
 
-let selection: SlateRange | null
-
-export function recordSelection(editor: IDomEditor): void {
-  if (editor.selection) {
-    selection = editor.selection as SlateRange
+  const setGlobalEditConfig = (globalConfig?: GlobalEditorConfig) => {
+    _globalEditConfig.value = globalConfig ?? createGlobalEditorConfig()
   }
-}
 
-export function unrecordSelection() {
-  selection = null
-}
-
-export function getSelectionByRecord() {
-  if (selection) return toRaw(selection)
-  return null
-}
+  return { editor, globalEditConfig, setEditor, setGlobalEditConfig }
+})

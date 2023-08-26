@@ -29,7 +29,6 @@ export default defineComponent({
     function handleClick(editor: IDomEditor) {
       fn.value ??= new RhythmFn(editor)
       if (fn.value.isDisabled()) return
-      fn.value.record()
       show()
     }
 
@@ -48,9 +47,7 @@ export default defineComponent({
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (fn.value && !fn.value.isDisabled()) {
-                        fn.value.reselect()
                         fn.value.exec({ label, value })
-                        fn.value.unrecord()
                       }
                       hide()
                     }}

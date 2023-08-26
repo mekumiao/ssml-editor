@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { withLimitView } from '@/components'
+import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 
 const src = ref<string>(`https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png`)
@@ -18,7 +18,7 @@ const { position } = useDraggable(boxRef, {
     return isClick(event.clientX, event.clientY) ? false : undefined
   }
 })
-const { style } = withLimitView(boxRef, position)
+const { style } = constrainDragBounds(boxRef, position)
 
 function handleMouseup(event: MouseEvent) {
   isClick(event.clientX, event.clientY) && emit('update:visible', false)

@@ -33,7 +33,6 @@ export default defineComponent({
     async function handleClick(editor: IDomEditor) {
       fn.value ??= new ChangespeedFn(editor)
       if (fn.value.isDisabled()) return
-      fn.value.record()
       show()
     }
 
@@ -59,9 +58,7 @@ export default defineComponent({
                     key={value}
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
-                      fn.value?.reselect()
                       fn.value?.exec({ label, value })
-                      fn.value?.unrecord()
                       hide()
                     }}
                     onMousedown={withModifiers(() => {}, ['stop', 'prevent'])}

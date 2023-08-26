@@ -1,5 +1,7 @@
 export {}
 
 declare global {
-  interface Window {}
+  interface Window {
+    editor: import('@wangeditor/editor').IDomEditor
+  }
 }

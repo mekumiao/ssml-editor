@@ -1,18 +1,17 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { defineComponent, inject, ref, withModifiers, shallowRef } from 'vue'
+import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
-import { selectionTrimEnd } from '../../core/helper'
+import { selectionTrimEnd } from '@/core/helper'
 import { ElPopover } from 'element-plus'
-import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
-import { emitter } from '@/event-bus'
 import { EnglishFn } from './english-fn'
-import type { GlobalEditorConfig } from '@/config'
 import type { LabelValue } from '@/model'
+import { useEditorStore } from '@/stores'
+import { WANGEDITOR_EVENT } from '@/constant'
 
 export default defineComponent({
   setup() {
+    const { globalEditConfig } = useEditorStore()
     const fn = shallowRef<EnglishFn>()
-    const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
     const englishList = ref<LabelValue[]>([])
     const visible = ref(false)
 
@@ -30,18 +29,15 @@ export default defineComponent({
       fn.value ??= new EnglishFn(editor)
       selectionTrimEnd(editor)
       if (fn.value.isDisabled()) return
-      fn.value.record()
       const text = fn.value.getValue()
       if (text) {
-        englishList.value = await config.fetchEnglish(text)
+        englishList.value = await globalEditConfig.fetchEnglish(text)
 
         if (englishList.value.length <= 0) {
-          return emitter.emit(EMITTER_EVENT.ERROR, '找不到单词的音标')
+          return editor.emit(WANGEDITOR_EVENT.ERROR, '找不到单词的音标')
         }
 
         show()
-      } else {
-        fn.value.unrecord()
       }
     }
 
@@ -58,9 +54,7 @@ export default defineComponent({
                     class="clickable w-100 fs-6 rounded-1 px-3 py-2"
                     onClick={() => {
                       if (fn.value && !fn.value.isDisabled()) {
-                        fn.value.reselect()
                         fn.value.exec({ label, value })
-                        fn.value.unrecord()
                       }
                       hide()
                     }}

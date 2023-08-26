@@ -5,7 +5,7 @@ import TagItem from './tag-item.vue'
 import SliderPanle from './slider-panle.vue'
 import { ElInput, ElForm, ElIcon } from 'element-plus'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
-import { withLimitView } from '@/components'
+import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 import { Minus } from '@element-plus/icons-vue'
 
@@ -44,7 +44,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 const { position } = useDraggable(handleRef, {
   initialValue: { x: 100, y: 100 }
 })
-const { style } = withLimitView(boxRef, position)
+const { style } = constrainDragBounds(boxRef, position)
 
 function handleMinus() {
   emit('update:visible', false)

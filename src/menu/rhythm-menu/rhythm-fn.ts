@@ -1,29 +1,22 @@
 import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
-import type { Rhythm } from '@/core/rhythm'
-import { findByDomId } from '../helper'
+import type { Break } from '@/core'
 
 export class RhythmFn extends BaseFn {
   protected readonly key: string = 'rhythm'
 
   public constructor(editor: IDomEditor) {
     super(editor)
-    editor.on('ssml-rhythm-close', RhythmFn.handleClose)
-  }
-
-  public static handleClose(editor: IDomEditor, item: Rhythm) {
-    const nodeEntity = findByDomId<Rhythm>(editor, 'ssml-rhythm', item.domId)
-    nodeEntity && SlateTransforms.delete(editor, { at: nodeEntity[1] })
   }
 
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
-    const selection = this.selection()!
+    const { selection } = this.editor
+    if (!selection) return true
     if (SlateRange.isExpanded(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '不能选中文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '不能选中文本')
       return true
     }
 
@@ -31,18 +24,16 @@ export class RhythmFn extends BaseFn {
   }
 
   public exec(opt: LabelValue) {
+    this.editor.restoreSelection()
     if (this.isDisabled()) return
 
-    const node: Rhythm = {
-      type: 'ssml-rhythm',
-      domId: this.genDomID(),
-      time: opt.value,
+    const node: Break = {
+      type: 'ssml-break',
+      strength: opt.value as any,
       remark: opt.label,
-      bgColor: 'rhythm',
       children: [{ text: '' }]
     }
 
     SlateTransforms.insertNodes(this.editor, node)
-    this.editor.move(1)
   }
 }

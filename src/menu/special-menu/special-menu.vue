@@ -1,20 +1,19 @@
 <script setup lang="ts">
 import { BarButton } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef, inject } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
-import { PROVIDER_KEY } from '@/constant'
 import { SpecialFn } from './special-fn'
 import type { LabelValue } from '@/model'
-import type { GlobalEditorConfig } from '@/config'
 import { DragBox, BarSearch } from '@/components'
+import { useEditorStore } from '@/stores'
 
 const dragRef = ref()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
+const { globalEditConfig } = useEditorStore()
 
 const visible = ref(false)
-const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
 
 const menuItemLabel = { first: '默认音效', second: '自定义音效', last: '最近音效' }
 const scenes = [
@@ -33,7 +32,6 @@ const { x, y, height } = useElementBounding(menuRef)
 const handleClick = (editor: IDomEditor) => {
   fn.value ??= new SpecialFn(editor)
   if (fn.value.isDisabled()) return
-  fn.value.record()
   dragRef.value.setPosition({
     x: x.value - 200,
     y: y.value + height.value
@@ -42,10 +40,9 @@ const handleClick = (editor: IDomEditor) => {
 }
 
 function handleSubmit(opt: LabelValue) {
+  fn.value?.restoreSelection()
   if (fn.value && !fn.value.isDisabled()) {
-    fn.value.reselect()
     fn.value.exec(opt)
-    fn.value.unrecord()
   }
   visible.value = false
 }
@@ -60,7 +57,7 @@ function handleSubmit(opt: LabelValue) {
       :menuItemLabel="menuItemLabel"
       :scenes="scenes"
       :styles="styles"
-      :fetch="config.fetchSpecial"
+      :fetch="globalEditConfig.fetchSpecial"
       @submit="handleSubmit"
     ></BarSearch>
   </DragBox>

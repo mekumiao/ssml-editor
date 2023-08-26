@@ -1,21 +1,15 @@
 <script setup lang="ts">
 import { ElButton, ElDialog, ElTag } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
-import { computed, inject, ref, type ShallowRef } from 'vue'
-import type { IDomEditor } from '@wangeditor/editor'
+import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
-import { playSound } from '@/utils'
-import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
+import { audioPlayer } from '@/utils'
+import { serializeToSSML } from '@/core'
+import { useSSMLStore } from '@/stores'
 
-defineProps<{
-  characterTotal: number
-  characterMax: number
-  bgm?: { value: string; label: string } | null
-}>()
-
-const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
 const dialogVisible = ref(false)
 const ssmlValue = ref('')
+const { rootBackgroundaudio } = useSSMLStore()
 
 const ssml = computed(() => {
   return xmlFormat(ssmlValue.value, {
@@ -27,14 +21,23 @@ const ssml = computed(() => {
 })
 
 const handleGenSSML = () => {
-  if (editorRef) {
-    ssmlValue.value = editorRef.value.getHtml()
-    dialogVisible.value = true
-  }
+  ssmlValue.value = serializeToSSML()
+  dialogVisible.value = true
 }
 
-const handleRemoveBgm = () => {
-  editorRef?.value.emit(WANGEDITOR_EVENT.REMOVE_BGM)
+const handlePlayBgm = () => {
+  rootBackgroundaudio.src && audioPlayer.play(rootBackgroundaudio.src)
+}
+
+const handleCloseBgm = () => {
+  audioPlayer.stop(rootBackgroundaudio.src)
+  rootBackgroundaudio.src = ''
+  rootBackgroundaudio.remark = ''
+}
+
+async function handleCopy() {
+  await navigator.clipboard.writeText(ssml.value)
+  dialogVisible.value = false
 }
 </script>
 
@@ -43,20 +46,18 @@ const handleRemoveBgm = () => {
     <div class="title-wrapper d-flex flex-column justify-content-center ps-3">
       <div class="title-author pb-1">SSML编辑器</div>
       <div class="author d-flex flex-row align-items-center justify-content-start">
-        <div>已保存</div>
-        <div>|</div>
-        <div>{{ characterTotal }}/{{ characterMax }}字</div>
+        <div>未保存</div>
         <ElTag
           class="bgm-txt ms-2"
           closable
           size="small"
-          @click="() => bgm && bgm.value && playSound(bgm.value)"
-          @close="handleRemoveBgm"
-          v-if="bgm"
+          @click="handlePlayBgm"
+          @close="handleCloseBgm"
+          v-if="rootBackgroundaudio.src"
         >
           <span class="iconfont icon-play font-size-12 p-1"></span>
           <div class="d-inline-block"></div>
-          <span>{{ bgm.label }}</span>
+          <span>{{ rootBackgroundaudio.remark }}</span>
         </ElTag>
       </div>
     </div>
@@ -72,11 +73,11 @@ const handleRemoveBgm = () => {
     </div>
   </div>
 
-  <ElDialog v-model="dialogVisible" title="查看SSML" width="50%">
-    <pre class="ssml-code">{{ ssml }}</pre>
+  <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
+    <pre class="ssml-code" style="white-space: pre-wrap">{{ ssml }}</pre>
     <template #footer>
       <span class="dialog-footer">
-        <ElButton type="primary" @click="dialogVisible = false">确定</ElButton>
+        <ElButton type="primary" @click="handleCopy">复制+关闭</ElButton>
       </span>
     </template>
   </ElDialog>

@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { PROVIDER_KEY } from '@/constant'
+import { useEditorStore } from '@/stores'
 import { type IDomEditor } from '@wangeditor/editor'
-import { inject, type ShallowRef } from 'vue'
 
 const emit = defineEmits<{ click: [editor: IDomEditor] }>()
 const props = withDefaults(
@@ -13,10 +12,11 @@ const props = withDefaults(
   { disabled: false }
 )
 
-const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)!
-
 const handleClick = () => {
-  if (!props.disabled) emit('click', editorRef.value)
+  if (!props.disabled) {
+    const { editor } = useEditorStore()
+    if (editor) emit('click', editor)
+  }
 }
 </script>
 

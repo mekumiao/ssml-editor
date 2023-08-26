@@ -1,23 +1,15 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { findByDomId, unpackVoid } from '../helper'
-import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
-import type { Speaker } from '@/core/speaker'
-import { EMITTER_EVENT } from '@/constant'
+import type { Phoneme } from '@/core'
+import { WANGEDITOR_EVENT } from '@/constant'
 
 export class SpeakerFn extends BaseFn {
   protected readonly key: string = 'speaker'
 
   public constructor(editor: IDomEditor) {
     super(editor)
-    editor.on('ssml-speaker-close', SpeakerFn.handleClose)
-  }
-
-  public static handleClose(editor: IDomEditor, value: Speaker) {
-    const nodeEntity = findByDomId<Speaker>(editor, 'ssml-speaker', value.domId)
-    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.word)
   }
 
   public getValue(): string {
@@ -26,10 +18,10 @@ export class SpeakerFn extends BaseFn {
 
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
-
-    const selection = this.selection()!
+    const { selection } = this.editor
+    if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请选中文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选中文本')
       return true
     }
 
@@ -37,7 +29,7 @@ export class SpeakerFn extends BaseFn {
     if (value.length != 1) return true
 
     if (!/^[\u4E00-\u9FA5]+$/gi.test(value)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
       return true
     }
 
@@ -45,22 +37,18 @@ export class SpeakerFn extends BaseFn {
   }
 
   public exec(opt: LabelValue) {
+    this.editor.restoreSelection()
     if (this.isDisabled()) return
     const value = this.getValue()
     if (value == null) return
 
-    const node: Speaker = {
-      type: 'ssml-speaker',
-      domId: this.genDomID(),
-      word: value,
-      phoneme: opt.value,
+    const node: Phoneme = {
+      type: 'ssml-phoneme',
+      ph: opt.value,
       remark: opt.label,
-      bgColor: 'speaker',
-      children: [{ text: '' }]
+      children: [{ text: value }]
     }
 
-    SlateTransforms.delete(this.editor)
     SlateTransforms.insertNodes(this.editor, node)
-    this.editor.move(1)
   }
 }

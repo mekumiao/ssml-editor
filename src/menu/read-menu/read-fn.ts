@@ -1,10 +1,8 @@
 import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
-import { findByDomId, unpackVoid } from '../helper'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
-import type { LabelValue } from '@/model'
-import type { Read } from '@/core/read'
+import type { Prosody } from '@/core'
+import type { ReadLabelValue } from './data'
 
 export class ReadFn extends BaseFn {
   protected readonly key: string = 'read'
@@ -13,40 +11,44 @@ export class ReadFn extends BaseFn {
     super(editor)
   }
 
-  public static handleClose(editor: IDomEditor, item: Read) {
-    const nodeEntity = findByDomId<Read>(editor, 'ssml-read', item.domId)
-    nodeEntity && unpackVoid(editor, nodeEntity, (elem) => elem.value)
-  }
-
   public isDisabled(): boolean {
     if (super.isDisabled()) return true
-    const selection = this.selection()
+    const { selection } = this.editor
+    if (!selection) return true
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请先选择文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请先选择文本')
       return true
     }
 
     return false
   }
 
-  exec(opt: LabelValue) {
+  exec(opt: ReadLabelValue) {
+    this.editor.restoreSelection()
     if (this.isDisabled()) return
     const value = this.getValue()
     if (value == null) return
 
-    const node: Read = {
-      type: 'ssml-read',
-      domId: this.genDomID(),
-      phoneme: opt.value,
+    const node: Prosody = {
+      type: 'ssml-prosody',
       remark: opt.label,
-      value: value,
-      bgColor: 'read',
-      children: [{ text: '' }]
+      children: [{ text: value }]
     }
 
-    SlateTransforms.delete(this.editor)
+    switch (opt.value) {
+      case 'z':
+        node.rate = 'fast'
+        break
+      case 't':
+        node.pitch = '+10%'
+        break
+      case 'z+t':
+        node.rate = 'fast'
+        node.pitch = '+10%'
+        break
+    }
+
     SlateTransforms.insertNodes(this.editor, node)
-    this.editor.move(1)
   }
 }
