@@ -3,7 +3,7 @@ import { ElButton, ElDialog, ElTag } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
-import { playSound } from '@/utils'
+import { audioPlayer } from '@/utils'
 import { serializeToSSML } from '@/core'
 import { useEditorStore, useSSMLStore } from '@/stores'
 
@@ -28,7 +28,12 @@ const handleGenSSML = () => {
   }
 }
 
-const handleRemoveBgm = () => {
+const handlePlayBgm = () => {
+  backgroundaudio.src && audioPlayer.play(backgroundaudio.src)
+}
+
+const handleCloseBgm = () => {
+  audioPlayer.stop(backgroundaudio.src)
   backgroundaudio.src = ''
   backgroundaudio.remark = ''
 }
@@ -44,8 +49,8 @@ const handleRemoveBgm = () => {
           class="bgm-txt ms-2"
           closable
           size="small"
-          @click="() => backgroundaudio.src && playSound(backgroundaudio.src)"
-          @close="handleRemoveBgm"
+          @click="handlePlayBgm"
+          @close="handleCloseBgm"
           v-if="backgroundaudio.src"
         >
           <span class="iconfont icon-play font-size-12 p-1"></span>
