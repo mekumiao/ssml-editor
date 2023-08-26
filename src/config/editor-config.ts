@@ -14,7 +14,7 @@ export type GlobalEditorConfig = ReturnType<typeof createGlobalEditorConfig>
 export interface SSMLEditorConfig {
   editorConfig?: IEditorConfig
   handleError: (error: string) => void
-  fetchSpeaker: FetahFunction
+  fetchPinyin: FetahFunction
   fetchEnglish: FetahFunction
   fetchBgm: FilterFetahFunction
   fetchSpecial: FilterFetahFunction
@@ -24,15 +24,15 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
   const editorConfig =
     config?.editorConfig || ({ maxLength: 5000, placeholder: '请输入内容...' } as IEditorConfig)
   const handleError = config?.handleError || (() => {})
-  const fetchSpeaker = config?.fetchSpeaker || resolveList<LabelValue>()
-  const fetchEnglish = config?.fetchSpeaker || resolveList<LabelValue>()
+  const fetchPinyin = config?.fetchPinyin || resolveList<LabelValue>()
+  const fetchEnglish = config?.fetchPinyin || resolveList<LabelValue>()
   const fetchBgm: FilterFetahFunction = config?.fetchBgm || resolveList<LabelValue>()
   const fetchSpecial: FilterFetahFunction = config?.fetchSpecial || resolveList<LabelValue>()
 
   return {
     editorConfig,
     handleError,
-    fetchSpeaker,
+    fetchPinyin,
     fetchEnglish,
     fetchBgm,
     fetchSpecial,

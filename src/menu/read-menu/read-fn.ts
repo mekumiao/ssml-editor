@@ -5,8 +5,6 @@ import type { Prosody } from '@/core'
 import type { ReadLabelValue } from './data'
 
 export class ReadFn extends BaseFn {
-  protected readonly key: string = 'read'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

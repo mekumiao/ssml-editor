@@ -5,8 +5,6 @@ import type { LabelValue } from '@/model'
 import type { Prosody } from '@/core'
 
 export class ChangespeedFn extends BaseFn {
-  protected readonly key: string = 'changespeed'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

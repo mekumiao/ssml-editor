@@ -2,7 +2,7 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
-import { SpeakerFn } from './speaker-fn'
+import { PinyinFn } from './pinyin-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import { useEditorStore } from '@/stores'
@@ -10,7 +10,7 @@ import { useEditorStore } from '@/stores'
 export default defineComponent({
   setup() {
     const { globalEditConfig } = useEditorStore()
-    const fn = shallowRef<SpeakerFn>()
+    const fn = shallowRef<PinyinFn>()
     const pyList = ref<LabelValue[]>([])
     const visible = ref(false)
 
@@ -25,11 +25,11 @@ export default defineComponent({
     }
 
     async function handleClick(editor: IDomEditor) {
-      fn.value ??= new SpeakerFn(editor)
+      fn.value ??= new PinyinFn(editor)
       if (fn.value?.isDisabled()) return
       const text = fn.value.getValue()
       if (text) {
-        pyList.value = await globalEditConfig.fetchSpeaker(text)
+        pyList.value = await globalEditConfig.fetchPinyin(text)
       } else {
         pyList.value = []
       }

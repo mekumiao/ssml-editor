@@ -5,8 +5,6 @@ import type { LabelValue } from '@/model'
 import type { Break } from '@/core'
 
 export class RhythmFn extends BaseFn {
-  protected readonly key: string = 'rhythm'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

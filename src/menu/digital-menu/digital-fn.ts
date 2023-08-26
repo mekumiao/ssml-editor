@@ -6,8 +6,6 @@ import type { LabelValue } from '@/model'
 import type { SayAs } from '@/core'
 
 export class DigitalFn extends BaseFn {
-  protected readonly key: string = 'digital'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

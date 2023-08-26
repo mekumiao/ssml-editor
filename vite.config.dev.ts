@@ -3,7 +3,7 @@ import vue from '@vitejs/plugin-vue'
 import { resolve } from 'path'
 import ElementPlus from 'unplugin-element-plus/vite'
 import vueJsx from '@vitejs/plugin-vue-jsx'
-import { UserConfig } from 'vite'
+import { type UserConfig } from 'vite'
 
 export default function (): UserConfig {
   return {

@@ -5,8 +5,6 @@ import { WANGEDITOR_EVENT } from '@/constant'
 import type { Prosody } from '@/core'
 
 export class ContinuousFn extends BaseFn {
-  protected readonly key: string = 'continuous'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

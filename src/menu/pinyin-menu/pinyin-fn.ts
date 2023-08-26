@@ -5,9 +5,7 @@ import type { LabelValue } from '@/model'
 import type { Phoneme } from '@/core'
 import { WANGEDITOR_EVENT } from '@/constant'
 
-export class SpeakerFn extends BaseFn {
-  protected readonly key: string = 'speaker'
-
+export class PinyinFn extends BaseFn {
   public constructor(editor: IDomEditor) {
     super(editor)
   }

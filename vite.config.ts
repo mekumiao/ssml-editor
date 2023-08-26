@@ -1,4 +1,4 @@
-import { ConfigEnv } from 'vite'
+import { type ConfigEnv } from 'vite'
 import { loadEnv } from 'vite'
 
 export default ({ mode }: ConfigEnv) => {

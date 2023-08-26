@@ -2,8 +2,8 @@ import axios from 'axios'
 import './mock-server'
 import type { LabelValue, Filter } from '@/model'
 
-export async function speaker(word: string): Promise<LabelValue[]> {
-  const resp = await axios.get('/speaker', { params: { word } })
+export async function pinyin(word: string): Promise<LabelValue[]> {
+  const resp = await axios.get('/pinyin', { params: { word } })
   return resp.data
 }
 

@@ -7,8 +7,6 @@ import type { Audio } from '@/core'
 
 // 音效功能
 export class SpecialFn extends BaseFn {
-  protected readonly key: string = 'special'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

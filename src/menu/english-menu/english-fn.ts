@@ -6,8 +6,6 @@ import type { LabelValue } from '@/model'
 import type { Phoneme } from '@/core'
 
 export class EnglishFn extends BaseFn {
-  protected readonly key: string = 'english'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

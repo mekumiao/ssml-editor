@@ -5,8 +5,6 @@ import type { LabelValue } from '@/model'
 import type { Sub } from '@/core'
 
 export class AliasFn extends BaseFn {
-  protected readonly key: string = 'alias'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }

@@ -5,8 +5,6 @@ import type { LabelValue } from '@/model'
 import type { Break } from '@/core'
 
 export class MuteFn extends BaseFn {
-  protected readonly key: string = 'mute'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
