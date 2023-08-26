@@ -1,3 +1,4 @@
+import '@wangeditor/editor/dist/css/style.css'
 import './assets/main.scss'
 
 import type { App, Plugin } from 'vue'
