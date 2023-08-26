@@ -7,13 +7,13 @@ const mock = new MockAdapter(axios)
 
 mock.onGet('/pinyin').reply((config) => {
   const word = config.params.word
-  const data = DataSource.pinyin[word]
+  const data = DataSource.pinyin[word] ?? []
   return [200, data]
 })
 
 mock.onGet('/english').reply((config) => {
   const word = config.params.word
-  const data = DataSource.english[word]
+  const data = DataSource.english[word] ?? []
   return [200, data]
 })
 

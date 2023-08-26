@@ -10,11 +10,11 @@ export default {
       { label: 'de2', value: 'de2' },
       { label: 'de3', value: 'de3' }
     ]
-  } as Record<string, { label: string; value: string }[]>,
+  } as Record<string, { label: string; value: string }[] | undefined>,
   english: {
     global: [{ label: 'ˈɡlōbəl', value: 'ˈɡlōbəl' }],
     world: [{ label: 'wərd', value: 'wərd' }]
-  } as Record<string, { label: string; value: string }[]>,
+  } as Record<string, { label: string; value: string }[] | undefined>,
   audio: [
     {
       label: '打鼓背景音',
