@@ -2,7 +2,7 @@
 import { useDraggable } from '@vueuse/core'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { type Position } from '@vueuse/core'
-import { withLimitView } from '@/components'
+import { constrainDragBounds } from './constrain-drag-bounds'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
 const props = defineProps<{ visible: boolean; initialValue?: Position }>()
@@ -13,7 +13,7 @@ const referenceRef = ref<HTMLElement>()
 const { position } = useDraggable(boxRef, {
   initialValue: props.initialValue
 })
-const { style } = withLimitView(boxRef, position)
+const { style } = constrainDragBounds(boxRef, position)
 
 function setPosition(opt: Position) {
   position.value = opt
