@@ -1,12 +1,11 @@
 <script setup lang="ts">
 import { BarButton } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef, inject } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
-import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
-import type { GlobalEditorConfig } from '@/config'
+import { useEditorStore, useSSMLStore } from '@/stores'
 
 const dragRef = ref()
 const menuRef = ref()
@@ -14,7 +13,7 @@ const edirorRef = shallowRef<IDomEditor>()
 
 const visible = ref(false)
 
-const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+const { globalEditConfig } = useEditorStore()
 
 const menuItemLabel = { first: '默认配乐', second: '自定义配乐', last: '最近配乐' }
 const scenes = [
@@ -41,7 +40,9 @@ const handleClick = async (editor: IDomEditor) => {
 }
 
 function handleSubmit(opt: LabelValue) {
-  edirorRef.value?.emit(WANGEDITOR_EVENT.UPDATE_BGM, opt)
+  const { backgroundaudio } = useSSMLStore()
+  backgroundaudio.src = opt.value
+  backgroundaudio.remark = opt.label
   visible.value = false
 }
 </script>
@@ -55,7 +56,7 @@ function handleSubmit(opt: LabelValue) {
       :menuItemLabel="menuItemLabel"
       :scenes="scenes"
       :styles="styles"
-      :fetch="config.fetchBgm"
+      :fetch="globalEditConfig.fetchBgm"
       @submit="handleSubmit"
     ></BarSearch>
   </DragBox>

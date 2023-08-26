@@ -1,7 +1,6 @@
 import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import type { Prosody } from '@/core'
 
@@ -18,7 +17,7 @@ export class ChangespeedFn extends BaseFn {
     if (selection == null) return true
 
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请框选要变速的句子')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选要变速的句子')
       return true
     }
 

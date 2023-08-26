@@ -1,22 +1,15 @@
 <script setup lang="ts">
 import { ElButton, ElDialog, ElTag } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
-import { computed, inject, ref, type ShallowRef } from 'vue'
-import type { IDomEditor } from '@wangeditor/editor'
+import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
 import { playSound } from '@/utils'
-import { PROVIDER_KEY, WANGEDITOR_EVENT } from '@/constant'
 import { serializeToSSML } from '@/core'
+import { useEditorStore, useSSMLStore } from '@/stores'
 
-defineProps<{
-  characterTotal: number
-  characterMax: number
-  bgm?: { value: string; label: string } | null
-}>()
-
-const editorRef = inject<ShallowRef<IDomEditor>>(PROVIDER_KEY.EDITOR)
 const dialogVisible = ref(false)
 const ssmlValue = ref('')
+const { backgroundaudio } = useSSMLStore()
 
 const ssml = computed(() => {
   return xmlFormat(ssmlValue.value, {
@@ -28,14 +21,16 @@ const ssml = computed(() => {
 })
 
 const handleGenSSML = () => {
-  if (editorRef) {
-    ssmlValue.value = serializeToSSML(editorRef.value.children)
+  const { editor } = useEditorStore()
+  if (editor) {
+    ssmlValue.value = serializeToSSML(editor.children)
     dialogVisible.value = true
   }
 }
 
 const handleRemoveBgm = () => {
-  editorRef?.value.emit(WANGEDITOR_EVENT.REMOVE_BGM)
+  backgroundaudio.src = ''
+  backgroundaudio.remark = ''
 }
 </script>
 
@@ -44,20 +39,18 @@ const handleRemoveBgm = () => {
     <div class="title-wrapper d-flex flex-column justify-content-center ps-3">
       <div class="title-author pb-1">SSML编辑器</div>
       <div class="author d-flex flex-row align-items-center justify-content-start">
-        <div>已保存</div>
-        <div>|</div>
-        <div>{{ characterTotal }}/{{ characterMax }}字</div>
+        <div>未保存</div>
         <ElTag
           class="bgm-txt ms-2"
           closable
           size="small"
-          @click="() => bgm && bgm.value && playSound(bgm.value)"
+          @click="() => backgroundaudio.src && playSound(backgroundaudio.src)"
           @close="handleRemoveBgm"
-          v-if="bgm"
+          v-if="backgroundaudio.src"
         >
           <span class="iconfont icon-play font-size-12 p-1"></span>
           <div class="d-inline-block"></div>
-          <span>{{ bgm.label }}</span>
+          <span>{{ backgroundaudio.remark }}</span>
         </ElTag>
       </div>
     </div>

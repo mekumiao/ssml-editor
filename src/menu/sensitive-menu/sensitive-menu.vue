@@ -1,17 +1,10 @@
 <script setup lang="ts">
 import { BarButton } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef, inject } from 'vue'
+import { ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
-import { PROVIDER_KEY } from '@/constant'
-// import type { LabelValue } from '@/model'
 import { DragBox } from '@/components'
-import type { GlobalEditorConfig } from '@/config'
 import SensitiveMenu from './sensitive-menu.vue'
-
-const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
-
-console.log(config)
 
 const dragRef = ref()
 const menuRef = ref()

@@ -1,7 +1,6 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Phoneme } from '@/core'
@@ -22,14 +21,14 @@ export class EnglishFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请选择英文单词')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择英文单词')
       return true
     }
 
     const value = SlateEditor.string(this.editor, selection)
     if (value.length <= 0) return true
     if (!/^[A-Za-z]+$/gi.test(value)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请选择英文单词')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择英文单词')
       return true
     }
 

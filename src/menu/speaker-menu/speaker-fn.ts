@@ -1,10 +1,9 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Phoneme } from '@/core'
-import { EMITTER_EVENT } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 
 export class SpeakerFn extends BaseFn {
   protected readonly key: string = 'speaker'
@@ -22,7 +21,7 @@ export class SpeakerFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请选中文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选中文本')
       return true
     }
 
@@ -30,7 +29,7 @@ export class SpeakerFn extends BaseFn {
     if (value.length != 1) return true
 
     if (!/^[\u4E00-\u9FA5]+$/gi.test(value)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
       return true
     }
 

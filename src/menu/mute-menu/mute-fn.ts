@@ -1,6 +1,5 @@
 import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Break } from '@/core'
@@ -17,7 +16,7 @@ export class MuteFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isExpanded(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '不能选中文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '不能选中文本')
       return true
     }
 

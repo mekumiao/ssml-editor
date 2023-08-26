@@ -4,7 +4,7 @@ import AnchorAvatar from './anchor-avatar.vue'
 import { reactive, ref, type CSSProperties, computed } from 'vue'
 import { formatTime } from '@/utils'
 import { Star } from '@element-plus/icons-vue'
-import { injectGlobalConfig } from '@/config'
+import { useEditorStore } from '@/stores'
 
 interface Mark {
   style: CSSProperties
@@ -13,7 +13,7 @@ interface Mark {
 
 type Marks = Record<number, Mark | string>
 
-const config = injectGlobalConfig()
+const { globalEditConfig } = useEditorStore()
 
 const timeMax = ref(10)
 const time = ref(0)
@@ -27,16 +27,16 @@ const pitch = ref(0)
 const timeMaxText = computed(() => formatTime(timeMax.value))
 const timeText = computed(() => formatTime(time.value))
 
-const speedMarks = reactive<Marks>(config.speed())
+const speedMarks = reactive<Marks>(globalEditConfig.speed())
 
-const pitchMarks = reactive<Marks>(config.pitch())
+const pitchMarks = reactive<Marks>(globalEditConfig.pitch())
 </script>
 
 <template>
   <div class="slider-panle w-100 px-3 text-white" style="font-size: 0.5rem">
     <div class="mt-2 row text-center justify-content-between align-items-center">
       <div class="col-auto me-auto d-flex flex-row align-items-center">
-        <img :src="config.demoAvatar()" class="rounded-circle" style="height: 50px" />
+        <img :src="globalEditConfig.demoAvatar()" class="rounded-circle" style="height: 50px" />
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
             <span class="fs-6">魔云猫</span>

@@ -1,21 +1,28 @@
-const EDITOR_KEY = '--editor-vdata'
+import type { IDomEditor } from '@wangeditor/editor'
+import { defineStore } from 'pinia'
+import { computed, shallowRef } from 'vue'
+import { type GlobalEditorConfig, createGlobalEditorConfig } from '@/config'
 
-export function saveChildren(children: any): void {
-  const data = JSON.stringify(children)
-  window.localStorage.setItem(EDITOR_KEY, data)
-}
+export const useEditorStore = defineStore('--editor', () => {
+  const _editor = shallowRef<IDomEditor>()
+  const _globalEditConfig = shallowRef<GlobalEditorConfig>()
 
-export function readChildren(): any[] | undefined {
-  const data = window.localStorage.getItem(EDITOR_KEY)
-  if (data) {
-    const vdata = JSON.parse(data)
-    if (vdata instanceof Array) {
-      return vdata
+  const editor = computed(() => _editor.value)
+
+  const globalEditConfig = computed(() => {
+    if (_globalEditConfig.value) {
+      return _globalEditConfig.value
     }
-  }
-  return undefined
-}
+    throw Error('请设置GlobalEditorConfig')
+  })
 
-export function cleanChildren(): void {
-  localStorage.removeItem(EDITOR_KEY)
-}
+  const setEditor = (editor: IDomEditor) => {
+    _editor.value = editor
+  }
+
+  const setGlobalEditConfig = (globalConfig?: GlobalEditorConfig) => {
+    _globalEditConfig.value = globalConfig ?? createGlobalEditorConfig()
+  }
+
+  return { editor, globalEditConfig, setEditor, setGlobalEditConfig }
+})
