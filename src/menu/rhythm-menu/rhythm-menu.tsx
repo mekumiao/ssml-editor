@@ -6,9 +6,9 @@ import { RhythmFn } from './rhythm-fn'
 import type { LabelValue } from '@/model'
 
 const options: LabelValue[] = [
-  { value: '200ms', label: '短' },
-  { value: '300ms', label: '中' },
-  { value: '500ms', label: '长' }
+  { value: 'weak', label: '短' },
+  { value: 'medium', label: '中' },
+  { value: 'strong', label: '长' }
 ]
 
 export default defineComponent({

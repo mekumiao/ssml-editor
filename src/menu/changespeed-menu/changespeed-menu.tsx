@@ -3,17 +3,7 @@ import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { ChangespeedFn } from './changespeed-fn'
-import type { LabelValue } from '@/model'
-
-const rates: LabelValue[] = [
-  { value: '0.1x', label: '0.1x' },
-  { value: '0.15x', label: '0.15x' },
-  { value: '0.2x', label: '0.2x' },
-  { value: '0.25x', label: '0.25x' },
-  { value: '0.3x', label: '0.3x' },
-  { value: '0.35x', label: '0.35x' },
-  { value: '0.4x', label: '0.4x' }
-]
+import { rates } from './data'
 
 export default defineComponent({
   setup() {

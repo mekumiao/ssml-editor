@@ -17,7 +17,7 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
   const rootVoice = shallowReactive<Voice>({
     name: 'zh-CN-XiaomoNeural',
     type: 'ssml-voice',
-    remark: '',
+    remark: 'Xiaomo-晓墨',
     effect: '',
     children: []
   })
@@ -31,8 +31,8 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
 
   const rootExpressAs = shallowReactive<MsttsExpressAs>({
     type: 'ssml-mstts:express-as',
-    style: 'Default',
-    role: 'Default',
+    style: '',
+    role: '',
     remark: '',
     children: []
   })

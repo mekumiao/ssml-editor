@@ -45,6 +45,7 @@ function serializeEmphasis(node: Emphasis, children: string) {
 }
 
 function serializeMsttsExpressAs(node: MsttsExpressAs, children: string) {
+  if (!node.style) return children
   const role = node.role ? ` role="${node.role}"` : ''
   const styledegree = node.styledegree ? ` styledegree="${node.styledegree}"` : ''
   return `<mstts:express-as style="${node.style}"${role}${styledegree}>${children}</mstts:express-as>`
@@ -77,7 +78,7 @@ function serializeProsody(node: Prosody, children: string) {
 }
 
 function serializeSayAs(node: SayAs, children: string) {
-  const interpretAs = node.interpretAs ? ` interpretAs="${node.interpretAs}"` : ''
+  const interpretAs = node.interpretAs ? ` interpret-as="${node.interpretAs}"` : ''
   const format = node.format ? ` format="${node.format}"` : ''
   const detail = node.detail ? ` detail="${node.detail}"` : ''
   return `<say-as${interpretAs}${format}${detail}>${children}</say-as>`
