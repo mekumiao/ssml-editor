@@ -2,7 +2,7 @@ import { h, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { Audio } from './custom-types'
 import throttle from 'lodash.throttle'
-import { playSound } from '@/utils'
+import { audioPlayer } from '@/utils'
 
 export default {
   type: 'ssml-audio',
@@ -22,6 +22,7 @@ export default {
             on: {
               click: throttle((event: Event) => {
                 event.preventDefault()
+                audioPlayer.stop(src)
                 const path = DomEditor.findPath(editor, elem)
                 SlateTransforms.delete(editor, { at: path })
               })
@@ -31,7 +32,7 @@ export default {
             on: {
               click: throttle((event: Event) => {
                 event.preventDefault()
-                playSound(src)
+                audioPlayer.play(src)
               })
             }
           }),

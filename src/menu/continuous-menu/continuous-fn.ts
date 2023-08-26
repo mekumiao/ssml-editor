@@ -1,8 +1,7 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
-import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
-import { EMITTER_EVENT } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { W } from '@/core'
 
 export class ContinuousFn extends BaseFn {
@@ -17,7 +16,7 @@ export class ContinuousFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请选择多个中文字符或者多个多个英文单词')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择多个中文字符或者多个多个英文单词')
       return true
     }
 

@@ -1,16 +1,15 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { defineComponent, inject, ref, withModifiers, shallowRef } from 'vue'
+import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
-import { emitter } from '@/event-bus'
 import { SpeakerFn } from './speaker-fn'
-import type { GlobalEditorConfig } from '@/config'
-import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
+import { useEditorStore } from '@/stores'
 
 export default defineComponent({
   setup() {
-    const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITORCONFIG)!
+    const { globalEditConfig } = useEditorStore()
     const fn = shallowRef<SpeakerFn>()
     const pyList = ref<LabelValue[]>([])
     const visible = ref(false)
@@ -30,13 +29,13 @@ export default defineComponent({
       if (fn.value?.isDisabled()) return
       const text = fn.value.getValue()
       if (text) {
-        pyList.value = await config.fetchSpeaker(text)
+        pyList.value = await globalEditConfig.fetchSpeaker(text)
       } else {
         pyList.value = []
       }
 
       if (pyList.value.length == 0) {
-        return emitter.emit(EMITTER_EVENT.ERROR, '选中的字符没有不是多音字')
+        return editor.emit(WANGEDITOR_EVENT.ERROR, '选中的字符没有不是多音字')
       }
 
       show()

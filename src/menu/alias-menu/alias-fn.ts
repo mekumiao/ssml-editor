@@ -1,7 +1,6 @@
 import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import type { Sub } from '@/core'
 
@@ -17,7 +16,7 @@ export class AliasFn extends BaseFn {
     const { selection } = this.editor
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
       return true
     }
 

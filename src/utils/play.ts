@@ -1,25 +1,41 @@
-import $ from './dom'
+export class AudioPlayer {
+  private audio: HTMLAudioElement | null
+  private src: string | null
 
-export function playSound(src: string) {
-  const borswer = window.navigator.userAgent.toLowerCase()
-  if (borswer.indexOf('ie') >= 0) {
-    //IE内核浏览器
-    const strEmbed = `<embed name="embedPlay" src="${src}"></embed>`
-    if ($('body').find('embed').length <= 0) $('body').append(strEmbed)
-    //@ts-ignore
-    const embed = document.embedPlay
+  constructor() {
+    this.audio = null
+    this.src = null
+  }
 
-    //浏览器不支持 audion，则使用 embed 播放
-    embed.volume = 50
-    //embed.play();这个不需要
-  } else {
-    //非IE内核浏览器
-    const strAudio = `<audio id='audioPlay' src='${src}' hidden='true'>`
-    if ($('body').find('audio').length <= 0) $('body').append(strAudio)
-    const audio = document.getElementById('audioPlay')
+  private removeAudioElement() {
+    if (this.audio) {
+      document.body.removeChild(this.audio)
+      this.audio = null
+      this.src = null
+    }
+  }
 
-    //浏览器支持 audion
-    //@ts-ignore
-    audio.play()
+  play(src: string) {
+    this.stop()
+
+    this.audio = document.createElement('audio')
+    this.audio.hidden = true
+    this.audio.volume = 50
+    this.audio.src = src
+    document.body.appendChild(this.audio)
+    this.audio.play()
+  }
+
+  stop(src?: string) {
+    if (src && src !== this.src) return
+    if (this.audio) {
+      this.audio.pause()
+      this.audio.currentTime = 0
+      this.removeAudioElement()
+    }
   }
 }
+
+const audioPlayer = new AudioPlayer()
+
+export { audioPlayer }

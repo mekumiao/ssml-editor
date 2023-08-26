@@ -1,7 +1,6 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateRange } from '@wangeditor/editor'
-import { emitter } from '@/event-bus'
-import { EMITTER_EVENT } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Audio } from '@/core'
@@ -23,7 +22,7 @@ export class SpecialFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isExpanded(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '不能框选文字')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '不能框选文字')
       return true
     }
     return false

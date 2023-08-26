@@ -1,6 +1,5 @@
 import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
-import { EMITTER_EVENT } from '@/constant'
-import { emitter } from '@/event-bus'
+import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Emphasis } from '@/core'
@@ -18,7 +17,7 @@ export class ReadFn extends BaseFn {
     if (!selection) return true
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit(EMITTER_EVENT.ERROR, '请先选择文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请先选择文本')
       return true
     }
 
