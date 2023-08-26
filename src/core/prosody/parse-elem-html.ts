@@ -16,7 +16,7 @@ export default {
       contour: contour,
       pitch: pitch,
       range: range,
-      rate: Number(rate),
+      rate: rate,
       volume: volume,
       children: children
     }

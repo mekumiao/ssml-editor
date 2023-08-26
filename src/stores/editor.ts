@@ -3,7 +3,7 @@ import { defineStore } from 'pinia'
 import { computed, shallowRef } from 'vue'
 import { type GlobalEditorConfig, createGlobalEditorConfig } from '@/config'
 
-export const useEditorStore = defineStore('--editor', () => {
+export const useEditorStore = defineStore('--editor-config', () => {
   const _editor = shallowRef<IDomEditor>()
   const _globalEditConfig = shallowRef<GlobalEditorConfig>()
 

@@ -33,7 +33,7 @@ export class ChangespeedFn extends BaseFn {
     const node: Prosody = {
       type: 'ssml-prosody',
       remark: opt.label,
-      rate: Number(opt.value),
+      rate: opt.value,
       children: [{ text: value }]
     }
 

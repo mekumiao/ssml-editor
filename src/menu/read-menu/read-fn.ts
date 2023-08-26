@@ -1,8 +1,8 @@
 import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
 import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
-import type { LabelValue } from '@/model'
-import type { Emphasis } from '@/core'
+import type { Prosody } from '@/core'
+import type { ReadLabelValue } from './data'
 
 export class ReadFn extends BaseFn {
   protected readonly key: string = 'read'
@@ -24,17 +24,29 @@ export class ReadFn extends BaseFn {
     return false
   }
 
-  exec(opt: LabelValue) {
+  exec(opt: ReadLabelValue) {
     this.editor.restoreSelection()
     if (this.isDisabled()) return
     const value = this.getValue()
     if (value == null) return
 
-    const node: Emphasis = {
-      type: 'ssml-emphasis',
-      level: opt.value as any,
+    const node: Prosody = {
+      type: 'ssml-prosody',
       remark: opt.label,
       children: [{ text: value }]
+    }
+
+    switch (opt.value) {
+      case 'z':
+        node.rate = 'fast'
+        break
+      case 't':
+        node.pitch = '+10%'
+        break
+      case 'z+t':
+        node.rate = 'fast'
+        node.pitch = '+10%'
+        break
     }
 
     SlateTransforms.insertNodes(this.editor, node)

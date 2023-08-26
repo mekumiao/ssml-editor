@@ -2,7 +2,7 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
-import type { W } from '@/core'
+import type { Prosody } from '@/core'
 
 export class ContinuousFn extends BaseFn {
   protected readonly key: string = 'continuous'
@@ -32,8 +32,9 @@ export class ContinuousFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: W = {
-      type: 'ssml-w',
+    const node: Prosody = {
+      type: 'ssml-prosody',
+      rate: 'fast',
       remark: '连读',
       children: [{ text: value }]
     }

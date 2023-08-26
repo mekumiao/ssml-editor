@@ -3,13 +3,7 @@ import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { ReadFn } from './read-fn'
-import type { LabelValue } from '@/model'
-
-const readList: LabelValue[] = [
-  { label: '重音', value: '重' },
-  { label: '拖音', value: '拖' },
-  { label: '重音+拖音', value: '重+拖' }
-]
+import { readList } from './data'
 
 export default defineComponent({
   setup() {

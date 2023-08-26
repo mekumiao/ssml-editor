@@ -1,10 +1,4 @@
-import {
-  DomEditor,
-  SlateElement,
-  SlateNode,
-  SlateText,
-  type SlateDescendant
-} from '@wangeditor/editor'
+import { DomEditor, SlateElement, SlateNode, SlateText } from '@wangeditor/editor'
 import type { Audio } from './audio'
 import type { Break } from './break'
 import type { Emphasis } from './emphasis'
@@ -18,7 +12,8 @@ import type { Sub } from './sub'
 import type { MsttsBackgroundaudio } from './mstts-backgroundaudio'
 import type { Speak } from './speak'
 import type { Voice } from './voice'
-import type { W } from './w'
+import type { SSMLElementType } from './custom-types'
+import { useEditorStore, useSSMLStore } from '@/stores'
 
 function escapeText(text: string): string {
   const result = text
@@ -56,6 +51,7 @@ function serializeMsttsExpressAs(node: MsttsExpressAs, children: string) {
 }
 
 export function serializeMsttsBackgroundaudio(node: MsttsBackgroundaudio) {
+  if (!node.src) return ''
   const volume = node.volume ? ` volume="${node.volume}"` : ''
   const fadein = node.fadein ? ` fadein="${node.fadein}"` : ''
   const fadeout = node.fadeout ? ` fadeout="${node.fadeout}"` : ''
@@ -91,21 +87,23 @@ function serializeS(_node: S, children: string) {
   return `<s>${children}</s>`
 }
 
-function serializeW(_node: W, children: string) {
-  return `<w>${children}</w>`
-}
-
 function serializeSub(node: Sub, children: string) {
   return `<sub alias=${node.alias}>${children}</sub>`
 }
 
 export function serializeVoice(node: Voice, children: string) {
   const effect = node.effect ? ` effect="${node.effect}"` : ''
-  return `<vocie name="${node.name}${effect}">${children}</vocie>`
+  return `<voice name="${node.name}${effect}">${children}</voice>`
 }
 
 export function serializeSpeak(node: Speak, children: string) {
-  return `<speak version="${node.version}" xml:lang="${node.xmlLang}" xmlns="${node.xmlns}">${children}</speak>`
+  return `<speak
+  version="${node.version}"
+  xml:lang="${node.xmlLang}"
+  xmlns="${node.xmlns}"
+  xmlns:mstts="${node['xmlns:mstts']}"
+  xmlns:emo="${node['xmlns:emo']}"
+  >${children}</speak>`
 }
 
 export function serializeNode(node: SlateNode): string {
@@ -113,10 +111,14 @@ export function serializeNode(node: SlateNode): string {
     return escapeText(node.text)
   } else if (SlateElement.isElement(node)) {
     const children = node.children.map((n) => serializeNode(n)).join('')
-    const type = DomEditor.getNodeType(node)
+    const type = DomEditor.getNodeType(node) as SSMLElementType
     switch (type) {
       case 'paragraph':
         return `<p>${children}</p>`
+      case 'ssml-speak':
+        return serializeSpeak(node as Speak, children)
+      case 'ssml-mstts:backgroundaudio':
+        return serializeMsttsBackgroundaudio(node as MsttsBackgroundaudio)
       case 'ssml-audio':
         return serializeAudio(node as Audio, children)
       case 'ssml-break':
@@ -133,8 +135,6 @@ export function serializeNode(node: SlateNode): string {
         return serializeProsody(node as Prosody, children)
       case 'ssml-s':
         return serializeS(node as S, children)
-      case 'ssml-w':
-        return serializeW(node as W, children)
       case 'ssml-say-as':
         return serializeSayAs(node as SayAs, children)
       case 'ssml-sub':
@@ -148,19 +148,19 @@ export function serializeNode(node: SlateNode): string {
   return ''
 }
 
-export function serializeToSSML(children: SlateDescendant[]) {
-  const speak: Speak = {
-    type: 'ssml-speak',
-    version: '1.0',
-    xmlLang: 'zh-CN',
-    xmlns: 'http://www.w3.org/2001/10/synthesis'
-  }
-  const voice: Voice = {
-    type: 'ssml-voice',
-    name: 'XiaoXiao-晓晓',
-    remark: '默认语音',
-    children: []
-  }
-  const ssml = children.map((n) => serializeNode(n)).join('')
-  return serializeSpeak(speak, serializeVoice(voice, ssml))
+export function serializeToSSML() {
+  const { editor } = useEditorStore()
+  if (!editor) throw Error('没有找到 editor 对象')
+  const { rootSpeak, rootVoice, rootExpressAs, rootBackgroundaudio } = useSSMLStore()
+  const speak = { ...rootSpeak, children: [] } as Speak
+  const backgroundaudio = { ...rootBackgroundaudio } as MsttsBackgroundaudio
+  const voice = { ...rootVoice, children: [] } as Voice
+  const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
+
+  speak.children.push(backgroundaudio)
+  speak.children.push(voice)
+  voice.children.push(expressAs)
+  expressAs.children = editor.children
+
+  return serializeNode(speak)
 }

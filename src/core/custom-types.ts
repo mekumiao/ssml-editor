@@ -1,3 +1,5 @@
+import type { Speak } from './speak'
+import type { MsttsBackgroundaudio } from './mstts-backgroundaudio'
 import type { Audio } from './audio'
 import type { Break } from './break'
 import type { Emphasis } from './emphasis'
@@ -25,10 +27,11 @@ export * from './sub/custom-types'
 export * from './voice/custom-types'
 export * from './mstts-backgroundaudio/custom-types'
 export * from './speak/custom-types'
-export * from './w/custom-types'
 
 export type SSMLElementType =
+  | UnionTypesMap<Speak>
   | UnionTypesMap<MsttsExpressAs>
+  | UnionTypesMap<MsttsBackgroundaudio>
   | UnionTypesMap<Break>
   | UnionTypesMap<Voice>
   | UnionTypesMap<Audio>
@@ -39,3 +42,4 @@ export type SSMLElementType =
   | UnionTypesMap<Sub>
   | UnionTypesMap<P>
   | UnionTypesMap<S>
+  | 'paragraph'

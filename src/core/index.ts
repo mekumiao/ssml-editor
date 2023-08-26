@@ -10,7 +10,6 @@ import SModule from './s'
 import SayAsModule from './say-as'
 import SubModule from './sub'
 import VoiceModule from './voice'
-import WModule from './w'
 
 import plugin from './plugin'
 
@@ -30,7 +29,6 @@ export default {
     Boot.registerModule(SayAsModule)
     Boot.registerModule(SubModule)
     Boot.registerModule(VoiceModule)
-    Boot.registerModule(WModule)
     // 全局插件
     Boot.registerPlugin(plugin)
   }

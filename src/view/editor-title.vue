@@ -5,11 +5,11 @@ import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
 import { audioPlayer } from '@/utils'
 import { serializeToSSML } from '@/core'
-import { useEditorStore, useSSMLStore } from '@/stores'
+import { useSSMLStore } from '@/stores'
 
 const dialogVisible = ref(false)
 const ssmlValue = ref('')
-const { backgroundaudio } = useSSMLStore()
+const { rootBackgroundaudio } = useSSMLStore()
 
 const ssml = computed(() => {
   return xmlFormat(ssmlValue.value, {
@@ -21,21 +21,18 @@ const ssml = computed(() => {
 })
 
 const handleGenSSML = () => {
-  const { editor } = useEditorStore()
-  if (editor) {
-    ssmlValue.value = serializeToSSML(editor.children)
-    dialogVisible.value = true
-  }
+  ssmlValue.value = serializeToSSML()
+  dialogVisible.value = true
 }
 
 const handlePlayBgm = () => {
-  backgroundaudio.src && audioPlayer.play(backgroundaudio.src)
+  rootBackgroundaudio.src && audioPlayer.play(rootBackgroundaudio.src)
 }
 
 const handleCloseBgm = () => {
-  audioPlayer.stop(backgroundaudio.src)
-  backgroundaudio.src = ''
-  backgroundaudio.remark = ''
+  audioPlayer.stop(rootBackgroundaudio.src)
+  rootBackgroundaudio.src = ''
+  rootBackgroundaudio.remark = ''
 }
 </script>
 
@@ -51,11 +48,11 @@ const handleCloseBgm = () => {
           size="small"
           @click="handlePlayBgm"
           @close="handleCloseBgm"
-          v-if="backgroundaudio.src"
+          v-if="rootBackgroundaudio.src"
         >
           <span class="iconfont icon-play font-size-12 p-1"></span>
           <div class="d-inline-block"></div>
-          <span>{{ backgroundaudio.remark }}</span>
+          <span>{{ rootBackgroundaudio.remark }}</span>
         </ElTag>
       </div>
     </div>

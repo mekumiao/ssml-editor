@@ -40,9 +40,9 @@ const handleClick = async (editor: IDomEditor) => {
 }
 
 function handleSubmit(opt: LabelValue) {
-  const { backgroundaudio } = useSSMLStore()
-  backgroundaudio.src = opt.value
-  backgroundaudio.remark = opt.label
+  const { rootBackgroundaudio } = useSSMLStore()
+  rootBackgroundaudio.src = opt.value
+  rootBackgroundaudio.remark = opt.label
   visible.value = false
 }
 </script>
