@@ -11,6 +11,7 @@ import type { S } from './s'
 import type { SayAs } from './say-as'
 import type { Sub } from './sub'
 import type { Voice } from './voice'
+import type { MsttsSilence } from '.'
 
 type UnionTypesMap<T extends { type: string }> = T extends any ? T['type'] : never
 
@@ -27,6 +28,7 @@ export * from './sub/custom-types'
 export * from './voice/custom-types'
 export * from './mstts-backgroundaudio/custom-types'
 export * from './speak/custom-types'
+export * from './mstts-silence/custom-types'
 
 export type SSMLElementType =
   | UnionTypesMap<Speak>
@@ -42,4 +44,5 @@ export type SSMLElementType =
   | UnionTypesMap<Sub>
   | UnionTypesMap<P>
   | UnionTypesMap<S>
+  | UnionTypesMap<MsttsSilence>
   | 'paragraph'

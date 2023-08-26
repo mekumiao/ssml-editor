@@ -12,7 +12,7 @@ import type { Sub } from './sub'
 import type { MsttsBackgroundaudio } from './mstts-backgroundaudio'
 import type { Speak } from './speak'
 import type { Voice } from './voice'
-import type { SSMLElementType } from './custom-types'
+import type { MsttsSilence, SSMLElementType } from './custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 
 function escapeText(text: string): string {
@@ -57,6 +57,11 @@ export function serializeMsttsBackgroundaudio(node: MsttsBackgroundaudio) {
   const fadein = node.fadein ? ` fadein="${node.fadein}"` : ''
   const fadeout = node.fadeout ? ` fadeout="${node.fadeout}"` : ''
   return `<mstts:backgroundaudio src="${node.src}"${volume}${fadein}${fadeout}/>`
+}
+
+export function serializeMsttsSilence(node: MsttsSilence) {
+  if (!node.attrType || !node.value) return ''
+  return `<mstts:silence type="${node.attrType}" value="${node.value}"/>`
 }
 
 function serializeP(_node: P, children: string) {
@@ -142,6 +147,8 @@ export function serializeNode(node: SlateNode): string {
         return serializeSub(node as Sub, children)
       case 'ssml-voice':
         return serializeVoice(node as Voice, children)
+      case 'ssml-mstts:silence':
+        return serializeMsttsSilence(node as MsttsSilence)
       default:
         return children
     }
@@ -158,8 +165,33 @@ export function serializeToSSML() {
   const voice = { ...rootVoice, children: [] } as Voice
   const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
 
+  const silences: MsttsSilence[] = [
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'comma-exact',
+      value: '50ms',
+      remark: '逗号静音',
+      children: []
+    },
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'semicolon-exact',
+      value: '100ms',
+      remark: '分号静音',
+      children: []
+    },
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'enumerationcomma-exact',
+      value: '150ms',
+      remark: '顿号静音',
+      children: []
+    }
+  ]
+
   speak.children.push(backgroundaudio)
   speak.children.push(voice)
+  voice.children.push(...silences)
   voice.children.push(expressAs)
   expressAs.children = editor.children
 
