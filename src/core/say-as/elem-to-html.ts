@@ -7,7 +7,6 @@ export default {
     const { remark, interpretAs, detail, format } = elem as SayAs
     const html = `<span
           data-w-e-type="ssml-say-as"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-interpretAs="${interpretAs}"

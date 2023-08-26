@@ -7,7 +7,6 @@ export default {
     const { remark, contour, pitch, range, rate, volume } = elem as Prosody
     const html = `<span
           data-w-e-type="ssml-prosody"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-contour="${contour}"

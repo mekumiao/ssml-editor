@@ -7,7 +7,6 @@ export default {
     const { remark, name, effect } = elem as Voice
     const html = `<span
           data-w-e-type="ssml-voice"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-name="${name}"

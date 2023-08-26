@@ -7,7 +7,6 @@ export default {
     const { remark, level } = elem as Emphasis
     const html = `<span
           data-w-e-type="ssml-emphasis"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-level="${level}"

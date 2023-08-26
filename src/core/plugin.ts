@@ -22,7 +22,7 @@ export default <T extends IDomEditor>(editor: T) => {
   }
 
   newEditor.apply = (operation) => {
-    // console.log('apply', JSON.stringify(operation))
+    console.log('apply', JSON.stringify(operation))
     apply(operation)
   }
 

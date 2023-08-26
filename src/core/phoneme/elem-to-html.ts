@@ -7,7 +7,6 @@ export default {
     const { remark, alphabet, ph } = elem as Phoneme
     const html = `<span
           data-w-e-type="ssml-phoneme"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-alphabet="${alphabet}"
