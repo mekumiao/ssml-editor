@@ -34,6 +34,11 @@ const handleCloseBgm = () => {
   rootBackgroundaudio.src = ''
   rootBackgroundaudio.remark = ''
 }
+
+async function handleCopy() {
+  await navigator.clipboard.writeText(ssml.value)
+  dialogVisible.value = false
+}
 </script>
 
 <template>
@@ -68,11 +73,11 @@ const handleCloseBgm = () => {
     </div>
   </div>
 
-  <ElDialog v-model="dialogVisible" title="查看SSML" width="50%">
-    <pre class="ssml-code">{{ ssml }}</pre>
+  <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
+    <pre class="ssml-code" style="white-space: pre-wrap">{{ ssml }}</pre>
     <template #footer>
       <span class="dialog-footer">
-        <ElButton type="primary" @click="dialogVisible = false">确定</ElButton>
+        <ElButton type="primary" @click="handleCopy">复制+关闭</ElButton>
       </span>
     </template>
   </ElDialog>
