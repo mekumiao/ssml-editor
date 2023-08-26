@@ -7,7 +7,6 @@ export default {
     const { remark } = elem as S
     const html = `<span
           data-w-e-type="ssml-s"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
         >${childrenHtml}</span>`

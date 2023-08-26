@@ -7,7 +7,6 @@ export default {
     const { remark, alias } = elem as Sub
     const html = `<span
           data-w-e-type="ssml-sub"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-alias="${alias}"

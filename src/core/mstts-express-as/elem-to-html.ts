@@ -7,7 +7,6 @@ export default {
     const { remark, style, role, styledegree } = elem as MsttsExpressAs
     const html = `<span
           data-w-e-type="ssml-mstts:express-as"
-          data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-style="${style}"
