@@ -1,14 +1,14 @@
 export default {
   pinyin: {
     我: [
-      { label: 'wo1', value: 'wo1' },
-      { label: 'wo2', value: 'wo2' },
-      { label: 'wo3', value: 'wo3' }
+      { label: 'wo1', value: 'wo 1' },
+      { label: 'wo2', value: 'wo 2' },
+      { label: 'wo3', value: 'wo 3' }
     ],
     的: [
-      { label: 'de1', value: 'de1' },
-      { label: 'de2', value: 'de2' },
-      { label: 'de3', value: 'de3' }
+      { label: 'de1', value: 'de 1' },
+      { label: 'de2', value: 'de 2' },
+      { label: 'de3', value: 'de 3' }
     ]
   } as Record<string, { label: string; value: string }[] | undefined>,
   english: {

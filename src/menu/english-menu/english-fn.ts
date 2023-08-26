@@ -41,6 +41,7 @@ export class EnglishFn extends BaseFn {
 
     const node: Phoneme = {
       type: 'ssml-phoneme',
+      alphabet: 'ipa',
       ph: opt.value,
       remark: opt.label,
       children: [{ text: value }]

@@ -42,6 +42,7 @@ export class PinyinFn extends BaseFn {
 
     const node: Phoneme = {
       type: 'ssml-phoneme',
+      alphabet: 'sapi',
       ph: opt.value,
       remark: opt.label,
       children: [{ text: value }]
