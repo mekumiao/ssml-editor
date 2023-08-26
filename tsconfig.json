@@ -36,6 +36,8 @@
     "env.d.ts",
     "global.d.ts",
     "vite.config.ts",
+    "vite.config.dev.ts",
+    "vite.config.prod.ts",
     "src/**/*",
     "src/**/*.ts",
     "src/**/*.d.ts",
