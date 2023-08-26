@@ -73,8 +73,11 @@ async function handleCopy() {
     </div>
   </div>
 
-  <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
+  <ElDialog v-model="dialogVisible" title="查看SSML" width="80%" height="60%">
     <pre class="ssml-code" style="white-space: pre-wrap">{{ ssml }}</pre>
+    <template #header>
+      <ElButton type="primary" @click="handleCopy">复制+关闭</ElButton>
+    </template>
     <template #footer>
       <span class="dialog-footer">
         <ElButton type="primary" @click="handleCopy">复制+关闭</ElButton>

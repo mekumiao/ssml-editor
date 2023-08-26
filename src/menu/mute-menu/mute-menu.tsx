@@ -63,7 +63,7 @@ export default defineComponent({
                   </div>
                 )
               })}
-              <BarInput type="number" ref={inputRef} onSubmit={handleSubmit}></BarInput>
+              <BarInput type="text" ref={inputRef} onSubmit={handleSubmit}></BarInput>
             </div>
           )
         }}

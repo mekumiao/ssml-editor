@@ -23,7 +23,7 @@ defineExpose({
 </script>
 
 <template>
-  <ElForm class="flex flex-row" @submit.prevent="handleSubmit">
+  <ElForm @submit.prevent="handleSubmit">
     <ElInput :type="type" ref="inputRef" v-model="inputValue"></ElInput>
   </ElForm>
 </template>

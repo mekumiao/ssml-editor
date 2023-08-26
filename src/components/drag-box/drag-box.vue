@@ -8,9 +8,10 @@ const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
 const props = defineProps<{ visible: boolean; initialValue?: Position }>()
 
 const boxRef = ref<HTMLElement>()
+const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
 
-const { position } = useDraggable(boxRef, {
+const { position } = useDraggable(dragRef, {
   initialValue: props.initialValue
 })
 const { style } = constrainDragBounds(boxRef, position)
@@ -67,7 +68,8 @@ function handleKeyDownEsc(event: KeyboardEvent) {
       style="position: fixed"
       :style="style"
     >
-      <div class="w-100 text-end me-2">
+      <div class="w-100 d-flex flex-row align-items-center">
+        <div ref="dragRef" class="w-100" style="height: 40px"></div>
         <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
       </div>
       <slot></slot>

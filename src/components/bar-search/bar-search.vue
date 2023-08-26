@@ -64,7 +64,7 @@ function handleSubmit(value: LabelValue) {
 </script>
 
 <template>
-  <div class="search-content vh-50">
+  <div class="search-content w-100">
     <div class="ps-2 w-75">
       <ElForm @submit.prevent="handleFetchData">
         <ElInput
@@ -75,7 +75,7 @@ function handleSubmit(value: LabelValue) {
         ></ElInput>
       </ElForm>
     </div>
-    <div class="menu">
+    <div class="menu ps-2">
       <ElMenu
         mode="horizontal"
         default-active="first"
@@ -87,7 +87,7 @@ function handleSubmit(value: LabelValue) {
       </ElMenu>
     </div>
     <div class="flex flex-row pt-1">
-      <ElSelect v-model="sceneSelect" @change="handleFetchData" class="m-1" size="large">
+      <ElSelect v-model="sceneSelect" @change="handleFetchData" class="m-1" size="default">
         <ElOption
           v-for="item in scenes"
           :key="item.value"
@@ -95,7 +95,7 @@ function handleSubmit(value: LabelValue) {
           :value="item.value"
         />
       </ElSelect>
-      <ElSelect v-model="styleSelect" @change="handleFetchData" class="m-1" size="large">
+      <ElSelect v-model="styleSelect" @change="handleFetchData" class="m-1" size="default">
         <ElOption
           v-for="item in styles"
           :key="item.value"
@@ -104,32 +104,18 @@ function handleSubmit(value: LabelValue) {
         />
       </ElSelect>
     </div>
-    <div class="content-list pt-1 w-90">
-      <div
+    <ul class="content-list overflow-x-hidden overflow-y-auto py-2" style="height: 250px">
+      <li
         @click="handleSubmit(toRaw(item))"
-        class="content-list-item clickable ps-3"
+        class="content-list-item clickable ps-2 py-2"
         v-for="(item, index) in dataListRef"
         :key="index"
       >
         <span class="iconfont icon-play"></span>
-        <span>{{ item.label }}</span>
-      </div>
-    </div>
+        <span class="ps-2">{{ item.label }}</span>
+      </li>
+    </ul>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.search-content {
-  .content-list {
-    .content-list-item {
-      display: flex;
-      flex-direction: row;
-      justify-content: left;
-      align-items: center;
-      height: 6vh;
-      width: 100%;
-      border-radius: 0.25rem;
-    }
-  }
-}
-</style>
+<style lang="scss" scoped></style>
