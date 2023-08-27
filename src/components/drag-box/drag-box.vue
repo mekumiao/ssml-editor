@@ -25,13 +25,13 @@ defineExpose({
 })
 
 onMounted(() => {
-  window.addEventListener('click', handleWindowClick)
-  window.addEventListener('keydown', handleKeyDownEsc)
+  document.addEventListener('mousedown', handleWindowClick)
+  document.addEventListener('keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
-  window.addEventListener('click', handleWindowClick)
-  window.addEventListener('keydown', handleKeyDownEsc)
+  document.addEventListener('mousedown', handleWindowClick)
+  document.addEventListener('keydown', handleKeyDownEsc)
 })
 
 function handleWindowClick(ev: MouseEvent) {
