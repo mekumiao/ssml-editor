@@ -8,7 +8,7 @@ export default {
     return {
       type: 'ssml-p',
       remark: remark,
-      children: children
+      children: children,
     }
-  }
+  },
 }

@@ -10,15 +10,15 @@ export default {
     return h(
       'span.ssml-wrapper',
       {
-        props: { contentEditable: false }
+        props: { contentEditable: false },
       },
       [
         h(
           `span.remark`,
           {
             style: {
-              backgroundColor: 'var(--ssml-break)'
-            }
+              backgroundColor: 'var(--ssml-break)',
+            },
           },
           [
             h(`span.iconfont.icon-roundclosefill`, {
@@ -27,17 +27,17 @@ export default {
                   event.preventDefault()
                   const path = DomEditor.findPath(editor, elem)
                   SlateTransforms.delete(editor, { at: path })
-                })
-              }
+                }),
+              },
             }),
-            h(`span.data-content`, { attrs: { 'data-content': remark } })
-          ]
+            h(`span.data-content`, { attrs: { 'data-content': remark } }),
+          ],
         ),
         h(`span.data-content`, {
           attrs: { 'data-content': '|' },
-          style: { color: `var(--ssml-break)` }
-        })
-      ]
+          style: { color: `var(--ssml-break)` },
+        }),
+      ],
     )
-  }
+  },
 }

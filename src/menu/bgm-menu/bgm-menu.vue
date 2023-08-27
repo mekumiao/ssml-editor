@@ -19,12 +19,12 @@ const menuItemLabel = { first: '默认配乐', second: '自定义配乐', last: 
 const scenes = [
   { value: '', label: '全部场景' },
   { value: '2', label: '场景2' },
-  { value: '3', label: '场景3' }
+  { value: '3', label: '场景3' },
 ] as LabelValue[]
 const styles = [
   { value: '', label: '全部风格' },
   { value: '2', label: '风格2' },
-  { value: '3', label: '风格3' }
+  { value: '3', label: '风格3' },
 ] as LabelValue[]
 
 const { x, y, height } = useElementBounding(menuRef)
@@ -32,7 +32,7 @@ const { x, y, height } = useElementBounding(menuRef)
 const handleClick = async (editor: IDomEditor) => {
   const pot = {
     x: x.value - 300,
-    y: y.value + height.value
+    y: y.value + height.value,
   }
   edirorRef.value = editor
   dragRef.value.setPosition(pot)

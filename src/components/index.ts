@@ -17,7 +17,7 @@ export default {
     app.component('BarWrapperItem', BarWrapperItem)
     app.component('BarWrapperGroup', BarWrapperGroup)
     app.component('DragBox', DragBox)
-  }
+  },
 } as Plugin
 
 export {
@@ -29,5 +29,5 @@ export {
   BarWrapperItem,
   BarWrapperGroup,
   DragBox,
-  constrainDragBounds
+  constrainDragBounds,
 }

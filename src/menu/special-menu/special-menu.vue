@@ -19,12 +19,12 @@ const menuItemLabel = { first: '默认音效', second: '自定义音效', last: 
 const scenes = [
   { value: '', label: '全部场景' },
   { value: '2', label: '场景2' },
-  { value: '3', label: '场景3' }
+  { value: '3', label: '场景3' },
 ] as LabelValue[]
 const styles = [
   { value: '', label: '全部风格' },
   { value: '2', label: '风格2' },
-  { value: '3', label: '风格3' }
+  { value: '3', label: '风格3' },
 ] as LabelValue[]
 
 const { x, y, height } = useElementBounding(menuRef)
@@ -34,7 +34,7 @@ const handleClick = (editor: IDomEditor) => {
   if (fn.value.isDisabled()) return
   dragRef.value.setPosition({
     x: x.value - 200,
-    y: y.value + height.value
+    y: y.value + height.value,
   })
   visible.value = true
 }

@@ -44,7 +44,7 @@ export class EnglishFn extends BaseFn {
       alphabet: 'ipa',
       ph: opt.value,
       remark: opt.label,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
     SlateTransforms.insertNodes(this.editor, node)

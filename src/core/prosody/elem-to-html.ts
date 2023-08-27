@@ -16,5 +16,5 @@ export default {
           data-ow-volume="${volume}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

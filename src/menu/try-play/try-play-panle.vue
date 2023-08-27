@@ -32,7 +32,7 @@ watch(
       setTimeout(() => {
         searchInputFocus()
       }, 200)
-  }
+  },
 )
 
 function handleKeyDownEsc(event: KeyboardEvent) {
@@ -42,7 +42,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 }
 
 const { position } = useDraggable(handleRef, {
-  initialValue: { x: 100, y: 100 }
+  initialValue: { x: 100, y: 100 },
 })
 const { style } = constrainDragBounds(boxRef, position)
 

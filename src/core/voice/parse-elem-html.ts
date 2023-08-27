@@ -12,7 +12,7 @@ export default {
       remark: remark,
       name: name,
       effect: effect,
-      children: children
+      children: children,
     }
-  }
+  },
 }

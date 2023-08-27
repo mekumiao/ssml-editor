@@ -13,5 +13,5 @@ export default {
           data-ow-ph="${ph}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

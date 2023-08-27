@@ -30,8 +30,8 @@ function initEditor() {
       },
       onChange(editor) {
         emit('change', editor)
-      }
-    }
+      },
+    },
   })
 
   setEditor(editor)

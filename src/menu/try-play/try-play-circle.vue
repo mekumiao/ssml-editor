@@ -16,7 +16,7 @@ const { position } = useDraggable(boxRef, {
   initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
   onStart: (_, event) => {
     return isClick(event.clientX, event.clientY) ? false : undefined
-  }
+  },
 })
 const { style } = constrainDragBounds(boxRef, position)
 

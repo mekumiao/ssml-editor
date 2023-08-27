@@ -34,7 +34,7 @@ export class ContinuousFn extends BaseFn {
       type: 'ssml-prosody',
       rate: 'fast',
       remark: '连读',
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
     SlateTransforms.insertNodes(this.editor, node)

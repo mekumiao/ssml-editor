@@ -171,22 +171,22 @@ export function serializeToSSML() {
       attrType: 'comma-exact',
       value: '50ms',
       remark: '逗号静音',
-      children: []
+      children: [],
     },
     {
       type: 'ssml-mstts:silence',
       attrType: 'semicolon-exact',
       value: '100ms',
       remark: '分号静音',
-      children: []
+      children: [],
     },
     {
       type: 'ssml-mstts:silence',
       attrType: 'enumerationcomma-exact',
       value: '150ms',
       remark: '顿号静音',
-      children: []
-    }
+      children: [],
+    },
   ]
 
   speak.children.push(backgroundaudio)

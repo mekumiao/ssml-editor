@@ -44,9 +44,9 @@ export default defineComponent({
       >
         {{
           reference: () => <BarButton text="别名" icon="alias" onClick={handleClick}></BarButton>,
-          default: () => <BarInput ref={inputRef} onSubmit={handleSubmit}></BarInput>
+          default: () => <BarInput ref={inputRef} onSubmit={handleSubmit}></BarInput>,
         }}
       </ElPopover>
     )
-  }
+  },
 })

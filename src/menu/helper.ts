@@ -5,7 +5,7 @@ import {
   DomEditor,
   SlateText,
   SlateTransforms,
-  SlatePath
+  SlatePath,
 } from '@wangeditor/editor'
 import type { NodeEntry } from 'slate'
 import type { SSMLBaseElement } from '@/core/base'
@@ -13,7 +13,7 @@ import type { SSMLBaseElement } from '@/core/base'
 export function findByDomId<T extends SSMLBaseElement>(
   editor: IDomEditor,
   type: T['type'],
-  domId: string
+  domId: string,
 ): NodeEntry<T> | null {
   const [nodeEntity] = SlateEditor.nodes<T>(editor, {
     at: [],
@@ -21,7 +21,7 @@ export function findByDomId<T extends SSMLBaseElement>(
       if (!SlateElement.isElement(n)) return false
       if (!DomEditor.checkNodeType(n, type)) return false
       return (n as any).domId === domId
-    }
+    },
   })
   return nodeEntity
 }
@@ -29,16 +29,16 @@ export function findByDomId<T extends SSMLBaseElement>(
 export function unpackVoid<T extends SSMLBaseElement>(
   editor: IDomEditor,
   current: NodeEntry<T>,
-  getter: (elem: T) => string
+  getter: (elem: T) => string,
 ) {
   const preNodeEntity = SlateEditor.previous(editor, {
     at: current[1],
-    match: (n) => SlateText.isText(n)
+    match: (n) => SlateText.isText(n),
   })
   if (preNodeEntity == null) return
 
   SlateTransforms.insertText(editor, getter(current[0]), {
-    at: SlateEditor.end(editor, preNodeEntity[1])
+    at: SlateEditor.end(editor, preNodeEntity[1]),
   })
   SlateTransforms.delete(editor, { at: SlatePath.next(preNodeEntity[1]) })
 }

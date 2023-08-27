@@ -37,7 +37,7 @@ export class SpecialFn extends BaseFn {
       type: 'ssml-audio',
       src: opt.value,
       remark: opt.label,
-      children: [{ text: '' }]
+      children: [{ text: '' }],
     }
 
     SlateTransforms.insertNodes(this.editor, node)

@@ -29,7 +29,7 @@ export class RhythmFn extends BaseFn {
       type: 'ssml-break',
       strength: opt.value as any,
       remark: opt.label,
-      children: [{ text: '' }]
+      children: [{ text: '' }],
     }
 
     SlateTransforms.insertNodes(this.editor, node)

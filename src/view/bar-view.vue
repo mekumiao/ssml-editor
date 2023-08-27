@@ -15,7 +15,7 @@ import {
   // SensitiveMenu,
   ConversionMenu,
   ManagementMenu,
-  TryPlay
+  TryPlay,
 } from '../menu'
 </script>
 

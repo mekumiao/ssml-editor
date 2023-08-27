@@ -14,7 +14,7 @@ export default {
       interpretAs: interpretAs,
       detail: detail,
       format: format,
-      children: children
+      children: children,
     }
-  }
+  },
 }

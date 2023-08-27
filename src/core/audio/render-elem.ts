@@ -14,8 +14,8 @@ export default {
         {
           props: { contentEditable: false },
           style: {
-            backgroundColor: 'var(--ssml-audio)'
-          }
+            backgroundColor: 'var(--ssml-audio)',
+          },
         },
         [
           h(`span.iconfont.icon-roundclosefill`, {
@@ -25,20 +25,20 @@ export default {
                 audioPlayer.stop(src)
                 const path = DomEditor.findPath(editor, elem)
                 SlateTransforms.delete(editor, { at: path })
-              })
-            }
+              }),
+            },
           }),
           h(`span.iconfont.icon-play`, {
             on: {
               click: throttle((event: Event) => {
                 event.preventDefault()
                 audioPlayer.play(src)
-              })
-            }
+              }),
+            },
           }),
-          h(`span.data-content`, { attrs: { 'data-content': remark } })
-        ]
-      )
+          h(`span.data-content`, { attrs: { 'data-content': remark } }),
+        ],
+      ),
     ])
-  }
+  },
 }

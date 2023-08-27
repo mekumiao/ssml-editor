@@ -90,7 +90,7 @@ const [node] = SlateEditor.nodes(editor, {
   match: (n) => {
     const type = DomEditor.getNodeType(n)
     return type === 'table'
-  }
+  },
 })
 
 // 根据type查找node

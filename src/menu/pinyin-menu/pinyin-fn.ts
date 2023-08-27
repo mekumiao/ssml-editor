@@ -45,7 +45,7 @@ export class PinyinFn extends BaseFn {
       alphabet: 'sapi',
       ph: opt.value,
       remark: opt.label,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
     SlateTransforms.insertNodes(this.editor, node)

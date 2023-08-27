@@ -12,5 +12,5 @@ export default {
           data-ow-level="${level}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

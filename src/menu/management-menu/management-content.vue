@@ -38,7 +38,7 @@ dataListType.value = [
   { label: '收藏', value: '4' },
   { label: '我的', value: '5' },
   { label: 'SVIP', value: '6' },
-  { label: '付费', value: '7' }
+  { label: '付费', value: '7' },
 ]
 
 dataListSpeaker.value = dataListType.value

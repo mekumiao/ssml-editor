@@ -12,5 +12,5 @@ export default {
           data-ow-alias="${alias}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

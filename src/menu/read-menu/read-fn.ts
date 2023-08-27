@@ -31,7 +31,7 @@ export class ReadFn extends BaseFn {
     const node: Prosody = {
       type: 'ssml-prosody',
       remark: opt.label,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
     switch (opt.value) {

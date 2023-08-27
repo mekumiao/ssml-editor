@@ -12,7 +12,7 @@ const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
 
 const { position } = useDraggable(dragRef, {
-  initialValue: props.initialValue
+  initialValue: props.initialValue,
 })
 const { style } = constrainDragBounds(boxRef, position)
 
@@ -21,7 +21,7 @@ function setPosition(opt: Position) {
 }
 
 defineExpose({
-  setPosition
+  setPosition,
 })
 
 onMounted(() => {

@@ -16,7 +16,7 @@ const ssml = computed(() => {
     indentation: '    ',
     filter: (node) => node.type !== 'Comment',
     collapseContent: false,
-    lineSeparator: '\n'
+    lineSeparator: '\n',
   })
 })
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 withDefaults(defineProps<{ name: string; img?: string }>(), {
-  img: 'https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png'
+  img: 'https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png',
 })
 </script>
 

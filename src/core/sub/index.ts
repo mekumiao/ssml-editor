@@ -10,5 +10,5 @@ export default {
   editorPlugin: plugin,
   renderElems: [renderElemConf],
   elemsToHtml: [elemToHtmlConf],
-  parseElemHtml: [parseElemHtmlConf]
+  parseElemHtml: [parseElemHtmlConf],
 } as Partial<IModuleConf>

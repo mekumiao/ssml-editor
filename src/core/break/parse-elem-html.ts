@@ -11,7 +11,7 @@ export default {
       remark: remark,
       time: time,
       strength: strength as any,
-      children: [{ text: '' }]
+      children: [{ text: '' }],
     }
-  }
+  },
 }

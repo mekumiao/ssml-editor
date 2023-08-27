@@ -11,7 +11,7 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
     'xmlns:mstts': 'http://www.w3.org/2001/mstts',
     'xmlns:emo': 'http://www.w3.org/2009/10/emotionml',
     remark: '',
-    children: []
+    children: [],
   })
 
   const rootVoice = shallowReactive<Voice>({
@@ -19,14 +19,14 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
     type: 'ssml-voice',
     remark: 'Xiaomo-晓墨',
     effect: '',
-    children: []
+    children: [],
   })
 
   const rootBackgroundaudio = shallowReactive<MsttsBackgroundaudio>({
     type: 'ssml-mstts:backgroundaudio',
     src: '',
     remark: '',
-    children: []
+    children: [],
   })
 
   const rootExpressAs = shallowReactive<MsttsExpressAs>({
@@ -34,7 +34,7 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
     style: '',
     role: '',
     remark: '',
-    children: []
+    children: [],
   })
 
   return { rootSpeak, rootVoice, rootBackgroundaudio, rootExpressAs }

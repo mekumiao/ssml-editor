@@ -26,5 +26,5 @@ export default {
     app.use(EditorComponentsPlugin)
     app.use(EditorMenuPlugin)
     app.use(EditorView)
-  }
+  },
 } as Plugin

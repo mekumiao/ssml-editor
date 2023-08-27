@@ -33,7 +33,7 @@ export default {
     app.component('ManagementMenu', ManagementMenu)
     app.component('ConversionMenu', ConversionMenu)
     app.component('TryPlay', TryPlay)
-  }
+  },
 } as Plugin
 
 export {
@@ -51,7 +51,7 @@ export {
   SensitiveMenu,
   ManagementMenu,
   ConversionMenu,
-  TryPlay
+  TryPlay,
 }
 
 import './style.scss'

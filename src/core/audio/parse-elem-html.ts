@@ -10,7 +10,7 @@ export default {
       type: 'ssml-audio',
       src: src,
       remark: remark,
-      children: children
+      children: children,
     }
-  }
+  },
 }

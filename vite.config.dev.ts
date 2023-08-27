@@ -10,8 +10,8 @@ export default function (): UserConfig {
     plugins: [vue(), vueJsx(), ElementPlus({})],
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src')
-      }
-    }
+        '@': resolve(__dirname, 'src'),
+      },
+    },
   }
 }

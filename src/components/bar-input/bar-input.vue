@@ -18,7 +18,7 @@ function handleSubmit() {
 }
 
 defineExpose({
-  focus
+  focus,
 })
 </script>
 

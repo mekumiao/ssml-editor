@@ -49,7 +49,7 @@ async function handleFetchData() {
     search: searchInput.value,
     menuKey: menuKey.value,
     scene: sceneSelect.value,
-    style: styleSelect.value
+    style: styleSelect.value,
   })
 }
 

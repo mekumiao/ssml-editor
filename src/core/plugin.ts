@@ -9,7 +9,7 @@ export default <T extends IDomEditor>(editor: T) => {
     normalizeNode,
     insertText,
     insertData,
-    setFragmentData
+    setFragmentData,
   } = editor
   const newEditor = editor
 

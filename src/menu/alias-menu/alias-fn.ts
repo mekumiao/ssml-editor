@@ -35,7 +35,7 @@ export class AliasFn extends BaseFn {
       type: 'ssml-sub',
       remark: opt.value,
       alias: opt.value,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
     SlateTransforms.insertNodes(this.editor, node)

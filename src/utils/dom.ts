@@ -15,7 +15,7 @@ import $, {
   click,
   off,
   is,
-  parents
+  parents,
 } from 'dom7'
 
 if (hide) $.fn.hide = hide

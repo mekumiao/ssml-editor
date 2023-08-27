@@ -13,5 +13,5 @@ export default {
           data-ow-effect="${effect}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

@@ -7,5 +7,5 @@ export default {
   fetchPinyin: pinyin,
   fetchEnglish: english,
   fetchBgm: bgm,
-  fetchSpecial: special
+  fetchSpecial: special,
 } as SSMLEditorConfig

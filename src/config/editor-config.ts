@@ -38,6 +38,6 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     fetchSpecial,
     speed,
     pitch,
-    demoAvatar
+    demoAvatar,
   }
 }

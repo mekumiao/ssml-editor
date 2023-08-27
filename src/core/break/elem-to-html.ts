@@ -14,5 +14,5 @@ export default {
           data-ow-strength="${strength}"
         ></span>`
     return html
-  }
+  },
 }

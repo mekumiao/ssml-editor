@@ -9,7 +9,7 @@ const props = withDefaults(
     icon: string
     disabled?: boolean
   }>(),
-  { disabled: false }
+  { disabled: false },
 )
 
 const handleClick = () => {

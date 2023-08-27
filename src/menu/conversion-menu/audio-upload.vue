@@ -30,7 +30,7 @@ function inputFile() {
 }
 
 defineExpose({
-  inputFile
+  inputFile,
 })
 </script>
 

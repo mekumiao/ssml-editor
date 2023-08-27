@@ -31,5 +31,5 @@ export const rates: LabelValue[] = [
   { value: '1.85', label: '1.85x' },
   { value: '1.9', label: '1.9x' },
   { value: '1.95', label: '1.95x' },
-  { value: '2', label: '2x' }
+  { value: '2', label: '2x' },
 ]

@@ -19,7 +19,7 @@ const { x, y, height } = useElementBounding(menuRef)
 const handleClick = (editor: IDomEditor) => {
   const pot = {
     x: x.value - 200,
-    y: y.value + height.value
+    y: y.value + height.value,
   }
   edirorRef.value = editor
   dragRef.value.setPosition(pot)

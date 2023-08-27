@@ -22,7 +22,7 @@ function scrollIntoViewTheItem() {
 }
 
 defineExpose({
-  scrollIntoViewTheItem
+  scrollIntoViewTheItem,
 })
 </script>
 

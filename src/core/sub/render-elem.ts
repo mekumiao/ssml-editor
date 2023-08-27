@@ -13,8 +13,8 @@ export default {
         {
           props: { contentEditable: false },
           style: {
-            backgroundColor: 'var(--ssml-sub)'
-          }
+            backgroundColor: 'var(--ssml-sub)',
+          },
         },
         [
           h(`span.iconfont.icon-roundclosefill`, {
@@ -23,21 +23,21 @@ export default {
                 event.preventDefault()
                 const path = DomEditor.findPath(editor, elem)
                 SlateTransforms.unwrapNodes(editor, { at: path })
-              })
-            }
+              }),
+            },
           }),
-          h(`span.data-content`, { attrs: { 'data-content': remark } })
-        ]
+          h(`span.data-content`, { attrs: { 'data-content': remark } }),
+        ],
       ),
       h(`span.data-content`, {
         attrs: { 'data-content': '{{' },
-        style: { color: `var(--ssml-sub)` }
+        style: { color: `var(--ssml-sub)` },
       }),
       h('span', children),
       h(`span.data-content`, {
         attrs: { 'data-content': '}}' },
-        style: { color: 'var(--ssml-sub)' }
-      })
+        style: { color: 'var(--ssml-sub)' },
+      }),
     ])
-  }
+  },
 }

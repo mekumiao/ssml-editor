@@ -31,7 +31,7 @@ export default {
     Boot.registerModule(VoiceModule)
     // 全局插件
     Boot.registerPlugin(plugin)
-  }
+  },
 }
 
 import './style.scss'

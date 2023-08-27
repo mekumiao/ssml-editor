@@ -11,5 +11,5 @@ export default {
           data-ow-remark="${remark}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

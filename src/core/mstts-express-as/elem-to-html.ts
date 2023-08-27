@@ -14,5 +14,5 @@ export default {
           data-ow-role="${role}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

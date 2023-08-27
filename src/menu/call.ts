@@ -7,7 +7,7 @@ export function call<T extends SSMLBaseElement>(
   editor: IDomEditor,
   type: T['type'],
   domId: string,
-  callback: (node: NodeEntry<T>) => void
+  callback: (node: NodeEntry<T>) => void,
 ) {
   const nodeEntity = findByDomId<T>(editor, type, domId)
   return nodeEntity && callback(nodeEntity)

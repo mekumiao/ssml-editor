@@ -14,5 +14,5 @@ export default {
           data-ow-format="${format}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

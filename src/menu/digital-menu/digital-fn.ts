@@ -41,7 +41,7 @@ export class DigitalFn extends BaseFn {
       type: 'ssml-say-as',
       interpretAs: opt.value,
       remark: opt.label,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
     SlateTransforms.delete(this.editor)

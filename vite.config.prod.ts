@@ -15,7 +15,7 @@ export default function (): UserConfig {
       ElementPlus({}),
       dts({
         exclude: ['example/**', 'node_modules/**'],
-        insertTypesEntry: true
+        insertTypesEntry: true,
       }),
       typescript2({
         check: false,
@@ -25,22 +25,22 @@ export default function (): UserConfig {
             outDir: 'dist',
             sourceMap: true,
             declaration: true,
-            declarationMap: true
-          }
+            declarationMap: true,
+          },
         },
-        exclude: ['vite.config.ts', 'vite.config.dev.ts', 'vite.config.prod.ts']
-      })
+        exclude: ['vite.config.ts', 'vite.config.dev.ts', 'vite.config.prod.ts'],
+      }),
     ],
     build: {
       lib: {
         entry: 'src/index.ts',
         name: 'SSMLEditor',
         formats: ['es', 'cjs', 'umd'],
-        fileName: (format) => `index.${format}.js`
+        fileName: (format) => `index.${format}.js`,
       },
       rollupOptions: {
         input: {
-          main: resolve(__dirname, 'src/index.ts')
+          main: resolve(__dirname, 'src/index.ts'),
         },
         external: ['vue', '@wangeditor/editor', 'element-plus', '@element-plus/icons-vue'],
         output: {
@@ -49,15 +49,15 @@ export default function (): UserConfig {
             vue: 'Vue',
             '@wangeditor/editor': 'wangEditor',
             'element-plus': 'ElementPlus',
-            '@element-plus/icons-vue': 'ElementPlusIconsVue'
-          }
-        }
-      }
+            '@element-plus/icons-vue': 'ElementPlusIconsVue',
+          },
+        },
+      },
     },
     resolve: {
       alias: {
-        '@': resolve(__dirname, 'src')
-      }
-    }
+        '@': resolve(__dirname, 'src'),
+      },
+    },
   }
 }
