@@ -22,3 +22,13 @@ export async function special(filter: BarSearchFilter): Promise<LabelValue[]> {
   const resp = await axios.get('/special', { params: { ...filter } })
   return resp.data
 }
+
+export async function scene(): Promise<LabelValue[]> {
+  const resp = await axios.get('/scene')
+  return resp.data
+}
+
+export async function style(): Promise<LabelValue[]> {
+  const resp = await axios.get('/style')
+  return resp.data
+}

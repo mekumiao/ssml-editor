@@ -36,3 +36,21 @@ mock.onGet('/special').reply((config) => {
     .filter((v) => v.style.includes(filter.style))
   return [200, data]
 })
+
+mock.onGet('/scene').reply(() => {
+  const data = [
+    { label: '默认场景', value: '' },
+    { label: '场景1', value: '1' },
+    { label: '场景2', value: '2' },
+  ]
+  return [200, data]
+})
+
+mock.onGet('/style').reply(() => {
+  const data = [
+    { label: '默认风格', value: '' },
+    { label: '风格1', value: '1' },
+    { label: '风格2', value: '2' },
+  ]
+  return [200, data]
+})

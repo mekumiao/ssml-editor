@@ -4,29 +4,30 @@ import { onMounted, ref, toRaw, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
 import type { LabelValue } from '@/model'
-import type { BarSearchMenuKey, BarSearchMenuItemLabel } from './data'
+import type { BarSearchMenuKey, BarSearchMenuItemLabel, BarSearchFilter } from './data'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
 const props = defineProps<{
   menuItemLabel: BarSearchMenuItemLabel
-  scenes: LabelValue[]
-  styles: LabelValue[]
+  fetchScene: () => Promise<LabelValue[]>
+  fetchStyle: () => Promise<LabelValue[]>
+  fetchData: (filter: BarSearchFilter) => Promise<LabelValue[]>
+  sceneList?: LabelValue[]
+  styleList?: LabelValue[]
   dataList?: LabelValue[]
-  fetch: (filter: {
-    search: string
-    menuKey: BarSearchMenuKey
-    scene: string
-    style: string
-  }) => Promise<{ value: string; label: string }[]>
 }>()
 
 const searchInputRef = ref<HTMLElement>()
 const searchInput = ref('')
 const sceneSelect = ref('')
 const styleSelect = ref('')
-const dataListRef = ref<LabelValue[]>(props.dataList || [])
+
 const menuKey = ref<BarSearchMenuKey>('default')
+
+const dataListCache = ref<LabelValue[]>(props.dataList || [])
+const sceneListCache = ref<LabelValue[]>(props.sceneList || [])
+const styleListCache = ref<LabelValue[]>(props.styleList || [])
 
 const isVisible = useElementVisibility(searchInputRef)
 
@@ -39,11 +40,13 @@ watch(isVisible, (newValue) => {
 })
 
 onMounted(async () => {
-  if (!dataListRef.value.length) await handleFetchData()
+  if (!dataListCache.value.length) await handleFetchData()
+  if (!sceneListCache.value.length) sceneListCache.value = await props.fetchScene()
+  if (!styleListCache.value.length) styleListCache.value = await props.fetchStyle()
 })
 
 async function handleFetchData() {
-  dataListRef.value = await props.fetch({
+  dataListCache.value = await props.fetchData({
     search: searchInput.value,
     menuKey: menuKey.value,
     scene: sceneSelect.value,
@@ -87,7 +90,7 @@ function handleSubmit(value: LabelValue) {
     <div class="flex flex-row pt-1">
       <ElSelect v-model="sceneSelect" @change="handleFetchData" class="m-1" size="default">
         <ElOption
-          v-for="item in scenes"
+          v-for="item in sceneListCache"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -95,7 +98,7 @@ function handleSubmit(value: LabelValue) {
       </ElSelect>
       <ElSelect v-model="styleSelect" @change="handleFetchData" class="m-1" size="default">
         <ElOption
-          v-for="item in styles"
+          v-for="item in styleListCache"
           :key="item.value"
           :label="item.label"
           :value="item.value"
@@ -106,7 +109,7 @@ function handleSubmit(value: LabelValue) {
       <li
         @click="handleSubmit(toRaw(item))"
         class="content-list-item clickable ps-2 py-2"
-        v-for="(item, index) in dataListRef"
+        v-for="(item, index) in dataListCache"
         :key="index"
       >
         <span class="iconfont icon-play"></span>

@@ -29,7 +29,7 @@ export default defineComponent({
       if (fn.value?.isDisabled()) return
       const text = fn.value.getValue()
       if (text) {
-        pyList.value = await globalEditConfig.fetchPinyin(text)
+        pyList.value = await globalEditConfig.pinyin.fetchData(text)
       } else {
         pyList.value = []
       }

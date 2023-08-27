@@ -1,7 +1,7 @@
 import type { LabelValue } from '@/model'
 import { speed, pitch, demoAvatar } from './data'
 import type { IEditorConfig } from '@wangeditor/editor'
-import type { BarSearchFilter } from '@/components/bar-search'
+import type { BarSearchFilter, BarSearchMenuItemLabel } from '@/components/bar-search'
 
 type FetahFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetahFunction = (filter: BarSearchFilter) => Promise<LabelValue[]>
@@ -15,27 +15,54 @@ export type GlobalEditorConfig = ReturnType<typeof createGlobalEditorConfig>
 export interface SSMLEditorConfig {
   editorConfig?: IEditorConfig
   handleError: (error: string) => void
-  fetchPinyin: FetahFunction
-  fetchEnglish: FetahFunction
-  fetchBgm: FilterFetahFunction
-  fetchSpecial: FilterFetahFunction
+  pinyin: {
+    fetchData: FetahFunction
+  }
+  english: {
+    fetchData: FetahFunction
+  }
+  bgm: {
+    menuItemLabel?: BarSearchMenuItemLabel
+    fetchScene: () => Promise<LabelValue[]>
+    fetchStyle: () => Promise<LabelValue[]>
+    fetchData: FilterFetahFunction
+  }
+  special: {
+    menuItemLabel?: BarSearchMenuItemLabel
+    fetchScene: () => Promise<LabelValue[]>
+    fetchStyle: () => Promise<LabelValue[]>
+    fetchData: FilterFetahFunction
+  }
 }
 
 export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
   const editorConfig = config?.editorConfig || { maxLength: 5000, placeholder: '请输入内容...' }
   const handleError = config?.handleError || (() => {})
-  const fetchPinyin = config?.fetchPinyin || resolveList<LabelValue>()
-  const fetchEnglish = config?.fetchPinyin || resolveList<LabelValue>()
-  const fetchBgm: FilterFetahFunction = config?.fetchBgm || resolveList<LabelValue>()
-  const fetchSpecial: FilterFetahFunction = config?.fetchSpecial || resolveList<LabelValue>()
+  const pinyin = config?.pinyin || { fetchData: resolveList<LabelValue>() }
+  const english = config?.english || { fetchData: resolveList<LabelValue>() }
+  const special = config?.special || {
+    fetchData: resolveList<LabelValue>(),
+    fetchScene: resolveList<LabelValue>(),
+    fetchStyle: resolveList<LabelValue>(),
+  }
+  const bgm = config?.bgm || {
+    fetchData: resolveList<LabelValue>(),
+    fetchScene: resolveList<LabelValue>(),
+    fetchStyle: resolveList<LabelValue>(),
+  }
+  special.menuItemLabel ??= { default: '默认音效', custom: '自定义音效', history: '最近音效' }
+  bgm.menuItemLabel ??= { default: '默认配乐', custom: '自定义配乐', history: '最近配乐' }
+
+  const specialRequired = special as Required<SSMLEditorConfig['special']>
+  const bgmRequired = bgm as Required<SSMLEditorConfig['bgm']>
 
   return {
     editorConfig,
     handleError,
-    fetchPinyin,
-    fetchEnglish,
-    fetchBgm,
-    fetchSpecial,
+    pinyin,
+    english,
+    bgm: bgmRequired,
+    special: specialRequired,
     speed,
     pitch,
     demoAvatar,

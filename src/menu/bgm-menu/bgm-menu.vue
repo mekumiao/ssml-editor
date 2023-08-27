@@ -6,31 +6,14 @@ import { useElementBounding } from '@vueuse/core'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
 import { useEditorStore, useSSMLStore } from '@/stores'
-import type { BarSearchMenuItemLabel } from '@/components/bar-search'
 
 const dragRef = ref()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
+const { globalEditConfig } = useEditorStore()
+const { bgm } = globalEditConfig
 
 const visible = ref(false)
-
-const { globalEditConfig } = useEditorStore()
-
-const menuItemLabel: BarSearchMenuItemLabel = {
-  default: '默认配乐',
-  custom: '自定义配乐',
-  history: '最近配乐',
-}
-const scenes = [
-  { value: '', label: '全部场景' },
-  { value: '2', label: '场景2' },
-  { value: '3', label: '场景3' },
-] as LabelValue[]
-const styles = [
-  { value: '', label: '全部风格' },
-  { value: '2', label: '风格2' },
-  { value: '3', label: '风格3' },
-] as LabelValue[]
 
 const { x, y, height } = useElementBounding(menuRef)
 
@@ -58,10 +41,10 @@ function handleSubmit(opt: LabelValue) {
       <BarButton ref="menuRef" text="配乐" icon="bgm" @click="handleClick"></BarButton>
     </template>
     <BarSearch
-      :menuItemLabel="menuItemLabel"
-      :scenes="scenes"
-      :styles="styles"
-      :fetch="globalEditConfig.fetchBgm"
+      :menuItemLabel="bgm.menuItemLabel"
+      :fetchScene="bgm.fetchScene"
+      :fetchStyle="bgm.fetchStyle"
+      :fetchData="bgm.fetchData"
       @submit="handleSubmit"
     ></BarSearch>
   </DragBox>

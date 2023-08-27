@@ -11,7 +11,7 @@ import type { S } from './s'
 import type { SayAs } from './say-as'
 import type { Sub } from './sub'
 import type { Voice } from './voice'
-import type { MsttsSilence } from '.'
+import type { MsttsSilence } from './mstts-silence'
 
 type UnionTypesMap<T extends { type: string }> = T extends any ? T['type'] : never
 

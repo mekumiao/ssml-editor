@@ -1,5 +1,11 @@
-export type BarSearchMenuKey = 'default' | 'custom' | 'history'
-export type BarSearchMenuItemLabel = { [k in BarSearchMenuKey]: string }
+export interface BarSearchMenuItemLabel {
+  default: string
+  custom: string
+  history: string
+}
+
+export type BarSearchMenuKey = keyof BarSearchMenuItemLabel
+
 export interface BarSearchFilter {
   search: string
   menuKey: BarSearchMenuKey
