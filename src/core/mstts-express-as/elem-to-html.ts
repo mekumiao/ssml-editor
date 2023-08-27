@@ -10,8 +10,8 @@ export default {
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-style="${style}"
-          data-ow-styledegree="${styledegree}"
-          data-ow-role="${role}"
+          data-ow-styledegree="${styledegree ?? ''}"
+          data-ow-role="${role ?? ''}"
         >${childrenHtml}</span>`
     return html
   },
