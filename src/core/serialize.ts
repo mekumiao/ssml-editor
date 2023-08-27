@@ -109,7 +109,7 @@ export function serializeSpeak(node: Speak, children: string) {
   xmlns="${node.xmlns}"
   xmlns:mstts="${node['xmlns:mstts']}"
   xmlns:emo="${node['xmlns:emo']}"
-  >${children}</speak>`
+  >${children}</speak>`.replaceAll(/[\r\n]/g, '')
 }
 
 export function serializeNode(node: SlateNode): string {
