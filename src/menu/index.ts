@@ -16,7 +16,7 @@ import { ManagementMenu } from './management-menu'
 import { ConversionMenu } from './conversion-menu'
 import { TryPlay } from './try-play'
 
-export default {
+export default <Plugin>{
   install: (app: App) => {
     app.component('PinyinMenu', PinyinMenu)
     app.component('ContinuousMenu', ContinuousMenu)
@@ -34,7 +34,7 @@ export default {
     app.component('ConversionMenu', ConversionMenu)
     app.component('TryPlay', TryPlay)
   },
-} as Plugin
+}
 
 export {
   PinyinMenu,

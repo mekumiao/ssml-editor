@@ -15,7 +15,7 @@ export * from './constant'
 export * from './model'
 export * from './config'
 
-export default {
+export default <Plugin>{
   install(app: App, config?: SSMLEditorConfig) {
     app.use(createPinia())
     app.use(() => {
@@ -27,4 +27,4 @@ export default {
     app.use(EditorMenuPlugin)
     app.use(EditorView)
   },
-} as Plugin
+}

@@ -22,8 +22,7 @@ export interface SSMLEditorConfig {
 }
 
 export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
-  const editorConfig =
-    config?.editorConfig || ({ maxLength: 5000, placeholder: '请输入内容...' } as IEditorConfig)
+  const editorConfig = config?.editorConfig || { maxLength: 5000, placeholder: '请输入内容...' }
   const handleError = config?.handleError || (() => {})
   const fetchPinyin = config?.fetchPinyin || resolveList<LabelValue>()
   const fetchEnglish = config?.fetchPinyin || resolveList<LabelValue>()

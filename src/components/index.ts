@@ -7,7 +7,7 @@ import { BarSearch } from './bar-search'
 import { BarWrapper, BarWrapperItem, BarWrapperGroup } from './bar-wrapper'
 import { DragBox, constrainDragBounds } from './drag-box'
 
-export default {
+export default <Plugin>{
   install(app: App) {
     app.component('BarButton', BarButton)
     app.component('BarInput', BarInput)
@@ -18,7 +18,7 @@ export default {
     app.component('BarWrapperGroup', BarWrapperGroup)
     app.component('DragBox', DragBox)
   },
-} as Plugin
+}
 
 export {
   BarButton,

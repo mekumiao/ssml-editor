@@ -6,9 +6,9 @@ import parseElemHtmlConf from './parse-elem-html'
 
 export * from './custom-types'
 
-export default {
+export default <Partial<IModuleConf>>{
   editorPlugin: plugin,
   renderElems: [renderElemConf],
   elemsToHtml: [elemToHtmlConf],
   parseElemHtml: [parseElemHtmlConf],
-} as Partial<IModuleConf>
+}
