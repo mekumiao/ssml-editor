@@ -2,8 +2,7 @@
 import { ref } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
-
-const src = ref<string>(`https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png`)
+import { demoAvatar } from '@/config'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
@@ -51,7 +50,7 @@ function isClick(x: number, y: number) {
     @mouseup="handleMouseup"
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <img :src="src" class="rounded-circle" />
+      <img :src="demoAvatar()" class="rounded-circle" />
       <div class="anchor-avatar-name text-white">莫厚渊</div>
     </div>
   </div>

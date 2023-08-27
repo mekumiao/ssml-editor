@@ -1,5 +1,4 @@
 import type { LabelValue } from '@/model'
-import { speed, pitch, demoAvatar } from './data'
 import type { IEditorConfig } from '@wangeditor/editor'
 import type { BarSearchFilter, BarSearchMenuItemLabel } from '@/components/bar-search'
 
@@ -63,8 +62,5 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     english,
     bgm: bgmRequired,
     special: specialRequired,
-    speed,
-    pitch,
-    demoAvatar,
   }
 }

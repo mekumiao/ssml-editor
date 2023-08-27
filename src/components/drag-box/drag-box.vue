@@ -57,7 +57,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div ref="referenceRef">
+  <div ref="referenceRef" @mousedown.prevent>
     <slot name="reference"></slot>
   </div>
   <Teleport to="body">
@@ -67,9 +67,10 @@ function handleKeyDownEsc(event: KeyboardEvent) {
       class="demotestname card shadow brag-box user-select-none"
       style="position: fixed"
       :style="style"
+      @mousedown.prevent
     >
       <div class="w-100 d-flex flex-row align-items-center">
-        <div ref="dragRef" class="w-100" style="height: 40px"></div>
+        <div ref="dragRef" class="w-100" style="height: 40px; cursor: move"></div>
         <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
       </div>
       <slot></slot>
@@ -77,13 +78,4 @@ function handleKeyDownEsc(event: KeyboardEvent) {
   </Teleport>
 </template>
 
-<style lang="scss" scoped>
-.drag-box-mask {
-  background-color: rgba(229, 229, 229, 0.15);
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-}
-</style>
+<style lang="scss" scoped></style>

@@ -75,7 +75,7 @@ function searchInputFocus() {
           <div class="pe-1">
             <ElForm @submit.prevent>
               <ElInput
-                :input-style="{}"
+                :input-style="{ color: 'white' }"
                 ref="searchInputRef"
                 v-model="searchInput"
                 placeholder="输入名称搜索"

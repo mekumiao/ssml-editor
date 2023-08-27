@@ -4,7 +4,7 @@ import AnchorAvatar from './anchor-avatar.vue'
 import { reactive, ref, type CSSProperties, computed } from 'vue'
 import { formatTime } from '@/utils'
 import { Star } from '@element-plus/icons-vue'
-import { useEditorStore } from '@/stores'
+import { demoAvatar, speed as speedGetter, pitch as pitchGetter } from '@/config'
 
 interface Mark {
   style: CSSProperties
@@ -13,13 +13,11 @@ interface Mark {
 
 type Marks = Record<number, Mark | string>
 
-const { globalEditConfig } = useEditorStore()
-
 const timeMax = ref(10)
 const time = ref(0)
 
 const speedRange = ref([0, 2.0])
-const speed = ref(0)
+const speed = ref(1)
 
 const pitchRange = ref([-10, 10])
 const pitch = ref(0)
@@ -27,16 +25,16 @@ const pitch = ref(0)
 const timeMaxText = computed(() => formatTime(timeMax.value))
 const timeText = computed(() => formatTime(time.value))
 
-const speedMarks = reactive<Marks>(globalEditConfig.speed())
+const speedMarks = reactive<Marks>(speedGetter())
 
-const pitchMarks = reactive<Marks>(globalEditConfig.pitch())
+const pitchMarks = reactive<Marks>(pitchGetter())
 </script>
 
 <template>
   <div class="slider-panle w-100 px-3 text-white" style="font-size: 0.5rem">
     <div class="mt-2 row text-center justify-content-between align-items-center">
       <div class="col-auto me-auto d-flex flex-row align-items-center">
-        <img :src="globalEditConfig.demoAvatar()" class="rounded-circle" style="height: 50px" />
+        <img :src="demoAvatar()" class="rounded-circle" style="height: 50px" />
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
             <span class="fs-6">魔云猫</span>
