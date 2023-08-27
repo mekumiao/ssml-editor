@@ -4,20 +4,18 @@ import { onMounted, ref, toRaw, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
 import type { LabelValue } from '@/model'
-
-type MenuKey = 'first' | 'second' | 'last'
-type MenuItemLabel = { [k in MenuKey]: string }
+import type { BarSearchMenuKey, BarSearchMenuItemLabel } from './data'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
 const props = defineProps<{
-  menuItemLabel: MenuItemLabel
+  menuItemLabel: BarSearchMenuItemLabel
   scenes: LabelValue[]
   styles: LabelValue[]
   dataList?: LabelValue[]
   fetch: (filter: {
     search: string
-    menuKey: MenuKey
+    menuKey: BarSearchMenuKey
     scene: string
     style: string
   }) => Promise<{ value: string; label: string }[]>
@@ -28,7 +26,7 @@ const searchInput = ref('')
 const sceneSelect = ref('')
 const styleSelect = ref('')
 const dataListRef = ref<LabelValue[]>(props.dataList || [])
-const menuKey = ref<MenuKey>('first')
+const menuKey = ref<BarSearchMenuKey>('default')
 
 const isVisible = useElementVisibility(searchInputRef)
 
@@ -53,7 +51,7 @@ async function handleFetchData() {
   })
 }
 
-function handleMenuSelect(key: MenuKey) {
+function handleMenuSelect(key: BarSearchMenuKey) {
   menuKey.value = key
   handleFetchData()
 }
@@ -78,12 +76,12 @@ function handleSubmit(value: LabelValue) {
     <div class="menu ps-2">
       <ElMenu
         mode="horizontal"
-        default-active="first"
-        @select="(index: string) => handleMenuSelect(index as MenuKey)"
+        default-active="default"
+        @select="(index: string) => handleMenuSelect(index as BarSearchMenuKey)"
       >
-        <ElMenuItem index="first">{{ menuItemLabel.first }}</ElMenuItem>
-        <ElMenuItem index="second">{{ menuItemLabel.second }}</ElMenuItem>
-        <ElMenuItem index="last">{{ menuItemLabel.last }}</ElMenuItem>
+        <ElMenuItem index="default">{{ menuItemLabel.default }}</ElMenuItem>
+        <ElMenuItem index="custom">{{ menuItemLabel.custom }}</ElMenuItem>
+        <ElMenuItem index="history">{{ menuItemLabel.history }}</ElMenuItem>
       </ElMenu>
     </div>
     <div class="flex flex-row pt-1">

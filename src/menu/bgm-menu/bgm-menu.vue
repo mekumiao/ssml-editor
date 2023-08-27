@@ -6,6 +6,7 @@ import { useElementBounding } from '@vueuse/core'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
 import { useEditorStore, useSSMLStore } from '@/stores'
+import type { BarSearchMenuItemLabel } from '@/components/bar-search'
 
 const dragRef = ref()
 const menuRef = ref()
@@ -15,7 +16,11 @@ const visible = ref(false)
 
 const { globalEditConfig } = useEditorStore()
 
-const menuItemLabel = { first: '默认配乐', second: '自定义配乐', last: '最近配乐' }
+const menuItemLabel: BarSearchMenuItemLabel = {
+  default: '默认配乐',
+  custom: '自定义配乐',
+  history: '最近配乐',
+}
 const scenes = [
   { value: '', label: '全部场景' },
   { value: '2', label: '场景2' },

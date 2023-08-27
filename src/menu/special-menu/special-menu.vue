@@ -7,6 +7,7 @@ import { SpecialFn } from './special-fn'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
 import { useEditorStore } from '@/stores'
+import type { BarSearchMenuItemLabel } from '@/components/bar-search'
 
 const dragRef = ref()
 const menuRef = ref()
@@ -15,7 +16,11 @@ const { globalEditConfig } = useEditorStore()
 
 const visible = ref(false)
 
-const menuItemLabel = { first: '默认音效', second: '自定义音效', last: '最近音效' }
+const menuItemLabel: BarSearchMenuItemLabel = {
+  default: '默认音效',
+  custom: '自定义音效',
+  history: '最近音效',
+}
 const scenes = [
   { value: '', label: '全部场景' },
   { value: '2', label: '场景2' },

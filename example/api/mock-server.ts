@@ -1,7 +1,7 @@
-import type { Filter } from '@/model'
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import DataSource from './data'
+import type { BarSearchFilter } from '@/components/bar-search'
 
 const mock = new MockAdapter(axios)
 
@@ -18,7 +18,7 @@ mock.onGet('/english').reply((config) => {
 })
 
 mock.onGet('/bgm').reply((config) => {
-  const filter = config.params as Filter
+  const filter = config.params as BarSearchFilter
   const data = DataSource.audio
     .filter((v) => v.label.includes(filter.search))
     .filter((v) => v.menuKey.includes(filter.menuKey))
@@ -28,7 +28,7 @@ mock.onGet('/bgm').reply((config) => {
 })
 
 mock.onGet('/special').reply((config) => {
-  const filter = config.params as Filter
+  const filter = config.params as BarSearchFilter
   const data = DataSource.audio
     .filter((v) => v.label.includes(filter.search))
     .filter((v) => v.menuKey.includes(filter.menuKey))

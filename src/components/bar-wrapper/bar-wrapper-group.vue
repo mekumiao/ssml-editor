@@ -1,5 +1,5 @@
 <script setup lang="ts">
-type DividerColor = 'green' | 'cyan' | 'orange' | 'purple' | 'yellow'
+import type { DividerColor } from './data'
 
 defineProps<{ divider?: DividerColor }>()
 </script>
