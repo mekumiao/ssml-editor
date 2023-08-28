@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { LabelValue } from '@/model'
-import { ElInput, ElForm, ElTag, ElButton, ElSelect, ElOption } from 'element-plus'
+import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
 import { ref } from 'vue'
@@ -10,6 +10,7 @@ const showMore = ref(false)
 
 const searchInput = ref('')
 
+const selTypeRef = ref()
 const selSpeakerRef = ref()
 const selRoleRef = ref()
 const selStyleRef = ref()
@@ -46,46 +47,19 @@ dataListRole.value = dataListType.value
 dataListStyle.value = dataListType.value
 
 function handleSearch() {}
-function handleChangeType() {}
+function handleSelectType() {}
 function handleSelectSpeaker() {
   selRole.value = ''
-  scrollIntoView(selSpeakerRef)
 }
 function handleSelectRole() {
   selStyle.value = ''
-  scrollIntoView(selRoleRef)
 }
 function handleSelectStyle() {
   selSpeed.value = '1.00'
   selPitch.value = '0'
-  scrollIntoView(selStyleRef)
 }
 function handleSelectSpeed() {}
 function handleSelectPitch() {}
-
-async function scrollIntoView(without: any) {
-  console.log(without)
-  // await sleep(200)
-  // selSpeakerRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selRoleRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selStyleRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selSpeedRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selPitchRef.value.scrollIntoViewTheItem()
-
-  // if (without != selSpeakerRef.value) selSpeakerRef.value.scrollIntoViewTheItem()
-  // if (without != selRoleRef.value) selRoleRef.value.scrollIntoViewTheItem()
-  // if (without != selStyleRef.value) selStyleRef.value.scrollIntoViewTheItem()
-  // if (without != selSpeedRef.value) selSpeedRef.value.scrollIntoViewTheItem()
-  // if (without != selPitchRef.value) selPitchRef.value.scrollIntoViewTheItem()
-}
-
-// function sleep(time?: number) {
-//   return new Promise<void>((resolve) => setTimeout(() => resolve(), time ?? 0))
-// }
 </script>
 
 <template>
@@ -112,20 +86,20 @@ async function scrollIntoView(without: any) {
       </ul>
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
         <SelectList
+          @update:modelValue="handleSelectType"
+          ref="selTypeRef"
+          v-model="selType"
+          :dataList="dataListType"
+        >
+          <span class="my-3">类型</span>
+        </SelectList>
+        <SelectList
           @update:modelValue="handleSelectSpeaker"
           ref="selSpeakerRef"
           v-model="selSpeaker"
           :dataList="dataListSpeaker"
         >
-          <ElSelect @change="handleChangeType" v-model="selType">
-            <ElOption
-              v-for="(item, index) in dataListType"
-              :value="item.value"
-              :label="item.label"
-              :key="index"
-            >
-            </ElOption>
-          </ElSelect>
+          <span class="my-3">配音师</span>
         </SelectList>
         <SelectList
           @update:modelValue="handleSelectRole"
