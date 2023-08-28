@@ -37,8 +37,8 @@ function initEditor() {
   setEditor(editor)
   window.editor = editor
 
-  const config = editor.getConfig()
-  config.hoverbarKeys = undefined
+  // const config = editor.getConfig()
+  // config.hoverbarKeys = undefined
 
   editor.on(WANGEDITOR_EVENT.ERROR, globalEditConfig.handleError)
 

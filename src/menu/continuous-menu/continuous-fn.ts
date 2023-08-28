@@ -32,7 +32,7 @@ export class ContinuousFn extends BaseFn {
 
     const node: Prosody = {
       type: 'ssml-prosody',
-      rate: 'fast',
+      rate: 'medium',
       remark: '连读',
       children: [{ text: value }],
     }

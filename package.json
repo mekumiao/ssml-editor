@@ -47,6 +47,8 @@
     "axios": "^1.4.0",
     "axios-mock-adapter": "^1.21.5",
     "bootstrap": "^5.3.1",
+    "cnchar": "^3.2.4",
+    "cnchar-poly": "^3.2.4",
     "dom7": "^3.0.0",
     "element-plus": "^2.3.9",
     "eslint": "^8.45.0",
@@ -65,7 +67,8 @@
     "vite-plugin-dts": "^2.3.0",
     "vue": "^3.3.4",
     "vue-tsc": "^1.8.6",
-    "xml-formatter": "^3.5.0"
+    "xml-formatter": "^3.5.0",
+    "xml2js": "^0.6.2"
   },
   "peerDependencies": {
     "@element-plus/icons-vue": "^2.1.0",
@@ -77,6 +80,7 @@
     "element-plus": "^2.3.9",
     "pinia": "^2.1.6",
     "snabbdom": "^3.5.1",
-    "vue": "^3.3.4"
+    "vue": "^3.3.4",
+    "xml2js": "^0.6.2"
   }
 }

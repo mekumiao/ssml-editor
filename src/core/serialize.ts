@@ -74,6 +74,7 @@ function serializePhoneme(node: Phoneme, children: string) {
 }
 
 function serializeProsody(node: Prosody, children: string) {
+  if (!node.contour && !node.pitch && !node.range && !node.rate && !node.volume) return children
   const contour = node.contour ? ` contour="${node.contour}"` : ''
   const pitch = node.pitch ? ` pitch="${node.pitch}"` : ''
   const range = node.range ? ` range="${node.range}"` : ''
@@ -159,11 +160,12 @@ export function serializeNode(node: SlateNode): string {
 export function serializeToSSML() {
   const { editor } = useEditorStore()
   if (!editor) throw Error('没有找到 editor 对象')
-  const { rootSpeak, rootVoice, rootExpressAs, rootBackgroundaudio } = useSSMLStore()
+  const { rootSpeak, rootVoice, rootExpressAs, rootBackgroundaudio, rootProsody } = useSSMLStore()
   const speak = { ...rootSpeak, children: [] } as Speak
   const backgroundaudio = { ...rootBackgroundaudio } as MsttsBackgroundaudio
   const voice = { ...rootVoice, children: [] } as Voice
   const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
+  const prosody = { ...rootProsody, children: [] } as Prosody
 
   const silences: MsttsSilence[] = [
     {
@@ -193,7 +195,8 @@ export function serializeToSSML() {
   speak.children.push(voice)
   voice.children.push(...silences)
   voice.children.push(expressAs)
-  expressAs.children = editor.children
+  expressAs.children.push(prosody)
+  prosody.children = editor.children
 
   return serializeNode(speak)
 }

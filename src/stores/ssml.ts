@@ -1,4 +1,10 @@
-import { type MsttsBackgroundaudio, type MsttsExpressAs, type Speak, type Voice } from '@/core'
+import {
+  type MsttsBackgroundaudio,
+  type MsttsExpressAs,
+  type Prosody,
+  type Speak,
+  type Voice,
+} from '@/core'
 import { defineStore } from 'pinia'
 import { shallowReactive } from 'vue'
 
@@ -37,5 +43,11 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
     children: [],
   })
 
-  return { rootSpeak, rootVoice, rootBackgroundaudio, rootExpressAs }
+  const rootProsody = shallowReactive<Prosody>({
+    type: 'ssml-prosody',
+    remark: '',
+    children: [],
+  })
+
+  return { rootSpeak, rootVoice, rootBackgroundaudio, rootExpressAs, rootProsody }
 })

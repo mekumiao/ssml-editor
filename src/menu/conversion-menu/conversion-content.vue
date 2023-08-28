@@ -1,57 +1,70 @@
 <script setup lang="ts">
 import type { LabelValue } from '@/model'
 import SpeakerItem from './speaker-item.vue'
-import { ref, shallowRef } from 'vue'
-// import { Recorder } from './recorder'
-
-const inputFileRef = ref<HTMLElement>()
-
-const audioFile = ref<{ name: string; path: string }>()
-const isShowAudioUpload = ref(false)
-const isRecord = ref(false)
-const selectedFile = shallowRef()
-
-// const recorder = shallowRef<Recorder>()
+import { ref, shallowRef, watch } from 'vue'
+import { Recorder } from './recorder'
+import { FileSelector } from '@/utils'
+import { useElementVisibility } from '@vueuse/core'
+// import { useEditorStore } from '@/stores'
 
 defineEmits<{ submit: [value: LabelValue] }>()
 defineProps<{ text: string }>()
 
-function handleInputFileChange(event: Event) {
-  if (!event.target) return
-  // @ts-ignore
-  const file = event.target.files[0]
-  if (file) {
-    selectedFile.value = file
-    console.log('已选择文件:', file.name)
+const boxRef = ref<HTMLElement>()
+
+// const { globalEditConfig } = useEditorStore()
+
+const audioFile = ref<{ name: string; path: string }>()
+const isShowAudioUpload = ref(false)
+const isRecord = ref(false)
+
+const recordingFile = shallowRef<Blob>()
+const localFile = shallowRef<File>()
+
+const audioRecorder = new Recorder()
+const audioSelector = new FileSelector('audio-conversion', 'audio/*')
+
+const visible = useElementVisibility(boxRef)
+
+watch(visible, (newVlaue) => {
+  if (!newVlaue) {
+    isRecord.value = false
+    isShowAudioUpload.value = false
+  }
+})
+
+async function handleOpenRecording() {
+  isShowAudioUpload.value = true
+  isRecord.value = true
+  try {
+    recordingFile.value = await audioRecorder.open()
+  } catch (error) {
+    //
   }
 }
 
-function handleInputAudioFile() {
-  inputFileRef.value?.click()
+async function handleOpenInputFile() {
+  isShowAudioUpload.value = true
+  isRecord.value = false
+  try {
+    localFile.value = await audioSelector.open()
+    console.log(localFile.value)
+  } catch (error) {
+    //
+  }
 }
-
-function handleStartRecord() {}
-
-function handleStoprecord() {}
 </script>
 
 <template>
-  <div class="px-2 py-1" style="width: 410px">
+  <div ref="boxRef" class="px-2 py-1" style="width: 410px">
     <section>
       <p class="text-start text-danger">请在安静的环境中进行录音，以需要转换的风格，读出以下文案</p>
       <div class="border border-secondary rounded w-100" style="height: 100px">{{ text }}</div>
     </section>
     <section class="mt-2" v-show="!isShowAudioUpload">
       <div class="w-100 d-flex flex-column row-gap-1">
-        <input
-          accept="audio/*"
-          ref="inputFileRef"
-          @change="handleInputFileChange"
-          type="file"
-          hidden
-        />
-        <button class="btn btn-success">实时录音</button>
-        <button @click="handleInputAudioFile" class="btn btn-primary">上传录音</button>
+        <button @click="handleOpenRecording" class="btn btn-success">实时录音</button>
+        <button @click="handleOpenInputFile" class="btn btn-primary">上传录音</button>
       </div>
       <p class="mt-2 text-secondary" style="font-size: 0.5rem">
         录音内容需要和滑选一致，音频限制60秒，滑选文案限制60个字
@@ -76,8 +89,7 @@ function handleStoprecord() {}
           </template>
           <template>
             <span class="text-secondary" style="font-size: 0.5rem">点击开始录音</span>
-            <button @click="handleStartRecord" class="btn btn-primary">开始录音</button>
-            <button @click="handleStoprecord" class="btn btn-primary">结束录音</button>
+            <button @click="audioRecorder.stop" class="btn btn-primary">结束录音</button>
           </template>
         </div>
         <div>
