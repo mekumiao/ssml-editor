@@ -9,6 +9,8 @@ import StyleAvatar from './style-avatar.vue'
 import { formatPitch, formatRate } from './data'
 import { useEditorStore, useSSMLStore, useTryPlayStore } from '@/stores'
 import type { Speaker } from '@/model'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
 
 interface Mark {
   style: CSSProperties
@@ -75,7 +77,11 @@ function handleStyleClick(value: string) {
 
 async function handleFlagClick(value: string) {
   flag.value = value
-  speakerList.value = await fetchFlag(value)
+  try {
+    speakerList.value = await fetchFlag(value)
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, error)
+  }
 }
 
 function handleSpeakerClick(value: Speaker) {
@@ -91,7 +97,7 @@ function handleSpeakerClick(value: Speaker) {
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
             <span class="fs-6">{{ tryPlayStore.speaker.label }}</span>
-            <span style="font-size: 0.5rem">0.55x</span>
+            <span style="font-size: 0.5rem">{{ speed }}x</span>
           </div>
           <div class="d-flex flex-row column-gap-2 align-items-center">
             <ElIcon @click="handleStar" class="fs-6" :style="{ color: isStar ? 'red' : 'white' }">

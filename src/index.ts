@@ -10,6 +10,8 @@ import EditorView from './view'
 import { type SSMLEditorConfig, createGlobalEditorConfig } from './config'
 import SSMLCorePlugin from './core'
 import { useEditorStore } from './stores'
+import { emitter } from './event-bus'
+import { EMITTER_EVENT } from './constant'
 
 export * from './constant'
 export * from './model'
@@ -20,7 +22,9 @@ export default <Plugin>{
     app.use(createPinia())
     app.use(() => {
       const { setGlobalEditConfig } = useEditorStore()
-      setGlobalEditConfig(createGlobalEditorConfig(config))
+      const globalEditorConfig = createGlobalEditorConfig(config)
+      setGlobalEditConfig(globalEditorConfig)
+      emitter.on(EMITTER_EVENT.ERROR, globalEditorConfig.handleError)
     })
     app.use(SSMLCorePlugin)
     app.use(EditorComponentsPlugin)
