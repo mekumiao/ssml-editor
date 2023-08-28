@@ -5,6 +5,8 @@ import type { BarSearchFilter } from '@/components/bar-search'
 import cnchar from 'cnchar'
 import 'cnchar-poly'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
+import voices from './voices'
+import { getStyleDes, getRoleDes } from './emoji-config'
 
 const mock = new MockAdapter(axios)
 
@@ -68,22 +70,26 @@ mock.onGet('/tag').reply(() => {
 
 mock.onGet('/speaker').reply((config) => {
   const filter = config.params as FilterSpeaker
-  const data = DataSource.speaker.children
-    .filter((v) => v.name.includes(filter.word))
-    .filter((v) => v.tags.includes(filter.tag))
-    .filter((v) => v.category.includes(filter.category))
+  const data = voices
+    .filter((v) => v.LocalName.includes(filter.word))
     .filter((v) => v.gender.includes(filter.gender))
     .map(
-      (v, i) =>
+      (v) =>
         <Speaker>{
-          label: v.remark,
-          value: i === 0 ? v.name : `${v.name}${i}`,
+          label: v.LocalName,
+          value: v.name,
           isFree: false,
           isStar: false,
           isSupper24K: true,
           avatar: '',
-          roles: v.roles.map((n) => ({ label: n.remark, value: n.name })),
-          styles: v.styles.map((n) => ({ label: n.remark, value: n.name })),
+          roles: v.VoiceRoleNames.split(',').map((n) => {
+            const des = getRoleDes(n)
+            return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+          }),
+          styles: v.VoiceStyleNames.split(',').map((n) => {
+            const des = getStyleDes(n)
+            return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+          }),
         },
     )
   return [200, data]
@@ -91,29 +97,45 @@ mock.onGet('/speaker').reply((config) => {
 
 mock.onGet('/star').reply((config) => {
   const { speaker, star } = config.params
-  const [child] = DataSource.speaker.children.filter((v) => v.name === speaker)
+  const [child] = voices.filter((v) => v.name === speaker)
   if (child) {
-    child.isStar = star
-    return [200, child.isStar]
+    return [200, star]
   }
   return [404]
 })
 
 mock.onGet('/flag').reply((config) => {
   const { flag } = config.params
-  const list = DataSource.speaker.children.map(
-    (v, i) =>
+  const list = voices.map(
+    (v) =>
       <Speaker>{
-        label: v.remark,
-        value: i === 0 ? v.name : `${v.name}${i}`,
+        label: v.LocalName,
+        value: v.name,
         isFree: false,
         isStar: false,
         isSupper24K: true,
         avatar: '',
-        roles: v.roles.map((n) => ({ label: n.remark, value: n.name })),
-        styles: v.styles.map((n) => ({ label: n.remark, value: n.name })),
+        roles: v.VoiceRoleNames.split(',').map((n) => {
+          const des = getRoleDes(n)
+          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+        }),
+        styles: v.VoiceStyleNames.split(',').map((n) => {
+          const des = getStyleDes(n)
+          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+        }),
       },
   )
-  const data = flag === '收藏' ? list.filter((v) => v.isStar) : list
-  return [200, data]
+  if (flag === '') {
+    return [200, list.slice(0, 5)]
+  }
+  if (flag === '已购') {
+    return [200, list.slice(5, 10)]
+  }
+  if (flag === '收藏') {
+    return [200, list.slice(10, 15)]
+  }
+  if (flag === '我的') {
+    return [200, list.slice(15, 20)]
+  }
+  return [200, list]
 })

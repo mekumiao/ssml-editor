@@ -20,7 +20,7 @@ interface Mark {
 type Marks = Record<number, Mark | string>
 
 const { globalEditConfig } = useEditorStore()
-const { rootProsody, rootExpressAs } = useSSMLStore()
+const { rootProsody, rootExpressAs, rootVoice } = useSSMLStore()
 const { fetchStar, flags, fetchFlag } = globalEditConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
@@ -85,6 +85,7 @@ async function handleFlagClick(value: string) {
 }
 
 function handleSpeakerClick(value: Speaker) {
+  rootVoice.name = value.value
   tryPlayStore.setSpeaker(toRaw(value))
 }
 </script>

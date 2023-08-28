@@ -5,8 +5,8 @@ export interface Speaker extends LabelValue {
   isFree: boolean
   isStar: boolean
   isSupper24K: boolean
-  roles: LabelValue[]
-  styles: (LabelValue & { avatar: string })[]
+  roles: (LabelValue & { avatar?: string; emoji?: string })[]
+  styles: (LabelValue & { avatar?: string; emoji?: string })[]
 }
 
 export function defaultSpeaker(): Speaker {

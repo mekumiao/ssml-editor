@@ -85,8 +85,8 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
 
   tryPlayRequired.gender ??= [
     { label: '全部', value: '' },
-    { label: '男声', value: '男' },
-    { label: '女声', value: '女' },
+    { label: '男声', value: 'Male' },
+    { label: '女声', value: 'Female' },
   ]
 
   tryPlayRequired.category ??= [
@@ -96,7 +96,7 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
   ]
 
   tryPlayRequired.flags ??= [
-    { label: '常用', value: '常用' },
+    { label: '常用', value: '' },
     { label: '已购', value: '已购' },
     { label: '收藏', value: '收藏' },
     { label: '我的', value: '我的' },
