@@ -40,7 +40,7 @@ export default {
     shade: [{ label: 'ˈʃeɪd', value: 'ˈʃeɪd' }],
     choice: [{ label: 'ˈʧɔɪs', value: 'ˈʧɔɪs' }],
     boat: [{ label: 'ˈboʊt', value: 'ˈboʊt' }],
-  } as Record<string, { label: string; value: string }[] | undefined>,
+  },
   audio: [
     {
       label: '打鼓背景音',
@@ -64,4 +64,62 @@ export default {
       menuKey: 'default',
     },
   ],
+  speaker: {
+    gender: [
+      { label: '男声', value: '男' },
+      { label: '女声', value: '女' },
+    ],
+    category: [
+      { label: '热榜', value: '热榜' },
+      { label: 'SVIP', value: 'SVIP' },
+      { label: '付费', value: '付费' },
+    ],
+    tags: [
+      { label: '影视', value: '影视' },
+      { label: '情感', value: '情感' },
+      { label: '娱乐', value: '娱乐' },
+      { label: '广告', value: '广告' },
+      { label: '纪录片', value: '纪录片' },
+      { label: '宣传片', value: '宣传片' },
+    ],
+    children: [
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: ['影视', '情感'],
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+    ],
+  },
 }

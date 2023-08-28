@@ -4,6 +4,7 @@ import DataSource from './data'
 import type { BarSearchFilter } from '@/components/bar-search'
 import cnchar from 'cnchar'
 import 'cnchar-poly'
+import type { LabelValue } from '@/model'
 
 const mock = new MockAdapter(axios)
 
@@ -18,8 +19,8 @@ mock.onGet('/pinyin').reply((config) => {
 })
 
 mock.onGet('/english').reply((config) => {
-  const word = config.params.word
-  const data = DataSource.english[word] ?? []
+  const word = config.params.word as string
+  const data = (DataSource.english as Record<string, LabelValue[]>)[word] ?? []
   return [200, data]
 })
 
