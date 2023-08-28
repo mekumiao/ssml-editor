@@ -47,40 +47,38 @@ export default {
       value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1415_dhol-drums-01.wav',
       scene: '',
       style: '',
-      menuKey: 'default',
+      menu: '',
     },
     {
       label: '拨号背景音',
       value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1378_dial-up-modem-01.wav',
       scene: '',
       style: '',
-      menuKey: 'default',
+      menu: '',
     },
     {
       label: '咕噜咕噜音效',
       value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1814_water-bubbles-01.wav',
       scene: '',
       style: '',
-      menuKey: 'default',
+      menu: '',
     },
   ],
   speaker: {
-    gender: [
-      { label: '男声', value: '男' },
-      { label: '女声', value: '女' },
-    ],
-    category: [
-      { label: '热榜', value: '热榜' },
-      { label: 'SVIP', value: 'SVIP' },
-      { label: '付费', value: '付费' },
-    ],
     tags: [
+      { label: '全部', value: '' },
       { label: '影视', value: '影视' },
       { label: '情感', value: '情感' },
       { label: '娱乐', value: '娱乐' },
       { label: '广告', value: '广告' },
       { label: '纪录片', value: '纪录片' },
       { label: '宣传片', value: '宣传片' },
+      { label: '影视', value: '影视1' },
+      { label: '情感', value: '情感1' },
+      { label: '娱乐', value: '娱乐1' },
+      { label: '广告', value: '广告1' },
+      { label: '纪录片', value: '纪录片1' },
+      { label: '宣传片', value: '宣传片1' },
     ],
     children: [
       {
@@ -88,7 +86,229 @@ export default {
         isSupport24k: true,
         isStar: true,
         category: '热榜,SVIP,付费',
-        tags: ['影视', '情感'],
+        tags: '影视,情感',
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: '影视,情感',
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: '影视,情感',
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: '影视,情感',
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: '影视,情感',
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: '影视,情感',
+        name: 'zh-CN-XiaomoNeural',
+        remark: 'Xiaomo-晓墨',
+        styles: [
+          {
+            name: 'embarrassed',
+            remark: '尴尬',
+          },
+          {
+            name: 'calm',
+            remark: '冷静',
+          },
+          {
+            name: 'serious',
+            remark: '严肃',
+          },
+        ],
+        roles: [
+          {
+            name: 'YoungAdultFemale',
+            remark: '女青年',
+          },
+          {
+            name: 'YoungAdultMale',
+            remark: '男青年',
+          },
+          {
+            name: 'Boy',
+            remark: '男孩',
+          },
+        ],
+      },
+      {
+        gender: '女,男',
+        isSupport24k: true,
+        isStar: true,
+        category: '热榜,SVIP,付费',
+        tags: '影视,情感',
         name: 'zh-CN-XiaomoNeural',
         remark: 'Xiaomo-晓墨',
         styles: [

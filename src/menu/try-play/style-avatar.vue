@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { demoAvatar } from '@/config'
-import type { AnchorAvatarData } from './data'
+import type { StyleAvatarData } from './data'
 
 defineEmits<{ click: [value: string] }>()
-defineProps<{ activate?: boolean; data?: AnchorAvatarData }>()
+defineProps<{ activate?: boolean; data?: StyleAvatarData }>()
 </script>
 
 <template>
@@ -11,19 +11,13 @@ defineProps<{ activate?: boolean; data?: AnchorAvatarData }>()
     class="anchor-avatar d-flex flex-column align-items-center text-center justify-content-center position-relative"
     @click="$emit('click', data?.value)"
   >
-    <span
-      v-if="!data?.isFree"
-      class="position-absolute top-0 start-100 translate-middle text-bg-danger text-nowrap rounded px-1"
-      style="font-size: 0.5rem"
-      >付费</span
-    >
     <img
-      :src="data?.src ?? demoAvatar()"
+      :src="data?.src || demoAvatar()"
       class="rounded-circle"
-      style="height: 40px"
+      style="height: 30px"
       :class="{ 'border border-2 border-warning': activate }"
     />
-    <div class="anchor-avatar-name text-white">{{ data?.label }}</div>
+    <div class="anchor-avatar-name text-white" style="font-size: 0.5rem">{{ data?.label }}</div>
   </div>
 </template>
 

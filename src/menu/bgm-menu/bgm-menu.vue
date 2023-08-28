@@ -41,7 +41,7 @@ function handleSubmit(opt: LabelValue) {
       <BarButton ref="menuRef" text="配乐" icon="bgm" @click="handleClick"></BarButton>
     </template>
     <BarSearch
-      :menuItemLabel="bgm.menuItemLabel"
+      :menus="bgm.menus"
       :fetchScene="bgm.fetchScene"
       :fetchStyle="bgm.fetchStyle"
       :fetchData="bgm.fetchData"
