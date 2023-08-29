@@ -15,7 +15,6 @@ import CustomManagement from './custom-management'
 import plugin from './plugin'
 
 export * from './custom-types'
-export * from './serialize'
 
 export default {
   install() {

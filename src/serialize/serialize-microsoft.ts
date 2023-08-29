@@ -1,18 +1,18 @@
 import { DomEditor, SlateElement, SlateNode, SlateText } from '@wangeditor/editor'
-import type { Audio } from './audio'
-import type { Break } from './break'
-import type { Emphasis } from './emphasis'
-import type { MsttsExpressAs } from './mstts-express-as'
-import type { P } from './p'
-import type { Phoneme } from './phoneme'
-import type { Prosody } from './prosody'
-import type { S } from './s'
-import type { SayAs } from './say-as'
-import type { Sub } from './sub'
-import type { MsttsBackgroundaudio } from './mstts-backgroundaudio'
-import type { Speak } from './speak'
-import type { Voice } from './voice'
-import type { CustomManagement, MsttsSilence, SSMLElementType } from './custom-types'
+import type { Audio } from '@/core/audio'
+import type { Break } from '@/core/break'
+import type { Emphasis } from '@/core/emphasis'
+import type { MsttsExpressAs } from '@/core/mstts-express-as'
+import type { P } from '@/core/p'
+import type { Phoneme } from '@/core/phoneme'
+import type { Prosody } from '@/core/prosody'
+import type { S } from '@/core/s'
+import type { SayAs } from '@/core/say-as'
+import type { Sub } from '@/core/sub'
+import type { MsttsBackgroundaudio } from '@/core/mstts-backgroundaudio'
+import type { Speak } from '@/core/speak'
+import type { Voice } from '@/core/voice'
+import type { CustomManagement, MsttsSilence, SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 
 function escapeText(text: string): string {
@@ -51,7 +51,7 @@ function serializeMsttsExpressAs(node: MsttsExpressAs, children: string) {
   return `<mstts:express-as style="${node.style}"${role}${styledegree}>${children}</mstts:express-as>`
 }
 
-export function serializeMsttsBackgroundaudio(node: MsttsBackgroundaudio) {
+function serializeMsttsBackgroundaudio(node: MsttsBackgroundaudio) {
   if (!node.src) return ''
   const volume = node.volume ? ` volume="${node.volume}"` : ''
   const fadein = node.fadein ? ` fadein="${node.fadein}"` : ''
@@ -59,7 +59,7 @@ export function serializeMsttsBackgroundaudio(node: MsttsBackgroundaudio) {
   return `<mstts:backgroundaudio src="${node.src}"${volume}${fadein}${fadeout}/>`
 }
 
-export function serializeMsttsSilence(node: MsttsSilence) {
+function serializeMsttsSilence(node: MsttsSilence) {
   if (!node.attrType || !node.value) return ''
   return `<mstts:silence type="${node.attrType}" value="${node.value}"/>`
 }
@@ -98,12 +98,12 @@ function serializeSub(node: Sub, children: string) {
   return `<sub alias=${node.alias}>${children}</sub>`
 }
 
-export function serializeVoice(node: Voice, children: string) {
+function serializeVoice(node: Voice, children: string) {
   const effect = node.effect ? ` effect="${node.effect}"` : ''
   return `<voice name="${node.name}${effect}">${children}</voice>`
 }
 
-export function serializeSpeak(node: Speak, children: string) {
+function serializeSpeak(node: Speak, children: string) {
   return `<speak
   version="${node.version}"
   xml:lang="${node.xmlLang}"
@@ -113,7 +113,7 @@ export function serializeSpeak(node: Speak, children: string) {
   >${children}</speak>`.replaceAll(/[\r\n]/g, '')
 }
 
-export function serializeCustomManagment(node: CustomManagement, children: string) {
+function serializeCustomManagment(node: CustomManagement, children: string) {
   const voice: Voice = { type: 'ssml-voice', remark: '', name: node.name, children: [] }
   const expressAs: MsttsExpressAs = {
     type: 'ssml-mstts:express-as',
@@ -135,7 +135,7 @@ export function serializeCustomManagment(node: CustomManagement, children: strin
   )
 }
 
-export function serializeNode(node: SlateNode): string {
+function serializeNode(node: SlateNode): string {
   if (SlateText.isText(node)) {
     return escapeText(node.text)
   } else if (SlateElement.isElement(node)) {
@@ -181,7 +181,7 @@ export function serializeNode(node: SlateNode): string {
   return ''
 }
 
-export function serializeToSSML() {
+export default function serializeToSSML() {
   const { editor } = useEditorStore()
   if (!editor) throw Error('没有找到 editor 对象')
   const { rootSpeak, rootVoice, rootExpressAs, rootBackgroundaudio, rootProsody } = useSSMLStore()

@@ -4,7 +4,7 @@ import { Share } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
 import { audioPlayer } from '@/utils'
-import { serializeToSSML } from '@/core'
+import { serializeToSSML } from '@/serialize'
 import { useSSMLStore } from '@/stores'
 
 const dialogVisible = ref(false)
