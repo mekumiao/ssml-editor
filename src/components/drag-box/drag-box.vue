@@ -3,6 +3,8 @@ import { useDraggable } from '@vueuse/core'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { type Position } from '@vueuse/core'
 import { constrainDragBounds } from './constrain-drag-bounds'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
 const props = defineProps<{ visible: boolean; initialValue?: Position }>()
@@ -25,16 +27,20 @@ defineExpose({
 })
 
 onMounted(() => {
-  document.addEventListener('mousedown', handleWindowClick)
+  emitter.on(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  // emitter.on(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
+  // document.addEventListener('mousedown', handleViewClick)
   document.addEventListener('keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
-  document.addEventListener('mousedown', handleWindowClick)
-  document.addEventListener('keydown', handleKeyDownEsc)
+  emitter.off(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  // emitter.off(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
+  // document.removeEventListener('mousedown', handleViewClick)
+  document.removeEventListener('keydown', handleKeyDownEsc)
 })
 
-function handleWindowClick(ev: MouseEvent) {
+function handleViewClick(ev: MouseEvent) {
   isOthreClick(ev) && handleClose()
 }
 
@@ -68,6 +74,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
       style="position: fixed"
       :style="style"
       @mousedown.prevent
+      @blur="() => console.log('drag-box-blur')"
     >
       <div class="w-100 d-flex flex-row align-items-center">
         <div ref="dragRef" class="w-100" style="height: 40px; cursor: move"></div>
