@@ -6,7 +6,7 @@ import SelectList from './select-list.vue'
 import { onMounted, ref } from 'vue'
 import { speed, pitch } from './data'
 import { useEditorStore } from '@/stores'
-import { type SubmitData } from './data'
+import { type SubmitData, formatPitch, formatRate } from './data'
 
 const emit = defineEmits<{ submit: [value: SubmitData] }>()
 
@@ -60,8 +60,8 @@ function handleSubmit() {
     value: selSpeaker.value.value,
     role: selRole.value.value,
     style: selStyle.value.value,
-    speed: selSpeed.value.value,
-    pitch: selPitch.value.value,
+    speed: formatRate(Number(selSpeed.value.value)),
+    pitch: formatPitch(Number(selPitch.value.value)),
   }
   emit('submit', rest)
 }

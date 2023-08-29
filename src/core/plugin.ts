@@ -10,6 +10,7 @@ export default <T extends IDomEditor>(editor: T) => {
     insertText,
     insertData,
     setFragmentData,
+    insertNode,
   } = editor
   const newEditor = editor
 
@@ -60,5 +61,10 @@ export default <T extends IDomEditor>(editor: T) => {
   newEditor.insertText = (text) => {
     insertText(text)
   }
+
+  newEditor.insertNode = (node) => {
+    insertNode(node)
+  }
+
   return newEditor
 }

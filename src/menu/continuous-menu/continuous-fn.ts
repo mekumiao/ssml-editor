@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
+import { SlateEditor, SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { Prosody } from '@/core'
@@ -37,6 +37,6 @@ export class ContinuousFn extends BaseFn {
       children: [{ text: value }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

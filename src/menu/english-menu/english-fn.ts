@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
+import { SlateEditor, SlateRange } from '@wangeditor/editor'
 import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
@@ -47,6 +47,6 @@ export class EnglishFn extends BaseFn {
       children: [{ text: value }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

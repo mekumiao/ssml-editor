@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
+import { SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Phoneme } from '@/core'
@@ -48,6 +48,6 @@ export class PinyinFn extends BaseFn {
       children: [{ text: value }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

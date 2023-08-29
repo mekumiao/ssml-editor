@@ -1,4 +1,4 @@
-import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor } from '@wangeditor/editor'
 import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
@@ -32,6 +32,6 @@ export class MuteFn extends BaseFn {
       children: [{ text: '' }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }
