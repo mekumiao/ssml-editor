@@ -1,4 +1,5 @@
-import { type IDomEditor } from '@wangeditor/editor'
+import { type IDomEditor, DomEditor, SlateTransforms } from '@wangeditor/editor'
+import { insertNodeSpace } from './helper'
 
 export default <T extends IDomEditor>(editor: T) => {
   const {
@@ -62,8 +63,23 @@ export default <T extends IDomEditor>(editor: T) => {
     insertText(text)
   }
 
+  // 需要插入间隔的标签
+  const SPACE_LIST_TYPES = [
+    'ssml-prosody',
+    'ssml-sub',
+    'custom-management',
+    'ssml-phoneme',
+    'ssml-say-as',
+  ]
+
   newEditor.insertNode = (node) => {
-    insertNode(node)
+    const type = DomEditor.getNodeType(node)
+    if (SPACE_LIST_TYPES.includes(type)) {
+      // 插入间隔
+      editor.selection && insertNodeSpace(editor, editor.selection)
+      return SlateTransforms.insertNodes(editor, node)
+    }
+    return insertNode(node)
   }
 
   return newEditor

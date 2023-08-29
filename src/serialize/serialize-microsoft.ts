@@ -116,7 +116,7 @@ function serializeSpeak(node: Speak, children: string) {
 
 function serializeNode(node: SlateNode): string {
   if (SlateText.isText(node)) {
-    return escapeText(node.text)
+    return escapeText(node.text.trim())
   } else if (SlateElement.isElement(node)) {
     const children = node.children.map((n) => serializeNode(n)).join('')
     const type = DomEditor.getNodeType(node) as SSMLElementType
@@ -201,7 +201,7 @@ function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement
 
   for (let i = 0; i < customNode.children.length; i++) {
     const node = customNode.children[i]
-    if (SlateText.isText(node) && !node.text) {
+    if (SlateText.isText(node) && !node.text.trim()) {
       continue
     } else if (SlateText.isText(node) || SlateEditor.isVoid(editor, node)) {
       handler ??= prosodyHandler()
@@ -329,7 +329,7 @@ function wrapVoiceNode(editor: IDomEditor) {
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
     // 跳过空节点
-    if (SlateText.isText(node) && !node.text) continue
+    if (SlateText.isText(node) && !node.text.trim()) continue
     // 多人语音节点
     if (DomEditor.checkNodeType(node, 'custom-management')) {
       if (voiceHandler) {
