@@ -1,4 +1,5 @@
 import { DomEditor, SlateElement, SlateNode, SlateText } from '@wangeditor/editor'
+import type { IDomEditor } from '@wangeditor/editor'
 import type { Audio } from '@/core/audio'
 import type { Break } from '@/core/break'
 import type { Emphasis } from '@/core/emphasis'
@@ -113,28 +114,6 @@ function serializeSpeak(node: Speak, children: string) {
   >${children}</speak>`.replaceAll(/[\r\n]/g, '')
 }
 
-function serializeCustomManagment(node: CustomManagement, children: string) {
-  const voice: Voice = { type: 'ssml-voice', remark: '', name: node.name, children: [] }
-  const expressAs: MsttsExpressAs = {
-    type: 'ssml-mstts:express-as',
-    remark: '',
-    style: node.style,
-    role: node.role,
-    children: [],
-  }
-  const prosody: Prosody = {
-    type: 'ssml-prosody',
-    remark: '',
-    rate: node.rate,
-    pitch: node.pitch,
-    children: [],
-  }
-  return serializeVoice(
-    voice,
-    serializeMsttsExpressAs(expressAs, serializeProsody(prosody, children)),
-  )
-}
-
 function serializeNode(node: SlateNode): string {
   if (SlateText.isText(node)) {
     return escapeText(node.text)
@@ -172,8 +151,6 @@ function serializeNode(node: SlateNode): string {
         return serializeVoice(node as Voice, children)
       case 'ssml-mstts:silence':
         return serializeMsttsSilence(node as MsttsSilence)
-      case 'custom-management':
-        return serializeCustomManagment(node as CustomManagement, children)
       default:
         return children
     }
@@ -181,17 +158,32 @@ function serializeNode(node: SlateNode): string {
   return ''
 }
 
-export default function serializeToSSML() {
-  const { editor } = useEditorStore()
-  if (!editor) throw Error('没有找到 editor 对象')
-  const { rootSpeak, rootVoice, rootExpressAs, rootBackgroundaudio, rootProsody } = useSSMLStore()
-  const speak = { ...rootSpeak, children: [] } as Speak
-  const backgroundaudio = { ...rootBackgroundaudio } as MsttsBackgroundaudio
-  const voice = { ...rootVoice, children: [] } as Voice
-  const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
-  const prosody = { ...rootProsody, children: [] } as Prosody
+function customManagmentToVoice(node: CustomManagement): Voice {
+  const voice: Voice = { type: 'ssml-voice', remark: '', name: node.name, children: [] }
+  const silences = createDefaultMsttsSilences()
+  const expressAs: MsttsExpressAs = {
+    type: 'ssml-mstts:express-as',
+    remark: '',
+    style: node.style,
+    role: node.role,
+    children: [],
+  }
+  const prosody: Prosody = {
+    type: 'ssml-prosody',
+    remark: '',
+    rate: node.rate,
+    pitch: node.pitch,
+    children: [],
+  }
 
-  const silences: MsttsSilence[] = [
+  voice.children.push(...silences)
+  voice.children.push(expressAs)
+  expressAs.children.push(prosody)
+  return voice
+}
+
+function createDefaultMsttsSilences(): MsttsSilence[] {
+  return [
     {
       type: 'ssml-mstts:silence',
       attrType: 'comma-exact',
@@ -214,13 +206,50 @@ export default function serializeToSSML() {
       children: [],
     },
   ]
+}
 
-  speak.children.push(backgroundaudio)
-  speak.children.push(voice)
+function createDefaultVoiceNode(node: SlateNode): Voice {
+  const { rootVoice, rootExpressAs, rootProsody } = useSSMLStore()
+  const voice = { ...rootVoice, children: [] } as Voice
+  const silences = createDefaultMsttsSilences()
+  const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
+  const prosody = { ...rootProsody, children: [] } as Prosody
+
   voice.children.push(...silences)
   voice.children.push(expressAs)
   expressAs.children.push(prosody)
-  prosody.children = editor.children
+  prosody.children.push(node)
 
+  return voice
+}
+
+function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
+  const arrayList = editor.children
+    .filter((v) => DomEditor.checkNodeType(v, 'paragraph'))
+    .map((v) => (v as any).children)
+  return [].concat(...arrayList)
+}
+
+function wrapVoiceNode(editor: IDomEditor) {
+  const nodes = mergeParagraphNodes(editor)
+  const wrapNodes: SlateNode[] = []
+  for (let i = 0; i < nodes.length; i++) {
+    const node = nodes[i]
+    if (DomEditor.checkNodeType(node, 'custom-management')) {
+      wrapNodes.push(customManagmentToVoice(node as CustomManagement))
+    } else {
+      wrapNodes.push(createDefaultVoiceNode(node))
+    }
+  }
+  return wrapNodes
+}
+
+export default function serializeToSSML() {
+  const { editor } = useEditorStore()
+  if (!editor) throw Error('没有找到 editor 对象')
+  const { rootSpeak, rootBackgroundaudio } = useSSMLStore()
+  const speak = { ...rootSpeak, children: [] } as Speak
+  const backgroundaudio = { ...rootBackgroundaudio } as MsttsBackgroundaudio
+  speak.children.push(backgroundaudio, ...wrapVoiceNode(editor))
   return serializeNode(speak)
 }

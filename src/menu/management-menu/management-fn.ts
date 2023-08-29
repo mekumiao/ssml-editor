@@ -1,4 +1,4 @@
-import { SlateRange, type IDomEditor } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor, DomEditor } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { CustomManagement } from '@/core'
@@ -16,6 +16,11 @@ export class ManagementFn extends BaseFn {
 
     if (SlateRange.isCollapsed(selection)) {
       this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选句子')
+      return true
+    }
+
+    if (DomEditor.getSelectedNodeByType(this.editor, 'custom-management')) {
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '多人配音不能嵌套使用')
       return true
     }
 
