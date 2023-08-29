@@ -25,8 +25,7 @@ export class Recorder {
           mediaRecorder.start()
         })
       } catch (error) {
-        console.error(error)
-        throw Error('授权失败！')
+        throw new Error('授权失败！', { cause: error })
       } finally {
         chunks = []
       }

@@ -48,7 +48,6 @@ async function handleOpenInputFile() {
   isRecord.value = false
   try {
     localFile.value = await audioSelector.open()
-    console.log(localFile.value)
   } catch (error) {
     //
   }

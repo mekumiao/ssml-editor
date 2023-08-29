@@ -27,12 +27,10 @@ export default <T extends IDomEditor>(editor: T) => {
   }
 
   newEditor.normalizeNode = (entry) => {
-    console.log('normalizeNode')
     normalizeNode(entry)
   }
 
   newEditor.apply = (operation) => {
-    console.log('apply', JSON.stringify(operation))
     apply(operation)
   }
 

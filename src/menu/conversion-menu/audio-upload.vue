@@ -20,7 +20,6 @@ onMounted(() => {
     const file = event.target.files[0]
     if (file) {
       selectedFile.value = file
-      console.log('已选择文件:', file.name)
     }
   })
 })

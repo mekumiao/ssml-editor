@@ -74,7 +74,6 @@ function handleKeyDownEsc(event: KeyboardEvent) {
       style="position: fixed"
       :style="style"
       @mousedown.prevent
-      @blur="() => console.log('drag-box-blur')"
     >
       <div class="w-100 d-flex flex-row align-items-center">
         <div ref="dragRef" class="w-100" style="height: 40px; cursor: move"></div>

@@ -132,8 +132,6 @@ debugger
 // const node = document.createElement('div')
 // const vnode = createVNode(ElButton, { text: 'xxxxx' })
 // render(vnode, node)
-// console.log(node)
-// console.log(vnode)
 
 // Transforms.splitNodes(editor, { at: prePath })
 
@@ -144,15 +142,12 @@ debugger
 // const [, path] = Editor.node(editor, selection)
 // const newPath = SlatePath.next(SlatePath.next(path))
 
-// console.log(Editor.node(editor, newPath))
-
 // editor.select(path)
 
 // SlatePath.parent(path)
 
 // const block = SlateEditor.above(editor, { match: (n) => SlateEditor.isBlock(editor, n) })
 // if (block == null) return
-// console.log(block)
 
 // const blockStart = SlateEditor.start(editor, block[1])
 // const blockEnd = SlateEditor.end(editor, block[1])
@@ -162,29 +157,24 @@ debugger
 // const entitys = Editor.nodes(editor, {
 //   // at: selection!,
 //   match: (n) => {
-//     console.log(DomEditor.getNodeType(n))
 //     return true
 //   },
 //   universal: false
 // })
 
 // if (entitys) {
-//   console.log('entitys', entitys)
 
 //   for (const iterator of entitys) {
-//     console.log(iterator)
 //   }
 // }
 
 // const [textNode] = Editor.nodes(editor, {
 //   match: (n) => {
-//     console.log(n)
 //     return SlateText.isText(n) && n.text == ''
 //   },
 //   universal: false,
 //   mode: 'highest'
 // })
-// console.log(textNode)
 
 // Transforms.select(editor,)
 

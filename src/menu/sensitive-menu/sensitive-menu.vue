@@ -21,10 +21,6 @@ const handleClick = (editor: IDomEditor) => {
   })
   visible.value = true
 }
-
-// function handleSubmit(opt: LabelValue) {
-//   console.log(opt)
-// }
 </script>
 
 <template>
