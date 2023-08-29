@@ -5,9 +5,9 @@ export const readList = [
 ] as const
 
 export const readValueMap = {
-  z: { pitch: '+100%', rate: undefined },
-  t: { pitch: undefined, rate: '-100%' },
-  'z+t': { pitch: '+100%', rate: '-100%' },
+  z: { pitch: 'x-high', rate: undefined },
+  t: { pitch: undefined, rate: 'medium' },
+  'z+t': { pitch: 'x-high', rate: 'medium' },
 }
 
 export type ReadLabelValue = { value: (typeof readList)[number]['value']; label: string }
