@@ -232,30 +232,29 @@ function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement
 }
 
 function createDefaultMsttsSilences(): MsttsSilence[] {
-  return []
-  // return [
-  //   {
-  //     type: 'ssml-mstts:silence',
-  //     attrType: 'comma-exact',
-  //     value: '150ms',
-  //     remark: '逗号静音',
-  //     children: [],
-  //   },
-  //   {
-  //     type: 'ssml-mstts:silence',
-  //     attrType: 'semicolon-exact',
-  //     value: '150ms',
-  //     remark: '分号静音',
-  //     children: [],
-  //   },
-  //   {
-  //     type: 'ssml-mstts:silence',
-  //     attrType: 'enumerationcomma-exact',
-  //     value: '150ms',
-  //     remark: '顿号静音',
-  //     children: [],
-  //   },
-  // ]
+  return [
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'comma-exact',
+      value: '200ms',
+      remark: '逗号静音',
+      children: [],
+    },
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'semicolon-exact',
+      value: '200ms',
+      remark: '分号静音',
+      children: [],
+    },
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'enumerationcomma-exact',
+      value: '200ms',
+      remark: '顿号静音',
+      children: [],
+    },
+  ]
 }
 
 function createDefaultVoiceHandler() {
