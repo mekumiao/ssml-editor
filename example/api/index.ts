@@ -1,5 +1,5 @@
 import axios from 'axios'
-import './mock-server'
+import '../mock'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
 import type { BarSearchFilter } from '@/components/bar-search'
 
