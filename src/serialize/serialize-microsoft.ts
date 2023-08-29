@@ -203,9 +203,13 @@ function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement
     const node = customNode.children[i]
     if (SlateText.isText(node) && !node.text.trim()) {
       continue
-    } else if (SlateText.isText(node) || SlateEditor.isVoid(editor, node)) {
+    } else if (SlateText.isText(node)) {
       handler ??= prosodyHandler()
       handler.pushNode(node)
+      continue
+    } else if (SlateEditor.isVoid(editor, node)) {
+      handler = undefined
+      expressAs.children.push(node)
       continue
     } else {
       const path = DomEditor.findPath(editor, node)
@@ -291,7 +295,7 @@ function createDefaultProsodyHandler(pushToVoice: (node: SlateNode) => void) {
 function paragraphBreak(): Break {
   return {
     type: 'ssml-break',
-    strength: 'medium',
+    time: '200ms',
     children: [{ text: '' }],
     remark: 'paragraphBreak',
   }
@@ -341,9 +345,13 @@ function wrapVoiceNode(editor: IDomEditor) {
     }
     // 默认语音节点
     voiceHandler ??= createDefaultVoiceHandler()
-    if (SlateText.isText(node) || SlateEditor.isVoid(editor, node)) {
+    if (SlateText.isText(node)) {
       prosodyHandler ??= createDefaultProsodyHandler(voiceHandler.pushNode)
       prosodyHandler.pushNode(node)
+      continue
+    } else if (SlateEditor.isVoid(editor, node)) {
+      prosodyHandler = undefined
+      voiceHandler.pushNode(node)
       continue
     } else {
       const path = DomEditor.findPath(editor, node)
