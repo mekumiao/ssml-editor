@@ -4,7 +4,7 @@ import { onMounted, ref, toRaw, watch } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
 import type { LabelValue } from '@/model'
-import type { BarSearchFilter } from './data'
+import type { FilterBarSearch } from './data'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
@@ -12,7 +12,7 @@ const props = defineProps<{
   menus: LabelValue[]
   fetchScene: () => Promise<LabelValue[]>
   fetchStyle: () => Promise<LabelValue[]>
-  fetchData: (filter: BarSearchFilter) => Promise<LabelValue[]>
+  fetchData: (filter: FilterBarSearch) => Promise<LabelValue[]>
   sceneList?: LabelValue[]
   styleList?: LabelValue[]
   dataList?: LabelValue[]

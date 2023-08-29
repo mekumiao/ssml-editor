@@ -6,12 +6,14 @@ import { createPinia } from 'pinia'
 
 import EditorComponentsPlugin from './components'
 import EditorMenuPlugin from './menu'
-import EditorView from './view'
+import EditorViewPlugin, { EditorView } from './view'
 import { type SSMLEditorConfig, createGlobalEditorConfig } from './config'
 import SSMLCorePlugin from './core'
 import { useEditorStore } from './stores'
 import { emitter } from './event-bus'
 import { EMITTER_EVENT } from './constant'
+
+import type { FilterBarSearch } from './components/bar-search'
 
 export * from './constant'
 export * from './model'
@@ -29,6 +31,10 @@ export default <Plugin>{
     app.use(SSMLCorePlugin)
     app.use(EditorComponentsPlugin)
     app.use(EditorMenuPlugin)
-    app.use(EditorView)
+    app.use(EditorViewPlugin)
   },
 }
+
+export { EditorView }
+
+export type { FilterBarSearch }

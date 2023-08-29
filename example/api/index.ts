@@ -1,7 +1,7 @@
 import axios from 'axios'
 import '../mock'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
-import type { BarSearchFilter } from '@/components/bar-search'
+import type { FilterBarSearch } from '@/components/bar-search'
 
 export async function pinyin(word: string): Promise<LabelValue[]> {
   const resp = await axios.get('/pinyin', { params: { word } })
@@ -13,12 +13,12 @@ export async function english(word: string): Promise<LabelValue[]> {
   return resp.data
 }
 
-export async function bgm(filter: BarSearchFilter): Promise<LabelValue[]> {
+export async function bgm(filter: FilterBarSearch): Promise<LabelValue[]> {
   const resp = await axios.get('/bgm', { params: { ...filter } })
   return resp.data
 }
 
-export async function special(filter: BarSearchFilter): Promise<LabelValue[]> {
+export async function special(filter: FilterBarSearch): Promise<LabelValue[]> {
   const resp = await axios.get('/special', { params: { ...filter } })
   return resp.data
 }

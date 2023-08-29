@@ -1,10 +1,10 @@
 import type { FilterSpeaker, LabelValue } from '@/model'
 import type { IEditorConfig } from '@wangeditor/editor'
-import type { BarSearchFilter } from '@/components/bar-search'
+import type { FilterBarSearch } from '@/components/bar-search'
 import type { Speaker } from '@/model'
 
 type FetahFunction = (word: string) => Promise<LabelValue[]>
-type FilterFetahFunction = (filter: BarSearchFilter) => Promise<LabelValue[]>
+type FilterFetahFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
 type FilterSpeakerFetahFunction = (filter: FilterSpeaker) => Promise<Speaker[]>
 
 function resolveList<T>() {

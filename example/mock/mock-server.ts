@@ -1,7 +1,7 @@
 import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import DataSource from './data'
-import type { BarSearchFilter } from '@/components/bar-search'
+import type { FilterBarSearch } from '@/components/bar-search'
 import cnchar from 'cnchar'
 import 'cnchar-poly'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
@@ -27,7 +27,7 @@ mock.onGet('/english').reply((config) => {
 })
 
 mock.onGet('/bgm').reply((config) => {
-  const filter = config.params as BarSearchFilter
+  const filter = config.params as FilterBarSearch
   const data = DataSource.audio
     .filter((v) => v.label.includes(filter.word))
     .filter((v) => v.menu.includes(filter.menu))
@@ -37,7 +37,7 @@ mock.onGet('/bgm').reply((config) => {
 })
 
 mock.onGet('/special').reply((config) => {
-  const filter = config.params as BarSearchFilter
+  const filter = config.params as FilterBarSearch
   const data = DataSource.audio
     .filter((v) => v.label.includes(filter.word))
     .filter((v) => v.menu.includes(filter.menu))
