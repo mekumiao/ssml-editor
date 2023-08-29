@@ -17,14 +17,16 @@ watch(
   async (value) => {
     dataList.value = await fetchData(toRaw(value))
   },
-  { immediate: true },
 )
 
 function handleClick(value: Speaker) {
   tryPlayStore.setSpeaker(value)
 }
 
-onMounted(() => {})
+onMounted(async () => {
+  dataList.value = await fetchData(toRaw(props.filter))
+  if (dataList.value.length > 0) handleClick(dataList.value[0])
+})
 </script>
 
 <template>
