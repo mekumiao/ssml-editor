@@ -1,9 +1,9 @@
 <script setup lang="ts">
-import { defaultFilterSpeaker, defaultLabelValue, type LabelValue } from '@/model'
+import { defaultFilterSpeaker, defaultLabelValue, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, shallowRef } from 'vue'
 import { speed, pitch } from './data'
 import { useEditorStore } from '@/stores'
 import { type SubmitData, formatPitch, formatRate } from './data'
@@ -28,9 +28,10 @@ const selType = ref<LabelValue>(defaultLabelValue())
 const selSpeaker = ref<LabelValue>(defaultLabelValue())
 const selRole = ref<LabelValue>(defaultLabelValue())
 const selStyle = ref<LabelValue>(defaultLabelValue())
-const selSpeed = ref<LabelValue>(defaultLabelValue())
-const selPitch = ref<LabelValue>(defaultLabelValue())
+const selSpeed = ref<LabelValue>({ label: '', value: '1.0' })
+const selPitch = ref<LabelValue>({ label: '', value: '0' })
 
+const speakerCache = shallowRef<Speaker[]>([])
 const dataListType = ref<LabelValue[]>([{ label: '全部类型', value: '' }, ...tryPlay.flags])
 const dataListSpeaker = ref<LabelValue[]>([])
 const dataListRole = ref<LabelValue[]>([])
@@ -41,14 +42,37 @@ const dataListPitch = ref<LabelValue[]>(pitch())
 
 onMounted(async () => {
   const voices = await tryPlay.fetchData(defaultFilterSpeaker())
+  speakerCache.value = voices
   dataListSpeaker.value = voices
-  dataListRole.value = voices[0].roles
-  dataListStyle.value = voices[0].styles
+  if (voices.length > 0) {
+    dataListRole.value = voices[0].roles
+    dataListStyle.value = voices[0].styles
+    selSpeaker.value = voices[0]
+  }
+  if (dataListRole.value.length > 0) {
+    selRole.value = dataListRole.value[0]
+  }
+  if (dataListStyle.value.length > 0) {
+    selStyle.value = dataListStyle.value[0]
+  }
 })
 
 function handleSearch() {}
 function handleSelectType() {}
-function handleSelectSpeaker() {}
+function handleSelectSpeaker(opt: LabelValue) {
+  const speader = speakerCache.value.find((v) => v.value === opt.value)
+  if (speader) {
+    dataListRole.value = speader.roles
+    dataListStyle.value = speader.styles
+
+    if (dataListRole.value.length > 0) {
+      selRole.value = dataListRole.value[0]
+    }
+    if (dataListStyle.value.length > 0) {
+      selStyle.value = dataListStyle.value[0]
+    }
+  }
+}
 function handleSelectRole() {}
 function handleSelectStyle() {}
 function handleSelectSpeed() {}
