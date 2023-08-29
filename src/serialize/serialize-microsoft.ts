@@ -186,23 +186,28 @@ function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement
   voice.children.push(...silences)
   voice.children.push(expressAs)
 
-  function pushNode(node: SlateNode) {
-    expressAs.children.push(node)
+  function prosodyHandler() {
+    const prosody = prosodyGenter()
+    expressAs.children.push(prosody)
+
+    function pushNode(node: SlateNode) {
+      prosody.children.push(node)
+    }
+
+    return { prosody, pushNode }
   }
 
-  function pushNodeWithProsody(node: SlateNode) {
-    const prosody = prosodyGenter()
-    prosody.children.push(node)
-    expressAs.children.push(prosody)
-  }
+  let handler: { prosody: Prosody; pushNode: (node: SlateNode) => void } | undefined
 
   for (let i = 0; i < customNode.children.length; i++) {
     const node = customNode.children[i]
-    if (SlateText.isText(node) && !node.text) continue
-    if (SlateText.isText(node)) {
-      pushNodeWithProsody(node)
+    if (SlateText.isText(node) && !node.text) {
       continue
-    } else if (!SlateEditor.isVoid(editor, node)) {
+    } else if (SlateText.isText(node) || SlateEditor.isVoid(editor, node)) {
+      handler ??= prosodyHandler()
+      handler.pushNode(node)
+      continue
+    } else {
       const path = DomEditor.findPath(editor, node)
       const [nodeEntity] = SlateEditor.nodes(editor, {
         at: path,
@@ -212,13 +217,15 @@ function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement
           return DomEditor.checkNodeType(n, 'ssml-prosody')
         },
       })
-
-      if (!nodeEntity) {
-        pushNodeWithProsody(node)
+      if (nodeEntity) {
+        handler = undefined
+        expressAs.children.push(node)
         continue
+      } else {
+        handler ??= prosodyHandler()
+        handler.pushNode(node)
       }
     }
-    pushNode(node)
   }
 
   return voice
@@ -251,9 +258,7 @@ function createDefaultMsttsSilences(): MsttsSilence[] {
   // ]
 }
 
-type VoiceHandler = { voice: Voice; pushNode: (node: SlateNode) => void }
-
-function createDefaultVoiceHandler(): VoiceHandler {
+function createDefaultVoiceHandler() {
   const { rootVoice, rootExpressAs } = useSSMLStore()
   const voice = { ...rootVoice, children: [] } as Voice
   const silences = createDefaultMsttsSilences()
@@ -269,11 +274,10 @@ function createDefaultVoiceHandler(): VoiceHandler {
   return { voice, pushNode }
 }
 
-type ProsodyHandler = { prosody: Prosody; pushNode: (node: SlateNode) => void }
-
-function createDefaultProsodyHandler(): ProsodyHandler {
+function createDefaultProsodyHandler(pushToVoice: (node: SlateNode) => void) {
   const { rootProsody } = useSSMLStore()
   const prosody = { ...rootProsody, children: [] } as Prosody
+  pushToVoice(prosody)
 
   function pushNode(node: SlateNode) {
     prosody.children.push(node)
@@ -320,7 +324,8 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
 function wrapVoiceNode(editor: IDomEditor) {
   const nodes = mergeParagraphNodes(editor)
   const wrapNodes: SlateNode[] = []
-  let voiceHandler: VoiceHandler | undefined
+  let voiceHandler: ReturnType<typeof createDefaultVoiceHandler> | undefined
+  let prosodyHandler: ReturnType<typeof createDefaultProsodyHandler> | undefined
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
     // 跳过空节点
@@ -330,18 +335,18 @@ function wrapVoiceNode(editor: IDomEditor) {
       if (voiceHandler) {
         wrapNodes.push(voiceHandler.voice)
         voiceHandler = undefined
+        prosodyHandler = undefined
       }
       wrapNodes.push(customManagmentToVoice(editor, node as CustomManagement))
       continue
     }
     // 默认语音节点
     voiceHandler ??= createDefaultVoiceHandler()
-    if (SlateText.isText(node)) {
-      const { prosody, pushNode } = createDefaultProsodyHandler()
-      pushNode(node)
-      voiceHandler.pushNode(prosody)
+    if (SlateText.isText(node) || SlateEditor.isVoid(editor, node)) {
+      prosodyHandler ??= createDefaultProsodyHandler(voiceHandler.pushNode)
+      prosodyHandler.pushNode(node)
       continue
-    } else if (!SlateEditor.isVoid(editor, node)) {
+    } else {
       const path = DomEditor.findPath(editor, node)
       const [nodeEntity] = SlateEditor.nodes(editor, {
         at: path,
@@ -352,18 +357,16 @@ function wrapVoiceNode(editor: IDomEditor) {
         },
       })
 
-      if (!nodeEntity) {
-        const { prosody, pushNode } = createDefaultProsodyHandler()
-        pushNode(node)
-        voiceHandler.pushNode(prosody)
+      if (nodeEntity) {
+        prosodyHandler = undefined
+        voiceHandler.pushNode(node)
+        continue
+      } else {
+        prosodyHandler ??= createDefaultProsodyHandler(voiceHandler.pushNode)
+        prosodyHandler.pushNode(node)
         continue
       }
-
-      voiceHandler.pushNode(node)
-      continue
     }
-    // 其余标签
-    voiceHandler.pushNode(node)
   }
   voiceHandler && wrapNodes.push(voiceHandler.voice)
   return wrapNodes
