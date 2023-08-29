@@ -4,14 +4,14 @@ import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 
-const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
+const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 
 const handleCreated = (editor: IDomEditor) => {
-  emit('onCreated', editor)
+  emit('created', editor)
 }
 
 const handleChange = (editor: IDomEditor) => {
-  emit('onChange', editor)
+  emit('change', editor)
 }
 </script>
 

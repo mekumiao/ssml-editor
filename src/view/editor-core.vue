@@ -35,26 +35,7 @@ function initEditor() {
   })
 
   setEditor(editor)
-  window.editor = editor
-
-  // const config = editor.getConfig()
-  // config.hoverbarKeys = undefined
-
   editor.on(WANGEDITOR_EVENT.ERROR, globalEditConfig.handleError)
-
-  // try {
-  //   const children = readChildren()
-  //   if (children && children.length > 0) {
-  //     // 暂时不加children可用性检查
-  //     editor.children = children
-  //     editor.updateView()
-  //   }
-  // } catch (error) {
-  //   cleanChildren()
-  //   editor.children = [{ type: 'paragraph', children: [{ text: '' }] }] as any
-  //   editor.updateView()
-  //   console.error('An error occurred:', error)
-  // }
 }
 </script>
 
