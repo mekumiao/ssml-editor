@@ -2,19 +2,19 @@
 import type { LabelValue } from '@/model'
 import { ref, toRaw } from 'vue'
 
-const emit = defineEmits<{ 'update:modelValue': [value: string] }>()
-const props = defineProps<{ modelValue: string; dataList: LabelValue[] }>()
+const emit = defineEmits<{ 'update:modelValue': [value: LabelValue] }>()
+const props = defineProps<{ modelValue: LabelValue; dataList: LabelValue[] }>()
 
 const listRef = ref<HTMLElement>()
 
 function handleSelect(item: LabelValue) {
-  emit('update:modelValue', item.value)
+  emit('update:modelValue', toRaw(item))
 }
 
 function scrollIntoViewTheItem() {
   if (!listRef.value) return
   for (let i = 0; i < props.dataList.length; i++) {
-    if (props.dataList[i].value === props.modelValue) {
+    if (props.dataList[i].value === props.modelValue.value) {
       listRef.value.children[i]?.scrollIntoView({ behavior: 'smooth' })
       return
     }
@@ -39,9 +39,9 @@ defineExpose({
       <li
         class="clickable select-item py-1"
         v-for="(item, index) in dataList"
-        :class="{ activate: item.value === modelValue }"
+        :class="{ activate: item.value === modelValue.value }"
         :key="index"
-        @click="handleSelect(toRaw(item))"
+        @click="handleSelect(item)"
       >
         {{ item.label }}
       </li>

@@ -96,7 +96,7 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
   ]
 
   tryPlayRequired.flags ??= [
-    { label: '常用', value: '' },
+    { label: '常用', value: '常用' },
     { label: '已购', value: '已购' },
     { label: '收藏', value: '收藏' },
     { label: '我的', value: '我的' },

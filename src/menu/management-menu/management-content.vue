@@ -1,10 +1,17 @@
 <script setup lang="ts">
-import type { LabelValue } from '@/model'
+import { defaultFilterSpeaker, defaultLabelValue, type LabelValue } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { speed, pitch } from './data'
+import { useEditorStore } from '@/stores'
+import { type SubmitData } from './data'
+
+const emit = defineEmits<{ submit: [value: SubmitData] }>()
+
+const { globalEditConfig } = useEditorStore()
+const { tryPlay } = globalEditConfig
 
 const showMore = ref(false)
 
@@ -17,14 +24,14 @@ const selStyleRef = ref()
 const selSpeedRef = ref()
 const selPitchRef = ref()
 
-const selType = ref('')
-const selSpeaker = ref('')
-const selRole = ref('')
-const selStyle = ref('')
-const selSpeed = ref('')
-const selPitch = ref('')
+const selType = ref<LabelValue>(defaultLabelValue())
+const selSpeaker = ref<LabelValue>(defaultLabelValue())
+const selRole = ref<LabelValue>(defaultLabelValue())
+const selStyle = ref<LabelValue>(defaultLabelValue())
+const selSpeed = ref<LabelValue>(defaultLabelValue())
+const selPitch = ref<LabelValue>(defaultLabelValue())
 
-const dataListType = ref<LabelValue[]>([])
+const dataListType = ref<LabelValue[]>([{ label: '全部类型', value: '' }, ...tryPlay.flags])
 const dataListSpeaker = ref<LabelValue[]>([])
 const dataListRole = ref<LabelValue[]>([])
 const dataListStyle = ref<LabelValue[]>([])
@@ -32,34 +39,32 @@ const dataListStyle = ref<LabelValue[]>([])
 const dataListSpeed = ref<LabelValue[]>(speed())
 const dataListPitch = ref<LabelValue[]>(pitch())
 
-dataListType.value = [
-  { label: '全部类型', value: '' },
-  { label: '常规', value: '2' },
-  { label: '已购', value: '3' },
-  { label: '收藏', value: '4' },
-  { label: '我的', value: '5' },
-  { label: 'SVIP', value: '6' },
-  { label: '付费', value: '7' },
-]
-
-dataListSpeaker.value = dataListType.value
-dataListRole.value = dataListType.value
-dataListStyle.value = dataListType.value
+onMounted(async () => {
+  const voices = await tryPlay.fetchData(defaultFilterSpeaker())
+  dataListSpeaker.value = voices
+  dataListRole.value = voices[0].roles
+  dataListStyle.value = voices[0].styles
+})
 
 function handleSearch() {}
 function handleSelectType() {}
-function handleSelectSpeaker() {
-  selRole.value = ''
-}
-function handleSelectRole() {
-  selStyle.value = ''
-}
-function handleSelectStyle() {
-  selSpeed.value = '1.00'
-  selPitch.value = '0'
-}
+function handleSelectSpeaker() {}
+function handleSelectRole() {}
+function handleSelectStyle() {}
 function handleSelectSpeed() {}
 function handleSelectPitch() {}
+
+function handleSubmit() {
+  const rest: SubmitData = {
+    label: `${selSpeaker.value.label}|${selRole.value.label}|${selStyle.value.label}|${selSpeed.value.label}`,
+    value: selSpeaker.value.value,
+    role: selRole.value.value,
+    style: selStyle.value.value,
+    speed: selSpeed.value.value,
+    pitch: selPitch.value.value,
+  }
+  emit('submit', rest)
+}
 </script>
 
 <template>
@@ -137,7 +142,7 @@ function handleSelectPitch() {}
     </div>
 
     <div class="position-absolute bottom-0 end-0 d-flex flex-row justify-content-end me-4 mb-3">
-      <ElButton v-show="!showMore" type="primary">确定</ElButton>
+      <ElButton v-show="!showMore" @click="handleSubmit" type="primary">确定</ElButton>
       <ElButton v-show="showMore" type="primary">全部清空</ElButton>
     </div>
   </div>

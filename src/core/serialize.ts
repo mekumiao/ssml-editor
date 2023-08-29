@@ -12,7 +12,7 @@ import type { Sub } from './sub'
 import type { MsttsBackgroundaudio } from './mstts-backgroundaudio'
 import type { Speak } from './speak'
 import type { Voice } from './voice'
-import type { MsttsSilence, SSMLElementType } from './custom-types'
+import type { CustomManagement, MsttsSilence, SSMLElementType } from './custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 
 function escapeText(text: string): string {
@@ -113,6 +113,28 @@ export function serializeSpeak(node: Speak, children: string) {
   >${children}</speak>`.replaceAll(/[\r\n]/g, '')
 }
 
+export function serializeCustomManagment(node: CustomManagement, children: string) {
+  const voice: Voice = { type: 'ssml-voice', remark: '', name: node.name, children: [] }
+  const expressAs: MsttsExpressAs = {
+    type: 'ssml-mstts:express-as',
+    remark: '',
+    style: node.style,
+    role: node.role,
+    children: [],
+  }
+  const prosody: Prosody = {
+    type: 'ssml-prosody',
+    remark: '',
+    rate: node.rate,
+    pitch: node.pitch,
+    children: [],
+  }
+  return serializeVoice(
+    voice,
+    serializeMsttsExpressAs(expressAs, serializeProsody(prosody, children)),
+  )
+}
+
 export function serializeNode(node: SlateNode): string {
   if (SlateText.isText(node)) {
     return escapeText(node.text)
@@ -150,6 +172,8 @@ export function serializeNode(node: SlateNode): string {
         return serializeVoice(node as Voice, children)
       case 'ssml-mstts:silence':
         return serializeMsttsSilence(node as MsttsSilence)
+      case 'custom-management':
+        return serializeCustomManagment(node as CustomManagement, children)
       default:
         return children
     }
