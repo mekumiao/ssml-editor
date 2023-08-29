@@ -1,4 +1,10 @@
-import { DomEditor, SlateElement, SlateNode, SlateText } from '@wangeditor/editor'
+/**
+ * 微软SSML序列化
+ * 已知和已解决的问题:
+ * 1. prosody标签嵌套会导致整个句子都被最深层的prosody值影响. 解决方法: 限制不可嵌套使用,并且分别给没有设置韵律的句子添加默认韵律
+ */
+
+import { DomEditor, SlateEditor, SlateElement, SlateNode, SlateText } from '@wangeditor/editor'
 import type { IDomEditor } from '@wangeditor/editor'
 import type { Audio } from '@/core/audio'
 import type { Break } from '@/core/break'
@@ -152,28 +158,69 @@ function serializeNode(node: SlateNode): string {
   return ''
 }
 
-function customManagmentToVoice(node: CustomManagement): Voice {
-  const voice: Voice = { type: 'ssml-voice', remark: '', name: node.name, children: [] }
+/**
+ * 将自定义多人配音节点处理为可序列化的voice节点
+ * @param editor editor 对象
+ * @param customNode 自定义多人配音节点
+ * @returns
+ */
+function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement): Voice {
+  const voice: Voice = { type: 'ssml-voice', remark: '', name: customNode.name, children: [] }
   const silences = createDefaultMsttsSilences()
   const expressAs: MsttsExpressAs = {
     type: 'ssml-mstts:express-as',
     remark: '',
-    style: node.style,
-    role: node.role,
-    children: [],
-  }
-  const prosody: Prosody = {
-    type: 'ssml-prosody',
-    remark: '',
-    rate: node.rate,
-    pitch: node.pitch,
+    style: customNode.style,
+    role: customNode.role,
     children: [],
   }
 
+  const prosodyGenter = (): Prosody => ({
+    type: 'ssml-prosody',
+    remark: '',
+    rate: customNode.rate,
+    pitch: customNode.pitch,
+    children: [],
+  })
+
   voice.children.push(...silences)
   voice.children.push(expressAs)
-  expressAs.children.push(prosody)
-  prosody.children.push(...node.children)
+
+  function pushNode(node: SlateNode) {
+    expressAs.children.push(node)
+  }
+
+  function pushNodeWithProsody(node: SlateNode) {
+    const prosody = prosodyGenter()
+    prosody.children.push(node)
+    expressAs.children.push(prosody)
+  }
+
+  for (let i = 0; i < customNode.children.length; i++) {
+    const node = customNode.children[i]
+    if (SlateText.isText(node) && !node.text) continue
+    if (SlateText.isText(node)) {
+      pushNodeWithProsody(node)
+      continue
+    } else if (!SlateEditor.isVoid(editor, node)) {
+      const path = DomEditor.findPath(editor, node)
+      const [nodeEntity] = SlateEditor.nodes(editor, {
+        at: path,
+        mode: 'lowest',
+        voids: false,
+        match: (n) => {
+          return DomEditor.checkNodeType(n, 'ssml-prosody')
+        },
+      })
+
+      if (!nodeEntity) {
+        pushNodeWithProsody(node)
+        continue
+      }
+    }
+    pushNode(node)
+  }
+
   return voice
 }
 
@@ -207,26 +254,37 @@ function createDefaultMsttsSilences(): MsttsSilence[] {
 type VoiceHandler = { voice: Voice; pushNode: (node: SlateNode) => void }
 
 function createDefaultVoiceHandler(): VoiceHandler {
-  const { rootVoice, rootExpressAs, rootProsody } = useSSMLStore()
+  const { rootVoice, rootExpressAs } = useSSMLStore()
   const voice = { ...rootVoice, children: [] } as Voice
   const silences = createDefaultMsttsSilences()
   const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
-  const prosody = { ...rootProsody, children: [] } as Prosody
 
   voice.children.push(...silences)
   voice.children.push(expressAs)
-  expressAs.children.push(prosody)
 
   function pushNode(node: SlateNode) {
-    prosody.children.push(node)
+    expressAs.children.push(node)
   }
 
   return { voice, pushNode }
 }
 
+type ProsodyHandler = { prosody: Prosody; pushNode: (node: SlateNode) => void }
+
+function createDefaultProsodyHandler(): ProsodyHandler {
+  const { rootProsody } = useSSMLStore()
+  const prosody = { ...rootProsody, children: [] } as Prosody
+
+  function pushNode(node: SlateNode) {
+    prosody.children.push(node)
+  }
+
+  return { prosody, pushNode }
+}
+
 /**
  * 默认段落停顿
-*/
+ */
 function paragraphBreak(): Break {
   return {
     type: 'ssml-break',
@@ -245,10 +303,11 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   const arrayList = editor.children
     .filter((v) => DomEditor.checkNodeType(v, 'paragraph'))
     .filter((v) => !!SlateNode.string(v as SlateElement).trim())
-    .map((v) => {
+    .map((v, i, ls) => {
       const elem = v as SlateElement
       const list = elem.children as SlateNode[]
-      return list.concat([paragraphBreak()])
+      if (i < ls.length - 1) return list.concat([paragraphBreak()])
+      return list
     })
   return ([] as SlateNode[]).concat(...arrayList)
 }
@@ -264,19 +323,47 @@ function wrapVoiceNode(editor: IDomEditor) {
   let voiceHandler: VoiceHandler | undefined
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
-    if (SlateText.isText(node) && !node.text) {
-      continue
-    }
+    // 跳过空节点
+    if (SlateText.isText(node) && !node.text) continue
+    // 多人语音节点
     if (DomEditor.checkNodeType(node, 'custom-management')) {
       if (voiceHandler) {
         wrapNodes.push(voiceHandler.voice)
         voiceHandler = undefined
       }
-      wrapNodes.push(customManagmentToVoice(node as CustomManagement))
-    } else {
-      voiceHandler ??= createDefaultVoiceHandler()
-      voiceHandler.pushNode(node)
+      wrapNodes.push(customManagmentToVoice(editor, node as CustomManagement))
+      continue
     }
+    // 默认语音节点
+    voiceHandler ??= createDefaultVoiceHandler()
+    if (SlateText.isText(node)) {
+      const { prosody, pushNode } = createDefaultProsodyHandler()
+      pushNode(node)
+      voiceHandler.pushNode(prosody)
+      continue
+    } else if (!SlateEditor.isVoid(editor, node)) {
+      const path = DomEditor.findPath(editor, node)
+      const [nodeEntity] = SlateEditor.nodes(editor, {
+        at: path,
+        mode: 'lowest',
+        voids: false,
+        match: (n) => {
+          return DomEditor.checkNodeType(n, 'ssml-prosody')
+        },
+      })
+
+      if (!nodeEntity) {
+        const { prosody, pushNode } = createDefaultProsodyHandler()
+        pushNode(node)
+        voiceHandler.pushNode(prosody)
+        continue
+      }
+
+      voiceHandler.pushNode(node)
+      continue
+    }
+    // 其余标签
+    voiceHandler.pushNode(node)
   }
   voiceHandler && wrapNodes.push(voiceHandler.voice)
   return wrapNodes
