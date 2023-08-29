@@ -26,7 +26,6 @@ function initEditor() {
       ...toRaw(globalEditConfig.editorConfig),
       onCreated(editor) {
         emit('created', editor)
-        editor.focus(true)
       },
       onChange(editor) {
         emit('change', editor)
