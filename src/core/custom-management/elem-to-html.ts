@@ -12,8 +12,8 @@ export default {
           data-ow-style="${style}"
           data-ow-name="${name}"
           data-ow-role="${role}"
-          data-ow-role="${pitch}"
-          data-ow-role="${rate}"
+          data-ow-pitch="${pitch}"
+          data-ow-rate="${rate}"
         >${childrenHtml}</span>`
     return html
   },
