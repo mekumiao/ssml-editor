@@ -102,7 +102,7 @@ function serializeS(_node: S, children: string) {
 }
 
 function serializeSub(node: Sub, children: string) {
-  return `<sub alias=${node.alias}>${children}</sub>`
+  return `<sub alias="${node.alias}">${children}</sub>`
 }
 
 function serializeVoice(node: Voice, children: string) {
