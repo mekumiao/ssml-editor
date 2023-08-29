@@ -178,29 +178,30 @@ function customManagmentToVoice(node: CustomManagement): Voice {
 }
 
 function createDefaultMsttsSilences(): MsttsSilence[] {
-  return [
-    {
-      type: 'ssml-mstts:silence',
-      attrType: 'comma-exact',
-      value: '50ms',
-      remark: '逗号静音',
-      children: [],
-    },
-    {
-      type: 'ssml-mstts:silence',
-      attrType: 'semicolon-exact',
-      value: '100ms',
-      remark: '分号静音',
-      children: [],
-    },
-    {
-      type: 'ssml-mstts:silence',
-      attrType: 'enumerationcomma-exact',
-      value: '150ms',
-      remark: '顿号静音',
-      children: [],
-    },
-  ]
+  return []
+  // return [
+  //   {
+  //     type: 'ssml-mstts:silence',
+  //     attrType: 'comma-exact',
+  //     value: '150ms',
+  //     remark: '逗号静音',
+  //     children: [],
+  //   },
+  //   {
+  //     type: 'ssml-mstts:silence',
+  //     attrType: 'semicolon-exact',
+  //     value: '150ms',
+  //     remark: '分号静音',
+  //     children: [],
+  //   },
+  //   {
+  //     type: 'ssml-mstts:silence',
+  //     attrType: 'enumerationcomma-exact',
+  //     value: '150ms',
+  //     remark: '顿号静音',
+  //     children: [],
+  //   },
+  // ]
 }
 
 type VoiceHandler = { voice: Voice; pushNode: (node: SlateNode) => void }
@@ -223,11 +224,33 @@ function createDefaultVoiceHandler(): VoiceHandler {
   return { voice, pushNode }
 }
 
+/**
+ * 默认段落停顿
+*/
+function paragraphBreak(): Break {
+  return {
+    type: 'ssml-break',
+    strength: 'medium',
+    children: [{ text: '' }],
+    remark: 'paragraphBreak',
+  }
+}
+
+/**
+ * 合并段落,并添加停顿
+ * @param editor IDomEditor对象
+ * @returns 合并后的节点
+ */
 function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   const arrayList = editor.children
     .filter((v) => DomEditor.checkNodeType(v, 'paragraph'))
-    .map((v) => (v as any).children)
-  return [].concat(...arrayList)
+    .filter((v) => !!SlateNode.string(v as SlateElement).trim())
+    .map((v) => {
+      const elem = v as SlateElement
+      const list = elem.children as SlateNode[]
+      return list.concat([paragraphBreak()])
+    })
+  return ([] as SlateNode[]).concat(...arrayList)
 }
 
 /**
