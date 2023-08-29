@@ -84,11 +84,13 @@ async function handleCopy(isFormat: boolean) {
       >{{ ssml }}</pre
     >
     <template #header>
-      <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭</ElButton>
+      <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
+      <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭(推荐)</ElButton>
     </template>
     <template #footer>
       <span class="dialog-footer">
-        <ElButton type="primary" @click="handleCopy(true)">复制+关闭</ElButton>
+        <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
+        <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭(推荐)</ElButton>
       </span>
     </template>
   </ElDialog>
