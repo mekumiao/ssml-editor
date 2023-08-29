@@ -105,13 +105,7 @@ function serializeVoice(node: Voice, children: string) {
 }
 
 function serializeSpeak(node: Speak, children: string) {
-  return `<speak
-  version="${node.version}"
-  xml:lang="${node.xmlLang}"
-  xmlns="${node.xmlns}"
-  xmlns:mstts="${node['xmlns:mstts']}"
-  xmlns:emo="${node['xmlns:emo']}"
-  >${children}</speak>`.replaceAll(/[\r\n]/g, '')
+  return `<speak version="${node.version}" xml:lang="${node.xmlLang}" xmlns="${node.xmlns}" xmlns:mstts="${node['xmlns:mstts']}" xmlns:emo="${node['xmlns:emo']}">${children}</speak>`
 }
 
 function serializeNode(node: SlateNode): string {
@@ -179,6 +173,7 @@ function customManagmentToVoice(node: CustomManagement): Voice {
   voice.children.push(...silences)
   voice.children.push(expressAs)
   expressAs.children.push(prosody)
+  prosody.children.push(...node.children)
   return voice
 }
 
@@ -208,7 +203,9 @@ function createDefaultMsttsSilences(): MsttsSilence[] {
   ]
 }
 
-function createDefaultVoiceNode(node: SlateNode): Voice {
+type VoiceHandler = { voice: Voice; pushNode: (node: SlateNode) => void }
+
+function createDefaultVoiceHandler(): VoiceHandler {
   const { rootVoice, rootExpressAs, rootProsody } = useSSMLStore()
   const voice = { ...rootVoice, children: [] } as Voice
   const silences = createDefaultMsttsSilences()
@@ -218,9 +215,12 @@ function createDefaultVoiceNode(node: SlateNode): Voice {
   voice.children.push(...silences)
   voice.children.push(expressAs)
   expressAs.children.push(prosody)
-  prosody.children.push(node)
 
-  return voice
+  function pushNode(node: SlateNode) {
+    prosody.children.push(node)
+  }
+
+  return { voice, pushNode }
 }
 
 function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
@@ -230,17 +230,32 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   return [].concat(...arrayList)
 }
 
+/**
+ * 处理自定义的多人语音标签
+ * 1. 多人语音标签已被限制为顶级标签
+ * 2. 没有多人语音标签的节点将被合并添加默认语音标签
+ */
 function wrapVoiceNode(editor: IDomEditor) {
   const nodes = mergeParagraphNodes(editor)
   const wrapNodes: SlateNode[] = []
+  let voiceHandler: VoiceHandler | undefined
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
+    if (SlateText.isText(node) && !node.text) {
+      continue
+    }
     if (DomEditor.checkNodeType(node, 'custom-management')) {
+      if (voiceHandler) {
+        wrapNodes.push(voiceHandler.voice)
+        voiceHandler = undefined
+      }
       wrapNodes.push(customManagmentToVoice(node as CustomManagement))
     } else {
-      wrapNodes.push(createDefaultVoiceNode(node))
+      voiceHandler ??= createDefaultVoiceHandler()
+      voiceHandler.pushNode(node)
     }
   }
+  voiceHandler && wrapNodes.push(voiceHandler.voice)
   return wrapNodes
 }
 

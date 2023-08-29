@@ -1,4 +1,4 @@
-import { SlateRange, type IDomEditor, DomEditor } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor, DomEditor, SlateEditor } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { CustomManagement } from '@/core'
@@ -21,6 +21,13 @@ export class ManagementFn extends BaseFn {
 
     if (DomEditor.getSelectedNodeByType(this.editor, 'custom-management')) {
       this.editor.emit(WANGEDITOR_EVENT.ERROR, '多人配音不能嵌套使用')
+      return true
+    }
+
+    const [currentNode] = SlateEditor.node(this.editor, selection)
+    const parentNode = this.editor.getParentNode(currentNode)
+    if (!parentNode || !DomEditor.checkNodeType(parentNode, 'paragraph')) {
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '多人配音需要在最外层使用')
       return true
     }
 
