@@ -30,12 +30,14 @@ export default {
         ],
       ),
       h(`span.data-content`, {
-        attrs: { 'data-content': '{{' },
+        props: { contentEditable: false },
+        attrs: { 'data-content': '{' },
         style: { color: `var(--ssml-p)` },
       }),
       h('span', children),
       h(`span.data-content`, {
-        attrs: { 'data-content': '}}' },
+        props: { contentEditable: false },
+        attrs: { 'data-content': '}' },
         style: { color: 'var(--ssml-p)' },
       }),
     ])

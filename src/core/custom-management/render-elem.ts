@@ -32,11 +32,13 @@ export default {
         ],
       ),
       h(`span.data-content`, {
+        props: { contentEditable: false },
         attrs: { 'data-content': '{{' },
         style: { color: `var(--custom-management)` },
       }),
       h('span', children),
       h(`span.data-content`, {
+        props: { contentEditable: false },
         attrs: { 'data-content': '}}' },
         style: { color: 'var(--custom-management)' },
       }),

@@ -49,11 +49,13 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
       ],
     ),
     h(`span.data-content`, {
+      props: { contentEditable: false },
       attrs: { 'data-content': '{' },
       style: { color: `var(--ssml-audio)` },
     }),
     h('span', children),
     h(`span.data-content`, {
+      props: { contentEditable: false },
       attrs: { 'data-content': '}' },
       style: { color: 'var(--ssml-audio)' },
     }),
