@@ -15,8 +15,8 @@ const props = defineProps<{ visible: boolean }>()
 
 const searchInputRef = ref<HTMLElement>()
 const searchInput = ref('')
-const boxRef = ref()
-const handleRef = ref()
+const boxRef = ref<HTMLElement>()
+const handleRef = ref<HTMLElement>()
 const filter = ref<FilterSpeaker>(defaultFilterSpeaker())
 
 onMounted(() => {
@@ -44,9 +44,14 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 }
 
 const { position } = useDraggable(handleRef, {
-  initialValue: { x: 100, y: 100 },
+  initialValue: { x: 40, y: 40 },
 })
 const { style } = constrainDragBounds(boxRef, position)
+
+onMounted(() => {
+  position.value.x = (window.innerWidth - 890) / 2
+  position.value.y = (window.innerHeight - 390) / 2
+})
 
 function handleMinus() {
   emit('update:visible', false)
