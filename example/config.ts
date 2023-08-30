@@ -1,19 +1,6 @@
 import type { SSMLEditorConfig } from '@/config'
-import {
-  pinyin,
-  english,
-  bgm,
-  special,
-  scene,
-  style,
-  tag,
-  speaker,
-  star,
-  flag,
-  upload,
-  transfer,
-  conversionSpeaker,
-} from './api'
+import { pinyin, english, bgm, special, scene, style, tag, speaker, star, flag } from './api'
+import { upload, transfer, conversionSpeaker } from './api'
 import { ElMessage } from 'element-plus'
 
 export default <SSMLEditorConfig>{
