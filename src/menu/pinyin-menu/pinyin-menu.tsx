@@ -48,7 +48,10 @@ export default defineComponent({
             <BarButton text="多音字" icon="speaker" onClick={handleClick}></BarButton>
           ),
           default: () => (
-            <div class="d-flex flex-column overflow-x-hidden overflow-y-auto" style="max-height: 300px">
+            <div
+              class="d-flex flex-column overflow-x-hidden overflow-y-auto"
+              style="max-height: 300px"
+            >
               {pyList.value.map(({ label, value }) => {
                 return (
                   <div
