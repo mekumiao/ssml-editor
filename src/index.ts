@@ -14,10 +14,12 @@ import { emitter } from './event-bus'
 import { EMITTER_EVENT } from './constant'
 
 import type { FilterBarSearch } from './components/bar-search'
+import type { AudioInfo } from './menu/conversion-menu/data'
 
 export * from './constant'
 export * from './model'
 export * from './config'
+export * from './utils'
 
 export default <Plugin>{
   install(app: App, config?: SSMLEditorConfig) {
@@ -37,4 +39,4 @@ export default <Plugin>{
 
 export { EditorView }
 
-export type { FilterBarSearch }
+export type { FilterBarSearch, AudioInfo }
