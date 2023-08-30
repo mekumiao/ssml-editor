@@ -9,6 +9,17 @@ export default {
   renderElem: (elem: SlateElement, children: VNode[] | null, editor: IDomEditor) => {
     const { remark } = elem as CustomManagement
     return h('span.ssml-wrapper', [
+      h(`span.data-content`, {
+        props: { contentEditable: false },
+        attrs: { 'data-content': '{{' },
+        style: { color: `var(--custom-management)` },
+      }),
+      h('span', children),
+      h(`span.data-content`, {
+        props: { contentEditable: false },
+        attrs: { 'data-content': '}}' },
+        style: { color: 'var(--custom-management)' },
+      }),
       h(
         `span.remark`,
         {
@@ -31,17 +42,6 @@ export default {
           h(`span.data-content`, { attrs: { 'data-content': remark } }),
         ],
       ),
-      h(`span.data-content`, {
-        props: { contentEditable: false },
-        attrs: { 'data-content': '{{' },
-        style: { color: `var(--custom-management)` },
-      }),
-      h('span', children),
-      h(`span.data-content`, {
-        props: { contentEditable: false },
-        attrs: { 'data-content': '}}' },
-        style: { color: 'var(--custom-management)' },
-      }),
     ])
   },
 }
