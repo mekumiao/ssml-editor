@@ -113,9 +113,11 @@ async function handleAudioUpload() {
 
 async function handleSpeakerItemClick(item: Speaker) {
   try {
-    selSpeaker.value = item
     if (audioInfo.value) {
+      selSpeaker.value = item
       transferAudioInfo.value = await transfer({ audioId: audioInfo.value.id, speakerId: item.id })
+    } else {
+      emitter.emit(EMITTER_EVENT.ERROR, '请先上传录音文件')
     }
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
