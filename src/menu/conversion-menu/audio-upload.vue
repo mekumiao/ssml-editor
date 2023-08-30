@@ -85,9 +85,9 @@ function handleDeleteFile() {
 }
 
 async function openInputFile() {
-  isRecord.value = false
   try {
     inputFile.value = await audioSelector.open()
+    isRecord.value = false
     return true
   } catch (error) {
     return false
