@@ -6,17 +6,22 @@ import { useElementBounding } from '@vueuse/core'
 import type { LabelValue } from '@/model'
 import { DragBox } from '@/components'
 import ConversionContent from './conversion-content.vue'
+import { ConversionFn } from './conversion-fn'
 
 const dragRef = ref()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
+const fn = shallowRef<ConversionFn>()
 
 const visible = ref(false)
-const text = ref('ttttt')
+const text = ref('')
 
 const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
+  fn.value ??= new ConversionFn(editor)
+  if (fn.value.isDisabled()) return
+  text.value = fn.value.getValue()
   const pot = {
     x: x.value - 200,
     y: y.value + height.value,
@@ -27,7 +32,8 @@ const handleClick = (editor: IDomEditor) => {
 }
 
 function handleMenuSubmit(opt: LabelValue) {
-  console.log(opt)
+  fn.value?.exec(opt)
+  visible.value = false
 }
 </script>
 

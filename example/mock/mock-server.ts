@@ -7,6 +7,7 @@ import 'cnchar-poly'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
 import voices from './voices'
 import { getStyleDes, getRoleDes } from './emoji-config'
+import type { AudioInfo } from '@/menu/conversion-menu/data'
 
 const mock = new MockAdapter(axios)
 
@@ -138,4 +139,37 @@ mock.onGet('/flag').reply((config) => {
     return [200, list.slice(15, 20)]
   }
   return [200, list]
+})
+
+mock.onPost('/upload').reply(() => {
+  const data: AudioInfo = { id: '1', src: DataSource.audio[0].value }
+  return [200, data]
+})
+
+mock.onPut('/transfer').reply(() => {
+  const data: AudioInfo = { id: '1', src: DataSource.audio[0].value }
+  return [200, data]
+})
+
+mock.onGet('/conversionSpeaker').reply(() => {
+  const data = voices.map(
+    (v) =>
+      <Speaker>{
+        label: v.LocalName,
+        value: v.name,
+        isFree: false,
+        isStar: false,
+        isSupper24K: true,
+        avatar: '',
+        roles: v.VoiceRoleNames.split(',').map((n) => {
+          const des = getRoleDes(n)
+          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+        }),
+        styles: v.VoiceStyleNames.split(',').map((n) => {
+          const des = getStyleDes(n)
+          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+        }),
+      },
+  )
+  return [200, data]
 })

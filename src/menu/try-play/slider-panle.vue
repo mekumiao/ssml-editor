@@ -89,7 +89,7 @@ async function handleFlagClick(value: string) {
   try {
     speakerList.value = await fetchFlag(value)
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, error)
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
   }
 }
 

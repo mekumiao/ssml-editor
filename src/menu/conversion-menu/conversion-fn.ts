@@ -1,0 +1,44 @@
+import { SlateRange, type IDomEditor } from '@wangeditor/editor'
+import BaseFn from '../base-fn'
+import { WANGEDITOR_EVENT } from '@/constant'
+import type { LabelValue } from '@/model'
+import type { Audio } from '@/core'
+
+export class ConversionFn extends BaseFn {
+  public constructor(editor: IDomEditor) {
+    super(editor)
+  }
+
+  public getValue(): string {
+    return super.getValue()
+  }
+
+  public isDisabled(): boolean {
+    if (super.isDisabled()) return true
+    const { selection } = this.editor
+    if (selection == null) return true
+
+    if (SlateRange.isCollapsed(selection)) {
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选要变音的句子')
+      return true
+    }
+
+    return false
+  }
+
+  exec(opt: LabelValue) {
+    this.editor.restoreSelection()
+    if (this.isDisabled()) return
+    const value = this.getValue()
+    if (value == null) return
+
+    const node: Audio = {
+      type: 'ssml-audio',
+      remark: opt.label,
+      src: opt.value,
+      children: [{ text: value }],
+    }
+
+    this.editor.insertNode(node)
+  }
+}

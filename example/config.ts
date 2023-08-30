@@ -1,5 +1,19 @@
 import type { SSMLEditorConfig } from '@/config'
-import { pinyin, english, bgm, special, scene, style, tag, speaker, star, flag } from './api'
+import {
+  pinyin,
+  english,
+  bgm,
+  special,
+  scene,
+  style,
+  tag,
+  speaker,
+  star,
+  flag,
+  upload,
+  transfer,
+  conversionSpeaker,
+} from './api'
 import { ElMessage } from 'element-plus'
 
 export default <SSMLEditorConfig>{
@@ -9,4 +23,10 @@ export default <SSMLEditorConfig>{
   bgm: { fetchData: bgm, fetchScene: scene, fetchStyle: style },
   special: { fetchData: special, fetchScene: scene, fetchStyle: style },
   tryPlay: { featchTag: tag, fetchData: speaker, fetchStar: star, fetchFlag: flag },
+  conversion: {
+    timeoutMilliseconds: 20000,
+    audioUpload: upload,
+    transfer: transfer,
+    fetchSpeaker: conversionSpeaker,
+  },
 }

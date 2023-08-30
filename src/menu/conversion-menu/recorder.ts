@@ -3,7 +3,11 @@ export class Recorder {
 
   public constructor() {}
 
-  public async open(): Promise<Blob> {
+  public get state() {
+    return this.mediaRecorder?.state
+  }
+
+  public async start(): Promise<Blob> {
     if (navigator.mediaDevices.getUserMedia) {
       let chunks: Blob[] = []
       try {
@@ -15,7 +19,7 @@ export class Recorder {
             chunks.push(e.data)
           }
           mediaRecorder.onstop = () => {
-            const blob = new Blob(chunks, { type: 'audio/ogg; codecs=opus' })
+            const blob = new Blob(chunks, { type: 'audio/wav; codecs=opus' })
             // const audioURL = window.URL.createObjectURL(blob)
             resolve(blob)
           }
@@ -25,7 +29,7 @@ export class Recorder {
           mediaRecorder.start()
         })
       } catch (error) {
-        throw new Error('授权失败！', { cause: error })
+        throw new Error('授权失败！请确保使用https访问网站', { cause: error })
       } finally {
         chunks = []
       }

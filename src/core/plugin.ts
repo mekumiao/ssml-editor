@@ -1,4 +1,4 @@
-import { type IDomEditor, DomEditor, SlateTransforms } from '@wangeditor/editor'
+import { type IDomEditor, DomEditor, SlateTransforms, SlateNode } from '@wangeditor/editor'
 import { insertNodeSpace } from './helper'
 
 export default <T extends IDomEditor>(editor: T) => {
@@ -79,6 +79,13 @@ export default <T extends IDomEditor>(editor: T) => {
       editor.selection && insertNodeSpace(editor, editor.selection)
       return SlateTransforms.insertNodes(editor, node)
     }
+
+    if (type === 'ssml-audio' && SlateNode.string(node)) {
+      // 插入间隔
+      editor.selection && insertNodeSpace(editor, editor.selection)
+      return SlateTransforms.insertNodes(editor, node)
+    }
+
     return insertNode(node)
   }
 

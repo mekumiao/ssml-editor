@@ -2,6 +2,8 @@ import type { FilterSpeaker, LabelValue } from '@/model'
 import type { IEditorConfig } from '@wangeditor/editor'
 import type { FilterBarSearch } from '@/components/bar-search'
 import type { Speaker } from '@/model'
+import { defaultAudioInfo, type AudioInfo } from '@/menu/conversion-menu/data'
+import type { CancellationToken } from '@/utils'
 
 type FetahFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetahFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
@@ -15,7 +17,7 @@ export type GlobalEditorConfig = ReturnType<typeof createGlobalEditorConfig>
 
 export interface SSMLEditorConfig {
   editorConfig?: IEditorConfig
-  handleError: (error: string) => void
+  handleError: (error: string, detail?: any) => void
   pinyin: {
     fetchData: FetahFunction
   }
@@ -43,6 +45,12 @@ export interface SSMLEditorConfig {
     fetchFlag: (flag: string) => Promise<Speaker[]>
     fetchStar: (speaker: string, star: boolean) => Promise<boolean>
   }
+  conversion: {
+    timeoutMilliseconds: number
+    audioUpload: (file: File | Blob, token: CancellationToken) => Promise<AudioInfo>
+    transfer: (opt: { audioId: string; speakerId: string }) => Promise<AudioInfo>
+    fetchSpeaker: () => Promise<Speaker[]>
+  }
 }
 
 export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
@@ -65,6 +73,12 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     featchTag: resolveList<LabelValue>(),
     fetchStar: resolveList<LabelValue>(),
     fetchFlag: resolveList<LabelValue>(),
+  }
+  const conversion = config?.conversion || {
+    timeoutMilliseconds: 20000,
+    audioUpload: () => defaultAudioInfo(),
+    transfer: () => defaultAudioInfo(),
+    fetchSpeaker: resolveList<Speaker>(),
   }
 
   const specialRequired = special as Required<SSMLEditorConfig['special']>
@@ -110,5 +124,6 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     bgm: bgmRequired,
     special: specialRequired,
     tryPlay: tryPlayRequired,
+    conversion,
   }
 }

@@ -1,85 +1,211 @@
 <script setup lang="ts">
-import { onMounted, ref, shallowRef } from 'vue'
+import type { LabelValue, Speaker } from '@/model'
 import SpeakerItem from './speaker-item.vue'
+import { computed, inject, onMounted, ref, shallowRef, watch } from 'vue'
+import { Recorder } from './recorder'
+import { CancellationTokenSource, FileSelector } from '@/utils'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
+import { useEditorStore } from '@/stores'
+import { type AudioInfo } from './data'
+import { useElementVisibility } from '@vueuse/core'
 
-type AudioFile = { name: string; path?: string }
+const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
-// const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
-// const props = defineProps<{ isUpload: boolean; visible: boolean }>()
+const { globalEditConfig } = useEditorStore()
+const { audioUpload, transfer, fetchSpeaker, timeoutMilliseconds } = globalEditConfig.conversion
 
-const audioFile = ref<AudioFile>()
+const boxRef = ref<HTMLElement>()
 
-const selectedFile = shallowRef()
+const audioInfo = ref<AudioInfo>()
+const transferAudioInfo = ref<AudioInfo>()
+const isRecord = ref<boolean>(true)
+const speakerList = ref<Speaker[]>([])
+const selSpeaker = ref<Speaker>()
 
-onMounted(() => {
-  const fileInput = document.getElementById('conversion_UploadAudioInputFile')
-  if (!fileInput) throw Error('未找到id:conversion_UploadAudioInputFile的元素')
-  fileInput.addEventListener('change', (event) => {
-    if (!event.target) return
-    // @ts-ignore
-    const file = event.target.files[0]
-    if (file) {
-      selectedFile.value = file
-    }
-  })
+const recordFile = shallowRef<Blob>()
+const inputFile = shallowRef<File>()
+
+const audioRecorder = new Recorder()
+const audioSelector = new FileSelector('audio-conversion', 'audio/*')
+
+const recorderState = computed(() => audioRecorder.state)
+
+const visible = useElementVisibility(boxRef)
+
+const reopen = inject<VoidFunction>('reopen')
+
+watch(visible, (newValue) => {
+  if (!newValue) {
+    reset()
+  }
 })
 
-function inputFile() {
-  document.getElementById('conversion_UploadAudioInputFile')?.click()
-}
+onMounted(async () => {
+  speakerList.value = await fetchSpeaker()
+})
+
+watch(visible, (newVlaue) => {
+  if (!newVlaue) {
+    isRecord.value = true
+  }
+})
 
 defineExpose({
-  inputFile,
+  openInputFile,
 })
+
+function reset() {
+  audioInfo.value = undefined
+  transferAudioInfo.value = undefined
+  isRecord.value = true
+  selSpeaker.value = undefined
+  recordFile.value = undefined
+  inputFile.value = undefined
+}
+
+function handleStopRecord() {
+  audioRecorder.stop()
+}
+
+async function handleStartRecord() {
+  try {
+    recordFile.value = await audioRecorder.start()
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
+}
+
+function handleDeleteFile() {
+  audioInfo.value = undefined
+  transferAudioInfo.value = undefined
+  recordFile.value = undefined
+  inputFile.value = undefined
+  selSpeaker.value = undefined
+}
+
+async function openInputFile() {
+  isRecord.value = false
+  try {
+    inputFile.value = await audioSelector.open()
+    return true
+  } catch (error) {
+    return false
+  }
+}
+
+async function handleAudioUpload() {
+  try {
+    const cts = new CancellationTokenSource(timeoutMilliseconds)
+    if (isRecord.value && recordFile.value) {
+      cts.startTimeout()
+      audioInfo.value = await audioUpload(recordFile.value, cts.token)
+    } else if (!isRecord.value && inputFile.value) {
+      cts.startTimeout()
+      audioInfo.value = await audioUpload(inputFile.value, cts.token)
+    } else {
+      throw new Error('请选则文件或实时录音')
+    }
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
+}
+
+async function handleSpeakerItemClick(item: Speaker) {
+  try {
+    selSpeaker.value = item
+    if (audioInfo.value) {
+      transferAudioInfo.value = await transfer({ audioId: audioInfo.value.id, speakerId: item.id })
+    }
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
+}
+
+function handleSubmit() {
+  if (transferAudioInfo.value && selSpeaker.value) {
+    emit('submit', { label: selSpeaker.value.label, value: transferAudioInfo.value.src })
+    reset()
+  }
+}
+
+function handleReupload() {
+  reopen?.()
+}
 </script>
 
 <template>
-  <div class="audio-upload">
-    <input type="file" id="conversion_UploadAudioInputFile" hidden />
-    <div class="border rounded-pill border-secondary d-flex flex-row justify-content-between">
-      <template>
-        <div class="d-flex flex-row align-items-center">
-          <div>图标</div>
-          <div>{{ audioFile?.name }}</div>
-        </div>
-        <div>
-          <div>删除</div>
-          <button>上传音频</button>
-        </div>
-      </template>
-      <template>
-        <span class="text-secondary" style="font-size: 0.5rem">点击选择文件</span>
-        <button class="btn btn-primary"></button>
-      </template>
-      <template>
-        <span class="text-secondary" style="font-size: 0.5rem">点击开始录音</span>
-        <button class="btn btn-primary">开始录音</button>
-      </template>
+  <div class="audio-upload" ref="boxRef">
+    <div
+      class="d-flex flex-row justify-content-between border rounded-pill border-secondary my-3 py-1 px-2"
+    >
+      <div class="text-secondary d-flex flex-row align-items-center" style="font-size: 0.5rem">
+        <span v-if="recordFile || inputFile" class="iconfont icon-play"></span>
+        <span>{{ inputFile?.name || recordFile?.name }}</span>
+      </div>
+      <div>
+        <button
+          v-if="!audioInfo && (recordFile || inputFile)"
+          @click="handleDeleteFile"
+          class="btn btn-sm rounded-pill"
+        >
+          <span class="iconfont icon-delete"></span>
+        </button>
+        <span v-if="audioInfo" style="font-size: 0.5rem">已上传</span>
+        <template v-if="isRecord">
+          <button
+            v-if="recorderState === 'recording'"
+            @click="handleStopRecord"
+            class="btn btn-primary btn-sm rounded-pill"
+          >
+            结束录音
+          </button>
+          <button v-else @click="handleStartRecord" class="btn btn-primary btn-sm rounded-pill">
+            开始录音
+          </button>
+        </template>
+        <button
+          v-if="!isRecord && !inputFile"
+          @click="openInputFile"
+          class="btn btn-primary btn-sm rounded-pill"
+        >
+          选择文件
+        </button>
+        <button
+          v-if="audioInfo"
+          @click="handleReupload"
+          class="btn btn-primary btn-sm rounded-pill"
+        >
+          重传音频
+        </button>
+        <button
+          v-if="!audioInfo && (inputFile || recordFile)"
+          @click="handleAudioUpload"
+          class="btn btn-primary btn-sm rounded-pill"
+        >
+          上传音频
+        </button>
+      </div>
     </div>
     <div>
       <p>选择需要转换的配音师</p>
-      <div class="speakers-container d-flex flex-row flex-wrap row-gap-1 column-gap-2">
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
-        <SpeakerItem name="莫厚渊"></SpeakerItem>
+      <div
+        class="speakers-container border rounded d-flex flex-row flex-wrap row-gap-1 column-gap-2 overflow-y-auto overflow-x-hidden"
+        style="height: 150px"
+      >
+        <SpeakerItem
+          @click="handleSpeakerItemClick(item)"
+          v-for="(item, index) in speakerList"
+          :key="index"
+          :name="item.label"
+          :avatar="item.avatar"
+          :activated="item.value === selSpeaker?.value"
+        ></SpeakerItem>
       </div>
     </div>
-    <button class="btn btn-primary" disabled>完成录音并上传完成后，可选择配音师转换</button>
+    <button class="btn btn-primary mt-1" @click="handleSubmit" :disabled="!transferAudioInfo">
+      完成录音并上传完成后，可选择配音师转换
+    </button>
   </div>
 </template>
 
