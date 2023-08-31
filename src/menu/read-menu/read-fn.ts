@@ -1,12 +1,10 @@
-import { SlateTransforms, SlateRange, type IDomEditor } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor } from '@wangeditor/editor'
 import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { Prosody } from '@/core'
-import type { ReadLabelValue } from './data'
+import { readValueMap, type ReadLabelValue } from './data'
 
 export class ReadFn extends BaseFn {
-  protected readonly key: string = 'read'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -30,25 +28,15 @@ export class ReadFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
+    const { pitch, rate } = readValueMap[opt.value]
     const node: Prosody = {
       type: 'ssml-prosody',
       remark: opt.label,
-      children: [{ text: value }]
+      pitch,
+      rate,
+      children: [{ text: value }],
     }
 
-    switch (opt.value) {
-      case 'z':
-        node.rate = 'fast'
-        break
-      case 't':
-        node.pitch = '+10%'
-        break
-      case 'z+t':
-        node.rate = 'fast'
-        node.pitch = '+10%'
-        break
-    }
-
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

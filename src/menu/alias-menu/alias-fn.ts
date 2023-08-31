@@ -1,12 +1,10 @@
-import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import type { Sub } from '@/core'
 
 export class AliasFn extends BaseFn {
-  protected readonly key: string = 'alias'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -37,9 +35,9 @@ export class AliasFn extends BaseFn {
       type: 'ssml-sub',
       remark: opt.value,
       alias: opt.value,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

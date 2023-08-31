@@ -1,12 +1,10 @@
-import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import type { Prosody } from '@/core'
 
 export class ChangespeedFn extends BaseFn {
-  protected readonly key: string = 'changespeed'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -34,9 +32,9 @@ export class ChangespeedFn extends BaseFn {
       type: 'ssml-prosody',
       remark: opt.label,
       rate: opt.value,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

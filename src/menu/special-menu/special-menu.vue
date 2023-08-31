@@ -12,20 +12,9 @@ const dragRef = ref()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
 const { globalEditConfig } = useEditorStore()
+const { special } = globalEditConfig
 
 const visible = ref(false)
-
-const menuItemLabel = { first: '默认音效', second: '自定义音效', last: '最近音效' }
-const scenes = [
-  { value: '', label: '全部场景' },
-  { value: '2', label: '场景2' },
-  { value: '3', label: '场景3' }
-] as LabelValue[]
-const styles = [
-  { value: '', label: '全部风格' },
-  { value: '2', label: '风格2' },
-  { value: '3', label: '风格3' }
-] as LabelValue[]
 
 const { x, y, height } = useElementBounding(menuRef)
 
@@ -34,7 +23,7 @@ const handleClick = (editor: IDomEditor) => {
   if (fn.value.isDisabled()) return
   dragRef.value.setPosition({
     x: x.value - 200,
-    y: y.value + height.value
+    y: y.value + height.value,
   })
   visible.value = true
 }
@@ -54,10 +43,10 @@ function handleSubmit(opt: LabelValue) {
       <BarButton ref="menuRef" text="音效" icon="special" @click="handleClick"></BarButton>
     </template>
     <BarSearch
-      :menuItemLabel="menuItemLabel"
-      :scenes="scenes"
-      :styles="styles"
-      :fetch="globalEditConfig.fetchSpecial"
+      :menus="special.menus"
+      :fetchScene="special.fetchScene"
+      :fetchStyle="special.fetchStyle"
+      :fetchData="special.fetchData"
       @submit="handleSubmit"
     ></BarSearch>
   </DragBox>

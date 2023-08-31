@@ -1,13 +1,11 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
+import { SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Phoneme } from '@/core'
 import { WANGEDITOR_EVENT } from '@/constant'
 
-export class SpeakerFn extends BaseFn {
-  protected readonly key: string = 'speaker'
-
+export class PinyinFn extends BaseFn {
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -44,11 +42,12 @@ export class SpeakerFn extends BaseFn {
 
     const node: Phoneme = {
       type: 'ssml-phoneme',
+      alphabet: 'sapi',
       ph: opt.value,
       remark: opt.label,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

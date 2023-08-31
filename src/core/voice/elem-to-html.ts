@@ -10,8 +10,8 @@ export default {
           data-w-e-is-inline
           data-ow-remark="${remark}"
           data-ow-name="${name}"
-          data-ow-effect="${effect}"
+          data-ow-effect="${effect ?? ''}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

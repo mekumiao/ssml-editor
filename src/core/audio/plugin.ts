@@ -1,4 +1,4 @@
-import { DomEditor, type IDomEditor } from '@wangeditor/editor'
+import { DomEditor, type IDomEditor, SlateNode } from '@wangeditor/editor'
 
 export default <T extends IDomEditor>(editor: T) => {
   const { isInline, isVoid } = editor
@@ -12,7 +12,9 @@ export default <T extends IDomEditor>(editor: T) => {
 
   newEditor.isVoid = (elem) => {
     const type = DomEditor.getNodeType(elem)
-    if (type === 'ssml-audio') return true
+    if (type === 'ssml-audio') {
+      return !SlateNode.string(elem)
+    }
     return isVoid(elem)
   }
 

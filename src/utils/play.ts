@@ -17,11 +17,11 @@ export class AudioPlayer {
 
   play(src: string) {
     this.stop()
-
     this.audio = document.createElement('audio')
     this.audio.hidden = true
-    this.audio.volume = 50
+    this.audio.volume = 0.5
     this.audio.src = src
+    this.src = src
     document.body.appendChild(this.audio)
     this.audio.play()
   }

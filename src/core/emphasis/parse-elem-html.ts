@@ -10,7 +10,7 @@ export default {
       type: 'ssml-emphasis',
       remark: remark,
       level: level as any,
-      children: children
+      children: children,
     }
-  }
+  },
 }

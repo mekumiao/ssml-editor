@@ -14,7 +14,7 @@ export default {
       remark: remark,
       styledegree: styledegree as any,
       role: role,
-      children: children
+      children: children,
     }
-  }
+  },
 }

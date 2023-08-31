@@ -14,5 +14,5 @@ export default defineComponent({
     }
 
     return () => <BarButton text="连读" icon="continuous" onClick={handleClick}></BarButton>
-  }
+  },
 })

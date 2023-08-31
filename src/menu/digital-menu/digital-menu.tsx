@@ -6,9 +6,9 @@ import { DigitalFn } from './digital-fn'
 import type { LabelValue } from '@/model'
 
 const options: LabelValue[] = [
-  { value: 'value', label: '读数值' },
-  { value: 'digits', label: '读数字' },
-  { value: 'telephone', label: '读手机号' }
+  { value: 'cardinal', label: '读数值' },
+  { value: 'characters', label: '读数字' },
+  { value: 'telephone', label: '读手机号' },
 ]
 
 export default defineComponent({
@@ -52,9 +52,9 @@ export default defineComponent({
                 )
               })}
             </div>
-          )
+          ),
         }}
       </ElPopover>
     )
-  }
+  },
 })

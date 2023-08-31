@@ -9,8 +9,8 @@ export default {
           data-w-e-type="ssml-emphasis"
           data-w-e-is-inline
           data-ow-remark="${remark}"
-          data-ow-level="${level}"
+          data-ow-level="${level ?? 'none'}"
         >${childrenHtml}</span>`
     return html
-  }
+  },
 }

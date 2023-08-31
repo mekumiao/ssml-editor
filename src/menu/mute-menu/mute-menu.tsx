@@ -11,7 +11,7 @@ const options: LabelValue[] = [
   { value: '300ms', label: '300ms' },
   { value: '400ms', label: '400ms' },
   { value: '500ms', label: '500ms' },
-  { value: '600ms', label: '600ms' }
+  { value: '600ms', label: '600ms' },
 ]
 
 export default defineComponent({
@@ -63,11 +63,11 @@ export default defineComponent({
                   </div>
                 )
               })}
-              <BarInput type="number" ref={inputRef} onSubmit={handleSubmit}></BarInput>
+              <BarInput type="text" ref={inputRef} onSubmit={handleSubmit}></BarInput>
             </div>
-          )
+          ),
         }}
       </ElPopover>
     )
-  }
+  },
 })

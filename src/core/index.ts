@@ -10,11 +10,12 @@ import SModule from './s'
 import SayAsModule from './say-as'
 import SubModule from './sub'
 import VoiceModule from './voice'
+import CustomManagement from './custom-management'
 
 import plugin from './plugin'
 
 export * from './custom-types'
-export * from './serialize'
+export * from './helper'
 
 export default {
   install() {
@@ -29,9 +30,10 @@ export default {
     Boot.registerModule(SayAsModule)
     Boot.registerModule(SubModule)
     Boot.registerModule(VoiceModule)
+    Boot.registerModule(CustomManagement)
     // 全局插件
     Boot.registerPlugin(plugin)
-  }
+  },
 }
 
 import './style.scss'

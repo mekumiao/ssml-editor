@@ -10,9 +10,9 @@ export default {
           data-w-e-is-void
           data-w-e-is-inline
           data-ow-remark="${remark}"
-          data-ow-time="${time}"
-          data-ow-strength="${strength}"
+          data-ow-time="${time ?? ''}"
+          data-ow-strength="${strength ?? 'medium'}"
         ></span>`
     return html
-  }
+  },
 }

@@ -31,7 +31,7 @@ export default defineComponent({
       if (fn.value.isDisabled()) return
       const text = fn.value.getValue()
       if (text) {
-        englishList.value = await globalEditConfig.fetchEnglish(text)
+        englishList.value = await globalEditConfig.english.fetchData(text)
 
         if (englishList.value.length <= 0) {
           return editor.emit(WANGEDITOR_EVENT.ERROR, '找不到单词的音标')
@@ -65,9 +65,9 @@ export default defineComponent({
                 )
               })}
             </div>
-          )
+          ),
         }}
       </ElPopover>
     )
-  }
+  },
 })

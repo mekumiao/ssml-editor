@@ -17,14 +17,10 @@ const handleClick = (editor: IDomEditor) => {
   edirorRef.value = editor
   dragRef.value.setPosition({
     x: x.value - 200,
-    y: y.value + height.value
+    y: y.value + height.value,
   })
   visible.value = true
 }
-
-// function handleSubmit(opt: LabelValue) {
-//   console.log(opt)
-// }
 </script>
 
 <template>

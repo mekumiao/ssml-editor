@@ -1,13 +1,19 @@
 <script setup lang="ts">
-withDefaults(defineProps<{ name: string; img?: string }>(), {
-  img: 'https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png'
-})
+import { demoAvatar } from '@/config'
+
+defineEmits<{ click: [value: string] }>()
+defineProps<{ name: string; value?: string; avatar?: string; activated?: boolean }>()
 </script>
 
 <template>
-  <div class="speaker-item">
+  <div class="speaker-item" @click="$emit('click', value || '')">
     <div class="speaker-head">
-      <img :src="img" class="rounded-circle" style="height: 40px" />
+      <img
+        :src="avatar || demoAvatar()"
+        :class="{ 'border border-warning': activated }"
+        class="rounded-circle"
+        style="height: 40px"
+      />
     </div>
     <div class="speaker-name">{{ name }}</div>
   </div>

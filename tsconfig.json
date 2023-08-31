@@ -3,7 +3,7 @@
     "target": "ES2020",
     "useDefineForClassFields": true,
     "module": "ESNext",
-    "lib": ["es2023", "DOM", "DOM.Iterable"],
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -36,6 +36,8 @@
     "env.d.ts",
     "global.d.ts",
     "vite.config.ts",
+    "vite.config.dev.ts",
+    "vite.config.prod.ts",
     "src/**/*",
     "src/**/*.ts",
     "src/**/*.d.ts",

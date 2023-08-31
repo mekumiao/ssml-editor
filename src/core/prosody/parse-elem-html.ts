@@ -18,7 +18,7 @@ export default {
       range: range,
       rate: rate,
       volume: volume,
-      children: children
+      children: children,
     }
-  }
+  },
 }

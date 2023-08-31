@@ -1,25 +1,17 @@
 <script setup lang="ts">
-defineProps<{ isActivate?: boolean }>()
+defineEmits<{ click: [value: string] }>()
+defineProps<{ activate?: boolean; value?: string }>()
 </script>
 
 <template>
-  <div class="tag-item p-2 text-white text-center" :class="[isActivate ? 'activate' : null]">
+  <span
+    class="tag-item d-inline-block text-white text-center text-nowrap text-truncate"
+    :class="{ 'border border-white rounded-pill': activate }"
+    @click="$emit('click', value)"
+    style="height: 20px; min-width: 60px; max-width: 160px; font-size: 0.5rem; cursor: pointer"
+  >
     <slot></slot>
-  </div>
+  </span>
 </template>
 
-<style lang="scss" scoped>
-.tag-item {
-  cursor: pointer;
-  color: rgba(189, 195, 199, 0.8);
-  font-size: 0.8rem;
-  width: 60px;
-}
-
-.activate {
-  background-color: beige;
-  border-color: white;
-  color: white;
-  opacity: 1;
-}
-</style>
+<style lang="scss" scoped></style>

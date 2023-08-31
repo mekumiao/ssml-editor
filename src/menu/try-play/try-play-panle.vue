@@ -1,21 +1,23 @@
 <script setup lang="ts">
 import AnchorList from './anchor-list.vue'
 import TagList from './tag-list.vue'
-import TagItem from './tag-item.vue'
 import SliderPanle from './slider-panle.vue'
 import { ElInput, ElForm, ElIcon } from 'element-plus'
 import { onMounted, onUnmounted, ref, watch } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 import { Minus } from '@element-plus/icons-vue'
+import type { FilterSpeaker } from '@/model'
+import { defaultFilterSpeaker } from '@/model'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 const props = defineProps<{ visible: boolean }>()
 
 const searchInputRef = ref<HTMLElement>()
 const searchInput = ref('')
-const boxRef = ref()
-const handleRef = ref()
+const boxRef = ref<HTMLElement>()
+const handleRef = ref<HTMLElement>()
+const filter = ref<FilterSpeaker>(defaultFilterSpeaker())
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDownEsc)
@@ -32,7 +34,7 @@ watch(
       setTimeout(() => {
         searchInputFocus()
       }, 200)
-  }
+  },
 )
 
 function handleKeyDownEsc(event: KeyboardEvent) {
@@ -42,9 +44,14 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 }
 
 const { position } = useDraggable(handleRef, {
-  initialValue: { x: 100, y: 100 }
+  initialValue: { x: 40, y: 40 },
 })
 const { style } = constrainDragBounds(boxRef, position)
+
+onMounted(() => {
+  position.value.x = (window.innerWidth - 890) / 2
+  position.value.y = (window.innerHeight - 390) / 2
+})
 
 function handleMinus() {
   emit('update:visible', false)
@@ -52,6 +59,10 @@ function handleMinus() {
 
 function searchInputFocus() {
   searchInputRef.value?.focus()
+}
+
+function handleSearchInputSubmit() {
+  filter.value = { ...filter.value, word: searchInput.value }
 }
 </script>
 
@@ -73,23 +84,18 @@ function searchInputFocus() {
       <div class="try-play-body d-flex flex-row">
         <div class="try-play-left w-50 border-right border-secondary">
           <div class="pe-1">
-            <ElForm @submit.prevent>
+            <ElForm @submit.prevent="handleSearchInputSubmit">
               <ElInput
-                :input-style="{}"
+                :input-style="{ color: 'white' }"
                 ref="searchInputRef"
                 v-model="searchInput"
                 placeholder="输入名称搜索"
               ></ElInput>
             </ElForm>
           </div>
-          <div class="type-list d-flex flex-row border-bottom border-secondary">
-            <TagItem>热榜</TagItem>
-            <TagItem>SVIP</TagItem>
-            <TagItem>付费</TagItem>
-          </div>
-          <TagList></TagList>
+          <TagList v-model:filter="filter"></TagList>
           <div class="py-1 border-top border-secondary"></div>
-          <AnchorList></AnchorList>
+          <AnchorList :filter="filter"></AnchorList>
         </div>
         <div
           class="try-play-right w-50 border-start rounded border-top border-secondary overflow-x-hidden overflow-y-auto scrollbar-none"

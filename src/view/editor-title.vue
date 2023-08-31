@@ -4,7 +4,7 @@ import { Share } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
 import { audioPlayer } from '@/utils'
-import { serializeToSSML } from '@/core'
+import { serializeToSSML } from '@/serialize'
 import { useSSMLStore } from '@/stores'
 
 const dialogVisible = ref(false)
@@ -15,8 +15,8 @@ const ssml = computed(() => {
   return xmlFormat(ssmlValue.value, {
     indentation: '    ',
     filter: (node) => node.type !== 'Comment',
-    collapseContent: false,
-    lineSeparator: '\n'
+    collapseContent: true,
+    lineSeparator: '\n',
   })
 })
 
@@ -35,8 +35,12 @@ const handleCloseBgm = () => {
   rootBackgroundaudio.remark = ''
 }
 
-async function handleCopy() {
-  await navigator.clipboard.writeText(ssml.value)
+/**
+ * 复制ssml到剪贴板
+ * @param isFormat 是否输出copy格式化的文本到剪贴板. 多余的空格和换行可能会导致意外的停顿
+ */
+async function handleCopy(isFormat: boolean) {
+  await navigator.clipboard.writeText(isFormat ? ssml.value : ssmlValue.value)
   dialogVisible.value = false
 }
 </script>
@@ -74,10 +78,19 @@ async function handleCopy() {
   </div>
 
   <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
-    <pre class="ssml-code" style="white-space: pre-wrap">{{ ssml }}</pre>
+    <pre
+      class="ssml-code border border-secondary-subtle rounded-2 px-2"
+      style="white-space: pre-wrap; max-height: 50vh"
+      >{{ ssml }}</pre
+    >
+    <template #header>
+      <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
+      <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭(推荐)</ElButton>
+    </template>
     <template #footer>
       <span class="dialog-footer">
-        <ElButton type="primary" @click="handleCopy">复制+关闭</ElButton>
+        <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
+        <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭(推荐)</ElButton>
       </span>
     </template>
   </ElDialog>

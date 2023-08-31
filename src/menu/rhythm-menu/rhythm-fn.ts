@@ -1,12 +1,10 @@
-import { SlateRange, type IDomEditor, SlateTransforms } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import type { Break } from '@/core'
 
 export class RhythmFn extends BaseFn {
-  protected readonly key: string = 'rhythm'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -31,9 +29,9 @@ export class RhythmFn extends BaseFn {
       type: 'ssml-break',
       strength: opt.value as any,
       remark: opt.label,
-      children: [{ text: '' }]
+      children: [{ text: '' }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

@@ -3,20 +3,30 @@ import EditorTitle from './editor-title.vue'
 import EditorCore from './editor-core.vue'
 import BarView from './bar-view.vue'
 import { type IDomEditor } from '@wangeditor/editor'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
 
-const emit = defineEmits<{ onCreated: [editor: IDomEditor]; onChange: [editor: IDomEditor] }>()
+const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 
 const handleCreated = (editor: IDomEditor) => {
-  emit('onCreated', editor)
+  emit('created', editor)
 }
 
 const handleChange = (editor: IDomEditor) => {
-  emit('onChange', editor)
+  emit('change', editor)
+}
+
+function handleClick(ev: MouseEvent) {
+  emitter.emit(EMITTER_EVENT.VIEW_CLICK, ev)
+}
+
+function handleKeyDown(ev: KeyboardEvent) {
+  emitter.emit(EMITTER_EVENT.VIEW_KEYDOWN, ev)
 }
 </script>
 
 <template>
-  <div class="editor-view">
+  <div class="editor-view" @click="handleClick" @keydown="handleKeyDown">
     <EditorTitle></EditorTitle>
     <div class="editor-box">
       <BarView></BarView>

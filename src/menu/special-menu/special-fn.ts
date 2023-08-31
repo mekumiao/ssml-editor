@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateRange } from '@wangeditor/editor'
+import { SlateRange } from '@wangeditor/editor'
 import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
@@ -7,8 +7,6 @@ import type { Audio } from '@/core'
 
 // 音效功能
 export class SpecialFn extends BaseFn {
-  protected readonly key: string = 'special'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -39,9 +37,9 @@ export class SpecialFn extends BaseFn {
       type: 'ssml-audio',
       src: opt.value,
       remark: opt.label,
-      children: [{ text: '' }]
+      children: [{ text: '' }],
     }
 
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

@@ -1,6 +1,6 @@
 import type { App, Plugin } from 'vue'
 
-import { SpeakerMenu } from './speaker-menu'
+import { PinyinMenu } from './pinyin-menu'
 import { ContinuousMenu } from './continuous-menu'
 import { ReadMenu } from './read-menu'
 import { DigitalMenu } from './digital-menu'
@@ -16,9 +16,9 @@ import { ManagementMenu } from './management-menu'
 import { ConversionMenu } from './conversion-menu'
 import { TryPlay } from './try-play'
 
-export default {
+export default <Plugin>{
   install: (app: App) => {
-    app.component('SpeakerMenu', SpeakerMenu)
+    app.component('PinyinMenu', PinyinMenu)
     app.component('ContinuousMenu', ContinuousMenu)
     app.component('ReadMenu', ReadMenu)
     app.component('DigitalMenu', DigitalMenu)
@@ -33,11 +33,11 @@ export default {
     app.component('ManagementMenu', ManagementMenu)
     app.component('ConversionMenu', ConversionMenu)
     app.component('TryPlay', TryPlay)
-  }
-} as Plugin
+  },
+}
 
 export {
-  SpeakerMenu,
+  PinyinMenu,
   ContinuousMenu,
   ReadMenu,
   DigitalMenu,
@@ -51,7 +51,7 @@ export {
   SensitiveMenu,
   ManagementMenu,
   ConversionMenu,
-  TryPlay
+  TryPlay,
 }
 
 import './style.scss'

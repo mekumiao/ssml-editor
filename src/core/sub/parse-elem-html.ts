@@ -10,7 +10,7 @@ export default {
       type: 'ssml-sub',
       remark: remark,
       alias: alias,
-      children: children
+      children: children,
     }
-  }
+  },
 }

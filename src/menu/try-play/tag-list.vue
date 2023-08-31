@@ -1,5 +1,32 @@
 <script setup lang="ts">
 import TagItem from './tag-item.vue'
+import { onMounted, ref, toRaw } from 'vue'
+import type { FilterSpeaker, LabelValue } from '@/model'
+import { useEditorStore } from '@/stores'
+
+const emit = defineEmits<{ 'update:filter': [value: FilterSpeaker] }>()
+const props = defineProps<{ filter: FilterSpeaker }>()
+
+const { globalEditConfig } = useEditorStore()
+const { category, gender, featchTag } = globalEditConfig.tryPlay
+
+const tags = ref<LabelValue[]>([])
+
+onMounted(async () => {
+  tags.value = await featchTag()
+})
+
+function handleCategoryClick(value: string) {
+  emit('update:filter', { ...toRaw(props.filter), category: value })
+}
+
+function handleGenderClick(value: string) {
+  emit('update:filter', { ...toRaw(props.filter), gender: value })
+}
+
+function handleTagsClick(value: string) {
+  emit('update:filter', { ...toRaw(props.filter), tag: value })
+}
 </script>
 
 <template>
@@ -8,62 +35,43 @@ import TagItem from './tag-item.vue'
       class="w-100 d-flex flex-row border-bottom border-secondary align-items-center"
       style="height: 40px"
     >
-      <TagItem>全部</TagItem>
-      <TagItem>男声</TagItem>
-      <TagItem>女声</TagItem>
+      <TagItem
+        @click="handleCategoryClick"
+        v-for="(item, index) in category"
+        :key="index"
+        :value="item.value"
+        :activate="filter.category === item.value"
+      >
+        {{ item.label }}
+      </TagItem>
+    </div>
+    <div
+      class="w-100 d-flex flex-row border-bottom border-secondary align-items-center"
+      style="height: 40px"
+    >
+      <TagItem
+        @click="handleGenderClick"
+        v-for="(item, index) in gender"
+        :key="index"
+        :value="item.value"
+        :activate="filter.gender === item.value"
+      >
+        {{ item.label }}
+      </TagItem>
     </div>
     <div
       style="height: 100px"
-      class="w-100 d-flex flex-row flex-wrap align-items-start overflow-y-auto overflow-x-hidden scrollbar-none"
+      class="w-100 pt-2 d-flex flex-row flex-wrap align-content-start row-gap-2 overflow-y-auto overflow-x-hidden scrollbar-none"
     >
-      <TagItem>全部</TagItem>
-      <TagItem>影视</TagItem>
-      <TagItem>情感</TagItem>
-      <TagItem>娱乐</TagItem>
-      <TagItem>快板</TagItem>
-      <TagItem>书单</TagItem>
-      <TagItem>名人</TagItem>
-      <TagItem>角色</TagItem>
-      <TagItem>全部</TagItem>
-      <TagItem>影视</TagItem>
-      <TagItem>情感</TagItem>
-      <TagItem>娱乐</TagItem>
-      <TagItem>快板</TagItem>
-      <TagItem>书单</TagItem>
-      <TagItem>名人</TagItem>
-      <TagItem>角色</TagItem>
-      <TagItem>全部</TagItem>
-      <TagItem>影视</TagItem>
-      <TagItem>情感</TagItem>
-      <TagItem>娱乐</TagItem>
-      <TagItem>快板</TagItem>
-      <TagItem>书单</TagItem>
-      <TagItem>名人</TagItem>
-      <TagItem>角色</TagItem>
-      <TagItem>全部</TagItem>
-      <TagItem>影视</TagItem>
-      <TagItem>情感</TagItem>
-      <TagItem>娱乐</TagItem>
-      <TagItem>快板</TagItem>
-      <TagItem>书单</TagItem>
-      <TagItem>名人</TagItem>
-      <TagItem>角色</TagItem>
-      <TagItem>全部</TagItem>
-      <TagItem>影视</TagItem>
-      <TagItem>情感</TagItem>
-      <TagItem>娱乐</TagItem>
-      <TagItem>快板</TagItem>
-      <TagItem>书单</TagItem>
-      <TagItem>名人</TagItem>
-      <TagItem>角色</TagItem>
-      <TagItem>全部</TagItem>
-      <TagItem>影视</TagItem>
-      <TagItem>情感</TagItem>
-      <TagItem>娱乐</TagItem>
-      <TagItem>快板</TagItem>
-      <TagItem>书单</TagItem>
-      <TagItem>名人</TagItem>
-      <TagItem>角色</TagItem>
+      <TagItem
+        @click="handleTagsClick"
+        v-for="(item, index) in tags"
+        :key="index"
+        :value="item.value"
+        :activate="filter.tag === item.value"
+      >
+        {{ item.label }}
+      </TagItem>
     </div>
   </div>
 </template>

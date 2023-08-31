@@ -2,7 +2,7 @@ import { type IDomEditor } from '@wangeditor/editor'
 import { defineComponent, ref, withModifiers, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
-import { SpeakerFn } from './speaker-fn'
+import { PinyinFn } from './pinyin-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import { useEditorStore } from '@/stores'
@@ -10,7 +10,7 @@ import { useEditorStore } from '@/stores'
 export default defineComponent({
   setup() {
     const { globalEditConfig } = useEditorStore()
-    const fn = shallowRef<SpeakerFn>()
+    const fn = shallowRef<PinyinFn>()
     const pyList = ref<LabelValue[]>([])
     const visible = ref(false)
 
@@ -25,11 +25,11 @@ export default defineComponent({
     }
 
     async function handleClick(editor: IDomEditor) {
-      fn.value ??= new SpeakerFn(editor)
+      fn.value ??= new PinyinFn(editor)
       if (fn.value?.isDisabled()) return
       const text = fn.value.getValue()
       if (text) {
-        pyList.value = await globalEditConfig.fetchSpeaker(text)
+        pyList.value = await globalEditConfig.pinyin.fetchData(text)
       } else {
         pyList.value = []
       }
@@ -48,7 +48,10 @@ export default defineComponent({
             <BarButton text="多音字" icon="speaker" onClick={handleClick}></BarButton>
           ),
           default: () => (
-            <div class="d-flex flex-column">
+            <div
+              class="d-flex flex-column overflow-x-hidden overflow-y-auto"
+              style="max-height: 300px"
+            >
               {pyList.value.map(({ label, value }) => {
                 return (
                   <div
@@ -67,9 +70,9 @@ export default defineComponent({
                 )
               })}
             </div>
-          )
+          ),
         }}
       </ElPopover>
     )
-  }
+  },
 })

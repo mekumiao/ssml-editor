@@ -1,2 +1,2 @@
 export * from './label-value'
-export * from './filter'
+export * from './speaker'

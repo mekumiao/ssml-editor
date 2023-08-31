@@ -1,13 +1,11 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateTransforms, SlateEditor, SlateRange } from '@wangeditor/editor'
+import { SlateEditor, SlateRange } from '@wangeditor/editor'
 import { WANGEDITOR_EVENT } from '@/constant'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { SayAs } from '@/core'
 
 export class DigitalFn extends BaseFn {
-  protected readonly key: string = 'digital'
-
   public constructor(editor: IDomEditor) {
     super(editor)
   }
@@ -43,10 +41,9 @@ export class DigitalFn extends BaseFn {
       type: 'ssml-say-as',
       interpretAs: opt.value,
       remark: opt.label,
-      children: [{ text: value }]
+      children: [{ text: value }],
     }
 
-    SlateTransforms.delete(this.editor)
-    SlateTransforms.insertNodes(this.editor, node)
+    this.editor.insertNode(node)
   }
 }

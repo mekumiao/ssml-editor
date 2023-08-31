@@ -1,29 +1,38 @@
 <script setup lang="ts">
-import type { LabelValue } from '@/model'
-import { ElInput, ElForm, ElTag, ElButton, ElSelect, ElOption } from 'element-plus'
+import { defaultFilterSpeaker, defaultLabelValue, type LabelValue, type Speaker } from '@/model'
+import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { ref } from 'vue'
+import { onMounted, ref, shallowRef } from 'vue'
 import { speed, pitch } from './data'
+import { useEditorStore } from '@/stores'
+import { type SubmitData, formatPitch, formatRate } from './data'
+
+const emit = defineEmits<{ submit: [value: SubmitData] }>()
+
+const { globalEditConfig } = useEditorStore()
+const { tryPlay } = globalEditConfig
 
 const showMore = ref(false)
 
 const searchInput = ref('')
 
+const selTypeRef = ref()
 const selSpeakerRef = ref()
 const selRoleRef = ref()
 const selStyleRef = ref()
 const selSpeedRef = ref()
 const selPitchRef = ref()
 
-const selType = ref('')
-const selSpeaker = ref('')
-const selRole = ref('')
-const selStyle = ref('')
-const selSpeed = ref('')
-const selPitch = ref('')
+const selType = ref<LabelValue>(defaultLabelValue())
+const selSpeaker = ref<LabelValue>(defaultLabelValue())
+const selRole = ref<LabelValue>(defaultLabelValue())
+const selStyle = ref<LabelValue>(defaultLabelValue())
+const selSpeed = ref<LabelValue>({ label: '', value: '1.0' })
+const selPitch = ref<LabelValue>({ label: '', value: '0' })
 
-const dataListType = ref<LabelValue[]>([])
+const speakerCache = shallowRef<Speaker[]>([])
+const dataListType = ref<LabelValue[]>([{ label: '全部类型', value: '' }, ...tryPlay.flags])
 const dataListSpeaker = ref<LabelValue[]>([])
 const dataListRole = ref<LabelValue[]>([])
 const dataListStyle = ref<LabelValue[]>([])
@@ -31,61 +40,55 @@ const dataListStyle = ref<LabelValue[]>([])
 const dataListSpeed = ref<LabelValue[]>(speed())
 const dataListPitch = ref<LabelValue[]>(pitch())
 
-dataListType.value = [
-  { label: '全部类型', value: '' },
-  { label: '常规', value: '2' },
-  { label: '已购', value: '3' },
-  { label: '收藏', value: '4' },
-  { label: '我的', value: '5' },
-  { label: 'SVIP', value: '6' },
-  { label: '付费', value: '7' }
-]
-
-dataListSpeaker.value = dataListType.value
-dataListRole.value = dataListType.value
-dataListStyle.value = dataListType.value
+onMounted(async () => {
+  const voices = await tryPlay.fetchData(defaultFilterSpeaker())
+  speakerCache.value = voices
+  dataListSpeaker.value = voices
+  if (voices.length > 0) {
+    dataListRole.value = voices[0].roles
+    dataListStyle.value = voices[0].styles
+    selSpeaker.value = voices[0]
+  }
+  if (dataListRole.value.length > 0) {
+    selRole.value = dataListRole.value[0]
+  }
+  if (dataListStyle.value.length > 0) {
+    selStyle.value = dataListStyle.value[0]
+  }
+})
 
 function handleSearch() {}
-function handleChangeType() {}
-function handleSelectSpeaker() {
-  selRole.value = ''
-  scrollIntoView(selSpeakerRef)
+function handleSelectType() {}
+function handleSelectSpeaker(opt: LabelValue) {
+  const speader = speakerCache.value.find((v) => v.value === opt.value)
+  if (speader) {
+    dataListRole.value = speader.roles
+    dataListStyle.value = speader.styles
+
+    if (dataListRole.value.length > 0) {
+      selRole.value = dataListRole.value[0]
+    }
+    if (dataListStyle.value.length > 0) {
+      selStyle.value = dataListStyle.value[0]
+    }
+  }
 }
-function handleSelectRole() {
-  selStyle.value = ''
-  scrollIntoView(selRoleRef)
-}
-function handleSelectStyle() {
-  selSpeed.value = '1.00'
-  selPitch.value = '0'
-  scrollIntoView(selStyleRef)
-}
+function handleSelectRole() {}
+function handleSelectStyle() {}
 function handleSelectSpeed() {}
 function handleSelectPitch() {}
 
-async function scrollIntoView(without: any) {
-  console.log(without)
-  // await sleep(200)
-  // selSpeakerRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selRoleRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selStyleRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selSpeedRef.value.scrollIntoViewTheItem()
-  // await sleep(200)
-  // selPitchRef.value.scrollIntoViewTheItem()
-
-  // if (without != selSpeakerRef.value) selSpeakerRef.value.scrollIntoViewTheItem()
-  // if (without != selRoleRef.value) selRoleRef.value.scrollIntoViewTheItem()
-  // if (without != selStyleRef.value) selStyleRef.value.scrollIntoViewTheItem()
-  // if (without != selSpeedRef.value) selSpeedRef.value.scrollIntoViewTheItem()
-  // if (without != selPitchRef.value) selPitchRef.value.scrollIntoViewTheItem()
+function handleSubmit() {
+  const rest: SubmitData = {
+    label: `${selSpeaker.value.label}|${selRole.value.label}|${selStyle.value.label}|${selSpeed.value.label}`,
+    value: selSpeaker.value.value,
+    role: selRole.value.value,
+    style: selStyle.value.value,
+    speed: formatRate(Number(selSpeed.value.value)),
+    pitch: formatPitch(Number(selPitch.value.value)),
+  }
+  emit('submit', rest)
 }
-
-// function sleep(time?: number) {
-//   return new Promise<void>((resolve) => setTimeout(() => resolve(), time ?? 0))
-// }
 </script>
 
 <template>
@@ -112,20 +115,20 @@ async function scrollIntoView(without: any) {
       </ul>
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
         <SelectList
+          @update:modelValue="handleSelectType"
+          ref="selTypeRef"
+          v-model="selType"
+          :dataList="dataListType"
+        >
+          <span class="my-3">类型</span>
+        </SelectList>
+        <SelectList
           @update:modelValue="handleSelectSpeaker"
           ref="selSpeakerRef"
           v-model="selSpeaker"
           :dataList="dataListSpeaker"
         >
-          <ElSelect @change="handleChangeType" v-model="selType">
-            <ElOption
-              v-for="(item, index) in dataListType"
-              :value="item.value"
-              :label="item.label"
-              :key="index"
-            >
-            </ElOption>
-          </ElSelect>
+          <span class="my-3">配音师</span>
         </SelectList>
         <SelectList
           @update:modelValue="handleSelectRole"
@@ -163,7 +166,7 @@ async function scrollIntoView(without: any) {
     </div>
 
     <div class="position-absolute bottom-0 end-0 d-flex flex-row justify-content-end me-4 mb-3">
-      <ElButton v-show="!showMore" type="primary">确定</ElButton>
+      <ElButton v-show="!showMore" @click="handleSubmit" type="primary">确定</ElButton>
       <ElButton v-show="showMore" type="primary">全部清空</ElButton>
     </div>
   </div>

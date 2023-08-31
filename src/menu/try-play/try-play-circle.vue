@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
-
-const src = ref<string>(`https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png`)
+import { demoAvatar } from '@/config'
+import { useTryPlayStore } from '@/stores'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
@@ -12,11 +12,13 @@ const boxRef = ref()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
 
+const tryPlayStore = useTryPlayStore()
+
 const { position } = useDraggable(boxRef, {
   initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
   onStart: (_, event) => {
     return isClick(event.clientX, event.clientY) ? false : undefined
-  }
+  },
 })
 const { style } = constrainDragBounds(boxRef, position)
 
@@ -51,8 +53,8 @@ function isClick(x: number, y: number) {
     @mouseup="handleMouseup"
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <img :src="src" class="rounded-circle" />
-      <div class="anchor-avatar-name text-white">莫厚渊</div>
+      <img :src="tryPlayStore.speaker.avatar || demoAvatar()" class="rounded-circle" />
+      <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.label }}</div>
     </div>
   </div>
 </template>

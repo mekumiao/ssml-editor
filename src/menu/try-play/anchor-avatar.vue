@@ -1,15 +1,29 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { demoAvatar } from '@/config'
+import type { AnchorAvatarData } from './data'
 
-const src = ref<string>(`https://img.sdaxia.top/upload/4314c841777e4d20901cd5d04a28e91a.png`)
+defineEmits<{ click: [value: string] }>()
+defineProps<{ activate?: boolean; data?: AnchorAvatarData }>()
 </script>
 
 <template>
   <div
-    class="anchor-avatar d-flex flex-column align-items-center text-center justify-content-center"
+    class="anchor-avatar d-flex flex-column align-items-center text-center justify-content-center position-relative"
+    @click="$emit('click', data?.value)"
   >
-    <img :src="src" class="rounded-circle" style="height: 40px" />
-    <div class="anchor-avatar-name text-white">莫厚渊</div>
+    <span
+      v-if="!data?.isFree"
+      class="position-absolute top-0 start-100 translate-middle text-bg-danger text-nowrap rounded px-1"
+      style="font-size: 0.5rem"
+      >付费</span
+    >
+    <img
+      :src="data?.src ?? demoAvatar()"
+      class="rounded-circle"
+      style="height: 40px"
+      :class="{ 'border border-2 border-warning': activate }"
+    />
+    <div class="anchor-avatar-name text-white">{{ data?.label }}</div>
   </div>
 </template>
 

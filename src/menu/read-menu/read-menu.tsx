@@ -53,9 +53,9 @@ export default defineComponent({
                 )
               })}
             </div>
-          )
+          ),
         }}
       </ElPopover>
     )
-  }
+  },
 })

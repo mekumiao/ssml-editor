@@ -12,7 +12,7 @@ export default {
       remark: remark,
       alphabet: alphabet,
       ph: ph,
-      children: children
+      children: children,
     }
-  }
+  },
 }

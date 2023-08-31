@@ -3,15 +3,18 @@ import { useDraggable } from '@vueuse/core'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { type Position } from '@vueuse/core'
 import { constrainDragBounds } from './constrain-drag-bounds'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
 const props = defineProps<{ visible: boolean; initialValue?: Position }>()
 
 const boxRef = ref<HTMLElement>()
+const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
 
-const { position } = useDraggable(boxRef, {
-  initialValue: props.initialValue
+const { position } = useDraggable(dragRef, {
+  initialValue: props.initialValue,
 })
 const { style } = constrainDragBounds(boxRef, position)
 
@@ -20,20 +23,24 @@ function setPosition(opt: Position) {
 }
 
 defineExpose({
-  setPosition
+  setPosition,
 })
 
 onMounted(() => {
-  window.addEventListener('click', handleWindowClick)
-  window.addEventListener('keydown', handleKeyDownEsc)
+  emitter.on(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  // emitter.on(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
+  // document.addEventListener('mousedown', handleViewClick)
+  document.addEventListener('keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
-  window.addEventListener('click', handleWindowClick)
-  window.addEventListener('keydown', handleKeyDownEsc)
+  emitter.off(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  // emitter.off(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
+  // document.removeEventListener('mousedown', handleViewClick)
+  document.removeEventListener('keydown', handleKeyDownEsc)
 })
 
-function handleWindowClick(ev: MouseEvent) {
+function handleViewClick(ev: MouseEvent) {
   isOthreClick(ev) && handleClose()
 }
 
@@ -56,7 +63,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 </script>
 
 <template>
-  <div ref="referenceRef">
+  <div ref="referenceRef" @mousedown.prevent>
     <slot name="reference"></slot>
   </div>
   <Teleport to="body">
@@ -66,8 +73,10 @@ function handleKeyDownEsc(event: KeyboardEvent) {
       class="demotestname card shadow brag-box user-select-none"
       style="position: fixed"
       :style="style"
+      @mousedown.prevent
     >
-      <div class="w-100 text-end me-2">
+      <div class="w-100 d-flex flex-row align-items-center">
+        <div ref="dragRef" class="w-100" style="height: 40px; cursor: move"></div>
         <span @click="handleClose" class="btn iconfont icon-close fs-5"></span>
       </div>
       <slot></slot>
@@ -75,13 +84,4 @@ function handleKeyDownEsc(event: KeyboardEvent) {
   </Teleport>
 </template>
 
-<style lang="scss" scoped>
-.drag-box-mask {
-  background-color: rgba(229, 229, 229, 0.15);
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0px;
-  left: 0px;
-}
-</style>
+<style lang="scss" scoped></style>

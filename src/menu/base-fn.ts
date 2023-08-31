@@ -5,7 +5,6 @@ import type { LabelValue } from '@/model'
 
 export default abstract class BaseFn {
   protected readonly editor: IDomEditor
-  protected abstract readonly key: string
 
   public constructor(editor: IDomEditor) {
     this.editor = editor

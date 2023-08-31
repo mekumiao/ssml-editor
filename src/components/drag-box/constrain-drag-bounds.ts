@@ -10,7 +10,7 @@ export function constrainDragBounds(
   position: Ref<{
     x: number
     y: number
-  }>
+  }>,
 ) {
   const { width: boxWidth, height: boxHeight } = useElementSize(box)
   const { width: windowWidth, height: windowHeight } = useWindowSize()
@@ -18,7 +18,7 @@ export function constrainDragBounds(
   const boundary = computed(() => {
     return {
       x: windowWidth.value - boxWidth.value,
-      y: windowHeight.value - boxHeight.value
+      y: windowHeight.value - boxHeight.value,
     }
   })
 
