@@ -1,77 +1,41 @@
 import { DomEditor, SlateEditor, SlateElement, SlateNode, SlateText } from '@wangeditor/editor'
 import type { IDomEditor } from '@wangeditor/editor'
-import type { Audio } from '@/core/audio'
 import type { Break } from '@/core/break'
-import type { Emphasis } from '@/core/emphasis'
-import type { MsttsExpressAs } from '@/core/mstts-express-as'
-import type { P } from '@/core/p'
 import type { Phoneme } from '@/core/phoneme'
 import type { Prosody } from '@/core/prosody'
-import type { S } from '@/core/s'
 import type { SayAs } from '@/core/say-as'
 import type { Sub } from '@/core/sub'
 import type { MsttsBackgroundaudio } from '@/core/mstts-backgroundaudio'
 import type { Speak } from '@/core/speak'
-import type { Voice } from '@/core/voice'
-import type { CustomManagement, MsttsSilence, SSMLElementType } from '@/core/custom-types'
+import type { SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
-
-function escapeText(text: string): string {
-  const result = text
-    .replaceAll(/[&]/gi, '&amp;')
-    .replaceAll(/[<]/gi, '&lt;')
-    .replaceAll(/[>]/gi, '&gt;')
-  return result
-}
-
-function serializeAudio(node: Audio, children?: string) {
-  if (children) return `<audio src="${node.src}">${children}</audio>`
-  return `<audio src="${node.src}"/>`
-}
+import type { MoyinW } from '@/core/moyin-w'
 
 function serializeBreak(node: Break) {
   if (node.time) {
     return `<break time="${node.time}"/>`
   } else if (node.strength) {
-    return `<break strength="${node.strength}"/>`
+    switch (node.strength) {
+      case 'x-weak':
+        return `<break time="200ms"/>`
+      case 'weak':
+        return `<break time="300ms"/>`
+      case 'medium':
+        return `<break time="500ms"/>`
+      case 'strong':
+        return `<break time="700ms"/>`
+      case 'x-strong':
+        return `<break time="1000ms"/>`
+      default:
+        return `<break time="200ms"/>`
+    }
   }
   return `<break/>`
 }
 
-function serializeEmphasis(node: Emphasis, children: string) {
-  if (node.level) {
-    return `<emphasis level="${node.level}">${children}</emphasis>`
-  }
-  return `<emphasis>${children}</emphasis>`
-}
-
-function serializeMsttsExpressAs(node: MsttsExpressAs, children: string) {
-  if (!node.style) return children
-  const role = node.role ? ` role="${node.role}"` : ''
-  const styledegree = node.styledegree ? ` styledegree="${node.styledegree}"` : ''
-  return `<mstts:express-as style="${node.style}"${role}${styledegree}>${children}</mstts:express-as>`
-}
-
-function serializeMsttsBackgroundaudio(node: MsttsBackgroundaudio) {
-  if (!node.src) return ''
-  const volume = node.volume ? ` volume="${node.volume}"` : ''
-  const fadein = node.fadein ? ` fadein="${node.fadein}"` : ''
-  const fadeout = node.fadeout ? ` fadeout="${node.fadeout}"` : ''
-  return `<mstts:backgroundaudio src="${node.src}"${volume}${fadein}${fadeout}/>`
-}
-
-function serializeMsttsSilence(node: MsttsSilence) {
-  if (!node.attrType || !node.value) return ''
-  return `<mstts:silence type="${node.attrType}" value="${node.value}"/>`
-}
-
-function serializeP(_node: P, children: string) {
-  return `<p>${children}</p>`
-}
-
 function serializePhoneme(node: Phoneme, children: string) {
-  const alphabet = node.alphabet ? `alphabet="${node.alphabet}"` : ''
-  return `<phoneme ph="${node.ph}"${alphabet}>${children}</phoneme>`
+  if (!node.ph) return children
+  return `<p phoneme="${node.ph}">${children}</phoneme>`
 }
 
 function serializeProsody(node: Prosody, children: string) {
@@ -91,17 +55,13 @@ function serializeSayAs(node: SayAs, children: string) {
   return `<say-as${interpretAs}${format}${detail}>${children}</say-as>`
 }
 
-function serializeS(_node: S, children: string) {
-  return `<s>${children}</s>`
+function serializeMoyinW(node: MoyinW, children: string) {
+  const phoneme = node.phoneme ? ` phoneme="${node.phoneme}"` : ''
+  return `<w${phoneme}>${children}</w>`
 }
 
 function serializeSub(node: Sub, children: string) {
   return `<sub alias=${node.alias}>${children}</sub>`
-}
-
-function serializeVoice(node: Voice, children: string) {
-  const effect = node.effect ? ` effect="${node.effect}"` : ''
-  return `<voice name="${node.name}${effect}">${children}</voice>`
 }
 
 function serializeSpeak(node: Speak, children: string) {
@@ -110,157 +70,30 @@ function serializeSpeak(node: Speak, children: string) {
 
 function serializeNode(node: SlateNode): string {
   if (SlateText.isText(node)) {
-    return escapeText(node.text)
+    return node.text
   } else if (SlateElement.isElement(node)) {
     const children = node.children.map((n) => serializeNode(n)).join('')
     const type = DomEditor.getNodeType(node) as SSMLElementType
     switch (type) {
-      case 'paragraph':
-        return `<p>${children}</p>`
       case 'ssml-speak':
         return serializeSpeak(node as Speak, children)
-      case 'ssml-mstts:backgroundaudio':
-        return serializeMsttsBackgroundaudio(node as MsttsBackgroundaudio)
-      case 'ssml-audio':
-        return serializeAudio(node as Audio, children)
       case 'ssml-break':
         return serializeBreak(node as Break)
-      case 'ssml-emphasis':
-        return serializeEmphasis(node as Emphasis, children)
-      case 'ssml-mstts:express-as':
-        return serializeMsttsExpressAs(node as MsttsExpressAs, children)
-      case 'ssml-p':
-        return serializeP(node as P, children)
       case 'ssml-phoneme':
         return serializePhoneme(node as Phoneme, children)
       case 'ssml-prosody':
         return serializeProsody(node as Prosody, children)
-      case 'ssml-s':
-        return serializeS(node as S, children)
       case 'ssml-say-as':
         return serializeSayAs(node as SayAs, children)
       case 'ssml-sub':
         return serializeSub(node as Sub, children)
-      case 'ssml-voice':
-        return serializeVoice(node as Voice, children)
-      case 'ssml-mstts:silence':
-        return serializeMsttsSilence(node as MsttsSilence)
+      case 'moyin-w':
+        return serializeMoyinW(node as MoyinW, children)
       default:
         return children
     }
   }
   return ''
-}
-
-/**
- * 将自定义多人配音节点处理为可序列化的voice节点
- * @param editor editor 对象
- * @param customNode 自定义多人配音节点
- * @returns
- */
-function customManagmentToVoice(editor: IDomEditor, customNode: CustomManagement): Voice {
-  const voice: Voice = { type: 'ssml-voice', remark: '', name: customNode.name, children: [] }
-  const silences = createDefaultMsttsSilences()
-  const expressAs: MsttsExpressAs = {
-    type: 'ssml-mstts:express-as',
-    remark: '',
-    style: customNode.style,
-    role: customNode.role,
-    children: [],
-  }
-
-  const prosodyGenter = (): Prosody => ({
-    type: 'ssml-prosody',
-    remark: '',
-    rate: customNode.rate,
-    pitch: customNode.pitch,
-    children: [],
-  })
-
-  voice.children.push(...silences)
-  voice.children.push(expressAs)
-
-  function pushNode(node: SlateNode) {
-    expressAs.children.push(node)
-  }
-
-  function pushNodeWithProsody(node: SlateNode) {
-    const prosody = prosodyGenter()
-    prosody.children.push(node)
-    expressAs.children.push(prosody)
-  }
-
-  for (let i = 0; i < customNode.children.length; i++) {
-    const node = customNode.children[i]
-    if (SlateText.isText(node) && !node.text) continue
-    if (SlateText.isText(node)) {
-      pushNodeWithProsody(node)
-      continue
-    } else if (!SlateEditor.isVoid(editor, node)) {
-      const path = DomEditor.findPath(editor, node)
-      const [nodeEntity] = SlateEditor.nodes(editor, {
-        at: path,
-        mode: 'lowest',
-        voids: false,
-        match: (n) => {
-          return DomEditor.checkNodeType(n, 'ssml-prosody')
-        },
-      })
-
-      if (!nodeEntity) {
-        pushNodeWithProsody(node)
-        continue
-      }
-    }
-    pushNode(node)
-  }
-
-  return voice
-}
-
-function createDefaultMsttsSilences(): MsttsSilence[] {
-  return []
-  // return [
-  //   {
-  //     type: 'ssml-mstts:silence',
-  //     attrType: 'comma-exact',
-  //     value: '150ms',
-  //     remark: '逗号静音',
-  //     children: [],
-  //   },
-  //   {
-  //     type: 'ssml-mstts:silence',
-  //     attrType: 'semicolon-exact',
-  //     value: '150ms',
-  //     remark: '分号静音',
-  //     children: [],
-  //   },
-  //   {
-  //     type: 'ssml-mstts:silence',
-  //     attrType: 'enumerationcomma-exact',
-  //     value: '150ms',
-  //     remark: '顿号静音',
-  //     children: [],
-  //   },
-  // ]
-}
-
-type VoiceHandler = { voice: Voice; pushNode: (node: SlateNode) => void }
-
-function createDefaultVoiceHandler(): VoiceHandler {
-  const { rootVoice, rootExpressAs } = useSSMLStore()
-  const voice = { ...rootVoice, children: [] } as Voice
-  const silences = createDefaultMsttsSilences()
-  const expressAs = { ...rootExpressAs, children: [] } as MsttsExpressAs
-
-  voice.children.push(...silences)
-  voice.children.push(expressAs)
-
-  function pushNode(node: SlateNode) {
-    expressAs.children.push(node)
-  }
-
-  return { voice, pushNode }
 }
 
 type ProsodyHandler = { prosody: Prosody; pushNode: (node: SlateNode) => void }
@@ -314,26 +147,18 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
 function wrapVoiceNode(editor: IDomEditor) {
   const nodes = mergeParagraphNodes(editor)
   const wrapNodes: SlateNode[] = []
-  let voiceHandler: VoiceHandler | undefined
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
     // 跳过空节点
     if (SlateText.isText(node) && !node.text) continue
     // 多人语音节点
     if (DomEditor.checkNodeType(node, 'custom-management')) {
-      if (voiceHandler) {
-        wrapNodes.push(voiceHandler.voice)
-        voiceHandler = undefined
-      }
-      wrapNodes.push(customManagmentToVoice(editor, node as CustomManagement))
       continue
     }
     // 默认语音节点
-    voiceHandler ??= createDefaultVoiceHandler()
     if (SlateText.isText(node)) {
-      const { prosody, pushNode } = createDefaultProsodyHandler()
+      const { pushNode } = createDefaultProsodyHandler()
       pushNode(node)
-      voiceHandler.pushNode(prosody)
       continue
     } else if (!SlateEditor.isVoid(editor, node)) {
       const path = DomEditor.findPath(editor, node)
@@ -347,19 +172,14 @@ function wrapVoiceNode(editor: IDomEditor) {
       })
 
       if (!nodeEntity) {
-        const { prosody, pushNode } = createDefaultProsodyHandler()
+        const { pushNode } = createDefaultProsodyHandler()
         pushNode(node)
-        voiceHandler.pushNode(prosody)
         continue
       }
 
-      voiceHandler.pushNode(node)
       continue
     }
-    // 其余标签
-    voiceHandler.pushNode(node)
   }
-  voiceHandler && wrapNodes.push(voiceHandler.voice)
   return wrapNodes
 }
 
