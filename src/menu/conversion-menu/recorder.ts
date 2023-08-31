@@ -9,7 +9,7 @@ export class Recorder {
 
   public async start(): Promise<Blob> {
     if (navigator.mediaDevices.getUserMedia) {
-      let chunks: Blob[] = []
+      const chunks: Blob[] = []
       try {
         const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
         const mediaRecorder = new MediaRecorder(stream)
@@ -19,8 +19,7 @@ export class Recorder {
             chunks.push(e.data)
           }
           mediaRecorder.onstop = () => {
-            const blob = new Blob(chunks, { type: 'audio/wav; codecs=opus' })
-            // const audioURL = window.URL.createObjectURL(blob)
+            const blob = new Blob(chunks, { type: 'audio/wav' })
             resolve(blob)
           }
           mediaRecorder.onerror = (ev) => {
@@ -29,9 +28,8 @@ export class Recorder {
           mediaRecorder.start()
         })
       } catch (error) {
-        throw new Error('授权失败！请确保使用https访问网站', { cause: error })
-      } finally {
-        chunks = []
+        console.error(error)
+        throw new Error('授权失败！', { cause: error })
       }
     }
     throw Error('浏览器不支持 getUserMedia')

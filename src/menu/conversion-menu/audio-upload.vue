@@ -9,6 +9,7 @@ import { EMITTER_EVENT } from '@/constant'
 import { useEditorStore } from '@/stores'
 import { type AudioInfo } from './data'
 import { useElementVisibility } from '@vueuse/core'
+import { AudioPlayer } from './audio-player'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
@@ -25,6 +26,8 @@ const selSpeaker = ref<Speaker>()
 
 const recordFile = shallowRef<Blob>()
 const inputFile = shallowRef<File>()
+const audioPlayer = new AudioPlayer()
+const playing = audioPlayer.playState
 
 const audioRecorder = new Recorder()
 const audioSelector = new FileSelector('audio-conversion', 'audio/*')
@@ -56,9 +59,16 @@ defineExpose({
 })
 
 function reset() {
+  isRecord.value = true
+
+  handleDeleteFile()
+}
+
+function handleDeleteFile() {
+  audioPlayer.pause()
+
   audioInfo.value = undefined
   transferAudioInfo.value = undefined
-  isRecord.value = true
   selSpeaker.value = undefined
   recordFile.value = undefined
   inputFile.value = undefined
@@ -76,12 +86,18 @@ async function handleStartRecord() {
   }
 }
 
-function handleDeleteFile() {
-  audioInfo.value = undefined
-  transferAudioInfo.value = undefined
-  recordFile.value = undefined
-  inputFile.value = undefined
-  selSpeaker.value = undefined
+function handlePlay() {
+  if (playing.value === 'playing') {
+    audioPlayer.pause()
+  } else if (recordFile.value) {
+    const audioURL = window.URL.createObjectURL(recordFile.value)
+    audioPlayer.load(audioURL)
+    audioPlayer.play()
+  } else if (inputFile.value) {
+    const audioURL = window.URL.createObjectURL(inputFile.value)
+    audioPlayer.load(audioURL)
+    audioPlayer.play()
+  }
 }
 
 async function openInputFile() {
@@ -117,7 +133,7 @@ async function handleSpeakerItemClick(item: Speaker) {
       selSpeaker.value = item
       transferAudioInfo.value = await transfer({ audioId: audioInfo.value.id, speakerId: item.id })
     } else {
-      emitter.emit(EMITTER_EVENT.ERROR, '请先上传录音文件')
+      emitter.emit(EMITTER_EVENT.ERROR, '请先上传音频文件')
     }
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
@@ -142,7 +158,10 @@ function handleReupload() {
       class="d-flex flex-row justify-content-between border rounded-pill border-secondary my-3 py-1 px-2"
     >
       <div class="text-secondary d-flex flex-row align-items-center" style="font-size: 0.5rem">
-        <span v-if="recordFile || inputFile" class="iconfont icon-play"></span>
+        <button @click="handlePlay" v-if="recordFile || inputFile" class="btn btn-sm rounded-pill">
+          <span v-if="playing === 'playing'" class="iconfont icon-pause"></span>
+          <span v-else class="iconfont icon-play"></span>
+        </button>
         <span>{{ inputFile?.name || recordFile?.name }}</span>
       </div>
       <div>
