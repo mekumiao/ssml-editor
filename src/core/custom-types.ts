@@ -13,6 +13,7 @@ import type { Sub } from './sub'
 import type { Voice } from './voice'
 import type { MsttsSilence } from './mstts-silence'
 import type { CustomManagement } from './custom-management'
+import type { MoyinW } from './moyin-w'
 
 type UnionTypesMap<T extends { type: string }> = T extends any ? T['type'] : never
 
@@ -48,4 +49,5 @@ export type SSMLElementType =
   | UnionTypesMap<S>
   | UnionTypesMap<MsttsSilence>
   | UnionTypesMap<CustomManagement>
+  | UnionTypesMap<MoyinW>
   | 'paragraph'

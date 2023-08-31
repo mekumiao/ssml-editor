@@ -3,6 +3,7 @@ import { SlateEditor, SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { Prosody } from '@/core'
+// import type { MoyinW } from '@/core/moyin-w'
 
 export class ContinuousFn extends BaseFn {
   public constructor(editor: IDomEditor) {
@@ -29,6 +30,13 @@ export class ContinuousFn extends BaseFn {
 
     const value = this.getValue()
     if (value == null) return
+
+    // 使用 moyin api 时, 取消注释
+    // const node: MoyinW = {
+    //   type: 'moyin-w',
+    //   remark: '连读',
+    //   children: [{ text: value }],
+    // }
 
     const node: Prosody = {
       type: 'ssml-prosody',
