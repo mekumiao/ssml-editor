@@ -5,7 +5,6 @@ import type { Phoneme } from '@/core/phoneme'
 import type { Prosody } from '@/core/prosody'
 import type { SayAs } from '@/core/say-as'
 import type { Sub } from '@/core/sub'
-import type { MsttsBackgroundaudio } from '@/core/mstts-backgroundaudio'
 import type { Speak } from '@/core/speak'
 import type { SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
@@ -49,10 +48,14 @@ function serializeProsody(node: Prosody, children: string) {
 }
 
 function serializeSayAs(node: SayAs, children: string) {
-  const interpretAs = node.interpretAs ? ` interpret-as="${node.interpretAs}"` : ''
-  const format = node.format ? ` format="${node.format}"` : ''
-  const detail = node.detail ? ` detail="${node.detail}"` : ''
-  return `<say-as${interpretAs}${format}${detail}>${children}</say-as>`
+  if (!node.interpretAs) return children
+  const interpretAs =
+    node.interpretAs === 'cardinal'
+      ? 'value'
+      : node.interpretAs === 'characters'
+      ? 'digits'
+      : node.interpretAs
+  return `<say-as interpret-as="${interpretAs}">${children}</say-as>`
 }
 
 function serializeMoyinW(node: MoyinW, children: string) {
@@ -65,7 +68,7 @@ function serializeSub(node: Sub, children: string) {
 }
 
 function serializeSpeak(node: Speak, children: string) {
-  return `<speak version="${node.version}" xml:lang="${node.xmlLang}" xmlns="${node.xmlns}" xmlns:mstts="${node['xmlns:mstts']}" xmlns:emo="${node['xmlns:emo']}">${children}</speak>`
+  return `<speak version="${node.version}" xml:lang="${node.xmlLang}" xmlns="http://www.w3.org/2001/10/synthesis">${children}</speak>`
 }
 
 function serializeNode(node: SlateNode): string {
@@ -96,9 +99,7 @@ function serializeNode(node: SlateNode): string {
   return ''
 }
 
-type ProsodyHandler = { prosody: Prosody; pushNode: (node: SlateNode) => void }
-
-function createDefaultProsodyHandler(): ProsodyHandler {
+function createDefaultProsodyHandler() {
   const { rootProsody } = useSSMLStore()
   const prosody = { ...rootProsody, children: [] } as Prosody
 
@@ -144,7 +145,7 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
  * 1. 多人语音标签已被限制为顶级标签
  * 2. 没有多人语音标签的节点将被合并添加默认语音标签
  */
-function wrapVoiceNode(editor: IDomEditor) {
+function handleCustomManagementNode(editor: IDomEditor) {
   const nodes = mergeParagraphNodes(editor)
   const wrapNodes: SlateNode[] = []
   for (let i = 0; i < nodes.length; i++) {
@@ -155,7 +156,7 @@ function wrapVoiceNode(editor: IDomEditor) {
     if (DomEditor.checkNodeType(node, 'custom-management')) {
       continue
     }
-    // 默认语音节点
+
     if (SlateText.isText(node)) {
       const { pushNode } = createDefaultProsodyHandler()
       pushNode(node)
@@ -186,9 +187,7 @@ function wrapVoiceNode(editor: IDomEditor) {
 export default function serializeToSSML() {
   const { editor } = useEditorStore()
   if (!editor) throw Error('没有找到 editor 对象')
-  const { rootSpeak, rootBackgroundaudio } = useSSMLStore()
-  const speak = { ...rootSpeak, children: [] } as Speak
-  const backgroundaudio = { ...rootBackgroundaudio } as MsttsBackgroundaudio
-  speak.children.push(backgroundaudio, ...wrapVoiceNode(editor))
-  return serializeNode(speak)
+  const speaks = handleCustomManagementNode(editor)
+  const ssmls = speaks.map((v) => serializeNode(v))
+  return ssmls
 }
