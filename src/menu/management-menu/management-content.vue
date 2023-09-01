@@ -1,38 +1,26 @@
 <script setup lang="ts">
-import { defaultFilterSpeaker, defaultLabelValue, type LabelValue, type Speaker } from '@/model'
+import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { onMounted, ref, shallowRef } from 'vue'
+import { onMounted, ref, shallowRef, watch } from 'vue'
 import { speed, pitch } from './data'
-import { useEditorStore } from '@/stores'
+import { useEditorStore, useManagementStore } from '@/stores'
 import { type SubmitData, formatPitch, formatRate } from './data'
+import { storeToRefs } from 'pinia'
 
-const emit = defineEmits<{ submit: [value: SubmitData] }>()
+const emit = defineEmits<{ submit: [data: SubmitData] }>()
 
 const { globalEditConfig } = useEditorStore()
 const { tryPlay } = globalEditConfig
 
 const showMore = ref(false)
-
 const searchInput = ref('')
-
-const selTypeRef = ref()
-const selSpeakerRef = ref()
-const selRoleRef = ref()
-const selStyleRef = ref()
-const selSpeedRef = ref()
-const selPitchRef = ref()
-
-const selType = ref<LabelValue>(defaultLabelValue())
-const selSpeaker = ref<LabelValue>(defaultLabelValue())
-const selRole = ref<LabelValue>(defaultLabelValue())
-const selStyle = ref<LabelValue>(defaultLabelValue())
-const selSpeed = ref<LabelValue>({ label: '', value: '1.0' })
-const selPitch = ref<LabelValue>({ label: '', value: '0' })
+const managementStore = useManagementStore()
+const { contentData } = storeToRefs(managementStore)
 
 const speakerCache = shallowRef<Speaker[]>([])
-const dataListType = ref<LabelValue[]>([{ label: '全部类型', value: '' }, ...tryPlay.flags])
+const dataListCategory = ref<LabelValue[]>([{ label: '全部类型', value: '' }, ...tryPlay.category])
 const dataListSpeaker = ref<LabelValue[]>([])
 const dataListRole = ref<LabelValue[]>([])
 const dataListStyle = ref<LabelValue[]>([])
@@ -41,59 +29,76 @@ const dataListSpeed = ref<LabelValue[]>(speed())
 const dataListPitch = ref<LabelValue[]>(pitch())
 
 onMounted(async () => {
-  const voices = await tryPlay.fetchData(defaultFilterSpeaker())
-  speakerCache.value = voices
-  dataListSpeaker.value = voices
-  if (voices.length > 0) {
-    dataListRole.value = voices[0].roles
-    dataListStyle.value = voices[0].styles
-    selSpeaker.value = voices[0]
-  }
-  if (dataListRole.value.length > 0) {
-    selRole.value = dataListRole.value[0]
-  }
-  if (dataListStyle.value.length > 0) {
-    selStyle.value = dataListStyle.value[0]
-  }
+  contentData.value.category = dataListCategory.value[0].value
+  await handleFetchData()
 })
 
-function handleSearch() {}
-function handleSelectType() {}
-function handleSelectSpeaker(opt: LabelValue) {
-  const speader = speakerCache.value.find((v) => v.value === opt.value)
+watch(
+  () => contentData.value.category,
+  async () => {
+    await handleFetchData()
+  },
+)
+
+async function handleFetchData() {
+  const speakers = await tryPlay.fetchData({ ...defaultFilterSpeaker(), ...contentData })
+  speakerCache.value = speakers
+  dataListSpeaker.value = speakers.map((v) => ({ label: v.displayName, value: v.name }))
+
+  if (speakers.length > 0) {
+    dataListRole.value = speakers[0].roles
+    dataListStyle.value = speakers[0].styles
+    contentData.value.name = speakers[0].name
+  }
+  if (dataListRole.value.length > 0) {
+    contentData.value.role = dataListRole.value[0].value
+  }
+  if (dataListStyle.value.length > 0) {
+    contentData.value.style = dataListStyle.value[0].value
+  }
+}
+
+function handleSelectSpeaker(name: string) {
+  const speader = speakerCache.value.find((v) => v.name === name)
   if (speader) {
     dataListRole.value = speader.roles
     dataListStyle.value = speader.styles
 
     if (dataListRole.value.length > 0) {
-      selRole.value = dataListRole.value[0]
+      contentData.value.role = dataListRole.value[0].value
     }
     if (dataListStyle.value.length > 0) {
-      selStyle.value = dataListStyle.value[0]
+      contentData.value.style = dataListStyle.value[0].value
     }
   }
 }
-function handleSelectRole() {}
-function handleSelectStyle() {}
-function handleSelectSpeed() {}
-function handleSelectPitch() {}
 
 function handleSubmit() {
-  const rest: SubmitData = {
-    label: `${selSpeaker.value.label}|${selRole.value.label}|${selStyle.value.label}|${selSpeed.value.label}`,
-    value: selSpeaker.value.value,
-    role: selRole.value.value,
-    style: selStyle.value.value,
-    speed: formatRate(Number(selSpeed.value.value)),
-    pitch: formatPitch(Number(selPitch.value.value)),
+  const speakerLabel =
+    dataListSpeaker.value.find((v) => v.value === contentData.value.name)?.label || ''
+  const roleLabel = dataListRole.value.find((v) => v.value === contentData.value.role)?.label || ''
+  const styleLabel =
+    dataListStyle.value.find((v) => v.value === contentData.value.style)?.label || ''
+  const speedLabel =
+    dataListSpeed.value.find((v) => v.value === contentData.value.speed)?.label || ''
+
+  const data: SubmitData = {
+    category: contentData.value.category,
+    name: contentData.value.name,
+    label: `${speakerLabel}|${roleLabel}|${styleLabel}|${speedLabel}`,
+    value: contentData.value.name,
+    role: contentData.value.role,
+    style: contentData.value.style,
+    speed: formatRate(Number(contentData.value.speed)),
+    pitch: formatPitch(Number(contentData.value.pitch)),
   }
-  emit('submit', rest)
+  emit('submit', data)
 }
 </script>
 
 <template>
   <div style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
-    <ElForm @submit.prevent="handleSearch">
+    <ElForm @submit.prevent="handleFetchData">
       <ElInput v-model="searchInput" placeholder="请输入名称快速查找配音师"></ElInput>
     </ElForm>
     <div class="position-relative">
@@ -114,52 +119,26 @@ function handleSubmit() {
         <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
       </ul>
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
-        <SelectList
-          @update:modelValue="handleSelectType"
-          ref="selTypeRef"
-          v-model="selType"
-          :dataList="dataListType"
-        >
+        <SelectList v-model="contentData.category" :dataList="dataListCategory">
           <span class="my-3">类型</span>
         </SelectList>
         <SelectList
           @update:modelValue="handleSelectSpeaker"
-          ref="selSpeakerRef"
-          v-model="selSpeaker"
+          v-model="contentData.name"
           :dataList="dataListSpeaker"
         >
           <span class="my-3">配音师</span>
         </SelectList>
-        <SelectList
-          @update:modelValue="handleSelectRole"
-          ref="selRoleRef"
-          v-model="selRole"
-          :dataList="dataListRole"
-        >
+        <SelectList v-model="contentData.role" :dataList="dataListRole">
           <span class="my-3">角色</span>
         </SelectList>
-        <SelectList
-          @update:modelValue="handleSelectStyle"
-          ref="selStyleRef"
-          v-model="selStyle"
-          :dataList="dataListStyle"
-        >
+        <SelectList v-model="contentData.style" :dataList="dataListStyle">
           <span class="my-3">风格</span>
         </SelectList>
-        <SelectList
-          @update:modelValue="handleSelectSpeed"
-          ref="selSpeedRef"
-          v-model="selSpeed"
-          :dataList="dataListSpeed"
-        >
+        <SelectList v-model="contentData.speed" :dataList="dataListSpeed">
           <span class="my-3">语速</span>
         </SelectList>
-        <SelectList
-          @update:modelValue="handleSelectPitch"
-          ref="selPitchRef"
-          v-model="selPitch"
-          :dataList="dataListPitch"
-        >
+        <SelectList v-model="contentData.pitch" :dataList="dataListPitch">
           <span class="my-3">语调</span>
         </SelectList>
       </div>

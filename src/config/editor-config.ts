@@ -38,11 +38,10 @@ export interface SSMLEditorConfig {
   }
   tryPlay: {
     gender?: LabelValue[]
+    topFlag?: LabelValue[]
     category?: LabelValue[]
-    flags?: LabelValue[]
     fetchData: FilterSpeakerFetahFunction
     featchTag: () => Promise<LabelValue[]>
-    fetchFlag: (flag: string) => Promise<Speaker[]>
     fetchStar: (speaker: string, star: boolean) => Promise<boolean>
   }
   conversion: {
@@ -72,7 +71,6 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     fetchData: resolveList<FilterSpeaker>(),
     featchTag: resolveList<LabelValue>(),
     fetchStar: resolveList<LabelValue>(),
-    fetchFlag: resolveList<LabelValue>(),
   }
   const conversion = config?.conversion || {
     timeoutMilliseconds: 20000,
@@ -103,13 +101,13 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     { label: '女声', value: 'Female' },
   ]
 
-  tryPlayRequired.category ??= [
+  tryPlayRequired.topFlag ??= [
     { label: '热榜', value: '' },
     { label: 'SVIP', value: 'SVIP' },
     { label: '付费', value: '付费' },
   ]
 
-  tryPlayRequired.flags ??= [
+  tryPlayRequired.category ??= [
     { label: '常用', value: '常用' },
     { label: '已购', value: '已购' },
     { label: '收藏', value: '收藏' },

@@ -8,7 +8,7 @@ const emit = defineEmits<{ 'update:filter': [value: FilterSpeaker] }>()
 const props = defineProps<{ filter: FilterSpeaker }>()
 
 const { globalEditConfig } = useEditorStore()
-const { category, gender, featchTag } = globalEditConfig.tryPlay
+const { topFlag, gender, featchTag } = globalEditConfig.tryPlay
 
 const tags = ref<LabelValue[]>([])
 
@@ -16,8 +16,8 @@ onMounted(async () => {
   tags.value = await featchTag()
 })
 
-function handleCategoryClick(value: string) {
-  emit('update:filter', { ...toRaw(props.filter), category: value })
+function handleTopFlagClick(value: string) {
+  emit('update:filter', { ...toRaw(props.filter), topFlag: value })
 }
 
 function handleGenderClick(value: string) {
@@ -36,11 +36,11 @@ function handleTagsClick(value: string) {
       style="height: 40px"
     >
       <TagItem
-        @click="handleCategoryClick"
-        v-for="(item, index) in category"
+        @click="handleTopFlagClick"
+        v-for="(item, index) in topFlag"
         :key="index"
         :value="item.value"
-        :activate="filter.category === item.value"
+        :activate="filter.topFlag === item.value"
       >
         {{ item.label }}
       </TagItem>

@@ -11,7 +11,7 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
 
   const setSpeaker = (value: Speaker) => {
     _speaker.value = value
-    ssmlStore.rootVoice.name = value.value
+    ssmlStore.rootVoice.name = value.name
   }
   return { speaker, setSpeaker }
 })

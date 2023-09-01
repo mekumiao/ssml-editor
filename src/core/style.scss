@@ -51,7 +51,7 @@
     white-space: nowrap;
 
     &:not(.left):hover {
-      z-index: 2;
+      z-index: 1;
       max-width: 300px;
     }
 
