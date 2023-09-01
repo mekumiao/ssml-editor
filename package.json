@@ -46,7 +46,7 @@
     "@wangeditor/editor": "^5.1.23",
     "axios": "^1.4.0",
     "axios-mock-adapter": "^1.21.5",
-    "bootstrap": "^5.3.1",
+    "bootstrap": "twbs/bootstrap#39030/head",
     "cnchar": "^3.2.4",
     "cnchar-poly": "^3.2.4",
     "dom7": "^3.0.0",
