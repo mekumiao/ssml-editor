@@ -77,8 +77,8 @@ mock.onGet('/speaker').reply((config) => {
     .map(
       (v) =>
         <Speaker>{
-          label: v.LocalName,
-          value: v.name,
+          displayName: v.LocalName,
+          name: v.name,
           isFree: false,
           isStar: false,
           isSupper24K: true,
@@ -93,6 +93,20 @@ mock.onGet('/speaker').reply((config) => {
           }),
         },
     )
+
+  if (filter.category === '常用') {
+    return [200, data.slice(0, 5)]
+  }
+  if (filter.category === '已购') {
+    return [200, data.slice(5, 10)]
+  }
+  if (filter.category === '收藏') {
+    return [200, data.slice(10, 15)]
+  }
+  if (filter.category === '我的') {
+    return [200, data.slice(15, 20)]
+  }
+
   return [200, data]
 })
 
@@ -103,42 +117,6 @@ mock.onGet('/star').reply((config) => {
     return [200, star]
   }
   return [404]
-})
-
-mock.onGet('/flag').reply((config) => {
-  const { flag } = config.params
-  const list = voices.map(
-    (v) =>
-      <Speaker>{
-        label: v.LocalName,
-        value: v.name,
-        isFree: false,
-        isStar: false,
-        isSupper24K: true,
-        avatar: '',
-        roles: v.VoiceRoleNames.split(',').map((n) => {
-          const des = getRoleDes(n)
-          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
-        }),
-        styles: v.VoiceStyleNames.split(',').map((n) => {
-          const des = getStyleDes(n)
-          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
-        }),
-      },
-  )
-  if (flag === '') {
-    return [200, list.slice(0, 5)]
-  }
-  if (flag === '已购') {
-    return [200, list.slice(5, 10)]
-  }
-  if (flag === '收藏') {
-    return [200, list.slice(10, 15)]
-  }
-  if (flag === '我的') {
-    return [200, list.slice(15, 20)]
-  }
-  return [200, list]
 })
 
 mock.onPost('/upload').reply(() => {
@@ -155,8 +133,8 @@ mock.onGet('/conversionSpeaker').reply(() => {
   const data = voices.map(
     (v) =>
       <Speaker>{
-        label: v.LocalName,
-        value: v.name,
+        displayName: v.LocalName,
+        name: v.name,
         isFree: false,
         isStar: false,
         isSupper24K: true,

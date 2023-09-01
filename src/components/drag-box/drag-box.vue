@@ -70,7 +70,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
     <div
       v-show="visible"
       ref="boxRef"
-      class="demotestname card shadow brag-box user-select-none"
+      class="demotestname card shadow brag-box user-select-none z-2"
       style="position: fixed"
       :style="style"
       @mousedown.prevent

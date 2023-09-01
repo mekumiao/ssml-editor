@@ -2,7 +2,7 @@
 import { demoAvatar } from '@/config'
 
 defineEmits<{ click: [value: string] }>()
-defineProps<{ name: string; value?: string; avatar?: string; activated?: boolean }>()
+defineProps<{ label: string; value?: string; avatar?: string; activated?: boolean }>()
 </script>
 
 <template>
@@ -15,7 +15,7 @@ defineProps<{ name: string; value?: string; avatar?: string; activated?: boolean
         style="height: 40px"
       />
     </div>
-    <div class="speaker-name">{{ name }}</div>
+    <div class="speaker-name">{{ label }}</div>
   </div>
 </template>
 

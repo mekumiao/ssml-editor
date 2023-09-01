@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, toRaw } from 'vue'
 import { type IDomEditor, createEditor } from '@wangeditor/editor'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
 import { useEditorStore } from '@/stores'
+import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 const { editor, setEditor, globalEditConfig } = useEditorStore()
@@ -26,6 +27,7 @@ function initEditor() {
       ...toRaw(globalEditConfig.editorConfig),
       onCreated(editor) {
         emit('created', editor)
+        emitter.emit(EMITTER_EVENT.EDITOR_CREATED, editor)
       },
       onChange(editor) {
         emit('change', editor)

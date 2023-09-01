@@ -10,6 +10,7 @@ export default {
     const style = domElem.getAttribute('data-ow-style') || ''
     const pitch = domElem.getAttribute('data-ow-pitch') || ''
     const rate = domElem.getAttribute('data-ow-rate') || ''
+    const custom = domElem.getAttribute('data-ow-custom') || '{}'
     return {
       type: 'custom-management',
       remark: remark,
@@ -18,6 +19,7 @@ export default {
       style: style,
       pitch: pitch,
       rate: rate,
+      custom: JSON.parse(custom),
       children: children,
     }
   },

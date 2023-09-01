@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { onMounted, ref, toRaw, watch } from 'vue'
+import { onMounted, ref, shallowRef, toRaw, watch } from 'vue'
 import AnchorAvatar from './anchor-avatar.vue'
-import type { FilterSpeaker, Speaker } from '@/model'
+import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
 import { useEditorStore, useTryPlayStore } from '@/stores'
 
 const props = defineProps<{ filter: FilterSpeaker }>()
@@ -10,22 +10,28 @@ const { globalEditConfig } = useEditorStore()
 const { fetchData } = globalEditConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
-const dataList = ref<Speaker[]>([])
+const dataList = ref<LabelValue[]>([])
+const speaderCache = shallowRef<Speaker[]>([])
 
 watch(
   () => props.filter,
   async (value) => {
-    dataList.value = await fetchData(toRaw(value))
+    const list = await fetchData(toRaw(value))
+    speaderCache.value = list
+    dataList.value = list.map((v) => ({ label: v.displayName, value: v.name }))
   },
 )
 
-function handleClick(value: Speaker) {
-  tryPlayStore.setSpeaker(value)
+function handleClick(value: string) {
+  const speaker = speaderCache.value.find((v) => v.name === value)
+  speaker && tryPlayStore.setSpeaker(speaker)
 }
 
 onMounted(async () => {
-  dataList.value = await fetchData(toRaw(props.filter))
-  if (dataList.value.length > 0) handleClick(dataList.value[0])
+  const list = await fetchData(toRaw(props.filter))
+  speaderCache.value = list
+  dataList.value = list.map((v) => ({ label: v.displayName, value: v.name }))
+  if (dataList.value.length > 0) handleClick(dataList.value[0].value)
 })
 </script>
 
@@ -37,8 +43,8 @@ onMounted(async () => {
     <div class="m-3" v-for="(item, index) in dataList" :key="index">
       <AnchorAvatar
         :data="item"
-        :activate="item.value === tryPlayStore.speaker.value"
-        @click="handleClick(toRaw(item))"
+        :activate="item.value === tryPlayStore.speaker.name"
+        @click="handleClick(item.value)"
       ></AnchorAvatar>
     </div>
   </div>

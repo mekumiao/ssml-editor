@@ -54,7 +54,7 @@ function isClick(x: number, y: number) {
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
       <img :src="tryPlayStore.speaker.avatar || demoAvatar()" class="rounded-circle" />
-      <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.label }}</div>
+      <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.displayName }}</div>
     </div>
   </div>
 </template>

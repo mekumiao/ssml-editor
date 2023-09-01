@@ -50,11 +50,6 @@ export async function star(speaker: string, star: boolean): Promise<boolean> {
   return resp.data
 }
 
-export async function flag(flag: string): Promise<Speaker[]> {
-  const resp = await axios.get('/flag', { params: { flag } })
-  return resp.data
-}
-
 export async function upload(file: File | Blob, token: CancellationToken): Promise<AudioInfo> {
   const source = axios.CancelToken.source()
   const formData = new FormData()

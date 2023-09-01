@@ -3,6 +3,7 @@ import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wang
 import type { CustomManagement } from './custom-types'
 import throttle from 'lodash.throttle'
 import { removeNodeSpace } from '../helper'
+import { WANGEDITOR_EVENT } from '@/constant'
 
 export default {
   type: 'custom-management',
@@ -26,6 +27,14 @@ export default {
           props: { contentEditable: false },
           style: {
             backgroundColor: 'var(--custom-management)',
+          },
+          on: {
+            mousedown: (event: Event) => event.preventDefault(),
+            click: throttle((event: Event) => {
+              event.preventDefault()
+              editor.select(DomEditor.findPath(editor, elem))
+              editor.emit(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, editor, elem)
+            }),
           },
         },
         [

@@ -126,7 +126,7 @@ async function handleSpeakerItemClick(item: Speaker) {
 
 function handleSubmit() {
   if (transferAudioInfo.value && selSpeaker.value) {
-    emit('submit', { label: selSpeaker.value.label, value: transferAudioInfo.value.src })
+    emit('submit', { label: selSpeaker.value.displayName, value: transferAudioInfo.value.src })
     reset()
   }
 }
@@ -199,9 +199,9 @@ function handleReupload() {
           @click="handleSpeakerItemClick(item)"
           v-for="(item, index) in speakerList"
           :key="index"
-          :name="item.label"
+          :label="item.displayName"
           :avatar="item.avatar"
-          :activated="item.value === selSpeaker?.value"
+          :activated="item.name === selSpeaker?.name"
         ></SpeakerItem>
       </div>
     </div>
