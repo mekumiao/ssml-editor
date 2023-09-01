@@ -3,7 +3,7 @@ import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { onMounted, ref, shallowRef, watch } from 'vue'
+import { onMounted, ref, shallowRef } from 'vue'
 import { speed, pitch } from './data'
 import { useEditorStore, useManagementStore } from '@/stores'
 import { type SubmitData, formatPitch, formatRate } from './data'
@@ -33,15 +33,13 @@ onMounted(async () => {
   await handleFetchData()
 })
 
-watch(
-  () => contentData.value.category,
-  async () => {
-    await handleFetchData()
-  },
-)
+async function handleSelectCategory(category: string) {
+  contentData.value.category = category
+  await handleFetchData()
+}
 
 async function handleFetchData() {
-  const speakers = await tryPlay.fetchData({ ...defaultFilterSpeaker(), ...contentData })
+  const speakers = await tryPlay.fetchData({ ...defaultFilterSpeaker(), ...contentData.value })
   speakerCache.value = speakers
   dataListSpeaker.value = speakers.map((v) => ({ label: v.displayName, value: v.name }))
 
@@ -119,7 +117,11 @@ function handleSubmit() {
         <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
       </ul>
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
-        <SelectList v-model="contentData.category" :dataList="dataListCategory">
+        <SelectList
+          @update:modelValue="handleSelectCategory"
+          v-model="contentData.category"
+          :dataList="dataListCategory"
+        >
           <span class="my-3">类型</span>
         </SelectList>
         <SelectList
