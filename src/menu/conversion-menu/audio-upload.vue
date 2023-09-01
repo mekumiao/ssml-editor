@@ -29,6 +29,7 @@ const inputFile = shallowRef<File>()
 const audioPlayer = new AudioPlayer()
 const playing = audioPlayer.playState
 
+let cts: CancellationTokenSource | undefined
 const audioRecorder = new Recorder()
 const audioSelector = new FileSelector('audio-conversion', 'audio/*')
 
@@ -51,6 +52,7 @@ onMounted(async () => {
 watch(visible, (newVlaue) => {
   if (!newVlaue) {
     isRecord.value = true
+    cts?.cancel()
   }
 })
 
@@ -72,6 +74,8 @@ function handleDeleteFile() {
   selSpeaker.value = undefined
   recordFile.value = undefined
   inputFile.value = undefined
+
+  cts?.cancel()
 }
 
 function handleStopRecord() {
@@ -112,7 +116,7 @@ async function openInputFile() {
 
 async function handleAudioUpload() {
   try {
-    const cts = new CancellationTokenSource(timeoutMilliseconds)
+    cts = new CancellationTokenSource(timeoutMilliseconds)
     if (isRecord.value && recordFile.value) {
       cts.startTimeout()
       audioInfo.value = await audioUpload(recordFile.value, cts.token)
@@ -148,6 +152,7 @@ function handleSubmit() {
 }
 
 function handleReupload() {
+  cts?.cancel()
   reopen?.()
 }
 </script>
