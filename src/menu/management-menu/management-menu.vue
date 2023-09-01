@@ -60,6 +60,7 @@ function hide() {
 
 function handleClick(editor: IDomEditor) {
   fn.value ??= new ManagementFn(editor)
+  if (fn.value.isDisabled()) return
   show()
 }
 
