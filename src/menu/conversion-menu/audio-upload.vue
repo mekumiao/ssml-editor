@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LabelValue, Speaker } from '@/model'
 import SpeakerItem from './speaker-item.vue'
-import { computed, inject, onMounted, ref, shallowRef, watch } from 'vue'
+import { inject, onMounted, ref, shallowRef, watch } from 'vue'
 import { Recorder } from './recorder'
 import { CancellationTokenSource, FileSelector } from '@/utils'
 import { emitter } from '@/event-bus'
@@ -27,13 +27,13 @@ const selSpeaker = ref<Speaker>()
 const recordFile = shallowRef<Blob>()
 const inputFile = shallowRef<File>()
 const audioPlayer = new AudioPlayer()
-const playing = audioPlayer.playState
+const { playState } = audioPlayer
 
 let cts: CancellationTokenSource | undefined
 const audioRecorder = new Recorder()
 const audioSelector = new FileSelector('audio-conversion', 'audio/*')
 
-const recorderState = computed(() => audioRecorder.state)
+const { recorderState } = audioRecorder
 
 const visible = useElementVisibility(boxRef)
 
@@ -83,15 +83,19 @@ function handleStopRecord() {
 }
 
 async function handleStartRecord() {
+  const cts = new CancellationTokenSource(60000)
   try {
-    recordFile.value = await audioRecorder.start()
+    cts.startTimeout()
+    recordFile.value = await audioRecorder.start(cts.token)
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  } finally {
+    cts.cancel()
   }
 }
 
 function handlePlay() {
-  if (playing.value === 'playing') {
+  if (playState.value === 'playing') {
     audioPlayer.pause()
   } else if (recordFile.value) {
     const audioURL = window.URL.createObjectURL(recordFile.value)
@@ -164,7 +168,10 @@ function handleReupload() {
     >
       <div class="text-secondary d-flex flex-row align-items-center" style="font-size: 0.5rem">
         <button @click="handlePlay" v-if="recordFile || inputFile" class="btn btn-sm rounded-pill">
-          <span v-if="playing === 'playing'" class="iconfont icon-pause"></span>
+          <span
+            v-if="playState === 'playing' || recorderState === 'recording'"
+            class="iconfont icon-pause"
+          ></span>
           <span v-else class="iconfont icon-play"></span>
         </button>
         <span>{{ inputFile?.name || recordFile?.name }}</span>
@@ -178,7 +185,7 @@ function handleReupload() {
           <span class="iconfont icon-delete"></span>
         </button>
         <span v-if="audioInfo" style="font-size: 0.5rem">已上传</span>
-        <template v-if="isRecord">
+        <template v-if="isRecord && !recordFile">
           <button
             v-if="recorderState === 'recording'"
             @click="handleStopRecord"

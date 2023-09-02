@@ -7,6 +7,9 @@ export class CancellationTokenSource {
   get token(): CancellationToken {
     return {
       isCancellationRequested: () => this.cancelled,
+      throwIfRequested: () => {
+        if (this.cancelled) throw new Error('Operation canceled')
+      },
     }
   }
 
@@ -31,4 +34,5 @@ export class CancellationTokenSource {
 
 export interface CancellationToken {
   isCancellationRequested: () => boolean
+  throwIfRequested(): void
 }
