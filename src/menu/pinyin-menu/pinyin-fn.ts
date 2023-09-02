@@ -19,15 +19,18 @@ export class PinyinFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选中文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选中一个中文字符')
       return true
     }
 
     const value = this.getValue()
-    if (value.length != 1) return true
+    if (value.length != 1) {
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选中一个中文字符')
+      return true
+    }
 
-    if (!/^[\u4E00-\u9FA5]+$/gi.test(value)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
+    if (!/^[\u4E00-\u9FA5]$/gi.test(value)) {
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选中一个中文字符')
       return true
     }
 
