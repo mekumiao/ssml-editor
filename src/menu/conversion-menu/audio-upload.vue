@@ -3,7 +3,7 @@ import type { LabelValue, Speaker } from '@/model'
 import SpeakerItem from './speaker-item.vue'
 import { inject, onMounted, ref, shallowRef, watch } from 'vue'
 import { Recorder } from './recorder'
-import { CancellationTokenSource, FileSelector } from '@/utils'
+import { CancellationTokenSource, FileSelector, Timer } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 import { useEditorStore } from '@/stores'
@@ -32,6 +32,8 @@ const { playState } = audioPlayer
 let cts: CancellationTokenSource | undefined
 const audioRecorder = new Recorder()
 const audioSelector = new FileSelector('audio-conversion', 'audio/*')
+const recordTimer = new Timer(60)
+const { state: recordTimerState } = recordTimer
 
 const { recorderState } = audioRecorder
 
@@ -80,10 +82,12 @@ function handleDeleteFile() {
 
 function handleStopRecord() {
   audioRecorder.stop()
+  recordTimer.stop()
 }
 
 async function handleStartRecord() {
-  const cts = new CancellationTokenSource(60000)
+  cts = new CancellationTokenSource(60000)
+  recordTimer.start()
   try {
     cts.startTimeout()
     recordFile.value = await audioRecorder.start(cts.token)
@@ -91,6 +95,7 @@ async function handleStartRecord() {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
   } finally {
     cts.cancel()
+    recordTimer.stop()
   }
 }
 
@@ -191,7 +196,7 @@ function handleReupload() {
             @click="handleStopRecord"
             class="btn btn-primary btn-sm rounded-pill"
           >
-            结束录音
+            结束录音({{ recordTimerState }})s
           </button>
           <button v-else @click="handleStartRecord" class="btn btn-primary btn-sm rounded-pill">
             开始录音
