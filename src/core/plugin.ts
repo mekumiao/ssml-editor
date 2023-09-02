@@ -44,9 +44,10 @@ export default <T extends IDomEditor>(editor: T) => {
     if (data.types.includes('application/x-slate-fragment')) {
       return insertData(data)
     } else {
-      data.setData('text/html', data.getData('text/plain').trim())
+      const copydata = new DataTransfer()
+      copydata.setData('text/plain', data.getData('text/plain').trim())
       // 这里不能使用insertText()方法,否者会破坏段落结构
-      return insertData(data)
+      return insertData(copydata)
     }
   }
 
