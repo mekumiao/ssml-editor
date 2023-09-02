@@ -1,4 +1,5 @@
 import { type IDomEditor, DomEditor, SlateTransforms, SlateNode } from '@wangeditor/editor'
+import { SlateEditor } from '@wangeditor/editor'
 import { insertNodeSpace } from './helper'
 
 export default <T extends IDomEditor>(editor: T) => {
@@ -85,6 +86,11 @@ export default <T extends IDomEditor>(editor: T) => {
       // 插入间隔
       editor.selection && insertNodeSpace(editor, editor.selection)
       return SlateTransforms.insertNodes(editor, node)
+    }
+
+    if (SlateEditor.isVoid(editor, node)) {
+      insertNode(node)
+      return editor.move(1)
     }
 
     return insertNode(node)
