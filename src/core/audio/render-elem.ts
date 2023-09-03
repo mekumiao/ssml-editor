@@ -17,17 +17,6 @@ export default {
 function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
   const { remark, src } = elem
   return h('span.ssml-wrapper', [
-    h(`span.data-content`, {
-      props: { contentEditable: false },
-      attrs: { 'data-content': '{' },
-      style: { color: `var(--ssml-audio)` },
-    }),
-    h('span', children),
-    h(`span.data-content`, {
-      props: { contentEditable: false },
-      attrs: { 'data-content': '}' },
-      style: { color: 'var(--ssml-audio)' },
-    }),
     h(
       `span.remark`,
       {
@@ -59,41 +48,60 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
         h(`span.data-content`, { attrs: { 'data-content': remark } }),
       ],
     ),
+    h(`span.data-content`, {
+      props: { contentEditable: false },
+      attrs: { 'data-content': '{' },
+      style: { color: `var(--ssml-audio)` },
+    }),
+    h('span', children),
+    h(`span.data-content`, {
+      props: { contentEditable: false },
+      attrs: { 'data-content': '}' },
+      style: { color: 'var(--ssml-audio)' },
+    }),
   ])
 }
 
 function renderVoidElement(elem: Audio, editor: IDomEditor) {
   const { remark, src } = elem
-  return h('span.ssml-wrapper.no-line-height', [
-    h(
-      `span.remark.left`,
-      {
-        props: { contentEditable: false },
-        style: {
-          backgroundColor: 'var(--ssml-audio)',
+  return h(
+    'span.ssml-wrapper',
+    {
+      props: { contentEditable: false },
+    },
+    [
+      h(
+        `span.remark`,
+        {
+          style: {
+            backgroundColor: 'var(--ssml-audio)',
+          },
         },
-      },
-      [
-        h(`span.iconfont.icon-roundclosefill`, {
-          on: {
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              audioPlayer.stop(src)
-              const path = DomEditor.findPath(editor, elem)
-              SlateTransforms.delete(editor, { at: path })
-            }),
-          },
-        }),
-        h(`span.iconfont.icon-play`, {
-          on: {
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              audioPlayer.play(src)
-            }),
-          },
-        }),
-        h(`span.data-content`, { attrs: { 'data-content': remark } }),
-      ],
-    ),
-  ])
+        [
+          h(`span.iconfont.icon-roundclosefill`, {
+            on: {
+              click: throttle((event: Event) => {
+                event.preventDefault()
+                audioPlayer.stop(src)
+                const path = DomEditor.findPath(editor, elem)
+                SlateTransforms.delete(editor, { at: path })
+              }),
+            },
+          }),
+          h(`span.iconfont.icon-play`, {
+            on: {
+              click: throttle((event: Event) => {
+                event.preventDefault()
+                audioPlayer.play(src)
+              }),
+            },
+          }),
+          h(`span.data-content`, { attrs: { 'data-content': remark } }),
+        ],
+      ),
+      h(`span.iconfont.icon-music`, {
+        style: { color: `var(--ssml-audio)` },
+      }),
+    ],
+  )
 }

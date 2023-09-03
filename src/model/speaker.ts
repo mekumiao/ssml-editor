@@ -1,7 +1,10 @@
 import type { LabelValue } from './label-value'
 
-export interface Speaker extends LabelValue {
+export interface Speaker {
   id: string
+  name: string
+  displayName: string
+  category: string
   avatar: string
   isFree: boolean
   isStar: boolean
@@ -13,19 +16,21 @@ export interface Speaker extends LabelValue {
 export function defaultSpeaker(): Speaker {
   return {
     id: '',
+    category: '',
     avatar: '',
     isFree: false,
     isStar: false,
     isSupper24K: false,
     roles: [],
     styles: [],
-    label: '',
-    value: '',
+    name: '',
+    displayName: '',
   }
 }
 
 export interface FilterSpeaker {
   word: string
+  topFlag: string
   category: string
   gender: string
   tag: string
@@ -34,6 +39,7 @@ export interface FilterSpeaker {
 export function defaultFilterSpeaker(): FilterSpeaker {
   return {
     word: '',
+    topFlag: '',
     category: '',
     gender: '',
     tag: '',

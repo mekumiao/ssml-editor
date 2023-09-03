@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { LabelValue, Speaker } from '@/model'
 import SpeakerItem from './speaker-item.vue'
-import { computed, inject, onMounted, ref, shallowRef, watch } from 'vue'
+import { inject, onMounted, ref, shallowRef, watch } from 'vue'
 import { Recorder } from './recorder'
-import { CancellationTokenSource, FileSelector } from '@/utils'
+import { CancellationTokenSource, FileSelector, Timer } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 import { useEditorStore } from '@/stores'
@@ -27,12 +27,15 @@ const selSpeaker = ref<Speaker>()
 const recordFile = shallowRef<Blob>()
 const inputFile = shallowRef<File>()
 const audioPlayer = new AudioPlayer()
-const playing = audioPlayer.playState
+const { playState } = audioPlayer
 
+let cts: CancellationTokenSource | undefined
 const audioRecorder = new Recorder()
 const audioSelector = new FileSelector('audio-conversion', 'audio/*')
+const recordTimer = new Timer(60)
+const { state: recordTimerState } = recordTimer
 
-const recorderState = computed(() => audioRecorder.state)
+const { recorderState } = audioRecorder
 
 const visible = useElementVisibility(boxRef)
 
@@ -51,6 +54,7 @@ onMounted(async () => {
 watch(visible, (newVlaue) => {
   if (!newVlaue) {
     isRecord.value = true
+    cts?.cancel()
   }
 })
 
@@ -72,22 +76,31 @@ function handleDeleteFile() {
   selSpeaker.value = undefined
   recordFile.value = undefined
   inputFile.value = undefined
+
+  cts?.cancel()
 }
 
 function handleStopRecord() {
   audioRecorder.stop()
+  recordTimer.stop()
 }
 
 async function handleStartRecord() {
+  cts = new CancellationTokenSource(60000)
+  recordTimer.start()
   try {
-    recordFile.value = await audioRecorder.start()
+    cts.startTimeout()
+    recordFile.value = await audioRecorder.start(cts.token)
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  } finally {
+    cts.cancel()
+    recordTimer.stop()
   }
 }
 
 function handlePlay() {
-  if (playing.value === 'playing') {
+  if (playState.value === 'playing') {
     audioPlayer.pause()
   } else if (recordFile.value) {
     const audioURL = window.URL.createObjectURL(recordFile.value)
@@ -112,7 +125,7 @@ async function openInputFile() {
 
 async function handleAudioUpload() {
   try {
-    const cts = new CancellationTokenSource(timeoutMilliseconds)
+    cts = new CancellationTokenSource(timeoutMilliseconds)
     if (isRecord.value && recordFile.value) {
       cts.startTimeout()
       audioInfo.value = await audioUpload(recordFile.value, cts.token)
@@ -142,12 +155,13 @@ async function handleSpeakerItemClick(item: Speaker) {
 
 function handleSubmit() {
   if (transferAudioInfo.value && selSpeaker.value) {
-    emit('submit', { label: selSpeaker.value.label, value: transferAudioInfo.value.src })
+    emit('submit', { label: selSpeaker.value.displayName, value: transferAudioInfo.value.src })
     reset()
   }
 }
 
 function handleReupload() {
+  cts?.cancel()
   reopen?.()
 }
 </script>
@@ -159,7 +173,10 @@ function handleReupload() {
     >
       <div class="text-secondary d-flex flex-row align-items-center" style="font-size: 0.5rem">
         <button @click="handlePlay" v-if="recordFile || inputFile" class="btn btn-sm rounded-pill">
-          <span v-if="playing === 'playing'" class="iconfont icon-pause"></span>
+          <span
+            v-if="playState === 'playing' || recorderState === 'recording'"
+            class="iconfont icon-pause"
+          ></span>
           <span v-else class="iconfont icon-play"></span>
         </button>
         <span>{{ inputFile?.name || recordFile?.name }}</span>
@@ -173,13 +190,13 @@ function handleReupload() {
           <span class="iconfont icon-delete"></span>
         </button>
         <span v-if="audioInfo" style="font-size: 0.5rem">已上传</span>
-        <template v-if="isRecord">
+        <template v-if="isRecord && !recordFile">
           <button
             v-if="recorderState === 'recording'"
             @click="handleStopRecord"
             class="btn btn-primary btn-sm rounded-pill"
           >
-            结束录音
+            结束录音({{ recordTimerState }})s
           </button>
           <button v-else @click="handleStartRecord" class="btn btn-primary btn-sm rounded-pill">
             开始录音
@@ -218,9 +235,9 @@ function handleReupload() {
           @click="handleSpeakerItemClick(item)"
           v-for="(item, index) in speakerList"
           :key="index"
-          :name="item.label"
+          :label="item.displayName"
           :avatar="item.avatar"
-          :activated="item.value === selSpeaker?.value"
+          :activated="item.name === selSpeaker?.name"
         ></SpeakerItem>
       </div>
     </div>

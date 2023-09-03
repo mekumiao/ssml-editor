@@ -1,8 +1,14 @@
-import { SlateRange, type IDomEditor, DomEditor, SlateEditor } from '@wangeditor/editor'
+import {
+  SlateRange,
+  type IDomEditor,
+  DomEditor,
+  SlateEditor,
+  SlateTransforms,
+} from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { CustomManagement } from '@/core'
-import type { SubmitData } from './data'
+import type { ContentData, SubmitData } from './data'
 
 export class ManagementFn extends BaseFn {
   public constructor(editor: IDomEditor) {
@@ -14,13 +20,12 @@ export class ManagementFn extends BaseFn {
     const { selection } = this.editor
     if (selection == null) return true
 
-    if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选句子')
-      return true
+    if (DomEditor.getSelectedNodeByType(this.editor, 'custom-management')) {
+      return false
     }
 
-    if (DomEditor.getSelectedNodeByType(this.editor, 'custom-management')) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '多人配音不能嵌套使用')
+    if (SlateRange.isCollapsed(selection)) {
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选句子')
       return true
     }
 
@@ -34,23 +39,44 @@ export class ManagementFn extends BaseFn {
     return false
   }
 
+  public contentData: ContentData | undefined
+
   exec(opt: SubmitData) {
     this.editor.restoreSelection()
     if (this.isDisabled()) return
     const value = this.getValue()
     if (value == null) return
 
-    const node: CustomManagement = {
-      type: 'custom-management',
-      remark: opt.label,
-      name: opt.value,
-      role: opt.role,
-      style: opt.style,
-      rate: opt.speed,
-      pitch: opt.pitch,
-      children: [{ text: value }],
+    const node = DomEditor.getSelectedNodeByType(this.editor, 'custom-management')
+    if (node) {
+      SlateTransforms.setNodes(
+        this.editor,
+        <Partial<CustomManagement>>{
+          custom: { contentData: this.contentData || {} },
+          remark: opt.label,
+          name: opt.value,
+          role: opt.role,
+          style: opt.style,
+          rate: opt.speed,
+          pitch: opt.pitch,
+        },
+        {
+          at: DomEditor.findPath(this.editor, node),
+        },
+      )
+    } else {
+      const elem: CustomManagement = {
+        type: 'custom-management',
+        custom: { contentData: this.contentData || {} },
+        remark: opt.label,
+        name: opt.value,
+        role: opt.role,
+        style: opt.style,
+        rate: opt.speed,
+        pitch: opt.pitch,
+        children: [{ text: value }],
+      }
+      this.editor.insertNode(elem)
     }
-
-    this.editor.insertNode(node)
   }
 }

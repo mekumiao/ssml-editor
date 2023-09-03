@@ -33,8 +33,7 @@ export default {
             h(`span.data-content`, { attrs: { 'data-content': remark } }),
           ],
         ),
-        h(`span.data-content`, {
-          attrs: { 'data-content': '|' },
+        h(`span.iconfont.icon-tingdun`, {
           style: { color: `var(--ssml-break)` },
         }),
       ],

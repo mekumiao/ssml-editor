@@ -43,6 +43,41 @@ export default {
   },
   audio: [
     {
+      label: '1856_dog-barking-01',
+      value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1856_dog-barking-01.wav',
+      scene: '',
+      style: '',
+      menu: '',
+    },
+    {
+      label: '1825_laughter-01',
+      value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1825_laughter-01.wav',
+      scene: '',
+      style: '',
+      menu: '',
+    },
+    {
+      label: '2094_whoosh-01',
+      value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/2094_whoosh-01.wav',
+      scene: '',
+      style: '',
+      menu: '',
+    },
+    {
+      label: '1449_record-scratch-02',
+      value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1449_record-scratch-02.wav',
+      scene: '',
+      style: '',
+      menu: '',
+    },
+    {
+      label: 'creativeminds',
+      value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/creativeminds.mp3',
+      scene: '',
+      style: '',
+      menu: '',
+    },
+    {
       label: '打鼓背景音',
       value: 'https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/1415_dhol-drums-01.wav',
       scene: '',

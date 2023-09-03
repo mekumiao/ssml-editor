@@ -27,7 +27,7 @@ function handleKeyDown(ev: KeyboardEvent) {
 
 <template>
   <div class="editor-view" @click="handleClick" @keydown="handleKeyDown">
-    <EditorTitle></EditorTitle>
+    <slot><EditorTitle></EditorTitle></slot>
     <div class="editor-box">
       <BarView></BarView>
       <div class="editor-core-container shadow pt-1">

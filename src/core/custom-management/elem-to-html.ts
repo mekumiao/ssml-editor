@@ -4,7 +4,7 @@ import type { CustomManagement } from './custom-types'
 export default {
   type: 'custom-management',
   elemToHtml: (elem: SlateElement, childrenHtml: string) => {
-    const { remark, style, role, name, pitch, rate } = elem as CustomManagement
+    const { remark, style, role, name, pitch, rate, custom } = elem as CustomManagement
     const html = `<span
           data-w-e-type="custom-management"
           data-w-e-is-inline
@@ -14,6 +14,7 @@ export default {
           data-ow-role="${role}"
           data-ow-pitch="${pitch}"
           data-ow-rate="${rate}"
+          data-ow-custom="${JSON.stringify(custom)}"
         >${childrenHtml}</span>`
     return html
   },

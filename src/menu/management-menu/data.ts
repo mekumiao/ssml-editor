@@ -47,9 +47,24 @@ export function formatRate(v: number) {
   return `${((v - 1) * 100).toFixed(0)}%`
 }
 
-export interface SubmitData extends LabelValue {
+export interface ContentData {
+  category: string
+  name: string
   role: string
   style: string
   speed: string
   pitch: string
 }
+
+export function defaultContentData(): ContentData {
+  return {
+    category: '',
+    name: '',
+    role: '',
+    style: '',
+    speed: '1.0',
+    pitch: '0',
+  }
+}
+
+export type SubmitData = ContentData & LabelValue

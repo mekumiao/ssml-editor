@@ -15,7 +15,7 @@ export class ContinuousFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择多个中文字符或者多个多个英文单词')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择多个中文字符或英文单词')
       return true
     }
 

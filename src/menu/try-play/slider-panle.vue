@@ -8,7 +8,7 @@ import { demoAvatar, speed as speedGetter, pitch as pitchGetter } from '@/config
 import StyleAvatar from './style-avatar.vue'
 import { formatPitch, formatRate } from './data'
 import { useEditorStore, useSSMLStore, useTryPlayStore } from '@/stores'
-import type { Speaker } from '@/model'
+import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 
@@ -21,7 +21,7 @@ type Marks = Record<number, Mark | string>
 
 const { globalEditConfig } = useEditorStore()
 const { rootProsody, rootExpressAs } = useSSMLStore()
-const { fetchStar, flags, fetchFlag } = globalEditConfig.tryPlay
+const { fetchStar, category, fetchData } = globalEditConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
 const isStar = ref(tryPlayStore.speaker.isStar)
@@ -44,7 +44,7 @@ const flag = ref('')
 const speakerList = ref<Speaker[]>([])
 
 onMounted(async () => {
-  await handleFlagClick('')
+  await handleCategoryClick(category[0].value)
 })
 
 watch(
@@ -73,7 +73,7 @@ watch(
 )
 
 async function handleStar() {
-  isStar.value = await fetchStar(tryPlayStore.speaker.value, !isStar.value)
+  isStar.value = await fetchStar(tryPlayStore.speaker.name, !isStar.value)
 }
 
 function handleRoleClick(value: string) {
@@ -84,10 +84,10 @@ function handleStyleClick(value: string) {
   rootExpressAs.style = value
 }
 
-async function handleFlagClick(value: string) {
+async function handleCategoryClick(value: string) {
   flag.value = value
   try {
-    speakerList.value = await fetchFlag(value)
+    speakerList.value = await fetchData({ ...defaultFilterSpeaker(), category: value })
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
   }
@@ -105,7 +105,7 @@ function handleSpeakerClick(value: Speaker) {
         <img :src="demoAvatar()" class="rounded-circle" style="height: 50px" />
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
-            <span class="fs-6">{{ tryPlayStore.speaker.label }}</span>
+            <span class="fs-6">{{ tryPlayStore.speaker.displayName }}</span>
             <span style="font-size: 0.5rem">{{ speed }}x</span>
           </div>
           <div class="d-flex flex-row column-gap-2 align-items-center">
@@ -187,8 +187,8 @@ function handleSpeakerClick(value: Speaker) {
     <div>
       <ul class="d-flex flex-row gap-3 my-3">
         <li
-          @click="handleFlagClick(item.value)"
-          v-for="(item, index) in flags"
+          @click="handleCategoryClick(item.value)"
+          v-for="(item, index) in category"
           :key="index"
           class="rounded-pill px-1"
           :class="{ border: item.value === flag }"
@@ -199,8 +199,8 @@ function handleSpeakerClick(value: Speaker) {
       <ul class="d-flex flex-row flex-wrap row-gap-2 column-gap-3 mb-3" style="min-height: 100px">
         <li @click="handleSpeakerClick(item)" v-for="(item, index) in speakerList" :key="index">
           <AnchorAvatar
-            :activate="item.value === tryPlayStore.speaker.value"
-            :data="item"
+            :activate="item.name === tryPlayStore.speaker.name"
+            :data="{ ...item, label: item.displayName, value: item.name }"
           ></AnchorAvatar>
         </li>
       </ul>

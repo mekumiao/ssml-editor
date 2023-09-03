@@ -1,4 +1,5 @@
 import { type IDomEditor, DomEditor, SlateTransforms, SlateNode } from '@wangeditor/editor'
+import { SlateEditor } from '@wangeditor/editor'
 import { insertNodeSpace } from './helper'
 
 export default <T extends IDomEditor>(editor: T) => {
@@ -44,9 +45,10 @@ export default <T extends IDomEditor>(editor: T) => {
     if (data.types.includes('application/x-slate-fragment')) {
       return insertData(data)
     } else {
-      data.setData('text/html', data.getData('text/plain').trim())
+      const copydata = new DataTransfer()
+      copydata.setData('text/plain', data.getData('text/plain').trim())
       // 这里不能使用insertText()方法,否者会破坏段落结构
-      return insertData(data)
+      return insertData(copydata)
     }
   }
 
@@ -84,6 +86,11 @@ export default <T extends IDomEditor>(editor: T) => {
       // 插入间隔
       editor.selection && insertNodeSpace(editor, editor.selection)
       return SlateTransforms.insertNodes(editor, node)
+    }
+
+    if (SlateEditor.isVoid(editor, node)) {
+      insertNode(node)
+      return editor.move(1)
     }
 
     return insertNode(node)
