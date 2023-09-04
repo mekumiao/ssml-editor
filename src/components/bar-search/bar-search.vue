@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElMenu, ElMenuItem, ElOption, ElSelect, ElInput, ElForm } from 'element-plus'
-import { onMounted, ref, toRaw, watch } from 'vue'
+import { onMounted, ref, toRaw, watch, nextTick } from 'vue'
 import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
 import type { LabelValue } from '@/model'
@@ -18,7 +18,7 @@ const props = defineProps<{
   dataList?: LabelValue[]
 }>()
 
-const searchInputRef = ref<HTMLElement>()
+const searchInputRef = ref<InstanceType<typeof ElInput>>()
 const searchInput = ref('')
 const sceneSelect = ref('')
 const styleSelect = ref('')
@@ -28,13 +28,13 @@ const dataListCache = ref<LabelValue[]>(props.dataList || [])
 const sceneListCache = ref<LabelValue[]>(props.sceneList || [])
 const styleListCache = ref<LabelValue[]>(props.styleList || [])
 
-const isVisible = useElementVisibility(searchInputRef)
+const isVisible = useElementVisibility(searchInputRef as any)
 
 watch(isVisible, (newValue) => {
   if (newValue) {
-    setTimeout(() => {
-      searchInputRef.value?.focus()
-    }, 100)
+    nextTick(() => {
+      searchInputRef.value?.input?.focus()
+    })
   }
 })
 

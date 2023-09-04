@@ -4,6 +4,7 @@ import type { FilterBarSearch } from '@/components/bar-search'
 import type { Speaker } from '@/model'
 import { defaultAudioInfo, type AudioInfo } from '@/menu/conversion-menu/data'
 import type { CancellationToken } from '@/utils'
+import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
 
 type FetahFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetahFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
@@ -51,6 +52,11 @@ export interface SSMLEditorConfig {
     transfer: (opt: { audioId: string; speakerId: string }) => Promise<AudioInfo>
     fetchSpeaker: () => Promise<Speaker[]>
   }
+  management: {
+    recordRecentUsage: (recentUsage: RecentUsageSpeaker) => Promise<RecentUsageSpeaker>
+    fetchRecentUsage: () => Promise<RecentUsageSpeaker[]>
+    deleteRecentUsage: (id?: string) => Promise<void>
+  }
 }
 
 export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
@@ -69,16 +75,21 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     fetchStyle: resolveList<LabelValue>(),
   }
   const tryPlay = config?.tryPlay || {
-    play: () => Promise<AudioInfo>,
+    play: () => Promise.resolve(defaultAudioInfo()),
     fetchData: resolveList<FilterSpeaker>(),
     featchTag: resolveList<LabelValue>(),
-    fetchStar: resolveList<LabelValue>(),
+    fetchStar: () => Promise.resolve(true),
   }
   const conversion = config?.conversion || {
     timeoutMilliseconds: 20000,
-    audioUpload: () => defaultAudioInfo(),
-    transfer: () => defaultAudioInfo(),
+    audioUpload: () => Promise.resolve(defaultAudioInfo()),
+    transfer: () => Promise.resolve(defaultAudioInfo()),
     fetchSpeaker: resolveList<Speaker>(),
+  }
+  const management = config?.management || {
+    recordRecentUsage: () => Promise.resolve<RecentUsageSpeaker>(defaultRecentUsageSpeaker()),
+    fetchRecentUsage: resolveList<RecentUsageSpeaker>(),
+    deleteRecentUsage: () => Promise.resolve(),
   }
 
   const specialRequired = special as Required<SSMLEditorConfig['special']>
@@ -125,5 +136,6 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     special: specialRequired,
     tryPlay: tryPlayRequired,
     conversion,
+    management,
   }
 }

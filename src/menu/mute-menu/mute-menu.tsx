@@ -18,7 +18,7 @@ export default defineComponent({
   setup() {
     const fn = shallowRef<MuteFn>()
     const visible = ref(false)
-    const inputRef = ref()
+    const inputRef = ref<InstanceType<typeof BarInput>>()
 
     function show() {
       if (visible.value) return
@@ -34,7 +34,7 @@ export default defineComponent({
       fn.value ??= new MuteFn(editor)
       if (fn.value.isDisabled()) return
       show()
-      inputRef.value.focus()
+      inputRef.value?.focus()
     }
 
     function handleSubmit(text: string | null) {

@@ -15,6 +15,7 @@ import { EMITTER_EVENT } from './constant'
 
 import type { FilterBarSearch } from './components/bar-search'
 import type { AudioInfo } from './menu/conversion-menu/data'
+import type { RecentUsageSpeaker } from './menu/management-menu/data'
 
 export * from './constant'
 export * from './model'
@@ -40,4 +41,4 @@ export default <Plugin>{
 
 export { EditorView }
 
-export type { FilterBarSearch, AudioInfo }
+export type { FilterBarSearch, AudioInfo, RecentUsageSpeaker }

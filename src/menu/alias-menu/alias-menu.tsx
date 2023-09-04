@@ -7,7 +7,7 @@ import type { IDomEditor } from '@wangeditor/editor'
 export default defineComponent({
   setup() {
     const fn = shallowRef<AliasFn>()
-    const inputRef = ref()
+    const inputRef = ref<InstanceType<typeof BarInput>>()
     const visible = ref(false)
 
     function show() {
@@ -24,7 +24,7 @@ export default defineComponent({
       fn.value ??= new AliasFn(editor)
       if (fn.value.isDisabled()) return
       show()
-      inputRef.value.focus()
+      inputRef.value?.focus()
     }
 
     function handleSubmit(text: string | null) {
