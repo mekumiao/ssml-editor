@@ -18,7 +18,7 @@ export default defineComponent({
   setup() {
     const fn = shallowRef<MuteFn>()
     const visible = ref(false)
-    const inputRef = ref<InstanceType<typeof BarInput>>()
+    const inputRef = ref()
 
     function show() {
       if (visible.value) return

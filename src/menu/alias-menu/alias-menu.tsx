@@ -7,7 +7,7 @@ import type { IDomEditor } from '@wangeditor/editor'
 export default defineComponent({
   setup() {
     const fn = shallowRef<AliasFn>()
-    const inputRef = ref<InstanceType<typeof BarInput>>()
+    const inputRef = ref()
     const visible = ref(false)
 
     function show() {
