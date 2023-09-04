@@ -75,3 +75,8 @@ export async function conversionSpeaker(): Promise<Speaker[]> {
   const resp = await axios.get('/conversionSpeaker')
   return resp.data
 }
+
+export async function play(): Promise<AudioInfo> {
+  const resp = await axios.get('/play')
+  return resp.data
+}
