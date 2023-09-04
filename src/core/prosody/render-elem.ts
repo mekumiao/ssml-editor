@@ -1,7 +1,7 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { Prosody } from './custom-types'
-import throttle from 'lodash.throttle'
+import { throttle } from 'lodash'
 import { removeNodeSpace } from '../helper'
 
 export default {

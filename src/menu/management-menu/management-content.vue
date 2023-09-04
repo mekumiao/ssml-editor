@@ -11,6 +11,7 @@ import { storeToRefs } from 'pinia'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
+import { sortedUniqBy } from 'lodash'
 
 const emit = defineEmits<{ submit: [data: SubmitData] }>()
 
@@ -86,7 +87,7 @@ function handleSelectSpeaker(name: string) {
   }
 }
 
-function handleSubmit() {
+async function handleSubmit() {
   const speakerLabel =
     dataListSpeaker.value.find((v) => v.value === contentData.value.name)?.label || ''
   const roleLabel = dataListRole.value.find((v) => v.value === contentData.value.role)?.label || ''
@@ -106,7 +107,7 @@ function handleSubmit() {
     pitch: formatPitch(Number(contentData.value.pitch)),
   }
   emit('submit', data)
-  handleRecordRecentUsage(data)
+  await handleRecordRecentUsage(data)
 }
 
 async function handleFetchRecentUsage() {
@@ -121,7 +122,11 @@ async function handleRecordRecentUsage(data: SubmitData) {
   try {
     const record = { ...contentData.value, label: data.label, id: '' }
     const result = await management.recordRecentUsage(record)
-    recentUsageCache.value.push(result)
+    recentUsageCache.value.splice(0, 0, result)
+    recentUsageCache.value = sortedUniqBy(
+      recentUsageCache.value,
+      (item) => `${item.name}+${item.role}+${item.style}+${item.pitch}+${item.speed}`,
+    )
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
   }
