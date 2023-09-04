@@ -6,7 +6,7 @@ import { AliasFn } from './alias-fn'
 import type { IDomEditor } from '@wangeditor/editor'
 
 const fn = shallowRef<AliasFn>()
-const inputRef = ref()
+const inputRef = ref<InstanceType<typeof BarInput>>()
 const visible = ref(false)
 
 function show() {

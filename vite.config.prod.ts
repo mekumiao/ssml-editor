@@ -13,7 +13,14 @@ export default function (): UserConfig {
       ElementPlus({}),
       dts({
         compilerOptions: { noUnusedLocals: false },
-        exclude: ['example/**', 'node_modules/**'],
+        exclude: [
+          'example/**',
+          'node_modules/**',
+          'src/menu/**/*.tsx',
+          'vite.config.ts',
+          'vite.config.dev.ts',
+          'vite.config.prod.ts',
+        ],
         insertTypesEntry: true,
       }),
       typescript2({
@@ -27,7 +34,14 @@ export default function (): UserConfig {
             declarationMap: true,
           },
         },
-        exclude: ['vite.config.ts', 'vite.config.dev.ts', 'vite.config.prod.ts'],
+        exclude: [
+          'example/**',
+          'node_modules/**',
+          'src/menu/**/*.tsx',
+          'vite.config.ts',
+          'vite.config.dev.ts',
+          'vite.config.prod.ts',
+        ],
       }),
     ],
     build: {

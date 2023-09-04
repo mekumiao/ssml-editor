@@ -8,7 +8,7 @@ import { options } from './data'
 
 const fn = shallowRef<MuteFn>()
 const visible = ref(false)
-const inputRef = ref()
+const inputRef = ref<InstanceType<typeof BarInput>>()
 
 function show() {
   if (visible.value) return

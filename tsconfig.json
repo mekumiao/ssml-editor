@@ -11,7 +11,8 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "noEmit": true,
-    "jsx": "preserve",
+    "jsx": "react",
+    "jsxFactory": "jsx",
 
     /* Linting */
     "strict": true,
@@ -32,6 +33,7 @@
       "@/*": ["./src/*"]
     }
   },
+  "exclude": ["src/menu/**/*.tsx"],
   "include": [
     "env.d.ts",
     "global.d.ts",
