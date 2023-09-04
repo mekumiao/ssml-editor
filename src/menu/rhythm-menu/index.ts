@@ -1,1 +1,1 @@
-export { default as RhythmMenu } from './rhythm-menu'
+export { default as RhythmMenu } from './rhythm-menu.vue'

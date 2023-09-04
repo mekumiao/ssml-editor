@@ -1,0 +1,70 @@
+<script setup lang="ts">
+import { type IDomEditor } from '@wangeditor/editor'
+import { ref, shallowRef } from 'vue'
+import { BarButton } from '@/components'
+import { ElPopover } from 'element-plus'
+import { PinyinFn } from './pinyin-fn'
+import { WANGEDITOR_EVENT } from '@/constant'
+import type { LabelValue } from '@/model'
+import { useEditorStore } from '@/stores'
+
+const { globalEditConfig } = useEditorStore()
+const fn = shallowRef<PinyinFn>()
+const pyList = ref<LabelValue[]>([])
+const visible = ref(false)
+
+function show() {
+  if (visible.value) return
+  visible.value = true
+}
+
+function hide() {
+  if (!visible.value) return
+  visible.value = false
+}
+
+async function handleClick(editor: IDomEditor) {
+  fn.value ??= new PinyinFn(editor)
+  if (fn.value?.isDisabled()) return
+  const text = fn.value.getValue()
+  if (text) {
+    pyList.value = await globalEditConfig.pinyin.fetchData(text)
+  } else {
+    pyList.value = []
+  }
+
+  if (pyList.value.length == 0) {
+    return editor.emit(WANGEDITOR_EVENT.ERROR, '选中的字符没有不是多音字')
+  }
+
+  show()
+}
+
+function handleItemClick(item: LabelValue) {
+  if (fn.value && !fn.value.isDisabled()) {
+    fn.value.exec({ ...item })
+  }
+  hide()
+}
+</script>
+
+<template>
+  <ElPopover v-model:visible="visible" trigger="contextmenu" :hideAfter="0">
+    <template #reference>
+      <BarButton text="多音字" icon="speaker" @click="handleClick"></BarButton>
+    </template>
+    <div class="d-flex flex-column overflow-x-hidden overflow-y-auto" style="max-height: 300px">
+      <div
+        v-for="(item, index) in pyList"
+        :key="index"
+        class="clickable w-100 fs-6 rounded-1 px-3 py-2"
+        @click="handleItemClick(item)"
+        @mousedown.stop.prevent
+      >
+        {{ item.label }}
+      </div>
+    </div>
+  </ElPopover>
+</template>
+
+<style lang="scss" scoped></style>
