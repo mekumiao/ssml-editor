@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { BarWrapper, BarWrapperGroup, BarButton } from '../components'
+import { BarWrapper, BarWrapperGroup } from '../components'
 import {
+  PlayMenu,
   PinyinMenu,
   ReadMenu,
   DigitalMenu,
@@ -12,7 +13,6 @@ import {
   SpecialMenu,
   MuteMenu,
   BgmMenu,
-  // SensitiveMenu,
   ConversionMenu,
   ManagementMenu,
   TryPlay,
@@ -23,7 +23,7 @@ import {
   <div class="bar-view border-bottom border-1">
     <BarWrapper>
       <BarWrapperGroup divider="green">
-        <BarButton text="24K高清音质" icon="play" disabled></BarButton>
+        <PlayMenu></PlayMenu>
       </BarWrapperGroup>
       <BarWrapperGroup divider="cyan">
         <PinyinMenu></PinyinMenu>
@@ -46,9 +46,6 @@ import {
         <SpecialMenu></SpecialMenu>
         <BgmMenu></BgmMenu>
       </BarWrapperGroup>
-      <!-- <BarWrapperGroup>
-        <SensitiveMenu></SensitiveMenu>
-      </BarWrapperGroup> -->
     </BarWrapper>
   </div>
   <TryPlay></TryPlay>
