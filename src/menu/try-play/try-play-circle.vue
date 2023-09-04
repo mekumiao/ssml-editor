@@ -5,7 +5,6 @@ import { useDraggable } from '@vueuse/core'
 import { demoAvatar } from '@/config'
 import { useEditorStore, useTryPlayStore } from '@/stores'
 import { serializeToSSML } from '@/serialize'
-import AudioPlayer from '../conversion-menu/audio-player'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
@@ -18,7 +17,7 @@ const recordClientY = ref<number>(0)
 const tryPlayStore = useTryPlayStore()
 const { globalEditConfig } = useEditorStore()
 
-const audioPlayer = new AudioPlayer()
+const { audioPlayer } = tryPlayStore
 const playState = audioPlayer.playState
 
 const { position } = useDraggable(boxRef, {

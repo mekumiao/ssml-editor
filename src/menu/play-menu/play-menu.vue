@@ -1,13 +1,13 @@
 <script setup lang="ts">
-import { useEditorStore } from '@/stores'
+import { useEditorStore, useTryPlayStore } from '@/stores'
 import { serializeToSSML } from '@/serialize'
-import AudioPlayer from '../conversion-menu/audio-player'
 import { ElIcon } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false })
 
-const audioPlayer = new AudioPlayer()
+const tryPlayStore = useTryPlayStore()
+const { audioPlayer } = tryPlayStore
 const playState = audioPlayer.playState
 const loadState = audioPlayer.loadState
 
