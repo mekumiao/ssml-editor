@@ -37,6 +37,7 @@ export interface SSMLEditorConfig {
     fetchData: FilterFetahFunction
   }
   tryPlay: {
+    play: (ssml: string) => Promise<AudioInfo>
     gender?: LabelValue[]
     topFlag?: LabelValue[]
     category?: LabelValue[]
@@ -68,6 +69,7 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     fetchStyle: resolveList<LabelValue>(),
   }
   const tryPlay = config?.tryPlay || {
+    play: () => Promise<AudioInfo>,
     fetchData: resolveList<FilterSpeaker>(),
     featchTag: resolveList<LabelValue>(),
     fetchStar: resolveList<LabelValue>(),

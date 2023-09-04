@@ -151,3 +151,8 @@ mock.onGet('/conversionSpeaker').reply(() => {
   )
   return [200, data]
 })
+
+mock.onPost('/play').reply(() => {
+  const audio = DataSource.audio.find((v) => v.label === 'creativeminds') || DataSource.audio[0]
+  return [200, <AudioInfo>{ id: 'id', src: audio.value }]
+})

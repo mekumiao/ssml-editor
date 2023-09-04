@@ -31,7 +31,7 @@ const { playState } = audioPlayer
 
 let cts: CancellationTokenSource | undefined
 const audioRecorder = new Recorder()
-const audioSelector = new FileSelector('audio-conversion', 'audio/*')
+const audioSelector = new FileSelector('audio/*')
 const recordTimer = new Timer(60)
 const { state: recordTimerState } = recordTimer
 

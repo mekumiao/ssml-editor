@@ -3,16 +3,22 @@ import { ref } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 import { demoAvatar } from '@/config'
-import { useTryPlayStore } from '@/stores'
+import { useEditorStore, useTryPlayStore } from '@/stores'
+import { serializeToSSML } from '@/serialize'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
 
-const boxRef = ref()
+const boxRef = ref<HTMLDivElement>()
+const btnPlayRef = ref<HTMLButtonElement>()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
 
 const tryPlayStore = useTryPlayStore()
+const { globalEditConfig } = useEditorStore()
+
+const { audioPlayer } = tryPlayStore
+const playState = audioPlayer.playState
 
 const { position } = useDraggable(boxRef, {
   initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
@@ -23,7 +29,19 @@ const { position } = useDraggable(boxRef, {
 const { style } = constrainDragBounds(boxRef, position)
 
 function handleMouseup(event: MouseEvent) {
-  isClick(event.clientX, event.clientY) && emit('update:visible', false)
+  const callback = () => {
+    if (!isClick(event.clientX, event.clientY)) return
+    if (isBtnPlayClick(event)) return handlePlay()
+    return emit('update:visible', false)
+  }
+
+  callback()
+  resetRecordClient()
+}
+
+function resetRecordClient() {
+  recordClientX.value = 0
+  recordClientY.value = 0
 }
 
 function handleMousedown(event: MouseEvent) {
@@ -40,6 +58,26 @@ function isClick(x: number, y: number) {
     y < recordClientY.value + offset
   return res
 }
+
+function isBtnPlayClick(event: MouseEvent) {
+  const target = event.target as HTMLElement
+  return btnPlayRef.value?.contains(target) || false
+}
+
+async function handlePlay() {
+  if (playState.value === 'playing') {
+    audioPlayer.pause()
+  } else {
+    try {
+      const ssml = serializeToSSML()
+      const audio = await globalEditConfig.tryPlay.play(ssml)
+      audioPlayer.load(audio.src)
+      audioPlayer.play()
+    } catch (error) {
+      audioPlayer.pause()
+    }
+  }
+}
 </script>
 
 <template>
@@ -53,7 +91,16 @@ function isClick(x: number, y: number) {
     @mouseup="handleMouseup"
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <img :src="tryPlayStore.speaker.avatar || demoAvatar()" class="rounded-circle" />
+      <div class="position-relative">
+        <img :src="tryPlayStore.speaker.avatar || demoAvatar()" class="rounded-circle" />
+        <button
+          ref="btnPlayRef"
+          class="btn w-100 h-100 position-absolute top-50 start-50 translate-middle bg-black bg-opacity-50 text-white rounded-circle"
+        >
+          <span v-if="playState === 'paused'" class="iconfont icon-play1"></span>
+          <span v-else class="iconfont icon-pause1"></span>
+        </button>
+      </div>
       <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.displayName }}</div>
     </div>
   </div>

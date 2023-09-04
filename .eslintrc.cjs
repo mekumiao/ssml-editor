@@ -12,4 +12,8 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 'latest',
   },
+  rules: {
+    // 变量未使用检查交由typescript负责
+    '@typescript-eslint/no-unused-vars': 'off',
+  },
 }

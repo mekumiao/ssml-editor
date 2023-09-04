@@ -20,6 +20,7 @@ export * from './constant'
 export * from './model'
 export * from './config'
 export * from './utils'
+export * from './serialize'
 
 export default <Plugin>{
   install(app: App, config?: SSMLEditorConfig) {

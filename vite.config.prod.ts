@@ -14,6 +14,7 @@ export default function (): UserConfig {
       vueJsx(),
       ElementPlus({}),
       dts({
+        compilerOptions: { noUnusedLocals: false },
         exclude: ['example/**', 'node_modules/**'],
         insertTypesEntry: true,
       }),

@@ -14,12 +14,9 @@ export class AliasFn extends BaseFn {
     const { selection } = this.editor
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '选中一个中文字符，并且有不能在其他语句之内')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选要设置别名的词或句子')
       return true
     }
-
-    const value = this.getValue()
-    if (value.length <= 0) return true
 
     return false
   }

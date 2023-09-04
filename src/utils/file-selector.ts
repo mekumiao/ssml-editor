@@ -1,13 +1,11 @@
 export class FileSelector {
-  private readonly id: string
   private readonly accept: string
   private dom: HTMLInputElement | null
   private isdestroy = false
   private resolve: ((value: File | PromiseLike<File>) => void) | null
   private reject: ((reason?: any) => void) | null
 
-  public constructor(id: string, accept: string) {
-    this.id = `--editor-input-file-${id}`
+  public constructor(accept: string) {
     this.accept = accept
     this.dom = null
     this.resolve = null

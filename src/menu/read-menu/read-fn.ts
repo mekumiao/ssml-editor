@@ -15,7 +15,7 @@ export class ReadFn extends BaseFn {
     if (!selection) return true
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请先选择文本')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选词或句子')
       return true
     }
 

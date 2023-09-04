@@ -15,7 +15,7 @@ export class DigitalFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择纯数字')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选纯数字')
       return true
     }
 
@@ -23,7 +23,7 @@ export class DigitalFn extends BaseFn {
     if (value.length <= 0) return true
 
     if (Number.isNaN(Number(value))) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请选择纯数字')
+      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选纯数字')
       return true
     }
 

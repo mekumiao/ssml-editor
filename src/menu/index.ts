@@ -1,5 +1,6 @@
 import type { App, Plugin } from 'vue'
 
+import { PlayMenu } from './play-menu'
 import { PinyinMenu } from './pinyin-menu'
 import { ContinuousMenu } from './continuous-menu'
 import { ReadMenu } from './read-menu'
@@ -18,6 +19,7 @@ import { TryPlay } from './try-play'
 
 export default <Plugin>{
   install: (app: App) => {
+    app.component('PlayMenu', PlayMenu)
     app.component('PinyinMenu', PinyinMenu)
     app.component('ContinuousMenu', ContinuousMenu)
     app.component('ReadMenu', ReadMenu)
@@ -37,6 +39,7 @@ export default <Plugin>{
 }
 
 export {
+  PlayMenu,
   PinyinMenu,
   ContinuousMenu,
   ReadMenu,
