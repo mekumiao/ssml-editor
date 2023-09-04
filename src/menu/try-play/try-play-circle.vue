@@ -29,9 +29,19 @@ const { position } = useDraggable(boxRef, {
 const { style } = constrainDragBounds(boxRef, position)
 
 function handleMouseup(event: MouseEvent) {
-  if (!isClick(event.clientX, event.clientY)) return
-  if (isBtnPlayClick(event)) return handlePlay()
-  return emit('update:visible', false)
+  const callback = () => {
+    if (!isClick(event.clientX, event.clientY)) return
+    if (isBtnPlayClick(event)) return handlePlay()
+    return emit('update:visible', false)
+  }
+
+  callback()
+  resetRecordClient()
+}
+
+function resetRecordClient() {
+  recordClientX.value = 0
+  recordClientY.value = 0
 }
 
 function handleMousedown(event: MouseEvent) {
