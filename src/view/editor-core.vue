@@ -29,9 +29,11 @@ function initEditor() {
       onCreated(editor) {
         emit('created', editor)
         emitter.emit(EMITTER_EVENT.EDITOR_CREATED, editor)
+        globalEditConfig.editorConfig.onCreated?.(editor)
       },
       onChange(editor) {
         emit('change', editor)
+        globalEditConfig.editorConfig.onChange?.(editor)
       },
     },
   })

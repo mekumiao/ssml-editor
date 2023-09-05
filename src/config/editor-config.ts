@@ -60,7 +60,8 @@ export interface SSMLEditorConfig {
 }
 
 export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
-  const editorConfig = config?.editorConfig || { maxLength: 5000, placeholder: '请输入内容...' }
+  const editorConfig =
+    config?.editorConfig || <IEditorConfig>{ maxLength: 5000, placeholder: '请输入内容...' }
   const handleError = config?.handleError || (() => {})
   const pinyin = config?.pinyin || { fetchData: resolveList<LabelValue>() }
   const english = config?.english || { fetchData: resolveList<LabelValue>() }
