@@ -1,7 +1,15 @@
 {
   "name": "ssml-editor",
   "private": false,
-  "version": "1.0.4",
+  "version": "1.0.5",
+  "description": "基于wangeditor实现的支持SSML语法的编辑器",
+  "keywords": [
+    "SSML",
+    "editor",
+    "编辑器"
+  ],
+  "author": "mekumiao <btguigushi@qq.com>",
+  "homepage": "https://github.com/mekumiao/ssml-editor/",
   "type": "module",
   "license": "Apache-2.0",
   "files": [
@@ -20,6 +28,10 @@
       "import": "./dist/style.css",
       "require": "./dist/style.css"
     }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mekumiao/ssml-editor.git"
   },
   "scripts": {
     "dev": "vite --port 5793",

@@ -1,6 +1,8 @@
 # ssml-editor
 
-模仿[魔音工坊](https://www.moyin.com/overview/article-voice)的`ssml`编辑器
+[在线体验](https://ssml.sdaxia.top/)  
+模仿[魔音工坊UI](https://www.moyin.com/overview/article-voice)的`SSML`编辑器  
+根据[微软语音文档](https://learn.microsoft.com/zh-cn/azure/ai-services/speech-service/speech-synthesis-markup)生成SSML, 可配合大佬项目[tts-vue](https://github.com/LokerL/tts-vue.git)一起使用
 
 ## 开始
 
