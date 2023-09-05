@@ -49,17 +49,21 @@ function handleItemClick(item: LabelValue) {
 </script>
 
 <template>
-  <ElPopover v-model:visible="visible" trigger="contextmenu" :hideAfter="0">
+  <ElPopover
+    popperStyle="--el-popover-padding: 0px"
+    v-model:visible="visible"
+    trigger="contextmenu"
+    :hideAfter="0"
+  >
     <template #reference>
       <BarButton text="音标" icon="english" @click="handleClick"></BarButton>
     </template>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column p-2" @mousedown.stop.prevent>
       <div
         v-for="(item, index) in englishList"
         :key="index"
         class="clickable w-100 fs-6 rounded-1 px-3 py-2"
         @click="handleItemClick(item)"
-        @mousedown.stop.prevent
       >
         {{ item.label }}
       </div>

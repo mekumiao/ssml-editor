@@ -11,6 +11,7 @@ defineProps<{
 
 <template>
   <ElPopover
+    popperStyle="--el-popover-padding: 0px"
     :hideAfter="hideAfter"
     :width="width"
     :visible="visible"
@@ -20,12 +21,10 @@ defineProps<{
     <template v-slot:reference>
       <slot name="reference"></slot>
     </template>
-    <slot></slot>
+    <div class="p-2" @mousedown.stop.prevent>
+      <slot></slot>
+    </div>
   </ElPopover>
 </template>
 
-<style lang="scss">
-:deep(.el-popover) {
-  padding: 1px !important;
-}
-</style>
+<style lang="scss" scoped></style>
