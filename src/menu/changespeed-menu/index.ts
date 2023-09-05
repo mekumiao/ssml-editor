@@ -1,1 +1,1 @@
-export { default as ChangespeedMenu } from './changespeed-menu'
+export { default as ChangespeedMenu } from './changespeed-menu.vue'

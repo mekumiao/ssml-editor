@@ -3,33 +3,24 @@ import vue from '@vitejs/plugin-vue'
 
 import { resolve } from 'path'
 import ElementPlus from 'unplugin-element-plus/vite'
-import typescript2 from 'rollup-plugin-typescript2'
-import vueJsx from '@vitejs/plugin-vue-jsx'
 import dts from 'vite-plugin-dts'
 
 export default function (): UserConfig {
   return {
     plugins: [
       vue(),
-      vueJsx(),
       ElementPlus({}),
       dts({
         compilerOptions: { noUnusedLocals: false },
-        exclude: ['example/**', 'node_modules/**'],
+        exclude: [
+          'example/**',
+          'node_modules/**',
+          'src/menu/**/*.tsx',
+          'vite.config.ts',
+          'vite.config.dev.ts',
+          'vite.config.prod.ts',
+        ],
         insertTypesEntry: true,
-      }),
-      typescript2({
-        check: false,
-        include: ['src/**/*.vue'],
-        tsconfigOverride: {
-          compilerOptions: {
-            outDir: 'dist',
-            sourceMap: true,
-            declaration: true,
-            declarationMap: true,
-          },
-        },
-        exclude: ['vite.config.ts', 'vite.config.dev.ts', 'vite.config.prod.ts'],
       }),
     ],
     build: {

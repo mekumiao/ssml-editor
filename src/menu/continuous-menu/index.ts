@@ -1,1 +1,1 @@
-export { default as ContinuousMenu } from './continuous-menu'
+export { default as ContinuousMenu } from './continuous-menu.vue'

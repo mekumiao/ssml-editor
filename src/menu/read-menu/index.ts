@@ -1,1 +1,1 @@
-export { default as ReadMenu } from './read-menu'
+export { default as ReadMenu } from './read-menu.vue'

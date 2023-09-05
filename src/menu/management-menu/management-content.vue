@@ -3,23 +3,29 @@ import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { onMounted, ref, shallowRef } from 'vue'
-import { speed, pitch } from './data'
+import { onMounted, ref, shallowRef, watch } from 'vue'
+import { speed, pitch, type RecentUsageSpeaker } from './data'
 import { useEditorStore, useManagementStore } from '@/stores'
 import { type SubmitData, formatPitch, formatRate } from './data'
 import { storeToRefs } from 'pinia'
+import { EMITTER_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
+import { useElementVisibility } from '@vueuse/core'
+import { sortedUniqBy } from 'lodash'
 
 const emit = defineEmits<{ submit: [data: SubmitData] }>()
 
 const { globalEditConfig } = useEditorStore()
-const { tryPlay } = globalEditConfig
+const { tryPlay, management } = globalEditConfig
 
+const boxRef = ref<HTMLDivElement>()
 const showMore = ref(false)
 const searchInput = ref('')
 const managementStore = useManagementStore()
 const { contentData } = storeToRefs(managementStore)
 
 const speakerCache = shallowRef<Speaker[]>([])
+const recentUsageCache = ref<RecentUsageSpeaker[]>([])
 const dataListCategory = ref<LabelValue[]>([{ label: '全部类型', value: '' }, ...tryPlay.category])
 const dataListSpeaker = ref<LabelValue[]>([])
 const dataListRole = ref<LabelValue[]>([])
@@ -28,9 +34,19 @@ const dataListStyle = ref<LabelValue[]>([])
 const dataListSpeed = ref<LabelValue[]>(speed())
 const dataListPitch = ref<LabelValue[]>(pitch())
 
+const visible = useElementVisibility(boxRef)
+
 onMounted(async () => {
   contentData.value.category = dataListCategory.value[0].value
   await handleFetchData()
+  await handleFetchRecentUsage()
+})
+
+watch(visible, (newValue) => {
+  if (!newValue) {
+    searchInput.value = ''
+    showMore.value = false
+  }
 })
 
 async function handleSelectCategory(category: string) {
@@ -71,7 +87,7 @@ function handleSelectSpeaker(name: string) {
   }
 }
 
-function handleSubmit() {
+async function handleSubmit() {
   const speakerLabel =
     dataListSpeaker.value.find((v) => v.value === contentData.value.name)?.label || ''
   const roleLabel = dataListRole.value.find((v) => v.value === contentData.value.role)?.label || ''
@@ -91,11 +107,64 @@ function handleSubmit() {
     pitch: formatPitch(Number(contentData.value.pitch)),
   }
   emit('submit', data)
+  await handleRecordRecentUsage(data)
+}
+
+async function handleFetchRecentUsage() {
+  try {
+    recentUsageCache.value = await management.fetchRecentUsage()
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
+}
+
+async function handleRecordRecentUsage(data: SubmitData) {
+  try {
+    const record = { ...contentData.value, label: data.label, id: '' }
+    const result = await management.recordRecentUsage(record)
+    recentUsageCache.value.splice(0, 0, result)
+    recentUsageCache.value = sortedUniqBy(
+      recentUsageCache.value,
+      (item) => `${item.name}+${item.role}+${item.style}+${item.pitch}+${item.speed}`,
+    )
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
+}
+
+function handleRecentUsageItemClick(item: RecentUsageSpeaker) {
+  contentData.value.category = item.category
+  contentData.value.name = item.name
+  contentData.value.pitch = item.pitch
+  contentData.value.role = item.role
+  contentData.value.speed = item.speed
+  contentData.value.style = item.style
+
+  handleSubmit()
+}
+
+async function handleRecentUsageClose(index: number) {
+  try {
+    const item = recentUsageCache.value[index]
+    await management.deleteRecentUsage(item.id)
+    recentUsageCache.value.splice(index, 1)
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
+}
+
+async function handleRecentUsageClean() {
+  try {
+    await management.deleteRecentUsage()
+    recentUsageCache.value = []
+  } catch (error) {
+    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+  }
 }
 </script>
 
 <template>
-  <div style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
+  <div ref="boxRef" style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
     <ElForm @submit.prevent="handleFetchData">
       <ElInput v-model="searchInput" placeholder="请输入名称快速查找配音师"></ElInput>
     </ElForm>
@@ -108,13 +177,16 @@ function handleSubmit() {
         :class="{ 'flex-wrap': showMore }"
       >
         <li><span class="text-nowrap">近期使用:</span></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
-        <li><ElTag type="info" closable>魔小婉|女青年|娱乐|1x</ElTag></li>
+        <li
+          class="btn m-0 p-0"
+          v-for="(item, index) in recentUsageCache"
+          @click="handleRecentUsageItemClick(item)"
+          :key="index"
+        >
+          <ElTag type="info" @close="handleRecentUsageClose(index)" closable>
+            {{ item.label }}
+          </ElTag>
+        </li>
       </ul>
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
         <SelectList
@@ -148,7 +220,7 @@ function handleSubmit() {
 
     <div class="position-absolute bottom-0 end-0 d-flex flex-row justify-content-end me-4 mb-3">
       <ElButton v-show="!showMore" @click="handleSubmit" type="primary">确定</ElButton>
-      <ElButton v-show="showMore" type="primary">全部清空</ElButton>
+      <ElButton v-show="showMore" @click="handleRecentUsageClean" type="primary">全部清空</ElButton>
     </div>
   </div>
 </template>

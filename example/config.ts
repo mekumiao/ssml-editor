@@ -1,10 +1,17 @@
 import type { SSMLEditorConfig } from '@/config'
 import { pinyin, english, bgm, special, scene, style, tag, speaker, star } from './api'
 import { upload, transfer, conversionSpeaker, play } from './api'
+import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 
 export default <SSMLEditorConfig>{
-  handleError: (error) => ElMessage.warning({ message: error, grouping: true }),
+  handleError: (error, detail) => {
+    if (!detail) {
+      ElMessage.warning({ message: error, grouping: true })
+    } else {
+      console.error(error, detail)
+    }
+  },
   pinyin: { fetchData: pinyin },
   english: { fetchData: english },
   bgm: { fetchData: bgm, fetchScene: scene, fetchStyle: style },
@@ -15,5 +22,10 @@ export default <SSMLEditorConfig>{
     audioUpload: upload,
     transfer: transfer,
     fetchSpeaker: conversionSpeaker,
+  },
+  management: {
+    fetchRecentUsage: fetchRecentUsage,
+    deleteRecentUsage: deleteRecentUsage,
+    recordRecentUsage: recordRecentUsage,
   },
 }

@@ -3,7 +3,7 @@ import AnchorList from './anchor-list.vue'
 import TagList from './tag-list.vue'
 import SliderPanle from './slider-panle.vue'
 import { ElInput, ElForm, ElIcon } from 'element-plus'
-import { onMounted, onUnmounted, ref, watch } from 'vue'
+import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 import { Minus } from '@element-plus/icons-vue'
@@ -13,7 +13,7 @@ import { defaultFilterSpeaker } from '@/model'
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 const props = defineProps<{ visible: boolean }>()
 
-const searchInputRef = ref<HTMLElement>()
+const searchInputRef = ref<InstanceType<typeof ElInput>>()
 const searchInput = ref('')
 const boxRef = ref<HTMLElement>()
 const handleRef = ref<HTMLElement>()
@@ -30,10 +30,7 @@ onUnmounted(() => {
 watch(
   () => props.visible,
   (newValue) => {
-    newValue &&
-      setTimeout(() => {
-        searchInputFocus()
-      }, 200)
+    newValue && searchInputFocus()
   },
 )
 
@@ -58,7 +55,9 @@ function handleMinus() {
 }
 
 function searchInputFocus() {
-  searchInputRef.value?.focus()
+  nextTick(() => {
+    searchInputRef.value?.input?.focus()
+  })
 }
 
 function handleSearchInputSubmit() {

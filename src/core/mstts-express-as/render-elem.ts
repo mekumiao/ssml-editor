@@ -1,7 +1,7 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { MsttsExpressAs } from './custom-types'
-import throttle from 'lodash.throttle'
+import { throttle } from 'lodash'
 
 export default {
   type: 'ssml-mstts:express-as',

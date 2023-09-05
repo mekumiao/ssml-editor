@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import { ElForm, ElInput } from 'element-plus'
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
 const emit = defineEmits<{ submit: [value: string] }>()
 defineProps<{ type?: string }>()
 
 const inputValue = ref('')
-const inputRef = ref()
+const inputRef = ref<InstanceType<typeof ElInput>>()
 
 function focus() {
-  inputRef.value.focus()
+  nextTick(() => {
+    inputRef.value!.input!.focus()
+  })
 }
 
 function handleSubmit() {

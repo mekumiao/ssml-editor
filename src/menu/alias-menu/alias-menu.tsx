@@ -24,7 +24,7 @@ export default defineComponent({
       fn.value ??= new AliasFn(editor)
       if (fn.value.isDisabled()) return
       show()
-      inputRef.value.focus()
+      inputRef.value?.focus()
     }
 
     function handleSubmit(text: string | null) {

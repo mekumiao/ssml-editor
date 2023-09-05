@@ -1,1 +1,1 @@
-export { default as AliasMenu } from './alias-menu'
+export { default as AliasMenu } from './alias-menu.vue'

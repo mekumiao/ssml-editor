@@ -1,1 +1,1 @@
-export { default as PinyinMenu } from './pinyin-menu'
+export { default as PinyinMenu } from './pinyin-menu.vue'

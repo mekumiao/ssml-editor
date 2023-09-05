@@ -1,6 +1,6 @@
 import { type IModuleConf } from '@wangeditor/editor'
 import plugin from './plugin'
-import renderElemConf from './render-elem'
+import renderElemConf from './render-elem.tsx'
 import elemToHtmlConf from './elem-to-html'
 import parseElemHtmlConf from './parse-elem-html'
 

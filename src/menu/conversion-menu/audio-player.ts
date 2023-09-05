@@ -13,6 +13,7 @@ export class AudioPlayer {
     this.audio.addEventListener('canplaythrough', () => {
       this.isLoading.value = false
       this.loadResolve?.()
+      this.loadResolve = undefined
     })
 
     this.audio.addEventListener('play', () => {
@@ -27,11 +28,13 @@ export class AudioPlayer {
       this.isLoading.value = false
       this.isPlaying.value = false
       this.loadReject?.()
+      this.loadReject = undefined
     })
   }
 
   load(audioSource: string): Promise<void> {
     this.pause()
+    if (this.loadReject) this.loadReject()
     this.isPlaying.value = false
     this.isLoading.value = true
     this.audio.src = audioSource

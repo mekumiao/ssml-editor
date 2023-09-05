@@ -1,1 +1,1 @@
-export { default as EnglishMenu } from './english-menu'
+export { default as EnglishMenu } from './english-menu.vue'
