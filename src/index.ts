@@ -25,7 +25,9 @@ export * from './serialize'
 
 export default <Plugin>{
   install(app: App, config?: SSMLEditorConfig) {
-    app.use(createPinia())
+    if (!app.config.globalProperties.$pinia) {
+      app.use(createPinia())
+    }
     app.use(() => {
       const { setGlobalEditConfig } = useEditorStore()
       const globalEditorConfig = createGlobalEditorConfig(config)
