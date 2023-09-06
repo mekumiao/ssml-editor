@@ -1,8 +1,9 @@
 <script setup lang="ts">
-import { useEditorStore, useTryPlayStore } from '@/stores'
+import { useTryPlayStore } from '@/stores'
 import { serializeToSSML } from '@/serialize'
 import { ElIcon } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
+import { injectConfig } from '@/config'
 
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false })
 
@@ -11,8 +12,7 @@ const { audioPlayer } = tryPlayStore
 const playState = audioPlayer.playState
 const loadState = audioPlayer.loadState
 
-const editorStore = useEditorStore()
-const { globalEditConfig } = editorStore
+const globalEditConfig = injectConfig()
 
 async function handlePlay() {
   if (playState.value === 'playing') {

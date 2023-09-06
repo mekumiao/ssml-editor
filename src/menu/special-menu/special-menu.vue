@@ -6,12 +6,12 @@ import { useElementBounding } from '@vueuse/core'
 import { SpecialFn } from './special-fn'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
-import { useEditorStore } from '@/stores'
+import { injectConfig } from '@/config'
 
 const dragRef = ref()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 const { special } = globalEditConfig
 
 const visible = ref(false)

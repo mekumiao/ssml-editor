@@ -6,10 +6,10 @@ import { selectionTrimEnd } from '@/core/helper'
 import { ElPopover } from 'element-plus'
 import { EnglishFn } from './english-fn'
 import type { LabelValue } from '@/model'
-import { useEditorStore } from '@/stores'
 import { WANGEDITOR_EVENT } from '@/constant'
+import { injectConfig } from '@/config'
 
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 const fn = shallowRef<EnglishFn>()
 const englishList = ref<LabelValue[]>([])
 const visible = ref(false)

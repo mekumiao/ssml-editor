@@ -6,9 +6,9 @@ import { ElPopover } from 'element-plus'
 import { PinyinFn } from './pinyin-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
-import { useEditorStore } from '@/stores'
+import { injectConfig } from '@/config'
 
-const { globalEditConfig } = useEditorStore()
+const  globalEditConfig  = injectConfig()
 const fn = shallowRef<PinyinFn>()
 const pyList = ref<LabelValue[]>([])
 const visible = ref(false)

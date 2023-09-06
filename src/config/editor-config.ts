@@ -5,6 +5,9 @@ import type { Speaker } from '@/model'
 import { defaultAudioInfo, type AudioInfo } from '@/menu/conversion-menu/data'
 import type { CancellationToken } from '@/utils'
 import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
+import { inject, type App } from 'vue'
+import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { emitter } from '@/event-bus'
 
 type FetahFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetahFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
@@ -139,4 +142,16 @@ export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
     conversion,
     management,
   }
+}
+
+export function proviceConfig(app: App, config?: SSMLEditorConfig) {
+  const globalEditorConfig = createGlobalEditorConfig(config)
+  emitter.on(EMITTER_EVENT.ERROR, globalEditorConfig.handleError)
+  app.provide(PROVIDER_KEY.EDITOR_CONFIG, globalEditorConfig)
+}
+
+export function injectConfig(): GlobalEditorConfig {
+  const config = inject<GlobalEditorConfig>(PROVIDER_KEY.EDITOR_CONFIG)
+  if (!config) throw new Error('GlobalEditorConfig is undefined')
+  return config
 }
