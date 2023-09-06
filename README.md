@@ -9,8 +9,9 @@
 ### 一、环境
 
 ```sh
+# 用于发布包到本地
 npm install -g yalc
-
+# 包管理器
 npm install -g yarn
 ```
 
@@ -25,27 +26,35 @@ git clone https://gogs.sdaxia.top/mekumiao/ssml-editor.git
 2.编译项目
 
 ```sh
-# ssml-editor
-yarn install && yarn build && yalc publish
-
-# 到此项目便成功发布到本地
+# 安装依赖
+yarn install
+# 编译
+yarn build
 ```
 
-3.创建自己的`vue3`项目
+3.发布项目到本地
 
-安装依赖
+```sh
+yalc publish
+```
+
+4.创建自己的`vue3`项目(已有则忽略)
 
 ```sh
 # 使用此命令创建项目时依次选择 vue3 > typescript
 yarn vite create
+```
 
-# 安装ssml-editor及依赖
+5.在自己的项目中安装刚才发布的`ssml-editor`
+
+```sh
+# 使用yalc安装ssml-editor
 yalc add ssml-editor
 
 yarn install
 ```
 
-导入包
+6.在自己的项目中导入ssml-editor包
 
 ```ts
 //src/main.ts
@@ -60,6 +69,20 @@ import SSMLEditor from 'ssml-editor'
 const app = createApp(App)
 app.use(SSMLEditor)
 app.mount('#app')
+```
+
+7.使用
+
+```vue
+<script setup lang="ts">
+import { EditorView } from 'ssml-editor'
+</script>
+
+<template>
+  <EditorView></EditorView>
+</template>
+
+<style scoped></style>
 ```
 
 ## 参考
