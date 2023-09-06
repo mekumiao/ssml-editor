@@ -6,14 +6,14 @@ import { Recorder } from './recorder'
 import { CancellationTokenSource, FileSelector, Timer } from '@/utils'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
-import { useEditorStore } from '@/stores'
 import { type AudioInfo } from './data'
 import { useElementVisibility } from '@vueuse/core'
 import { AudioPlayer } from './audio-player'
+import { injectConfig } from '@/config'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 const { audioUpload, transfer, fetchSpeaker, timeoutMilliseconds } = globalEditConfig.conversion
 
 const boxRef = ref<HTMLElement>()

@@ -1,21 +1,26 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, toRaw } from 'vue'
+import { onMounted, onUnmounted, ref, shallowRef, toRaw } from 'vue'
 import { type IDomEditor, createEditor } from '@wangeditor/editor'
 import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
+import { injectConfig } from '@/config'
 import { useEditorStore } from '@/stores'
 import { emitter } from '@/event-bus'
+import Core from '@/core'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
-const { editor, setEditor, globalEditConfig } = useEditorStore()
+const { setEditor } = useEditorStore()
+const globalEditConfig = injectConfig()
 
 const boxRef = ref(null)
+const editorRef = shallowRef<IDomEditor>()
 
 onMounted(() => {
+  Core.install()
   initEditor()
 })
 
 onUnmounted(() => {
-  editor?.destroy()
+  editorRef.value?.destroy()
 })
 
 function initEditor() {
@@ -28,13 +33,16 @@ function initEditor() {
       onCreated(editor) {
         emit('created', editor)
         emitter.emit(EMITTER_EVENT.EDITOR_CREATED, editor)
+        globalEditConfig.editorConfig.onCreated?.(editor)
       },
       onChange(editor) {
         emit('change', editor)
+        globalEditConfig.editorConfig.onChange?.(editor)
       },
     },
   })
 
+  editorRef.value = editor
   setEditor(editor)
   editor.on(WANGEDITOR_EVENT.ERROR, globalEditConfig.handleError)
 }

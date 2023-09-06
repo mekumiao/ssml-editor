@@ -2,8 +2,8 @@
 import { ref } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
-import { demoAvatar } from '@/config'
-import { useEditorStore, useTryPlayStore } from '@/stores'
+import { demoAvatar, injectConfig } from '@/config'
+import { useTryPlayStore } from '@/stores'
 import { serializeToSSML } from '@/serialize'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
@@ -15,7 +15,7 @@ const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
 
 const tryPlayStore = useTryPlayStore()
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 
 const { audioPlayer } = tryPlayStore
 const playState = audioPlayer.playState

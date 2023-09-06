@@ -6,50 +6,25 @@
 
 ## 开始
 
+[详情可参考demo](https://github.com/mekumiao/ssml-editor-demo.git)
+
 ### 一、环境
 
-```sh
-npm install -g yalc
-
-npm install -g yarn
-```
+- Node 18
 
 ### 二、开始
 
-1.克隆项目
+1.安装插件
 
 ```sh
-git clone https://gogs.sdaxia.top/mekumiao/ssml-editor.git
+yarn add @mekumiao/ssml-editor
 ```
 
-2.编译项目
+2.使用
 
-```sh
-# ssml-editor
-yarn install && yarn build && yalc publish
-
-# 到此项目便成功发布到本地
-```
-
-3.创建自己的`vue3`项目
-
-安装依赖
-
-```sh
-# 使用此命令创建项目时依次选择 vue3 > typescript
-yarn vite create
-
-# 安装ssml-editor及依赖
-yalc add ssml-editor
-
-yarn install
-```
-
-导入包
+> src/main.ts
 
 ```ts
-//src/main.ts
-
 import { createApp } from 'vue'
 import App from './App.vue'
 
@@ -62,10 +37,24 @@ app.use(SSMLEditor)
 app.mount('#app')
 ```
 
+> src/App.vue
+
+```vue
+<script setup lang="ts">
+import { EditorView } from 'ssml-editor'
+</script>
+
+<template>
+  <EditorView></EditorView>
+</template>
+
+<style scoped></style>
+```
+
 ## 参考
 
 1. [阿里TTS](https://ai.aliyun.com/nls/tts)
 2. [wangEditor 5](https://www.wangeditor.com/)
 3. [slate-table](https://github.com/lqs469/slate-table.git)
 4. [wangEditor](https://github.com/wangeditor-team/wangEditor.git)
-5. [SlateNode](https://docs.slatejs.org/api/nodes/node) [SlateTransforms](https://docs.slatejs.org/api/transforms) slatejs [SlateNormalizing](https://docs.slatejs.org/concepts/11-normalizing)
+5. [SlateNode](https://docs.slatejs.org/api/nodes/node) | [SlateTransforms](https://docs.slatejs.org/api/transforms) | [SlateNormalizing](https://docs.slatejs.org/concepts/11-normalizing)

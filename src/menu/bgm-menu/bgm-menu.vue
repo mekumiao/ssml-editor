@@ -5,12 +5,13 @@ import { ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
-import { useEditorStore, useSSMLStore } from '@/stores'
+import { useSSMLStore } from '@/stores'
+import { injectConfig } from '@/config'
 
 const dragRef = ref()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 const { bgm } = globalEditConfig
 
 const visible = ref(false)

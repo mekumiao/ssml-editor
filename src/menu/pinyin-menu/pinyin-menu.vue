@@ -6,9 +6,9 @@ import { ElPopover } from 'element-plus'
 import { PinyinFn } from './pinyin-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
-import { useEditorStore } from '@/stores'
+import { injectConfig } from '@/config'
 
-const { globalEditConfig } = useEditorStore()
+const  globalEditConfig  = injectConfig()
 const fn = shallowRef<PinyinFn>()
 const pyList = ref<LabelValue[]>([])
 const visible = ref(false)
@@ -49,17 +49,25 @@ function handleItemClick(item: LabelValue) {
 </script>
 
 <template>
-  <ElPopover v-model:visible="visible" trigger="contextmenu" :hideAfter="0">
+  <ElPopover
+    popperStyle="--el-popover-padding: 0px"
+    v-model:visible="visible"
+    trigger="contextmenu"
+    :hideAfter="0"
+  >
     <template #reference>
       <BarButton text="多音字" icon="speaker" @click="handleClick"></BarButton>
     </template>
-    <div class="d-flex flex-column overflow-x-hidden overflow-y-auto" style="max-height: 300px">
+    <div
+      class="d-flex flex-column overflow-x-hidden overflow-y-auto p-2"
+      style="max-height: 300px"
+      @mousedown.stop.prevent
+    >
       <div
         v-for="(item, index) in pyList"
         :key="index"
         class="clickable w-100 fs-6 rounded-1 px-3 py-2"
         @click="handleItemClick(item)"
-        @mousedown.stop.prevent
       >
         {{ item.label }}
       </div>

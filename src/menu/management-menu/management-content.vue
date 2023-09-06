@@ -5,17 +5,18 @@ import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
 import { onMounted, ref, shallowRef, watch } from 'vue'
 import { speed, pitch, type RecentUsageSpeaker } from './data'
-import { useEditorStore, useManagementStore } from '@/stores'
+import { useManagementStore } from '@/stores'
 import { type SubmitData, formatPitch, formatRate } from './data'
 import { storeToRefs } from 'pinia'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
 import { sortedUniqBy } from 'lodash'
+import { injectConfig } from '@/config'
 
 const emit = defineEmits<{ submit: [data: SubmitData] }>()
 
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 const { tryPlay, management } = globalEditConfig
 
 const boxRef = ref<HTMLDivElement>()

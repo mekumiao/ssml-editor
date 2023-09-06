@@ -33,17 +33,25 @@ function handleItemClick(item: LabelValue) {
 </script>
 
 <template>
-  <ElPopover style="padding: 0px" v-model:visible="visible" trigger="contextmenu" :hideAfter="0">
+  <ElPopover
+    popperStyle="--el-popover-padding: 0px"
+    v-model:visible="visible"
+    trigger="contextmenu"
+    :hideAfter="0"
+  >
     <template #reference>
       <BarButton text="局部变速" icon="changespeed" @click="handleClick"></BarButton>
     </template>
-    <div class="d-flex flex-column overflow-x-hidden overflow-y-scroll" style="height: 15rem">
+    <div
+      class="p-2 d-flex flex-column overflow-x-hidden overflow-y-scroll"
+      style="height: 15rem"
+      @mousedown.stop.prevent
+    >
       <div
         v-for="(item, index) in rates"
         :key="index"
         class="clickable w-100 fs-6 rounded-1 px-3 py-2"
         @click="handleItemClick(item)"
-        @mousedown.stop.prevent
       >
         {{ item.label }}
       </div>

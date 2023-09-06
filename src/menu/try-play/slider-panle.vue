@@ -4,10 +4,10 @@ import AnchorAvatar from './anchor-avatar.vue'
 import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
-import { demoAvatar, speed as speedGetter, pitch as pitchGetter } from '@/config'
+import { demoAvatar, speed as speedGetter, pitch as pitchGetter, injectConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
 import { formatPitch, formatRate } from './data'
-import { useEditorStore, useSSMLStore, useTryPlayStore } from '@/stores'
+import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
@@ -19,7 +19,7 @@ interface Mark {
 
 type Marks = Record<number, Mark | string>
 
-const { globalEditConfig } = useEditorStore()
+const globalEditConfig = injectConfig()
 const { rootProsody, rootExpressAs } = useSSMLStore()
 const { fetchStar, category, fetchData } = globalEditConfig.tryPlay
 const tryPlayStore = useTryPlayStore()

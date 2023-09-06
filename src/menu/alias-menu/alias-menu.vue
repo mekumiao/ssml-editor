@@ -36,6 +36,7 @@ function handleSubmit(text: string | null) {
 
 <template>
   <ElPopover
+    popperStyle="--el-popover-padding: 0px"
     v-model:visible="visible"
     trigger="contextmenu"
     placement="right-end"
@@ -45,7 +46,9 @@ function handleSubmit(text: string | null) {
     <template #reference>
       <BarButton text="别名" icon="alias" @click="handleClick"></BarButton>
     </template>
-    <BarInput ref="inputRef" @submit="handleSubmit"></BarInput>
+    <div class="p-2" @mousedown.stop.prevent>
+      <BarInput ref="inputRef" @submit="handleSubmit"></BarInput>
+    </div>
   </ElPopover>
 </template>
 
