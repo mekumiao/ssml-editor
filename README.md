@@ -51,6 +51,10 @@ import { EditorView } from '@mekumiao/ssml-editor'
 <style scoped></style>
 ```
 
+## 本地开发指南
+
+[开发指南](./DEV.md)
+
 ## 参考
 
 1. [阿里TTS](https://ai.aliyun.com/nls/tts)
