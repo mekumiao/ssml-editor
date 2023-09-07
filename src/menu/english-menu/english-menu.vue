@@ -58,7 +58,7 @@ function handleItemClick(item: LabelValue) {
     <template #reference>
       <BarButton text="音标" icon="english" @click="handleClick"></BarButton>
     </template>
-    <div class="d-flex flex-column p-2" @mousedown.stop.prevent>
+    <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
       <div
         v-for="(item, index) in englishList"
         :key="index"

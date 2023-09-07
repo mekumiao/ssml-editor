@@ -46,7 +46,7 @@ function handleSubmit(text: string | null) {
     <template #reference>
       <BarButton text="别名" icon="alias" @click="handleClick"></BarButton>
     </template>
-    <div class="p-2" @mousedown.stop.prevent>
+    <div class="p-2 ssml-editor-root" @mousedown.stop.prevent>
       <BarInput ref="inputRef" @submit="handleSubmit"></BarInput>
     </div>
   </ElPopover>

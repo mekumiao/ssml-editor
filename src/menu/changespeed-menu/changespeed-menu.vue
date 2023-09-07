@@ -43,7 +43,7 @@ function handleItemClick(item: LabelValue) {
       <BarButton text="局部变速" icon="changespeed" @click="handleClick"></BarButton>
     </template>
     <div
-      class="p-2 d-flex flex-column overflow-x-hidden overflow-y-scroll"
+      class="p-2 ssml-editor-root d-flex flex-column overflow-x-hidden overflow-y-scroll scrollbar"
       style="height: 15rem"
       @mousedown.stop.prevent
     >
