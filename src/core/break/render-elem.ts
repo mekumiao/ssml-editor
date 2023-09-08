@@ -1,7 +1,7 @@
 import { h, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { Break } from './custom-types'
-import { throttle } from 'lodash'
+import throttle from 'lodash.throttle'
 
 export default {
   type: 'ssml-break',

@@ -20,7 +20,7 @@ function resolveList<T>() {
 export type GlobalEditorConfig = ReturnType<typeof createGlobalEditorConfig>
 
 export interface SSMLEditorConfig {
-  editorConfig?: IEditorConfig
+  editorConfig: IEditorConfig
   handleError: (error: string, detail?: any) => void
   pinyin: {
     fetchData: FetahFunction
@@ -62,7 +62,7 @@ export interface SSMLEditorConfig {
   }
 }
 
-export function createGlobalEditorConfig(config?: SSMLEditorConfig) {
+export function createGlobalEditorConfig(config?: Partial<SSMLEditorConfig>) {
   const editorConfig =
     config?.editorConfig || <IEditorConfig>{ maxLength: 5000, placeholder: '请输入内容...' }
   const handleError = config?.handleError || (() => {})

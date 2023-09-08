@@ -38,7 +38,7 @@ function handleItemClick(item: LabelValue) {
     <template #reference>
       <BarButton text="数字符号" icon="digital" @click="handleClick"></BarButton>
     </template>
-    <div class="p-2 d-flex flex-column" @mousedown.stop.prevent>
+    <div class="p-2 ssml-editor-root d-flex flex-column" @mousedown.stop.prevent>
       <div
         v-for="(item, index) in options"
         :key="index"

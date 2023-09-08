@@ -104,7 +104,7 @@ function handleSubmit(value: LabelValue) {
         />
       </ElSelect>
     </div>
-    <ul class="content-list overflow-x-hidden overflow-y-auto py-2" style="height: 250px">
+    <ul class="content-list overflow-x-hidden overflow-y-auto py-2 scrollbar" style="height: 250px">
       <li
         @click="handleSubmit(toRaw(item))"
         class="content-list-item clickable ps-2 py-2"

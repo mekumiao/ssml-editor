@@ -1,29 +1,32 @@
-.clickable {
-  &:not(.disabled) {
-    cursor: pointer;
+.ssml-editor-root {
+  .clickable {
+    &:not(.disabled) {
+      cursor: pointer;
+    }
+
+    &:hover {
+      background-color: var(--tool-btn-hover-bg-color);
+    }
   }
 
-  &:hover {
-    background-color: var(--tool-btn-hover-bg-color);
+  ol,
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
   }
-}
 
-ol,
-ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
+  li {
+    list-style: none;
+  }
 
-li {
-  list-style: none;
-}
+  img {
+    pointer-events: none;
+  }
 
-.scrollbar-none {
-  scrollbar-width: none;
-  -ms-overflow-style: none;
-
-  &::-webkit-scrollbar {
-    display: none;
+  *,
+  *::after,
+  *::before {
+    box-sizing: border-box;
   }
 }

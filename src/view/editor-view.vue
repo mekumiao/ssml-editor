@@ -26,7 +26,7 @@ function handleKeyDown(ev: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="editor-view" @click="handleClick" @keydown="handleKeyDown">
+  <div class="ssml-editor-root editor-view" @click="handleClick" @keydown="handleKeyDown">
     <slot><EditorTitle></EditorTitle></slot>
     <div class="editor-box">
       <BarView></BarView>

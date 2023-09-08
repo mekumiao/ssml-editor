@@ -91,7 +91,7 @@ async function handlePlay() {
     @mouseup="handleMouseup"
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <div class="position-relative">
+      <div class="position-relative rounded-circle" style="height: 40px">
         <img :src="tryPlayStore.speaker.avatar || demoAvatar()" class="rounded-circle" />
         <button
           ref="btnPlayRef"

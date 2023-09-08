@@ -28,9 +28,9 @@ yarn add @mekumiao/ssml-editor
 import { createApp } from 'vue'
 import App from './App.vue'
 
-import 'ssml-editor/dist/style.css'
+import '@mekumiao/ssml-editor/dist/style.css'
 
-import SSMLEditor from 'ssml-editor'
+import SSMLEditor from '@mekumiao/ssml-editor'
 
 const app = createApp(App)
 app.use(SSMLEditor)
@@ -41,7 +41,7 @@ app.mount('#app')
 
 ```vue
 <script setup lang="ts">
-import { EditorView } from 'ssml-editor'
+import { EditorView } from '@mekumiao/ssml-editor'
 </script>
 
 <template>
@@ -50,6 +50,10 @@ import { EditorView } from 'ssml-editor'
 
 <style scoped></style>
 ```
+
+## 本地开发指南
+
+[开发指南](./DEV.md)
 
 ## 参考
 

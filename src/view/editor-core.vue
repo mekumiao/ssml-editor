@@ -49,7 +49,15 @@ function initEditor() {
 </script>
 
 <template>
-  <div ref="boxRef" class="edit-core" style="height: 70vh; overflow-y: hidden"></div>
+  <div ref="boxRef" class="editor-core scrollbar" style="height: 70vh; overflow-y: hidden"></div>
 </template>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+@import '@/assets/scrollbar.scss';
+
+:deep() {
+  .w-e-scroll {
+    @include scrollBar();
+  }
+}
+</style>

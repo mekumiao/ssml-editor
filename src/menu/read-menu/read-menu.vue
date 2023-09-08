@@ -43,7 +43,7 @@ function handleItemClick(item: ReadLabelValue) {
     <template #reference>
       <BarButton text="重音" icon="read" @click="handleClick"></BarButton>
     </template>
-    <div class="d-flex flex-column p-2" @mousedown.stop.prevent>
+    <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
       <div
         v-for="(item, index) in readList"
         :key="index"

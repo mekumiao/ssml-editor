@@ -228,7 +228,7 @@ function handleReupload() {
     <div>
       <p>选择需要转换的配音师</p>
       <div
-        class="speakers-container border rounded d-flex flex-row flex-wrap row-gap-1 column-gap-2 overflow-y-auto overflow-x-hidden"
+        class="speakers-container border rounded d-flex flex-row flex-wrap row-gap-1 column-gap-2 overflow-y-auto overflow-x-hidden scrollbar"
         style="height: 150px"
       >
         <SpeakerItem

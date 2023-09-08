@@ -59,7 +59,7 @@ function handleItemClick(item: LabelValue) {
       <BarButton text="多音字" icon="speaker" @click="handleClick"></BarButton>
     </template>
     <div
-      class="d-flex flex-column overflow-x-hidden overflow-y-auto p-2"
+      class="ssml-editor-root d-flex flex-column overflow-x-hidden overflow-y-auto p-2 scrollbar"
       style="max-height: 300px"
       @mousedown.stop.prevent
     >

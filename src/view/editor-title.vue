@@ -79,7 +79,7 @@ async function handleCopy(isFormat: boolean) {
 
   <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
     <pre
-      class="ssml-code border border-secondary-subtle rounded-2 px-2"
+      class="border border-secondary-subtle rounded-2 px-2 scrollbar overflow-y-auto"
       style="white-space: pre-wrap; max-height: 50vh"
       >{{ ssml }}</pre
     >
@@ -119,11 +119,6 @@ async function handleCopy(isFormat: boolean) {
       margin: 0 14px;
       background: #e1e1e1;
     }
-  }
-
-  .ssml-code {
-    height: 400px;
-    overflow-y: auto;
   }
 
   .iconfont.icon-play {

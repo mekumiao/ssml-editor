@@ -21,7 +21,7 @@ defineProps<{
     <template v-slot:reference>
       <slot name="reference"></slot>
     </template>
-    <div class="p-2" @mousedown.stop.prevent>
+    <div class="ssml-editor-root p-2" @mousedown.stop.prevent>
       <slot></slot>
     </div>
   </ElPopover>

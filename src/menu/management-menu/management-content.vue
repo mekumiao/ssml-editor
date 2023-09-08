@@ -11,7 +11,7 @@ import { storeToRefs } from 'pinia'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
-import { sortedUniqBy } from 'lodash'
+import sortedUniqBy from 'lodash.sorteduniqby'
 import { injectConfig } from '@/config'
 
 const emit = defineEmits<{ submit: [data: SubmitData] }>()

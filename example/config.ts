@@ -4,7 +4,7 @@ import { upload, transfer, conversionSpeaker, play } from './api'
 import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 
-export default <SSMLEditorConfig>{
+export default <Partial<SSMLEditorConfig>>{
   handleError: (error, detail) => {
     if (!detail) {
       ElMessage.warning({ message: error, grouping: true })
