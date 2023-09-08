@@ -36,7 +36,7 @@ function handleItemClick(item: LabelValue) {
     :hideAfter="0"
   >
     <template #reference>
-      <BarButton text="数字符号" icon="digital" @click="handleClick"></BarButton>
+      <BarButton icon="digital" @click="handleClick">数字符号</BarButton>
     </template>
     <div class="p-2 ssml-editor-root d-flex flex-column" @mousedown.stop.prevent>
       <div

@@ -44,7 +44,7 @@ function handleSubmit(text: string | null) {
     :width="200"
   >
     <template #reference>
-      <BarButton text="别名" icon="alias" @click="handleClick"></BarButton>
+      <BarButton icon="alias" @click="handleClick">别名</BarButton>
     </template>
     <div class="p-2 ssml-editor-root" @mousedown.stop.prevent>
       <BarInput ref="inputRef" @submit="handleSubmit"></BarInput>

@@ -6,6 +6,7 @@ export class AudioPlayer {
   private readonly isLoading = ref(false)
   private loadResolve: (() => void) | undefined
   private loadReject: (() => void) | undefined
+  private timeout: NodeJS.Timeout | undefined
 
   constructor() {
     this.audio = new Audio()
@@ -13,7 +14,7 @@ export class AudioPlayer {
     this.audio.addEventListener('canplaythrough', () => {
       this.isLoading.value = false
       this.loadResolve?.()
-      this.loadResolve = undefined
+      this.resetPromise()
     })
 
     this.audio.addEventListener('play', () => {
@@ -28,13 +29,20 @@ export class AudioPlayer {
       this.isLoading.value = false
       this.isPlaying.value = false
       this.loadReject?.()
-      this.loadReject = undefined
+      this.resetPromise()
     })
   }
 
-  load(audioSource: string): Promise<void> {
+  private resetPromise() {
+    clearTimeout(this.timeout)
+    this.timeout = undefined
+    this.loadResolve = undefined
+    this.loadReject = undefined
+  }
+
+  load(audioSource: string, timeoutMilliseconds: number = 10000): Promise<void> {
     this.pause()
-    if (this.loadReject) this.loadReject()
+    this.resetPromise()
     this.isPlaying.value = false
     this.isLoading.value = true
     this.audio.src = audioSource
@@ -42,6 +50,13 @@ export class AudioPlayer {
     return new Promise<void>((resolve, reject) => {
       this.loadResolve = resolve
       this.loadReject = reject
+      this.timeout = setTimeout(() => {
+        this.pause()
+        this.isPlaying.value = false
+        this.isLoading.value = false
+        reject(new Error(`加载音频超时`))
+        this.resetPromise()
+      }, timeoutMilliseconds)
     })
   }
 

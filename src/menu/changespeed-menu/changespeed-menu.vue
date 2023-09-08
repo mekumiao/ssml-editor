@@ -40,7 +40,7 @@ function handleItemClick(item: LabelValue) {
     :hideAfter="0"
   >
     <template #reference>
-      <BarButton text="局部变速" icon="changespeed" @click="handleClick"></BarButton>
+      <BarButton icon="changespeed" @click="handleClick">局部变速</BarButton>
     </template>
     <div
       class="p-2 ssml-editor-root d-flex flex-column overflow-x-hidden overflow-y-scroll scrollbar"

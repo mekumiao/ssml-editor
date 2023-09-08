@@ -39,7 +39,7 @@ function handleSubmit(opt: LabelValue) {
 <template>
   <DragBox ref="dragRef" v-model:visible="visible">
     <template #reference>
-      <BarButton ref="menuRef" text="配乐" icon="bgm" @click="handleClick"></BarButton>
+      <BarButton ref="menuRef" icon="bgm" @click="handleClick">配乐</BarButton>
     </template>
     <BarSearch
       :menus="bgm.menus"

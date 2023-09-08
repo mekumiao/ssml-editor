@@ -42,7 +42,7 @@ function handleItemClick(item: LabelValue) {
     :hideAfter="0"
   >
     <template #reference>
-      <BarButton text="停顿调节" icon="rhythm" @click="handleClick"></BarButton>
+      <BarButton icon="rhythm" @click="handleClick">停顿调节</BarButton>
     </template>
     <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
       <div

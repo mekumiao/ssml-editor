@@ -14,7 +14,7 @@ function handleClick(editor: IDomEditor) {
 </script>
 
 <template>
-  <BarButton text="连读" icon="continuous" @click="handleClick"></BarButton>
+  <BarButton icon="continuous" @click="handleClick">连读</BarButton>
 </template>
 
 <style lang="scss" scoped></style>

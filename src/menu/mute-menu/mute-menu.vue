@@ -43,7 +43,7 @@ function handleSubmit(text: string | null) {
     :width="200"
   >
     <template #reference>
-      <BarButton text="插入静音" icon="mute" @click="handleClick"></BarButton>
+      <BarButton icon="mute" @click="handleClick">插入静音</BarButton>
     </template>
     <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
       <div

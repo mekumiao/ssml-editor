@@ -26,7 +26,7 @@ const handleClick = (editor: IDomEditor) => {
 <template>
   <DragBox ref="dragRef" v-model:visible="visible">
     <template #reference>
-      <BarButton ref="menuRef" text="敏感词" icon="sensitive" @click="handleClick"></BarButton>
+      <BarButton ref="menuRef" icon="sensitive" @click="handleClick">敏感词</BarButton>
     </template>
     <SensitiveMenu></SensitiveMenu>
   </DragBox>

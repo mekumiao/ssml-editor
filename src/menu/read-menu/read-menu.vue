@@ -41,7 +41,7 @@ function handleItemClick(item: ReadLabelValue) {
     :hideAfter="0"
   >
     <template #reference>
-      <BarButton text="重音" icon="read" @click="handleClick"></BarButton>
+      <BarButton icon="read" @click="handleClick">重音</BarButton>
     </template>
     <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
       <div
