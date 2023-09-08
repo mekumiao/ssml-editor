@@ -27,5 +27,5 @@ yalc add @mekumiao/ssml-editor
 # 更新包
 yarn
 
-# 更新之后可能需要重启应用
+# 由于缓存原因需要删除目录 node_modules/.cache 后重启应用
 ```
