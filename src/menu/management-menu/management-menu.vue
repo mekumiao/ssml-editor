@@ -10,7 +10,7 @@ import { emitter } from '@/event-bus'
 import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
 import type { SSMLBaseElement } from '@/core/base'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const visible = ref(false)
 const fn = shallowRef<ManagementFn>()
@@ -19,32 +19,39 @@ const contentData = reactive<ContentData>(defaultContentData())
 const { x, y, height } = useElementBounding(menuRef)
 
 onMounted(() => {
-  emitter.on(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
+  // 监听editor创建成功事件
+  emitter.once(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
+    // 监听在editor中点击ssml标签事件
     editor.on(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
-      if (elem.type === 'custom-management') handleClick(editor, true)
+      if (elem.type === 'custom-management') handleClick(editor)
     })
+    // 将drag的自动关闭功能延后在ssml标签点击事件之后,防止show功能与hide功能冲突
+    dragRef.value?.enableAutoClose()
   })
 })
 
 function show() {
-  const pot = {
-    x: x.value - 200,
-    y: y.value + height.value,
+  const call = () => {
+    const pot = {
+      x: x.value - 200,
+      y: y.value + height.value,
+    }
+    dragRef.value?.setPosition(pot)
+    visible.value = true
   }
-  dragRef.value?.setPosition(pot)
-  visible.value = true
+  dragRef.value?.withoutAutoClose(call)
 }
 
 function hide() {
   visible.value = false
 }
 
-function handleClick(editor: IDomEditor, asyncShow?: boolean) {
+function handleClick(editor: IDomEditor) {
   fn.value ??= new ManagementFn(editor)
   if (fn.value.isDisabled()) return
   const data = fn.value.readContentData()
   data && Object.assign(contentData, data)
-  asyncShow ? setTimeout(() => show(), 200) : show()
+  show()
 }
 
 function handleSubmit(opt: SubmitData) {
@@ -54,7 +61,7 @@ function handleSubmit(opt: SubmitData) {
 </script>
 
 <template>
-  <DragBox ref="dragRef" v-model:visible="visible">
+  <DragBox ref="dragRef" v-model:visible="visible" :isAutoClose="false">
     <template #reference>
       <BarButton ref="menuRef" icon="management" @click="handleClick">多人配音</BarButton>
     </template>

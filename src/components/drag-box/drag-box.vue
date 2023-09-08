@@ -7,11 +7,15 @@ import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
-const props = defineProps<{ visible: boolean; initialValue?: Position }>()
+const props = withDefaults(
+  defineProps<{ visible: boolean; initialValue?: Position; isAutoClose?: boolean }>(),
+  { isAutoClose: true },
+)
 
 const boxRef = ref<HTMLElement>()
 const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
+const allowClose = ref(false)
 
 const { position } = useDraggable(dragRef, {
   initialValue: props.initialValue,
@@ -24,24 +28,37 @@ function setPosition(opt: Position) {
 
 defineExpose({
   setPosition,
+  enableAutoClose,
+  withoutAutoClose,
 })
 
 onMounted(() => {
-  emitter.on(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
-  // emitter.on(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
-  // document.addEventListener('mousedown', handleViewClick)
-  document.addEventListener('keydown', handleKeyDownEsc)
+  props.isAutoClose && enableAutoClose()
 })
 
 onUnmounted(() => {
   emitter.off(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
-  // emitter.off(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
-  // document.removeEventListener('mousedown', handleViewClick)
   document.removeEventListener('keydown', handleKeyDownEsc)
 })
 
 function handleViewClick(ev: MouseEvent) {
-  isOthreClick(ev) && handleClose()
+  allowClose.value && isOthreClick(ev) && handleClose()
+}
+
+function withoutAutoClose(callback: VoidFunction) {
+  try {
+    allowClose.value = false
+    callback()
+  } finally {
+    allowClose.value = true
+  }
+}
+
+function enableAutoClose() {
+  emitter.once(EMITTER_EVENT.EDITOR_CREATED, () => {
+    emitter.on(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  })
+  document.addEventListener('keydown', handleKeyDownEsc)
 }
 
 function isOthreClick(ev: MouseEvent) {
