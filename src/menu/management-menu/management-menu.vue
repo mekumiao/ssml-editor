@@ -1,24 +1,21 @@
 <script setup lang="ts">
 import { BarButton, DragBox } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { onMounted, ref, shallowRef } from 'vue'
+import { onMounted, reactive, ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import ManagementContent from './management-content.vue'
-import { type ContentData, type SubmitData } from './data'
+import { defaultContentData, type ContentData, type SubmitData } from './data'
 import { ManagementFn } from './management-fn'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
 import type { SSMLBaseElement } from '@/core/base'
 import type { CustomManagement } from '@/core'
-import { useManagementStore } from '@/stores'
-import { storeToRefs } from 'pinia'
 
 const dragRef = ref()
 const menuRef = ref()
 const visible = ref(false)
 const fn = shallowRef<ManagementFn>()
-const managementStore = useManagementStore()
-const { contentData } = storeToRefs(managementStore)
+const contentData = reactive<ContentData>(defaultContentData())
 
 const { x, y, height } = useElementBounding(menuRef)
 
@@ -31,12 +28,12 @@ onMounted(() => {
         const node = elem as CustomManagement
         const data = (node.custom?.['contentData'] || {}) as ContentData
         if (data) {
-          contentData.value.category = data.category
-          contentData.value.name = data.name
-          contentData.value.pitch = data.pitch
-          contentData.value.role = data.role
-          contentData.value.speed = data.speed
-          contentData.value.style = data.style
+          contentData.category = data.category
+          contentData.name = data.name
+          contentData.pitch = data.pitch
+          contentData.role = data.role
+          contentData.speed = data.speed
+          contentData.style = data.style
         }
         setTimeout(() => {
           show()
@@ -67,7 +64,7 @@ function handleClick(editor: IDomEditor) {
 
 function handleSubmit(opt: SubmitData) {
   if (fn.value) {
-    fn.value.contentData = { ...contentData.value }
+    fn.value.contentData = { ...contentData }
     fn.value.exec(opt)
   }
   hide()
@@ -79,7 +76,7 @@ function handleSubmit(opt: SubmitData) {
     <template #reference>
       <BarButton ref="menuRef" icon="management" @click="handleClick">多人配音</BarButton>
     </template>
-    <ManagementContent @submit="handleSubmit"></ManagementContent>
+    <ManagementContent @submit="handleSubmit" :contentData="contentData"></ManagementContent>
   </DragBox>
 </template>
 
