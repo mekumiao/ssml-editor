@@ -25,7 +25,7 @@ function hide() {
 
 async function handleClick(editor: IDomEditor) {
   fn.value ??= new PinyinFn(editor)
-  if (fn.value?.isDisabled()) return
+  if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
     pyList.value = await globalEditConfig.pinyin.fetchData(text)
@@ -41,9 +41,7 @@ async function handleClick(editor: IDomEditor) {
 }
 
 function handleItemClick(item: LabelValue) {
-  if (fn.value && !fn.value.isDisabled()) {
-    fn.value.exec({ ...item })
-  }
+  fn.value?.exec({ ...item })
   hide()
 }
 </script>

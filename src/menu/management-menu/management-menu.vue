@@ -27,6 +27,7 @@ onMounted(() => {
     editor.on(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
       if (elem.type === 'custom-management') {
         fn.value ??= new ManagementFn(editor)
+        if (fn.value.isDisabled()) return
         const node = elem as CustomManagement
         const data = (node.custom?.['contentData'] || {}) as ContentData
         if (data) {
@@ -65,9 +66,9 @@ function handleClick(editor: IDomEditor) {
 }
 
 function handleSubmit(opt: SubmitData) {
-  if (fn.value && !fn.value.isDisabled()) {
+  if (fn.value) {
     fn.value.contentData = { ...contentData.value }
-    fn.value?.exec(opt)
+    fn.value.exec(opt)
   }
   hide()
 }

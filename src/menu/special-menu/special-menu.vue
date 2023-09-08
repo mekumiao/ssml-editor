@@ -29,10 +29,7 @@ const handleClick = (editor: IDomEditor) => {
 }
 
 function handleSubmit(opt: LabelValue) {
-  fn.value?.restoreSelection()
-  if (fn.value && !fn.value.isDisabled()) {
-    fn.value.exec(opt)
-  }
+  fn.value?.exec(opt)
   visible.value = false
 }
 </script>

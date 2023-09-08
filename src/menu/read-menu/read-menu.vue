@@ -26,9 +26,7 @@ function handleClick(editor: IDomEditor) {
 }
 
 function handleItemClick(item: ReadLabelValue) {
-  if (fn.value && !fn.value.isDisabled()) {
-    fn.value.exec({ ...item })
-  }
+  fn.value?.exec({ ...item })
   hide()
 }
 </script>
