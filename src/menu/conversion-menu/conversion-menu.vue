@@ -8,7 +8,7 @@ import { DragBox } from '@/components'
 import ConversionContent from './conversion-content.vue'
 import { ConversionFn } from './conversion-fn'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
 const fn = shallowRef<ConversionFn>()
@@ -27,7 +27,7 @@ const handleClick = (editor: IDomEditor) => {
     y: y.value + height.value,
   }
   edirorRef.value = editor
-  dragRef.value.setPosition(pot)
+  dragRef.value?.setPosition(pot)
   visible.value = true
 }
 

@@ -6,7 +6,7 @@ import { useElementBounding } from '@vueuse/core'
 import { DragBox } from '@/components'
 import SensitiveMenu from './sensitive-menu.vue'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
 const visible = ref(false)
@@ -15,7 +15,7 @@ const { x, y, height } = useElementBounding(menuRef)
 
 const handleClick = (editor: IDomEditor) => {
   edirorRef.value = editor
-  dragRef.value.setPosition({
+  dragRef.value?.setPosition({
     x: x.value - 200,
     y: y.value + height.value,
   })

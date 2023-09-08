@@ -8,7 +8,7 @@ import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
 import { injectConfig } from '@/config'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
 const globalEditConfig = injectConfig()
@@ -21,7 +21,7 @@ const { x, y, height } = useElementBounding(menuRef)
 const handleClick = (editor: IDomEditor) => {
   fn.value ??= new SpecialFn(editor)
   if (fn.value.isDisabled()) return
-  dragRef.value.setPosition({
+  dragRef.value?.setPosition({
     x: x.value - 200,
     y: y.value + height.value,
   })

@@ -8,7 +8,7 @@ import { DragBox, BarSearch } from '@/components'
 import { useSSMLStore } from '@/stores'
 import { injectConfig } from '@/config'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
 const globalEditConfig = injectConfig()
@@ -24,7 +24,7 @@ const handleClick = async (editor: IDomEditor) => {
     y: y.value + height.value,
   }
   edirorRef.value = editor
-  dragRef.value.setPosition(pot)
+  dragRef.value?.setPosition(pot)
   visible.value = true
 }
 
