@@ -25,8 +25,6 @@ onMounted(() => {
     editor.on(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
       if (elem.type === 'custom-management') handleClick(editor)
     })
-    // 将drag的自动关闭功能延后在ssml标签点击事件之后,防止show功能与hide功能冲突
-    dragRef.value?.enableAutoClose()
   })
 })
 
@@ -61,7 +59,7 @@ function handleSubmit(opt: SubmitData) {
 </script>
 
 <template>
-  <DragBox ref="dragRef" v-model:visible="visible" :isAutoClose="false">
+  <DragBox ref="dragRef" v-model:visible="visible">
     <template #reference>
       <BarButton ref="menuRef" icon="management" @click="handleClick">多人配音</BarButton>
     </template>
