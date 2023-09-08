@@ -104,18 +104,16 @@ function handleSelectSpeaker(name: string) {
 
 async function handleSubmit() {
   const speakerLabel =
-    dataListSpeaker.value.find((v) => v.value === contentDataRef.value.name)?.label || ''
+    dataListSpeaker.value.find((v) => v.value === contentDataRef.value.name)?.label || '-'
   const roleLabel =
-    dataListRole.value.find((v) => v.value === contentDataRef.value.role)?.label || ''
+    dataListRole.value.find((v) => v.value === contentDataRef.value.role)?.label || '-'
   const styleLabel =
-    dataListStyle.value.find((v) => v.value === contentDataRef.value.style)?.label || ''
-  const speedLabel =
-    dataListSpeed.value.find((v) => v.value === contentDataRef.value.speed)?.label || ''
+    dataListStyle.value.find((v) => v.value === contentDataRef.value.style)?.label || '-'
 
   const data: SubmitData = {
     category: contentDataRef.value.category,
     name: contentDataRef.value.name,
-    label: `${speakerLabel}|${roleLabel}|${styleLabel}|${speedLabel}`,
+    label: `${speakerLabel}|${roleLabel}|${styleLabel}|${contentDataRef.value.speed}|${contentDataRef.value.pitch}`,
     value: contentDataRef.value.name,
     role: contentDataRef.value.role,
     style: contentDataRef.value.style,
