@@ -1,7 +1,7 @@
 {
   "name": "@mekumiao/ssml-editor",
   "private": false,
-  "version": "1.0.7",
+  "version": "1.0.8",
   "description": "基于wangeditor实现的支持SSML语法的编辑器",
   "keywords": [
     "SSML",
