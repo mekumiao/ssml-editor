@@ -39,43 +39,47 @@ export class ManagementFn extends BaseFn {
     return false
   }
 
-  public contentData: ContentData | undefined
+  public readContentData() {
+    const node = DomEditor.getSelectedNodeByType(this.editor, 'custom-management')
+    if (!node) return
+    const managementNode = node as CustomManagement
+    const data = managementNode.custom.contentData as ContentData | undefined
+    if (data) {
+      return {
+        category: data.category,
+        name: data.name,
+        pitch: data.pitch,
+        role: data.role,
+        speed: data.speed,
+        style: data.style,
+      }
+    }
+  }
 
-  exec(opt: SubmitData) {
+  exec(opt: SubmitData, contentData: ContentData) {
     this.editor.restoreSelection()
     if (this.isDisabled()) return
     const value = this.getValue()
     if (value == null) return
 
+    const elem: CustomManagement = {
+      type: 'custom-management',
+      custom: { contentData },
+      remark: opt.label,
+      name: opt.value,
+      role: opt.role,
+      style: opt.style,
+      rate: opt.speed,
+      pitch: opt.pitch,
+      children: [{ text: value }],
+    }
     const node = DomEditor.getSelectedNodeByType(this.editor, 'custom-management')
     if (node) {
-      SlateTransforms.setNodes(
-        this.editor,
-        <Partial<CustomManagement>>{
-          custom: { contentData: this.contentData || {} },
-          remark: opt.label,
-          name: opt.value,
-          role: opt.role,
-          style: opt.style,
-          rate: opt.speed,
-          pitch: opt.pitch,
-        },
-        {
-          at: DomEditor.findPath(this.editor, node),
-        },
-      )
+      const partElem: Partial<CustomManagement> = { ...elem, type: undefined, children: undefined }
+      SlateTransforms.setNodes(this.editor, partElem, {
+        at: DomEditor.findPath(this.editor, node),
+      })
     } else {
-      const elem: CustomManagement = {
-        type: 'custom-management',
-        custom: { contentData: this.contentData || {} },
-        remark: opt.label,
-        name: opt.value,
-        role: opt.role,
-        style: opt.style,
-        rate: opt.speed,
-        pitch: opt.pitch,
-        children: [{ text: value }],
-      }
       this.editor.insertNode(elem)
     }
   }

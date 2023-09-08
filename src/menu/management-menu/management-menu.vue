@@ -9,7 +9,6 @@ import { ManagementFn } from './management-fn'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
 import type { SSMLBaseElement } from '@/core/base'
-import type { CustomManagement } from '@/core'
 
 const dragRef = ref()
 const menuRef = ref()
@@ -22,23 +21,7 @@ const { x, y, height } = useElementBounding(menuRef)
 onMounted(() => {
   emitter.on(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
     editor.on(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
-      if (elem.type === 'custom-management') {
-        fn.value ??= new ManagementFn(editor)
-        if (fn.value.isDisabled()) return
-        const node = elem as CustomManagement
-        const data = (node.custom?.['contentData'] || {}) as ContentData
-        if (data) {
-          contentData.category = data.category
-          contentData.name = data.name
-          contentData.pitch = data.pitch
-          contentData.role = data.role
-          contentData.speed = data.speed
-          contentData.style = data.style
-        }
-        setTimeout(() => {
-          show()
-        }, 200)
-      }
+      if (elem.type === 'custom-management') handleClick(editor, true)
     })
   })
 })
@@ -56,17 +39,16 @@ function hide() {
   visible.value = false
 }
 
-function handleClick(editor: IDomEditor) {
+function handleClick(editor: IDomEditor, asyncShow?: boolean) {
   fn.value ??= new ManagementFn(editor)
   if (fn.value.isDisabled()) return
-  show()
+  const data = fn.value.readContentData()
+  data && Object.assign(contentData, data)
+  asyncShow ? setTimeout(() => show(), 200) : show()
 }
 
 function handleSubmit(opt: SubmitData) {
-  if (fn.value) {
-    fn.value.contentData = { ...contentData }
-    fn.value.exec(opt)
-  }
+  fn.value?.exec(opt, { ...contentData })
   hide()
 }
 </script>
