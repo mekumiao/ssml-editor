@@ -2,14 +2,12 @@ import { type UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
 
 import { resolve } from 'path'
-import ElementPlus from 'unplugin-element-plus/vite'
 import dts from 'vite-plugin-dts'
 
 export default function (): UserConfig {
   return {
     plugins: [
       vue(),
-      ElementPlus({}),
       dts({
         compilerOptions: { noUnusedLocals: false },
         exclude: [
