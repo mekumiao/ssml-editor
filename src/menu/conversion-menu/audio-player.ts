@@ -7,6 +7,7 @@ export class AudioPlayer {
   private loadResolve: (() => void) | undefined
   private loadReject: (() => void) | undefined
   private timeout: NodeJS.Timeout | undefined
+  private _currentTime = ref(0)
 
   constructor() {
     this.audio = new Audio()
@@ -30,6 +31,10 @@ export class AudioPlayer {
       this.isPlaying.value = false
       this.loadReject?.()
       this.resetPromise()
+    })
+
+    this.audio.addEventListener('timeupdate', () => {
+      this._currentTime.value = this.audio.currentTime
     })
   }
 
@@ -82,6 +87,27 @@ export class AudioPlayer {
 
   get loadState() {
     return computed(() => (this.isLoading.value ? 'loading' : 'complete'))
+  }
+
+  get duration() {
+    return computed(() => {
+      if (this.isLoading.value) return 0
+      return Number.isNaN(this.audio.duration) ? 0 : Math.ceil(this.audio.duration)
+    })
+  }
+
+  get currentTime() {
+    return computed({
+      get: () => {
+        if (this.isLoading.value) return 0
+        return Number.isNaN(this._currentTime.value) ? 0 : Math.ceil(this._currentTime.value)
+      },
+      set: (v) => {
+        if (Number.isNaN(v)) return
+        this._currentTime.value = v
+        this.audio.currentTime = v
+      },
+    })
   }
 }
 
