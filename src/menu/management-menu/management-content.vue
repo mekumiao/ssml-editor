@@ -44,9 +44,11 @@ onMounted(async () => {
 })
 
 watch(visible, (newValue) => {
-  if (!newValue) {
+  showMore.value = false
+
+  if (newValue && searchInput.value) {
     searchInput.value = ''
-    showMore.value = false
+    handleFetchData()
   }
 })
 
@@ -56,7 +58,11 @@ async function handleSelectCategory(category: string) {
 }
 
 async function handleFetchData() {
-  const speakers = await tryPlay.fetchData({ ...defaultFilterSpeaker(), ...contentData.value })
+  const speakers = await tryPlay.fetchData({
+    ...defaultFilterSpeaker(),
+    word: searchInput.value,
+    category: contentData.value.category,
+  })
   speakerCache.value = speakers
   dataListSpeaker.value = speakers.map((v) => ({ label: v.displayName, value: v.name }))
 
@@ -64,12 +70,18 @@ async function handleFetchData() {
     dataListRole.value = speakers[0].roles
     dataListStyle.value = speakers[0].styles
     contentData.value.name = speakers[0].name
-  }
-  if (dataListRole.value.length > 0) {
-    contentData.value.role = dataListRole.value[0].value
-  }
-  if (dataListStyle.value.length > 0) {
-    contentData.value.style = dataListStyle.value[0].value
+
+    if (dataListRole.value.length > 0) {
+      contentData.value.role = dataListRole.value[0].value
+    }
+    if (dataListStyle.value.length > 0) {
+      contentData.value.style = dataListStyle.value[0].value
+    }
+  } else {
+    dataListRole.value = []
+    dataListStyle.value = []
+    contentData.value.role = ''
+    contentData.value.style = ''
   }
 }
 
@@ -166,7 +178,7 @@ async function handleRecentUsageClean() {
 
 <template>
   <div ref="boxRef" style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
-    <ElForm @submit.prevent="handleFetchData">
+    <ElForm @submit.prevent="handleSelectCategory('')">
       <ElInput v-model="searchInput" placeholder="请输入名称快速查找配音师"></ElInput>
     </ElForm>
     <div class="position-relative">
