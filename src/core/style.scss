@@ -77,3 +77,11 @@
     }
   }
 }
+
+.w-e-text-container.grayscale {
+  .ssml-wrapper:not(:hover) {
+    -webkit-filter: opacity(100%);
+    filter: opacity(50%);
+    transition: all 0.1s ease;
+  }
+}

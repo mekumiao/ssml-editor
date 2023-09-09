@@ -2,7 +2,7 @@ import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { Phoneme } from './custom-types'
 import throttle from 'lodash.throttle'
-import { removeNodeSpace } from '../helper'
+import { handleGrayscaleControl, removeNodeSpace } from '../helper'
 
 export default {
   type: 'ssml-phoneme',
@@ -14,6 +14,7 @@ export default {
           className="remark"
           contentEditable="false"
           style={{ 'background-color': 'var(--ssml-phoneme)' }}
+          on={handleGrayscaleControl()}
         >
           <span
             className="iconfont icon-roundclosefill"

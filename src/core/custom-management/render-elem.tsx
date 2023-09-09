@@ -2,7 +2,7 @@ import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { CustomManagement } from './custom-types'
 import throttle from 'lodash.throttle'
-import { removeNodeSpace } from '../helper'
+import { removeNodeSpace, handleGrayscaleControl } from '../helper'
 import { WANGEDITOR_EVENT } from '@/constant'
 
 export default {
@@ -22,6 +22,7 @@ export default {
               editor.select(DomEditor.findPath(editor, elem))
               editor.emit(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, editor, elem)
             }),
+            ...handleGrayscaleControl(),
           }}
         >
           <span

@@ -2,6 +2,7 @@ import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { Emphasis } from './custom-types'
 import throttle from 'lodash.throttle'
+import { handleGrayscaleControl } from '../helper'
 
 export default {
   type: 'ssml-emphasis',
@@ -13,6 +14,7 @@ export default {
           className="remark"
           contentEditable="false"
           style={{ 'background-color': 'var(--ssml-emphasis)' }}
+          on={handleGrayscaleControl()}
         >
           <span
             className="iconfont icon-roundclosefill"

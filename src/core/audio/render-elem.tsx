@@ -3,7 +3,7 @@ import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wang
 import type { Audio } from './custom-types'
 import throttle from 'lodash.throttle'
 import { audioPlayer } from '@/utils'
-import { removeNodeSpace } from '../helper'
+import { handleGrayscaleControl, removeNodeSpace } from '../helper'
 
 export default {
   type: 'ssml-audio',
@@ -22,6 +22,7 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
         className="remark"
         contentEditable="false"
         style={{ 'background-color': 'var(--ssml-audio)' }}
+        on={handleGrayscaleControl()}
       >
         <span
           className="iconfont icon-roundclosefill"
@@ -67,7 +68,11 @@ function renderVoidElement(elem: Audio, editor: IDomEditor) {
   const { remark, src } = elem
   return (
     <span className="ssml-wrapper" contentEditable="false">
-      <span className="remark" style={{ 'background-color': 'var(--ssml-audio)' }}>
+      <span
+        className="remark"
+        style={{ 'background-color': 'var(--ssml-audio)' }}
+        on={handleGrayscaleControl()}
+      >
         <span
           className="iconfont icon-roundclosefill"
           on={{
