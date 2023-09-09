@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef } from 'vue'
-import { BarButton } from '@/components'
-import { ElPopover } from 'element-plus'
+import { BarButton, BarPopover } from '@/components'
 import { DigitalFn } from './digital-fn'
 import { options } from './data'
 import type { LabelValue } from '@/model'
@@ -27,16 +26,11 @@ function handleItemClick(item: LabelValue) {
 </script>
 
 <template>
-  <ElPopover
-    popperStyle="--el-popover-padding: 0px"
-    v-model:visible="visible"
-    trigger="contextmenu"
-    :hideAfter="0"
-  >
+  <BarPopover v-model:visible="visible">
     <template #reference>
       <BarButton icon="digital" @click="handleClick">数字符号</BarButton>
     </template>
-    <div class="p-2 ssml-editor-root d-flex flex-column" @mousedown.stop.prevent>
+    <div class="d-flex flex-column">
       <div
         v-for="(item, index) in options"
         :key="index"
@@ -46,7 +40,7 @@ function handleItemClick(item: LabelValue) {
         {{ item.label }}
       </div>
     </div>
-  </ElPopover>
+  </BarPopover>
 </template>
 
 <style lang="scss" scoped></style>

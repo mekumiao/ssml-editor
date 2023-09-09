@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, shallowRef } from 'vue'
-import { BarButton, BarInput } from '@/components'
-import { ElPopover } from 'element-plus'
+import { BarButton, BarInput, BarPopover } from '@/components'
 import { AliasFn } from './alias-fn'
 import type { IDomEditor } from '@wangeditor/editor'
 
@@ -35,21 +34,12 @@ function handleSubmit(text: string | null) {
 </script>
 
 <template>
-  <ElPopover
-    popperStyle="--el-popover-padding: 0px"
-    v-model:visible="visible"
-    trigger="contextmenu"
-    placement="right-end"
-    :hideAfter="0"
-    :width="200"
-  >
+  <BarPopover v-model:visible="visible" placement="right-end" :width="200">
     <template #reference>
       <BarButton icon="alias" @click="handleClick">别名</BarButton>
     </template>
-    <div class="p-2 ssml-editor-root" @mousedown.stop.prevent>
-      <BarInput ref="inputRef" @submit="handleSubmit"></BarInput>
-    </div>
-  </ElPopover>
+    <BarInput ref="inputRef" @submit="handleSubmit"></BarInput>
+  </BarPopover>
 </template>
 
 <style lang="scss" scoped></style>

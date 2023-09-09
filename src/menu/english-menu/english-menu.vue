@@ -1,9 +1,8 @@
 <script setup lang="ts">
 import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef } from 'vue'
-import { BarButton } from '@/components'
+import { BarButton, BarPopover } from '@/components'
 import { selectionTrimEnd } from '@/core/helper'
-import { ElPopover } from 'element-plus'
 import { EnglishFn } from './english-fn'
 import type { LabelValue } from '@/model'
 import { WANGEDITOR_EVENT } from '@/constant'
@@ -47,16 +46,11 @@ function handleItemClick(item: LabelValue) {
 </script>
 
 <template>
-  <ElPopover
-    popperStyle="--el-popover-padding: 0px"
-    v-model:visible="visible"
-    trigger="contextmenu"
-    :hideAfter="0"
-  >
+  <BarPopover v-model:visible="visible">
     <template #reference>
       <BarButton icon="english" @click="handleClick">音标</BarButton>
     </template>
-    <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
+    <div class="d-flex flex-column">
       <div
         v-for="(item, index) in englishList"
         :key="index"
@@ -66,7 +60,7 @@ function handleItemClick(item: LabelValue) {
         {{ item.label }}
       </div>
     </div>
-  </ElPopover>
+  </BarPopover>
 </template>
 
 <style lang="scss" scoped></style>

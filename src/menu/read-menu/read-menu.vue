@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef } from 'vue'
-import { BarButton } from '@/components'
-import { ElPopover } from 'element-plus'
+import { BarButton, BarPopover } from '@/components'
 import { ReadFn } from './read-fn'
 import { readList, type ReadLabelValue } from './data'
 
@@ -32,16 +31,11 @@ function handleItemClick(item: ReadLabelValue) {
 </script>
 
 <template>
-  <ElPopover
-    popperStyle="--el-popover-padding: 0px"
-    v-model:visible="visible"
-    trigger="contextmenu"
-    :hideAfter="0"
-  >
+  <BarPopover v-model:visible="visible">
     <template #reference>
       <BarButton icon="read" @click="handleClick">重音</BarButton>
     </template>
-    <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
+    <div class="d-flex flex-column">
       <div
         v-for="(item, index) in readList"
         :key="index"
@@ -51,7 +45,7 @@ function handleItemClick(item: ReadLabelValue) {
         {{ item.label }}
       </div>
     </div>
-  </ElPopover>
+  </BarPopover>
 </template>
 
 <style lang="scss" scoped></style>

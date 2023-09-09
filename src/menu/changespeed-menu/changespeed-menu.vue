@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef } from 'vue'
-import { BarButton } from '@/components'
-import { ElPopover } from 'element-plus'
+import { BarButton, BarPopover } from '@/components'
 import { ChangespeedFn } from './changespeed-fn'
 import { rates } from './data'
 import type { LabelValue } from '@/model'
@@ -33,19 +32,13 @@ function handleItemClick(item: LabelValue) {
 </script>
 
 <template>
-  <ElPopover
-    popperStyle="--el-popover-padding: 0px"
-    v-model:visible="visible"
-    trigger="contextmenu"
-    :hideAfter="0"
-  >
+  <BarPopover v-model:visible="visible">
     <template #reference>
       <BarButton icon="changespeed" @click="handleClick">局部变速</BarButton>
     </template>
     <div
-      class="p-2 ssml-editor-root d-flex flex-column overflow-x-hidden overflow-y-scroll scrollbar"
+      class="d-flex flex-column overflow-x-hidden overflow-y-scroll scrollbar"
       style="height: 15rem"
-      @mousedown.stop.prevent
     >
       <div
         v-for="(item, index) in rates"
@@ -56,7 +49,7 @@ function handleItemClick(item: LabelValue) {
         {{ item.label }}
       </div>
     </div>
-  </ElPopover>
+  </BarPopover>
 </template>
 
 <style lang="scss" scoped></style>
