@@ -102,7 +102,7 @@ function handleSelectSpeaker(name: string) {
   }
 }
 
-async function handleSubmit() {
+async function handleSubmit(label?: string) {
   const speakerLabel =
     dataListSpeaker.value.find((v) => v.value === contentDataRef.value.name)?.label || '-'
   const roleLabel =
@@ -113,7 +113,9 @@ async function handleSubmit() {
   const data: SubmitData = {
     category: contentDataRef.value.category,
     name: contentDataRef.value.name,
-    label: `${speakerLabel}|${roleLabel}|${styleLabel}|${contentDataRef.value.speed}|${contentDataRef.value.pitch}`,
+    label:
+      label ??
+      `${speakerLabel}|${roleLabel}|${styleLabel}|${contentDataRef.value.speed}|${contentDataRef.value.pitch}`,
     value: contentDataRef.value.name,
     role: contentDataRef.value.role,
     style: contentDataRef.value.style,
@@ -154,7 +156,7 @@ function handleRecentUsageItemClick(item: RecentUsageSpeaker) {
   contentDataRef.value.speed = item.speed
   contentDataRef.value.style = item.style
 
-  handleSubmit()
+  handleSubmit(item.label)
 }
 
 async function handleRecentUsageClose(index: number) {
@@ -233,7 +235,7 @@ async function handleRecentUsageClean() {
     </div>
 
     <div class="position-absolute bottom-0 end-0 d-flex flex-row justify-content-end me-4 mb-3">
-      <ElButton v-show="!showMore" @click="handleSubmit" type="primary">确定</ElButton>
+      <ElButton v-show="!showMore" @click="() => handleSubmit()" type="primary">确定</ElButton>
       <ElButton v-show="showMore" @click="handleRecentUsageClean" type="primary">全部清空</ElButton>
     </div>
   </div>
