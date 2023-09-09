@@ -1,8 +1,7 @@
 import { jsx, type VNode } from 'snabbdom'
-import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
+import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Break } from './custom-types'
-import throttle from 'lodash.throttle'
-import { handleGrayscaleControl } from '../helper'
+import { handleDeleteNode, handleGrayscaleControl } from '../helper'
 
 export default {
   type: 'ssml-break',
@@ -17,13 +16,7 @@ export default {
         >
           <span
             className="iconfont icon-roundclosefill"
-            on={{
-              click: throttle((event: Event) => {
-                event.preventDefault()
-                const path = DomEditor.findPath(editor, elem)
-                SlateTransforms.delete(editor, { at: path })
-              }),
-            }}
+            on={{ click: [handleGrayscaleControl().mouseleave, handleDeleteNode(editor, elem)] }}
           ></span>
           <span className="data-content" attrs={{ 'data-content': remark }}></span>
         </span>

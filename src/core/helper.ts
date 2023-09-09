@@ -4,7 +4,10 @@ import {
   SlateEditor,
   SlateTransforms,
   SlatePath,
+  SlateNode,
+  DomEditor,
 } from '@wangeditor/editor'
+import throttle from 'lodash.throttle'
 
 export function selectionTrimEnd(editor: IDomEditor) {
   const { selection } = editor
@@ -73,4 +76,21 @@ export function handleGrayscaleControl() {
       document.querySelector('.w-e-text-container')?.classList.remove('grayscale')
     },
   }
+}
+
+export function handleDeleteNode(editor: IDomEditor, elem: SlateNode) {
+  return throttle((event: Event) => {
+    event.preventDefault()
+    const path = DomEditor.findPath(editor, elem)
+    SlateTransforms.delete(editor, { at: path })
+  })
+}
+
+export function handleUnwrapNodes(editor: IDomEditor, elem: SlateNode) {
+  return throttle((event: Event) => {
+    event.preventDefault()
+    const path = DomEditor.findPath(editor, elem)
+    removeNodeSpace(editor, path)
+    SlateTransforms.unwrapNodes(editor, { at: path })
+  })
 }
