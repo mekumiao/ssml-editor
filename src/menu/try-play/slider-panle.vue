@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { ElSlider, ElIcon } from 'element-plus'
 import AnchorAvatar from './anchor-avatar.vue'
+import PlayButton from './play-button.vue'
 import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
-import { demoAvatar, speed as speedGetter, pitch as pitchGetter, injectConfig } from '@/config'
+import { speed as speedGetter, pitch as pitchGetter, injectConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
 import { formatPitch, formatRate } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
@@ -121,7 +122,7 @@ function handleTimeChange(time: Arrayable<number>) {
   <div class="slider-panle w-100 px-3 text-white" style="font-size: 0.5rem">
     <div class="mt-2 d-flex text-center justify-content-between align-items-center">
       <div class="me-auto d-flex flex-row align-items-center">
-        <img :src="demoAvatar()" class="rounded-circle" style="height: 50px" />
+        <PlayButton></PlayButton>
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
             <span class="fs-6">{{ tryPlayStore.speaker.displayName }}</span>
