@@ -9,7 +9,7 @@ import { type SubmitData, formatPitch, formatRate } from './data'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
-import sortedUniqBy from 'lodash.sorteduniqby'
+import uniqBy from 'lodash.uniqby'
 import { injectConfig } from '@/config'
 
 const emit = defineEmits<{
@@ -137,9 +137,9 @@ async function handleRecordRecentUsage(data: SubmitData) {
     const record = { ...contentDataRef.value, label: data.label, id: '' }
     const result = await management.recordRecentUsage(record)
     recentUsageCache.value.splice(0, 0, result)
-    recentUsageCache.value = sortedUniqBy(
+    recentUsageCache.value = uniqBy(
       recentUsageCache.value,
-      (item) => `${item.name}+${item.role}+${item.style}+${item.pitch}+${item.speed}`,
+      (item) => `${item.name}+${item.role}+${item.style}+${item.speed}+${item.pitch}`,
     )
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
