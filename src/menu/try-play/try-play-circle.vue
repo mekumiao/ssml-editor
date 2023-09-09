@@ -71,7 +71,7 @@ function isBtnPlayClick(event: MouseEvent) {
     @mouseup="handleMouseup"
   >
     <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <PlayButton ref="btnPlayRef" disabled-click></PlayButton>
+      <PlayButton ref="btnPlayRef" disabled-click :size="40"></PlayButton>
       <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.displayName }}</div>
     </div>
   </div>

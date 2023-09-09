@@ -4,6 +4,7 @@ export class AudioPlayer {
   private audio: HTMLAudioElement
   private readonly isPlaying = ref(false)
   private readonly isLoading = ref(false)
+  private readonly canplay = ref(false)
   private loadResolve: (() => void) | undefined
   private loadReject: (() => void) | undefined
   private timeout: NodeJS.Timeout | undefined
@@ -23,6 +24,10 @@ export class AudioPlayer {
       this.isPlaying.value = true
     })
 
+    this.audio.addEventListener('canplay', () => {
+      this.canplay.value = true
+    })
+
     this.audio.addEventListener('pause', () => {
       this.isPlaying.value = false
     })
@@ -30,6 +35,7 @@ export class AudioPlayer {
     this.audio.addEventListener('error', () => {
       this.isLoading.value = false
       this.isPlaying.value = false
+      this.canplay.value = false
       this.loadReject?.()
       this.resetPromise()
     })
@@ -51,6 +57,7 @@ export class AudioPlayer {
     this.resetPromise()
     this.isPlaying.value = false
     this.isLoading.value = true
+    this.canplay.value = false
     this.audio.src = audioSource
     this.audio.load()
     return new Promise<void>((resolve, reject) => {
@@ -67,7 +74,7 @@ export class AudioPlayer {
   }
 
   play() {
-    this.audio.play()
+    this.canplay.value && this.audio.play()
   }
 
   pause() {
