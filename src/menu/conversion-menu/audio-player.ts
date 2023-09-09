@@ -11,6 +11,7 @@ export class AudioPlayer {
 
   constructor() {
     this.audio = new Audio()
+    this.audio.autoplay = false
 
     this.audio.addEventListener('canplaythrough', () => {
       this.isLoading.value = false
