@@ -30,7 +30,7 @@ const isStar = ref(tryPlayStore.speaker.isStar)
 const timeMax = tryPlayStore.audioPlayer.duration
 const currentTime = tryPlayStore.audioPlayer.currentTime
 const time = ref(0)
-const isInput = ref(true)
+const isInput = ref(false)
 
 const speedRange = ref([0, 2.0])
 const speed = ref(1)
