@@ -8,7 +8,7 @@ import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import { injectConfig } from '@/config'
 
-const  globalEditConfig  = injectConfig()
+const globalEditConfig = injectConfig()
 const fn = shallowRef<PinyinFn>()
 const pyList = ref<LabelValue[]>([])
 const visible = ref(false)
@@ -25,7 +25,7 @@ function hide() {
 
 async function handleClick(editor: IDomEditor) {
   fn.value ??= new PinyinFn(editor)
-  if (fn.value?.isDisabled()) return
+  if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
     pyList.value = await globalEditConfig.pinyin.fetchData(text)
@@ -41,9 +41,7 @@ async function handleClick(editor: IDomEditor) {
 }
 
 function handleItemClick(item: LabelValue) {
-  if (fn.value && !fn.value.isDisabled()) {
-    fn.value.exec({ ...item })
-  }
+  fn.value?.exec({ ...item })
   hide()
 }
 </script>
@@ -56,7 +54,7 @@ function handleItemClick(item: LabelValue) {
     :hideAfter="0"
   >
     <template #reference>
-      <BarButton text="多音字" icon="speaker" @click="handleClick"></BarButton>
+      <BarButton icon="speaker" @click="handleClick">多音字</BarButton>
     </template>
     <div
       class="ssml-editor-root d-flex flex-column overflow-x-hidden overflow-y-auto p-2 scrollbar"

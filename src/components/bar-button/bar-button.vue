@@ -1,60 +1,43 @@
 <script setup lang="ts">
 import { useEditorStore } from '@/stores'
 import { type IDomEditor } from '@wangeditor/editor'
+import throttle from 'lodash.throttle'
 
 const emit = defineEmits<{ click: [editor: IDomEditor] }>()
-const props = withDefaults(
+withDefaults(
   defineProps<{
-    text: string
-    icon: string
+    icon?: string
     disabled?: boolean
   }>(),
-  { disabled: false },
+  { icon: 'play', disabled: false },
 )
 
-const handleClick = () => {
-  if (!props.disabled) {
-    const { editor } = useEditorStore()
-    if (editor) emit('click', editor)
-  }
-}
+const handleClick = throttle(() => {
+  const { editor } = useEditorStore()
+  if (editor) emit('click', editor)
+})
 </script>
 
 <template>
-  <div
-    class="bar-button px-2 py-1"
-    :class="{ disabled: disabled }"
+  <button
+    :disabled="disabled"
+    class="play-menu d-flex flex-column justify-content-center align-items-center btn border-0 px-2 py-1 clickable"
     @click="handleClick"
     @mousedown.prevent
+    style="height: 4.5rem"
   >
-    <div class="bar-button-icon">
-      <span class="fs-3 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
+    <div
+      class="play-menu-icon d-flex justify-content-center align-items-center"
+      style="height: 30px; width: 30px"
+    >
+      <slot name="icon">
+        <span class="fs-3 iconfont-moyin" :class="[`moyin-icon_${icon}`]"></span>
+      </slot>
     </div>
-    <div class="fw-normal" style="font-size: 0.85rem">{{ text }}</div>
-  </div>
+    <div class="fw-normal" style="font-size: 0.85rem">
+      <slot></slot>
+    </div>
+  </button>
 </template>
 
-<style lang="scss" scoped>
-.bar-button {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  height: 4.5rem;
-
-  border-radius: 0.5rem;
-
-  &.disabled {
-    color: #a7a5a5;
-  }
-
-  &:not(.disabled):hover {
-    background-color: #e5e5e5;
-  }
-
-  .bar-button-icon {
-    width: 30px;
-    height: 30px;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

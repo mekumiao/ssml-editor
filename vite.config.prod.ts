@@ -13,7 +13,6 @@ export default function (): UserConfig {
         exclude: [
           'example/**',
           'node_modules/**',
-          'src/menu/**/*.tsx',
           'vite.config.ts',
           'vite.config.dev.ts',
           'vite.config.prod.ts',

@@ -3,18 +3,20 @@ import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { onMounted, ref, shallowRef, watch } from 'vue'
-import { speed, pitch, type RecentUsageSpeaker } from './data'
-import { useManagementStore } from '@/stores'
+import { computed, onMounted, ref, shallowRef, watch } from 'vue'
+import { speed, pitch, type RecentUsageSpeaker, type ContentData } from './data'
 import { type SubmitData, formatPitch, formatRate } from './data'
-import { storeToRefs } from 'pinia'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
-import sortedUniqBy from 'lodash.sorteduniqby'
+import uniqBy from 'lodash.uniqby'
 import { injectConfig } from '@/config'
 
-const emit = defineEmits<{ submit: [data: SubmitData] }>()
+const emit = defineEmits<{
+  submit: [data: SubmitData]
+  'update:contentData': [data: ContentData]
+}>()
+const props = defineProps<{ contentData: ContentData }>()
 
 const globalEditConfig = injectConfig()
 const { tryPlay, management } = globalEditConfig
@@ -22,8 +24,6 @@ const { tryPlay, management } = globalEditConfig
 const boxRef = ref<HTMLDivElement>()
 const showMore = ref(false)
 const searchInput = ref('')
-const managementStore = useManagementStore()
-const { contentData } = storeToRefs(managementStore)
 
 const speakerCache = shallowRef<Speaker[]>([])
 const recentUsageCache = ref<RecentUsageSpeaker[]>([])
@@ -37,39 +37,53 @@ const dataListPitch = ref<LabelValue[]>(pitch())
 
 const visible = useElementVisibility(boxRef)
 
+const contentDataRef = computed(() => props.contentData)
+
 onMounted(async () => {
-  contentData.value.category = dataListCategory.value[0].value
+  contentDataRef.value.category = dataListCategory.value[0].value
   await handleFetchData()
   await handleFetchRecentUsage()
 })
 
 watch(visible, (newValue) => {
-  if (!newValue) {
+  showMore.value = false
+
+  if (newValue && searchInput.value) {
     searchInput.value = ''
-    showMore.value = false
+    handleFetchData()
   }
 })
 
 async function handleSelectCategory(category: string) {
-  contentData.value.category = category
+  contentDataRef.value.category = category
   await handleFetchData()
 }
 
 async function handleFetchData() {
-  const speakers = await tryPlay.fetchData({ ...defaultFilterSpeaker(), ...contentData.value })
+  const speakers = await tryPlay.fetchData({
+    ...defaultFilterSpeaker(),
+    word: searchInput.value,
+    category: props.contentData.category,
+  })
   speakerCache.value = speakers
   dataListSpeaker.value = speakers.map((v) => ({ label: v.displayName, value: v.name }))
 
   if (speakers.length > 0) {
     dataListRole.value = speakers[0].roles
     dataListStyle.value = speakers[0].styles
-    contentData.value.name = speakers[0].name
-  }
-  if (dataListRole.value.length > 0) {
-    contentData.value.role = dataListRole.value[0].value
-  }
-  if (dataListStyle.value.length > 0) {
-    contentData.value.style = dataListStyle.value[0].value
+    contentDataRef.value.name = speakers[0].name
+
+    if (dataListRole.value.length > 0) {
+      contentDataRef.value.role = dataListRole.value[0].value
+    }
+    if (dataListStyle.value.length > 0) {
+      contentDataRef.value.style = dataListStyle.value[0].value
+    }
+  } else {
+    dataListRole.value = []
+    dataListStyle.value = []
+    contentDataRef.value.role = ''
+    contentDataRef.value.style = ''
   }
 }
 
@@ -80,32 +94,33 @@ function handleSelectSpeaker(name: string) {
     dataListStyle.value = speader.styles
 
     if (dataListRole.value.length > 0) {
-      contentData.value.role = dataListRole.value[0].value
+      contentDataRef.value.role = dataListRole.value[0].value
     }
     if (dataListStyle.value.length > 0) {
-      contentData.value.style = dataListStyle.value[0].value
+      contentDataRef.value.style = dataListStyle.value[0].value
     }
   }
 }
 
-async function handleSubmit() {
+async function handleSubmit(label?: string) {
   const speakerLabel =
-    dataListSpeaker.value.find((v) => v.value === contentData.value.name)?.label || ''
-  const roleLabel = dataListRole.value.find((v) => v.value === contentData.value.role)?.label || ''
+    dataListSpeaker.value.find((v) => v.value === contentDataRef.value.name)?.label || '-'
+  const roleLabel =
+    dataListRole.value.find((v) => v.value === contentDataRef.value.role)?.label || '-'
   const styleLabel =
-    dataListStyle.value.find((v) => v.value === contentData.value.style)?.label || ''
-  const speedLabel =
-    dataListSpeed.value.find((v) => v.value === contentData.value.speed)?.label || ''
+    dataListStyle.value.find((v) => v.value === contentDataRef.value.style)?.label || '-'
 
   const data: SubmitData = {
-    category: contentData.value.category,
-    name: contentData.value.name,
-    label: `${speakerLabel}|${roleLabel}|${styleLabel}|${speedLabel}`,
-    value: contentData.value.name,
-    role: contentData.value.role,
-    style: contentData.value.style,
-    speed: formatRate(Number(contentData.value.speed)),
-    pitch: formatPitch(Number(contentData.value.pitch)),
+    category: contentDataRef.value.category,
+    name: contentDataRef.value.name,
+    label:
+      label ??
+      `${speakerLabel}|${roleLabel}|${styleLabel}|${contentDataRef.value.speed}|${contentDataRef.value.pitch}`,
+    value: contentDataRef.value.name,
+    role: contentDataRef.value.role,
+    style: contentDataRef.value.style,
+    speed: formatRate(Number(contentDataRef.value.speed)),
+    pitch: formatPitch(Number(contentDataRef.value.pitch)),
   }
   emit('submit', data)
   await handleRecordRecentUsage(data)
@@ -121,12 +136,12 @@ async function handleFetchRecentUsage() {
 
 async function handleRecordRecentUsage(data: SubmitData) {
   try {
-    const record = { ...contentData.value, label: data.label, id: '' }
+    const record = { ...contentDataRef.value, label: data.label, id: '' }
     const result = await management.recordRecentUsage(record)
     recentUsageCache.value.splice(0, 0, result)
-    recentUsageCache.value = sortedUniqBy(
+    recentUsageCache.value = uniqBy(
       recentUsageCache.value,
-      (item) => `${item.name}+${item.role}+${item.style}+${item.pitch}+${item.speed}`,
+      (item) => `${item.name}+${item.role}+${item.style}+${item.speed}+${item.pitch}`,
     )
   } catch (error) {
     emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
@@ -134,14 +149,14 @@ async function handleRecordRecentUsage(data: SubmitData) {
 }
 
 function handleRecentUsageItemClick(item: RecentUsageSpeaker) {
-  contentData.value.category = item.category
-  contentData.value.name = item.name
-  contentData.value.pitch = item.pitch
-  contentData.value.role = item.role
-  contentData.value.speed = item.speed
-  contentData.value.style = item.style
+  contentDataRef.value.category = item.category
+  contentDataRef.value.name = item.name
+  contentDataRef.value.pitch = item.pitch
+  contentDataRef.value.role = item.role
+  contentDataRef.value.speed = item.speed
+  contentDataRef.value.style = item.style
 
-  handleSubmit()
+  handleSubmit(item.label)
 }
 
 async function handleRecentUsageClose(index: number) {
@@ -166,7 +181,7 @@ async function handleRecentUsageClean() {
 
 <template>
   <div ref="boxRef" style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
-    <ElForm @submit.prevent="handleFetchData">
+    <ElForm @submit.prevent="handleSelectCategory('')">
       <ElInput v-model="searchInput" placeholder="请输入名称快速查找配音师"></ElInput>
     </ElForm>
     <div class="position-relative">
@@ -192,35 +207,35 @@ async function handleRecentUsageClean() {
       <div v-show="!showMore" :class="{ 'd-flex flex-row': !showMore }">
         <SelectList
           @update:modelValue="handleSelectCategory"
-          v-model="contentData.category"
+          v-model="contentDataRef.category"
           :dataList="dataListCategory"
         >
           <span class="my-3">类型</span>
         </SelectList>
         <SelectList
           @update:modelValue="handleSelectSpeaker"
-          v-model="contentData.name"
+          v-model="contentDataRef.name"
           :dataList="dataListSpeaker"
         >
           <span class="my-3">配音师</span>
         </SelectList>
-        <SelectList v-model="contentData.role" :dataList="dataListRole">
+        <SelectList v-model="contentDataRef.role" :dataList="dataListRole">
           <span class="my-3">角色</span>
         </SelectList>
-        <SelectList v-model="contentData.style" :dataList="dataListStyle">
+        <SelectList v-model="contentDataRef.style" :dataList="dataListStyle">
           <span class="my-3">风格</span>
         </SelectList>
-        <SelectList v-model="contentData.speed" :dataList="dataListSpeed">
+        <SelectList v-model="contentDataRef.speed" :dataList="dataListSpeed">
           <span class="my-3">语速</span>
         </SelectList>
-        <SelectList v-model="contentData.pitch" :dataList="dataListPitch">
+        <SelectList v-model="contentDataRef.pitch" :dataList="dataListPitch">
           <span class="my-3">语调</span>
         </SelectList>
       </div>
     </div>
 
     <div class="position-absolute bottom-0 end-0 d-flex flex-row justify-content-end me-4 mb-3">
-      <ElButton v-show="!showMore" @click="handleSubmit" type="primary">确定</ElButton>
+      <ElButton v-show="!showMore" @click="() => handleSubmit()" type="primary">确定</ElButton>
       <ElButton v-show="showMore" @click="handleRecentUsageClean" type="primary">全部清空</ElButton>
     </div>
   </div>

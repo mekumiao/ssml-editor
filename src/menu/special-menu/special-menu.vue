@@ -8,7 +8,7 @@ import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
 import { injectConfig } from '@/config'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
 const globalEditConfig = injectConfig()
@@ -21,7 +21,7 @@ const { x, y, height } = useElementBounding(menuRef)
 const handleClick = (editor: IDomEditor) => {
   fn.value ??= new SpecialFn(editor)
   if (fn.value.isDisabled()) return
-  dragRef.value.setPosition({
+  dragRef.value?.setPosition({
     x: x.value - 200,
     y: y.value + height.value,
   })
@@ -29,10 +29,7 @@ const handleClick = (editor: IDomEditor) => {
 }
 
 function handleSubmit(opt: LabelValue) {
-  fn.value?.restoreSelection()
-  if (fn.value && !fn.value.isDisabled()) {
-    fn.value.exec(opt)
-  }
+  fn.value?.exec(opt)
   visible.value = false
 }
 </script>
@@ -40,7 +37,7 @@ function handleSubmit(opt: LabelValue) {
 <template>
   <DragBox ref="dragRef" v-model:visible="visible">
     <template #reference>
-      <BarButton ref="menuRef" text="音效" icon="special" @click="handleClick"></BarButton>
+      <BarButton ref="menuRef" icon="special" @click="handleClick">音效</BarButton>
     </template>
     <BarSearch
       :menus="special.menus"

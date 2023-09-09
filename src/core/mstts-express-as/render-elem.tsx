@@ -2,6 +2,7 @@ import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { MsttsExpressAs } from './custom-types'
 import throttle from 'lodash.throttle'
+import { handleGrayscaleControl } from '../helper'
 
 export default {
   type: 'ssml-mstts:express-as',
@@ -13,6 +14,7 @@ export default {
           className="remark"
           contentEditable="false"
           style={{ 'background-color': 'var(--ssml-mstts--express-as)' }}
+          on={handleGrayscaleControl()}
         >
           <span
             className="iconfont icon-roundclosefill"

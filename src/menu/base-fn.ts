@@ -25,5 +25,5 @@ export default abstract class BaseFn {
     return false
   }
 
-  public abstract exec(opt: LabelValue): void
+  public abstract exec(opt: LabelValue, ...args: any[]): void
 }

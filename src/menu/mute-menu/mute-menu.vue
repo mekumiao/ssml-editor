@@ -1,8 +1,7 @@
 <script setup lang="ts">
 import { type IDomEditor } from '@wangeditor/editor'
 import { ref, shallowRef } from 'vue'
-import { BarButton, BarInput } from '@/components'
-import { ElPopover } from 'element-plus'
+import { BarButton, BarInput, BarPopover } from '@/components'
 import { MuteFn } from './mute-fn'
 import { options } from './data'
 
@@ -35,17 +34,11 @@ function handleSubmit(text: string | null) {
 </script>
 
 <template>
-  <ElPopover
-    popperStyle="--el-popover-padding: 0px"
-    v-model:visible="visible"
-    trigger="contextmenu"
-    :hideAfter="0"
-    :width="200"
-  >
+  <BarPopover v-model:visible="visible" :width="200">
     <template #reference>
-      <BarButton text="插入静音" icon="mute" @click="handleClick"></BarButton>
+      <BarButton icon="mute" @click="handleClick">插入静音</BarButton>
     </template>
-    <div class="ssml-editor-root d-flex flex-column p-2" @mousedown.stop.prevent>
+    <div class="d-flex flex-column">
       <div
         v-for="(item, index) in options"
         :key="index"
@@ -56,7 +49,7 @@ function handleSubmit(text: string | null) {
       </div>
       <BarInput type="text" ref="inputRef" @submit="handleSubmit"></BarInput>
     </div>
-  </ElPopover>
+  </BarPopover>
 </template>
 
 <style lang="scss" scoped></style>

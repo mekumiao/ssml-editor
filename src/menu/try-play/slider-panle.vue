@@ -1,16 +1,18 @@
 <script setup lang="ts">
 import { ElSlider, ElIcon } from 'element-plus'
 import AnchorAvatar from './anchor-avatar.vue'
+import PlayButton from './play-button.vue'
 import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
-import { demoAvatar, speed as speedGetter, pitch as pitchGetter, injectConfig } from '@/config'
+import { speed as speedGetter, pitch as pitchGetter, injectConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
 import { formatPitch, formatRate } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
+import type { Arrayable } from 'element-plus/lib/utils/typescript'
 
 interface Mark {
   style: CSSProperties
@@ -25,8 +27,10 @@ const { fetchStar, category, fetchData } = globalEditConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
 const isStar = ref(tryPlayStore.speaker.isStar)
-const timeMax = ref(10)
+const timeMax = tryPlayStore.audioPlayer.duration
+const currentTime = tryPlayStore.audioPlayer.currentTime
 const time = ref(0)
+const isInput = ref(true)
 
 const speedRange = ref([0, 2.0])
 const speed = ref(1)
@@ -72,6 +76,10 @@ watch(
   { immediate: true },
 )
 
+watch(currentTime, (newValue) => {
+  if (!isInput.value) time.value = newValue
+})
+
 async function handleStar() {
   isStar.value = await fetchStar(tryPlayStore.speaker.name, !isStar.value)
 }
@@ -96,13 +104,25 @@ async function handleCategoryClick(value: string) {
 function handleSpeakerClick(value: Speaker) {
   tryPlayStore.setSpeaker(toRaw(value))
 }
+
+function handleTimeInput() {
+  isInput.value = true
+}
+
+function handleTimeChange(time: Arrayable<number>) {
+  if (!(time instanceof Array)) {
+    currentTime.value = time
+    tryPlayStore.audioPlayer.play()
+  }
+  isInput.value = false
+}
 </script>
 
 <template>
   <div class="slider-panle w-100 px-3 text-white" style="font-size: 0.5rem">
     <div class="mt-2 d-flex text-center justify-content-between align-items-center">
       <div class="me-auto d-flex flex-row align-items-center">
-        <img :src="demoAvatar()" class="rounded-circle" style="height: 50px" />
+        <PlayButton></PlayButton>
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
             <span class="fs-6">{{ tryPlayStore.speaker.displayName }}</span>
@@ -126,7 +146,14 @@ function handleSpeakerClick(value: Speaker) {
           <span>/</span>
           <span>{{ timeMaxText }}</span>
         </div>
-        <ElSlider :max="timeMax" v-model="time" size="small"></ElSlider>
+        <ElSlider
+          :max="timeMax"
+          v-model="time"
+          size="small"
+          @input="handleTimeInput"
+          @change="handleTimeChange"
+          :format-tooltip="formatTime"
+        ></ElSlider>
       </div>
     </div>
     <div

@@ -20,7 +20,7 @@ import {
 </script>
 
 <template>
-  <div class="bar-view border-bottom border-1">
+  <div class="bar-view border-bottom">
     <BarWrapper>
       <BarWrapperGroup divider="green">
         <PlayMenu></PlayMenu>

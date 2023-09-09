@@ -1,21 +1,19 @@
 <script setup lang="ts">
 import { ElPopover } from 'element-plus'
+import type { Placement } from '@popperjs/core'
+
 defineEmits<{ 'update:visible': [value: boolean] }>()
-defineProps<{
-  visible?: boolean
-  trigger: 'hover' | 'focus' | 'click' | 'contextmenu'
-  hideAfter?: number
-  width?: number
-}>()
+defineProps<{ visible?: boolean; width?: number; placement?: Placement }>()
 </script>
 
 <template>
   <ElPopover
     popperStyle="--el-popover-padding: 0px"
-    :hideAfter="hideAfter"
+    :hideAfter="0"
     :width="width"
     :visible="visible"
-    :trigger="trigger"
+    :placement="placement"
+    trigger="contextmenu"
     @update:visible="(value) => $emit('update:visible', value)"
   >
     <template v-slot:reference>

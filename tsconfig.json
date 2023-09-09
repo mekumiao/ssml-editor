@@ -33,7 +33,6 @@
       "@/*": ["./src/*"]
     }
   },
-  "exclude": ["src/menu/**/*.tsx"],
   "include": [
     "env.d.ts",
     "global.d.ts",

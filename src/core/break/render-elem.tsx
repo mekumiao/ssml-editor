@@ -2,6 +2,7 @@ import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
 import type { Break } from './custom-types'
 import throttle from 'lodash.throttle'
+import { handleGrayscaleControl } from '../helper'
 
 export default {
   type: 'ssml-break',
@@ -9,7 +10,11 @@ export default {
     const { remark } = elem as Break
     return (
       <span className="ssml-wrapper" contentEditable="false">
-        <span className="remark" style={{ 'background-color': 'var(--ssml-break)' }}>
+        <span
+          className="remark"
+          style={{ 'background-color': 'var(--ssml-break)' }}
+          on={handleGrayscaleControl()}
+        >
           <span
             className="iconfont icon-roundclosefill"
             on={{

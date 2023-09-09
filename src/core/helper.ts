@@ -63,3 +63,14 @@ export function removeNodeSpace(editor: IDomEditor, path: SlatePath) {
     }
   })
 }
+
+export function handleGrayscaleControl() {
+  return {
+    mouseenter: () => {
+      document.querySelector('.w-e-text-container')?.classList.add('grayscale')
+    },
+    mouseleave: () => {
+      document.querySelector('.w-e-text-container')?.classList.remove('grayscale')
+    },
+  }
+}

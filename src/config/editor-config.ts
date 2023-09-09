@@ -144,7 +144,7 @@ export function createGlobalEditorConfig(config?: Partial<SSMLEditorConfig>) {
   }
 }
 
-export function proviceConfig(app: App, config?: SSMLEditorConfig) {
+export function proviceConfig(app: App, config?: Partial<SSMLEditorConfig>) {
   const globalEditorConfig = createGlobalEditorConfig(config)
   emitter.on(EMITTER_EVENT.ERROR, globalEditorConfig.handleError)
   app.provide(PROVIDER_KEY.EDITOR_CONFIG, globalEditorConfig)

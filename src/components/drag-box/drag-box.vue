@@ -12,6 +12,7 @@ const props = defineProps<{ visible: boolean; initialValue?: Position }>()
 const boxRef = ref<HTMLElement>()
 const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
+const allowClose = ref(true)
 
 const { position } = useDraggable(dragRef, {
   initialValue: props.initialValue,
@@ -24,24 +25,30 @@ function setPosition(opt: Position) {
 
 defineExpose({
   setPosition,
+  withoutAutoClose,
 })
 
 onMounted(() => {
   emitter.on(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
-  // emitter.on(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
-  // document.addEventListener('mousedown', handleViewClick)
   document.addEventListener('keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
   emitter.off(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
-  // emitter.off(EMITTER_EVENT.VIEW_KEYDOWN, handleKeyDownEsc)
-  // document.removeEventListener('mousedown', handleViewClick)
   document.removeEventListener('keydown', handleKeyDownEsc)
 })
 
 function handleViewClick(ev: MouseEvent) {
-  isOthreClick(ev) && handleClose()
+  allowClose.value && isOthreClick(ev) && handleClose()
+}
+
+function withoutAutoClose(callback: VoidFunction) {
+  try {
+    allowClose.value = false
+    callback()
+  } finally {
+    setTimeout(() => (allowClose.value = true))
+  }
 }
 
 function isOthreClick(ev: MouseEvent) {

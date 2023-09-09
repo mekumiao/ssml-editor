@@ -8,7 +8,7 @@ import { DragBox, BarSearch } from '@/components'
 import { useSSMLStore } from '@/stores'
 import { injectConfig } from '@/config'
 
-const dragRef = ref()
+const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
 const globalEditConfig = injectConfig()
@@ -24,7 +24,7 @@ const handleClick = async (editor: IDomEditor) => {
     y: y.value + height.value,
   }
   edirorRef.value = editor
-  dragRef.value.setPosition(pot)
+  dragRef.value?.setPosition(pot)
   visible.value = true
 }
 
@@ -39,7 +39,7 @@ function handleSubmit(opt: LabelValue) {
 <template>
   <DragBox ref="dragRef" v-model:visible="visible">
     <template #reference>
-      <BarButton ref="menuRef" text="配乐" icon="bgm" @click="handleClick"></BarButton>
+      <BarButton ref="menuRef" icon="bgm" @click="handleClick">配乐</BarButton>
     </template>
     <BarSearch
       :menus="bgm.menus"
