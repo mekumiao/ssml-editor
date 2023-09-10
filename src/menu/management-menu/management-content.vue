@@ -18,8 +18,8 @@ const emit = defineEmits<{
 }>()
 const props = defineProps<{ contentData: ContentData }>()
 
-const globalEditConfig = injectConfig()
-const { tryPlay, management } = globalEditConfig
+const ssmlEditorConfig = injectConfig()
+const { tryPlay, management } = ssmlEditorConfig
 
 const boxRef = ref<HTMLDivElement>()
 const showMore = ref(false)

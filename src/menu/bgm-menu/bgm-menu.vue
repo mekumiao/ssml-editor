@@ -11,8 +11,8 @@ import { injectConfig } from '@/config'
 const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
-const globalEditConfig = injectConfig()
-const { bgm } = globalEditConfig
+const ssmlEditorConfig = injectConfig()
+const { bgm } = ssmlEditorConfig
 
 const visible = ref(false)
 

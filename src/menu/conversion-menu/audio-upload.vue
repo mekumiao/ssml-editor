@@ -13,8 +13,8 @@ import { injectConfig } from '@/config'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
-const globalEditConfig = injectConfig()
-const { audioUpload, transfer, fetchSpeaker, timeoutMilliseconds } = globalEditConfig.conversion
+const ssmlEditorConfig = injectConfig()
+const { audioUpload, transfer, fetchSpeaker, timeoutMilliseconds } = ssmlEditorConfig.conversion
 
 const boxRef = ref<HTMLElement>()
 

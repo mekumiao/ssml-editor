@@ -7,8 +7,8 @@ import { injectConfig } from '@/config'
 const emit = defineEmits<{ 'update:filter': [value: FilterSpeaker] }>()
 const props = defineProps<{ filter: FilterSpeaker }>()
 
-const globalEditConfig = injectConfig()
-const { topFlag, gender, featchTag } = globalEditConfig.tryPlay
+const ssmlEditorConfig = injectConfig()
+const { topFlag, gender, featchTag } = ssmlEditorConfig.tryPlay
 
 const tags = ref<LabelValue[]>([])
 

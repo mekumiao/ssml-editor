@@ -17,7 +17,7 @@ const boxRef = ref<HTMLDivElement>()
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const globalEditConfig = injectConfig()
+const ssmlEditorConfig = injectConfig()
 
 const styleObject = computed<CSSProperties>(() => ({
   'background-image': `url(${tryPlayStore.speaker.avatar || demoAvatar()})`,
@@ -26,7 +26,7 @@ const styleObject = computed<CSSProperties>(() => ({
 }))
 
 const handleClick = throttle(async () => {
-  await play(globalEditConfig.tryPlay.play)
+  await play(ssmlEditorConfig.tryPlay.play)
 })
 
 defineExpose({

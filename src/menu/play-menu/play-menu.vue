@@ -11,10 +11,10 @@ withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false })
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const globalEditConfig = injectConfig()
+const ssmlEditorConfig = injectConfig()
 
 const handleClick = throttle(async () => {
-  await play(globalEditConfig.tryPlay.play)
+  await play(ssmlEditorConfig.tryPlay.play)
 })
 </script>
 

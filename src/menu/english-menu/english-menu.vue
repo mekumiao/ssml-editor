@@ -8,7 +8,7 @@ import type { LabelValue } from '@/model'
 import { WANGEDITOR_EVENT } from '@/constant'
 import { injectConfig } from '@/config'
 
-const globalEditConfig = injectConfig()
+const ssmlEditorConfig = injectConfig()
 const fn = shallowRef<EnglishFn>()
 const englishList = ref<LabelValue[]>([])
 const visible = ref(false)
@@ -29,7 +29,7 @@ async function handleClick(editor: IDomEditor) {
   if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
-    englishList.value = await globalEditConfig.english.fetchData(text)
+    englishList.value = await ssmlEditorConfig.english.fetchData(text)
 
     if (englishList.value.length <= 0) {
       return editor.emit(WANGEDITOR_EVENT.ERROR, '找不到单词的音标')

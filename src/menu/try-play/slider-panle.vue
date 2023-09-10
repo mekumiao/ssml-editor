@@ -21,9 +21,9 @@ interface Mark {
 
 type Marks = Record<number, Mark | string>
 
-const globalEditConfig = injectConfig()
+const ssmlEditorConfig = injectConfig()
 const { rootProsody, rootExpressAs } = useSSMLStore()
-const { fetchStar, category, fetchData } = globalEditConfig.tryPlay
+const { fetchStar, category, fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
 const isStar = ref(tryPlayStore.speaker.isStar)

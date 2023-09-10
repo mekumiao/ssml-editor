@@ -7,8 +7,8 @@ import { injectConfig } from '@/config'
 
 const props = defineProps<{ filter: FilterSpeaker }>()
 
-const globalEditConfig = injectConfig()
-const { fetchData } = globalEditConfig.tryPlay
+const ssmlEditorConfig = injectConfig()
+const { fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
 const dataList = ref<LabelValue[]>([])
