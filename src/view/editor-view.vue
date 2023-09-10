@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import EditorTitle from './editor-title.vue'
 import EditorCore from './editor-core.vue'
-import BarView from './bar-view.vue'
+import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
@@ -29,7 +29,7 @@ function handleKeyDown(ev: KeyboardEvent) {
   <div class="ssml-editor-root editor-view" @click="handleClick" @keydown="handleKeyDown">
     <slot><EditorTitle></EditorTitle></slot>
     <div class="editor-box">
-      <BarView></BarView>
+      <EditorBar></EditorBar>
       <div class="editor-core-container shadow pt-1">
         <EditorCore @change="handleChange" @created="handleCreated"></EditorCore>
       </div>
