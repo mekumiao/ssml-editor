@@ -5,9 +5,9 @@ import PlayButton from './play-button.vue'
 import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
-import { speed as speedGetter, pitch as pitchGetter, injectConfig } from '@/config'
+import { injectConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
-import { formatPitch, formatRate } from './data'
+import { formatPitch, formatRate, defaultSpeed, defaultPitch } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
@@ -41,8 +41,8 @@ const pitch = ref(0)
 const timeMaxText = computed(() => formatTime(timeMax.value))
 const timeText = computed(() => formatTime(time.value))
 
-const speedMarks = reactive<Marks>(speedGetter())
-const pitchMarks = reactive<Marks>(pitchGetter())
+const speedMarks = reactive<Marks>(defaultSpeed())
+const pitchMarks = reactive<Marks>(defaultPitch())
 
 const flag = ref('')
 const speakerList = ref<Speaker[]>([])
