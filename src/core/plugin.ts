@@ -37,8 +37,8 @@ export default <T extends IDomEditor>(editor: T) => {
   }
 
   /**
-   * 粘贴时如何处理剪贴板文本到编辑器
-   * 1. 忽略编辑器之身的粘贴
+   * 自定义剪贴板粘贴行为
+   * 1. 放行编辑器之身的粘贴行为
    * 2. 其他粘贴行为一律使用文本粘贴
    */
   newEditor.insertData = (data) => {
@@ -53,7 +53,7 @@ export default <T extends IDomEditor>(editor: T) => {
   }
 
   /**
-   * 设置复制时设置文字片段格式
+   * 复制时设置文字片段格式
    */
   newEditor.setFragmentData = (data) => {
     setFragmentData(data)
