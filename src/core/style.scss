@@ -17,21 +17,17 @@
   box-sizing: border-box;
   border: 0px;
 
-  &:not(.no-line-height) {
-    line-height: 2.6rem;
-    vertical-align: top;
-  }
+  line-height: 2.6rem;
+  vertical-align: top;
 
   .data-content::before {
     content: attr(data-content);
   }
 
   .remark {
-    &:not(.left) {
-      position: absolute;
-      top: -18px;
-      left: 0px;
-    }
+    position: absolute;
+    top: -18px;
+    left: 0px;
 
     display: inline-flex;
     flex-direction: row;
@@ -51,10 +47,9 @@
     white-space: nowrap;
     transition: all 0.1s ease;
 
-    &:not(.left):hover {
+    &:hover {
       z-index: 1;
       max-width: 300px;
-      transform: scale(1.1);
       box-shadow: 0 0 8px rgba(0, 0, 0, 0.5);
     }
 
@@ -78,10 +73,26 @@
   }
 }
 
-.w-e-text-container.grayscale {
+@mixin grayscale() {
+  -webkit-filter: opacity(100%);
+  filter: opacity(50%);
+  transition: all 0.1s ease;
+}
+
+.w-e-text-container.allow-grayscale.grayscale {
   .ssml-wrapper:not(:hover) {
-    -webkit-filter: opacity(100%);
-    filter: opacity(50%);
-    transition: all 0.1s ease;
+    @include grayscale();
+  }
+
+  div[data-slate-editor] > p > [data-slate-node='text'] {
+    @include grayscale();
+  }
+}
+
+.w-e-text-container.allow-zoom {
+  .ssml-wrapper {
+    .remark:hover {
+      transform: scale(1.1);
+    }
   }
 }

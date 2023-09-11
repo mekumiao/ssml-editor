@@ -1,8 +1,8 @@
 import { jsx, type VNode } from 'snabbdom'
-import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
+import { SlateElement, type IDomEditor, DomEditor } from '@wangeditor/editor'
 import type { CustomManagement } from './custom-types'
 import throttle from 'lodash.throttle'
-import { removeNodeSpace, handleGrayscaleControl } from '../helper'
+import { handleGrayscaleControl, handleUnwrapNodes } from '../helper'
 import { WANGEDITOR_EVENT } from '@/constant'
 
 export default {
@@ -27,14 +27,7 @@ export default {
         >
           <span
             className="iconfont icon-roundclosefill"
-            on={{
-              click: throttle((event: Event) => {
-                event.preventDefault()
-                const path = DomEditor.findPath(editor, elem)
-                removeNodeSpace(editor, path)
-                SlateTransforms.unwrapNodes(editor, { at: path })
-              }),
-            }}
+            on={{ click: [handleGrayscaleControl().mouseleave, handleUnwrapNodes(editor, elem)] }}
           ></span>
           <span className="data-content" attrs={{ 'data-content': remark }}></span>
         </span>

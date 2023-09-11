@@ -6,13 +6,13 @@ import { useElementBounding } from '@vueuse/core'
 import { SpecialFn } from './special-fn'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
-const globalEditConfig = injectConfig()
-const { special } = globalEditConfig
+const ssmlEditorConfig = getConfig()
+const { special } = ssmlEditorConfig
 
 const visible = ref(false)
 

@@ -1,9 +1,23 @@
 import { jsx, type VNode } from 'snabbdom'
-import { SlateElement, type IDomEditor, SlateTransforms, DomEditor } from '@wangeditor/editor'
+import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Audio } from './custom-types'
 import throttle from 'lodash.throttle'
 import { audioPlayer } from '@/utils'
-import { handleGrayscaleControl, removeNodeSpace } from '../helper'
+import { handleDeleteNode, handleGrayscaleControl, handleUnwrapNodes } from '../helper'
+
+function handlePlay(src: string) {
+  return throttle((event: Event) => {
+    event.preventDefault()
+    audioPlayer.play(src)
+  })
+}
+
+function handleStop(src: string) {
+  return throttle((event: Event) => {
+    event.preventDefault()
+    audioPlayer.stop(src)
+  })
+}
 
 export default {
   type: 'ssml-audio',
@@ -27,24 +41,14 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
         <span
           className="iconfont icon-roundclosefill"
           on={{
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              audioPlayer.stop(src)
-              const path = DomEditor.findPath(editor, elem)
-              removeNodeSpace(editor, path)
-              SlateTransforms.unwrapNodes(editor, { at: path })
-            }),
+            click: [
+              handleGrayscaleControl().mouseleave,
+              handleUnwrapNodes(editor, elem),
+              handleStop(src),
+            ],
           }}
         ></span>
-        <span
-          className="iconfont icon-play"
-          on={{
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              audioPlayer.play(src)
-            }),
-          }}
-        ></span>
+        <span className="iconfont icon-play" on={{ click: handlePlay(src) }}></span>
         <span className="data-content" attrs={{ 'data-content': remark }}></span>
       </span>
       <span
@@ -76,23 +80,14 @@ function renderVoidElement(elem: Audio, editor: IDomEditor) {
         <span
           className="iconfont icon-roundclosefill"
           on={{
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              audioPlayer.stop(src)
-              const path = DomEditor.findPath(editor, elem)
-              SlateTransforms.delete(editor, { at: path })
-            }),
+            click: [
+              handleGrayscaleControl().mouseleave,
+              handleDeleteNode(editor, elem),
+              handleStop(src),
+            ],
           }}
         ></span>
-        <span
-          className="iconfont icon-play"
-          on={{
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              audioPlayer.play(src)
-            }),
-          }}
-        ></span>
+        <span className="iconfont icon-play" on={{ click: handlePlay(src) }}></span>
         <span className="data-content" attrs={{ 'data-content': remark }}></span>
       </span>
       <span className="iconfont icon-music" style={{ color: 'var(--ssml-audio)' }}></span>

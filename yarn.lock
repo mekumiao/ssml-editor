@@ -672,6 +672,13 @@
   dependencies:
     "@types/lodash" "*"
 
+"@types/lodash.merge@^4.6.7":
+  version "4.6.7"
+  resolved "https://registry.yarnpkg.com/@types/lodash.merge/-/lodash.merge-4.6.7.tgz#0af6555dd8bc6568ef73e5e0d820a027362946b1"
+  integrity sha512-OwxUJ9E50gw3LnAefSHJPHaBLGEKmQBQ7CZe/xflHkyy/wH2zVyEIAKReHvVrrn7zKdF58p16We9kMfh7v0RRQ==
+  dependencies:
+    "@types/lodash" "*"
+
 "@types/lodash.sorteduniqby@^4.7.7":
   version "4.7.7"
   resolved "https://registry.yarnpkg.com/@types/lodash.sorteduniqby/-/lodash.sorteduniqby-4.7.7.tgz#9b10baf45a4e92f848371817a9f40f5cb969329e"
@@ -1396,25 +1403,6 @@ chalk@^4.0.0:
     readdirp "~3.6.0"
   optionalDependencies:
     fsevents "~2.3.2"
-
-cnchar-poly@^3.2.4:
-  version "3.2.4"
-  resolved "https://registry.npmmirror.com/cnchar-poly/-/cnchar-poly-3.2.4.tgz#9c6c8bc95fac816da02dccdb615087fbdb95e3b3"
-  integrity sha512-kobq9xj0Mfu4n3MFf7uldluIxXkoaV5y00qyF3b/bcb9rI8s7rvlRu53RF/fNOS46MWkTGgXDnUl2QF7V7RjEg==
-  dependencies:
-    cnchar-types "^3.2.4"
-
-cnchar-types@^3.2.4:
-  version "3.2.4"
-  resolved "https://registry.npmmirror.com/cnchar-types/-/cnchar-types-3.2.4.tgz#0719d89e598a1830928bfd16b343744a36d2216b"
-  integrity sha512-px3V2FQ7M6iS0OJsu/XxNGQcCf4jfHV9xHmLte9UgQv04DK7Ss9x719FQwIVfT8uy+iyfIth77B/D4ufDGDAIA==
-
-cnchar@^3.2.4:
-  version "3.2.4"
-  resolved "https://registry.npmmirror.com/cnchar/-/cnchar-3.2.4.tgz#aeac6216f6393748b32a8c4052409a8576afa561"
-  integrity sha512-Gpz66OIcBp2WGStVZFt4I9NcKZYEwf7k3CjZ6eDb9LZa7QXwTO2QKer2Ko7HEPPKosRiwxAshdR3BaQ5mR+qqA==
-  dependencies:
-    cnchar-types "^3.2.4"
 
 color-convert@^1.9.0:
   version "1.9.3"
@@ -2645,7 +2633,7 @@ lodash.isequal@^4.5.0:
 
 lodash.merge@^4.6.2:
   version "4.6.2"
-  resolved "https://registry.npmmirror.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
+  resolved "https://registry.yarnpkg.com/lodash.merge/-/lodash.merge-4.6.2.tgz#558aa53b43b661e1925a0afdfa36a9a1085fe57a"
   integrity sha512-0KpjqXRVvrYyCsX1swR/XTK0va6VQkQM6MNo7PqW77ByjAhoARA8EfrP1N4+KlKj8YS0ZUCtRT/YUuhyYDujIQ==
 
 lodash.sorteduniqby@^4.7.0:
@@ -2667,6 +2655,11 @@ lodash.uniqby@^4.7.0:
   version "4.7.0"
   resolved "https://registry.yarnpkg.com/lodash.uniqby/-/lodash.uniqby-4.7.0.tgz#d99c07a669e9e6d24e1362dfe266c67616af1302"
   integrity sha512-e/zcLx6CSbmaEgFHCA7BnoQKyCtKMxnuWrJygbwPs/AIn+IMKl66L8/s+wBUn5LRw2pZx3bUHibiV1b6aTWIww==
+
+lodash@^3.10.1:
+  version "3.10.1"
+  resolved "https://registry.yarnpkg.com/lodash/-/lodash-3.10.1.tgz#5bf45e8e49ba4189e17d482789dfd15bd140b7b6"
+  integrity sha512-9mDDwqVIma6OZX79ZlDACZl8sBm0TEnkf99zV3iMA4GzkIT/9hiqP5mY0HoT1iNLCrKc/R1HByV+yJfRWVJryQ==
 
 lodash@^4.17.21, lodash@~4.17.15:
   version "4.17.21"
@@ -3027,6 +3020,18 @@ pinia@^2.1.6:
   dependencies:
     "@vue/devtools-api" "^6.5.0"
     vue-demi ">=0.14.5"
+
+pinyin-pro@^3.16.4:
+  version "3.16.4"
+  resolved "https://registry.yarnpkg.com/pinyin-pro/-/pinyin-pro-3.16.4.tgz#7b75dbf6125af5715a588a1411ab8e1c6eb04470"
+  integrity sha512-NP1x+Z9OajEIjJzIs5gzp3DHiUln8SLIytoYspPFQ8Xd6NMBO2HHZuki1XgYzGS7qat4oRZlwnZ+hvCZwuldbg==
+
+pinyinize@^3.3.1:
+  version "3.3.1"
+  resolved "https://registry.yarnpkg.com/pinyinize/-/pinyinize-3.3.1.tgz#f537e6b5c65aeaf52a05bfebd84c8545db1fe595"
+  integrity sha512-xxea97zhQBMWGtlUWNhtZGQce8FeBLasD0wzVsVn1+idQuPrYvb+E+yYkW8s1iIYb1ZYd6RVHCp0DFBS5DYEMw==
+  dependencies:
+    lodash "^3.10.1"
 
 postcss-selector-parser@^6.0.13:
   version "6.0.13"

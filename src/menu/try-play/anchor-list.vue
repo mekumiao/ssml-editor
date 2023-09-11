@@ -3,12 +3,12 @@ import { onMounted, ref, shallowRef, toRaw, watch } from 'vue'
 import AnchorAvatar from './anchor-avatar.vue'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
 import { useTryPlayStore } from '@/stores'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const props = defineProps<{ filter: FilterSpeaker }>()
 
-const globalEditConfig = injectConfig()
-const { fetchData } = globalEditConfig.tryPlay
+const ssmlEditorConfig = getConfig()
+const { fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
 const dataList = ref<LabelValue[]>([])

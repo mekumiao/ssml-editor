@@ -5,7 +5,7 @@ import { useTryPlayStore } from '@/stores'
 import { ElIcon } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import throttle from 'lodash.throttle'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const props = withDefaults(defineProps<{ disabledClick?: boolean; size?: number }>(), {
   disabledClick: false,
@@ -17,7 +17,7 @@ const boxRef = ref<HTMLDivElement>()
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const globalEditConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 
 const styleObject = computed<CSSProperties>(() => ({
   'background-image': `url(${tryPlayStore.speaker.avatar || demoAvatar()})`,
@@ -26,7 +26,7 @@ const styleObject = computed<CSSProperties>(() => ({
 }))
 
 const handleClick = throttle(async () => {
-  await play(globalEditConfig.tryPlay.play)
+  await play(ssmlEditorConfig.tryPlay.play)
 })
 
 defineExpose({

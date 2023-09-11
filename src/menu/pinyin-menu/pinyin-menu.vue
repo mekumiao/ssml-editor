@@ -6,9 +6,9 @@ import { ElPopover } from 'element-plus'
 import { PinyinFn } from './pinyin-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
-const globalEditConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 const fn = shallowRef<PinyinFn>()
 const pyList = ref<LabelValue[]>([])
 const visible = ref(false)
@@ -28,7 +28,7 @@ async function handleClick(editor: IDomEditor) {
   if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
-    pyList.value = await globalEditConfig.pinyin.fetchData(text)
+    pyList.value = await ssmlEditorConfig.pinyin.fetchData(text)
   } else {
     pyList.value = []
   }

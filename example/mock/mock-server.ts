@@ -2,23 +2,19 @@ import axios from 'axios'
 import MockAdapter from 'axios-mock-adapter'
 import DataSource from './data'
 import type { FilterBarSearch } from '@/components/bar-search'
-import cnchar from 'cnchar'
-import 'cnchar-poly'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
 import voices from './voices'
 import { getStyleDes, getRoleDes } from './emoji-config'
 import type { AudioInfo } from '@/menu/conversion-menu/data'
 import type { RecentUsageSpeaker } from '@/menu/management-menu/data'
+import { getPolyphoneData, polyphoneDataToLabelValue } from '../utils'
 
 const mock = new MockAdapter(axios)
 
 mock.onGet('/pinyin').reply((config) => {
   const word = config.params.word as string
-  const poly = cnchar.spell(word, 'poly', 'low') as string
-  const polyList = poly.replaceAll(/[()]/g, '').split('|')
-  const genTone = (p: string) => Array.from({ length: 5 }).map((_, i) => (i == 0 ? p : `${p} ${i}`))
-  const dataList = polyList.map((v) => genTone(v))
-  const data = ([] as string[]).concat(...dataList).map((v) => ({ value: v, label: v }))
+  const polyphoneData = getPolyphoneData(word)
+  const data = polyphoneDataToLabelValue(polyphoneData)
   return [200, data]
 })
 

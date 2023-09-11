@@ -4,7 +4,7 @@ import './assets/main.scss'
 import type { App, Plugin } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
 
-import { type SSMLEditorConfig, proviceConfig } from './config'
+import { type SSMLEditorConfig, setConfig } from './config'
 
 export type { FilterBarSearch } from './components/bar-search/data'
 export type { AudioInfo } from './menu/conversion-menu/data'
@@ -19,7 +19,7 @@ export * from './serialize'
 
 export default <Plugin>{
   install(app: App, config?: Partial<SSMLEditorConfig>) {
-    proviceConfig(app, config)
+    setConfig(config)
     const pinia = app.config.globalProperties.$pinia
     if (pinia) {
       setActivePinia(pinia)
