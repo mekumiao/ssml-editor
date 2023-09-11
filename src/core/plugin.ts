@@ -57,7 +57,7 @@ export default <T extends IDomEditor>(editor: T) => {
    */
   newEditor.setFragmentData = (data) => {
     setFragmentData(data)
-    const plain = data.getData('text/plain').replaceAll(/[\s]/gi, '')
+    const plain = editor.getText()
     data.setData('text/plain', plain)
   }
 
