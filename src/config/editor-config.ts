@@ -9,18 +9,20 @@ import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import merge from 'lodash.merge'
 
+type Effects = { zoom: boolean; grayscale: boolean }
 type FetchFunction = () => Promise<LabelValue[]>
 type WordFetchFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetchFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
 type FilterSpeakerFetchFunction = (filter: FilterSpeaker) => Promise<Speaker[]>
 
-type PartialKey = 'bgm' | 'special' | 'tryPlay' | 'conversion' | 'management'
+type PartialKey = 'effects' | 'bgm' | 'special' | 'tryPlay' | 'conversion' | 'management'
 type PartialProps<T, K extends keyof T> = { [P in K]?: Partial<T[P]> }
 
 export type PartialSSMLEditorConfig = Partial<Omit<SSMLEditorConfig, PartialKey>> &
   PartialProps<SSMLEditorConfig, PartialKey>
 
 export interface SSMLEditorConfig {
+  effects: Effects
   editorConfig: Partial<IEditorConfig>
   handleError: (error: string, detail?: any) => void
   pinyin: { fetchData: WordFetchFunction }
@@ -65,6 +67,7 @@ function resolveList() {
 
 function defaultSSMLEditorConfig(): SSMLEditorConfig {
   return {
+    effects: { zoom: true, grayscale: true },
     editorConfig: { maxLength: 5000, placeholder: '请输入内容...' },
     handleError: () => {},
     pinyin: { fetchData: resolveList() },
