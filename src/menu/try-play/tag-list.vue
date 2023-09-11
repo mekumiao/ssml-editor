@@ -2,12 +2,12 @@
 import TagItem from './tag-item.vue'
 import { onMounted, ref, toRaw } from 'vue'
 import type { FilterSpeaker, LabelValue } from '@/model'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const emit = defineEmits<{ 'update:filter': [value: FilterSpeaker] }>()
 const props = defineProps<{ filter: FilterSpeaker }>()
 
-const ssmlEditorConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 const { topFlag, gender, featchTag } = ssmlEditorConfig.tryPlay
 
 const tags = ref<LabelValue[]>([])

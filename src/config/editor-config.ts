@@ -5,8 +5,7 @@ import type { Speaker } from '@/model'
 import { defaultAudioInfo, type AudioInfo } from '@/menu/conversion-menu/data'
 import type { CancellationToken } from '@/utils'
 import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
-import { inject, type App } from 'vue'
-import { EMITTER_EVENT, PROVIDER_KEY } from '@/constant'
+import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import merge from 'lodash.merge'
 
@@ -131,14 +130,17 @@ function mergeSSMLEditorConfig(config?: Partial<SSMLEditorConfig>): SSMLEditorCo
   return merge(defaultConfig, config)
 }
 
-export function proviceConfig(app: App, config?: Partial<SSMLEditorConfig>) {
+type CacheKey = 'editor-config'
+const cache = {} as Record<CacheKey, unknown>
+
+export function setConfig(config?: Partial<SSMLEditorConfig>) {
   const ssmlEditorConfig = mergeSSMLEditorConfig(config)
   emitter.on(EMITTER_EVENT.ERROR, ssmlEditorConfig.handleError)
-  app.provide(PROVIDER_KEY.EDITOR_CONFIG, ssmlEditorConfig)
+  cache['editor-config'] = ssmlEditorConfig
 }
 
-export function injectConfig(): SSMLEditorConfig {
-  const config = inject<SSMLEditorConfig>(PROVIDER_KEY.EDITOR_CONFIG)
+export function getConfig() {
+  const config = cache['editor-config']
   if (!config) throw new Error('SSMLEditorConfig is undefined')
-  return config
+  return config as SSMLEditorConfig
 }

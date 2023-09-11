@@ -9,11 +9,11 @@ import { EMITTER_EVENT } from '@/constant'
 import { type AudioInfo } from './data'
 import { useElementVisibility } from '@vueuse/core'
 import { AudioPlayer } from './audio-player'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
-const ssmlEditorConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 const { audioUpload, transfer, fetchSpeaker, timeoutMilliseconds } = ssmlEditorConfig.conversion
 
 const boxRef = ref<HTMLElement>()

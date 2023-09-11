@@ -5,7 +5,7 @@ import PlayButton from './play-button.vue'
 import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
 import { formatPitch, formatRate, defaultSpeed, defaultPitch } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
@@ -21,7 +21,7 @@ interface Mark {
 
 type Marks = Record<number, Mark | string>
 
-const ssmlEditorConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 const { rootProsody, rootExpressAs } = useSSMLStore()
 const { fetchStar, category, fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()

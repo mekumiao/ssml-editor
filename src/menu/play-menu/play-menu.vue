@@ -4,14 +4,14 @@ import { ElIcon } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
 import { BarButton } from '@/components'
 import throttle from 'lodash.throttle'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false })
 
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const ssmlEditorConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 
 const handleClick = throttle(async () => {
   await play(ssmlEditorConfig.tryPlay.play)

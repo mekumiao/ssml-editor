@@ -6,12 +6,12 @@ import { useElementBounding } from '@vueuse/core'
 import type { LabelValue } from '@/model'
 import { DragBox, BarSearch } from '@/components'
 import { useSSMLStore } from '@/stores'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const edirorRef = shallowRef<IDomEditor>()
-const ssmlEditorConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 const { bgm } = ssmlEditorConfig
 
 const visible = ref(false)

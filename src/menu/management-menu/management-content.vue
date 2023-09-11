@@ -10,7 +10,7 @@ import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
 import uniqBy from 'lodash.uniqby'
-import { injectConfig } from '@/config'
+import { getConfig } from '@/config'
 
 const emit = defineEmits<{
   submit: [data: SubmitData]
@@ -18,7 +18,7 @@ const emit = defineEmits<{
 }>()
 const props = defineProps<{ contentData: ContentData }>()
 
-const ssmlEditorConfig = injectConfig()
+const ssmlEditorConfig = getConfig()
 const { tryPlay, management } = ssmlEditorConfig
 
 const boxRef = ref<HTMLDivElement>()
