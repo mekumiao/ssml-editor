@@ -68,7 +68,7 @@ function resolveList() {
 function defaultSSMLEditorConfig(): SSMLEditorConfig {
   return {
     effects: { zoom: true, grayscale: true },
-    editorConfig: { maxLength: 5000, placeholder: '请输入内容...' },
+    editorConfig: { placeholder: '请输入内容...' },
     handleError: () => {},
     pinyin: { fetchData: resolveList() },
     english: { fetchData: resolveList() },
