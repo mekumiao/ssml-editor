@@ -86,7 +86,7 @@ function serializeP(_node: P, children: string) {
 }
 
 function serializePhoneme(node: Phoneme, children: string) {
-  const alphabet = node.alphabet ? `alphabet="${node.alphabet}"` : ''
+  const alphabet = node.alphabet ? ` alphabet="${node.alphabet}"` : ''
   return `<phoneme ph="${node.ph}"${alphabet}>${children}</phoneme>`
 }
 
