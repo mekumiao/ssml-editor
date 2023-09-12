@@ -5,7 +5,7 @@ import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 import { speed, pitch, type RecentUsageSpeaker, type ContentData } from './data'
-import { type SubmitData, formatPitch, formatRate } from './data'
+import { type SubmitData } from './data'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
@@ -119,8 +119,8 @@ async function handleSubmit(label?: string) {
     value: contentDataRef.value.name,
     role: contentDataRef.value.role,
     style: contentDataRef.value.style,
-    speed: formatRate(Number(contentDataRef.value.speed)),
-    pitch: formatPitch(Number(contentDataRef.value.pitch)),
+    speed: contentDataRef.value.speed,
+    pitch: contentDataRef.value.pitch,
   }
   emit('submit', data)
   await handleRecordRecentUsage(data)

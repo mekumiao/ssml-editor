@@ -7,7 +7,7 @@ import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 import { getConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
-import { formatPitch, formatRate, defaultSpeed, defaultPitch } from './data'
+import { defaultSpeed, defaultPitch } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
@@ -63,7 +63,7 @@ watch(
 watch(
   pitch,
   (value) => {
-    rootProsody.pitch = formatPitch(value)
+    rootProsody.pitch = value.toString()
   },
   { immediate: true },
 )
@@ -71,7 +71,7 @@ watch(
 watch(
   speed,
   (value) => {
-    rootProsody.rate = formatRate(value)
+    rootProsody.rate = value.toString()
   },
   { immediate: true },
 )

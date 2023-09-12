@@ -1,25 +1,8 @@
-import {
-  type MsttsBackgroundaudio,
-  type MsttsExpressAs,
-  type Prosody,
-  type Speak,
-  type Voice,
-} from '@/core'
+import { type MsttsBackgroundaudio, type MsttsExpressAs, type Prosody, type Voice } from '@/core'
 import { defineStore } from 'pinia'
 import { shallowReactive } from 'vue'
 
 export const useSSMLStore = defineStore('--editor-ssml', () => {
-  const rootSpeak = shallowReactive<Speak>({
-    type: 'ssml-speak',
-    version: '1.0',
-    xmlLang: 'zh-CN',
-    xmlns: 'http://www.w3.org/2001/10/synthesis',
-    'xmlns:mstts': 'http://www.w3.org/2001/mstts',
-    'xmlns:emo': 'http://www.w3.org/2009/10/emotionml',
-    remark: '',
-    children: [],
-  })
-
   const rootVoice = shallowReactive<Voice>({
     name: 'zh-CN-XiaomoNeural',
     type: 'ssml-voice',
@@ -49,5 +32,5 @@ export const useSSMLStore = defineStore('--editor-ssml', () => {
     children: [],
   })
 
-  return { rootSpeak, rootVoice, rootBackgroundaudio, rootExpressAs, rootProsody }
+  return { rootVoice, rootBackgroundaudio, rootExpressAs, rootProsody }
 })
