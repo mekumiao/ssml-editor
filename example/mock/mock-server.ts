@@ -23,6 +23,7 @@ mock.onGet('/bgm').reply((config) => {
     .filter((v) => v.menu.includes(filter.menu))
     .filter((v) => v.scene.includes(filter.scene))
     .filter((v) => v.style.includes(filter.style))
+    .map<LabelValue>((v) => ({ label: v.label, value: v.value }))
   return [200, data]
 })
 
@@ -33,6 +34,7 @@ mock.onGet('/special').reply((config) => {
     .filter((v) => v.menu.includes(filter.menu))
     .filter((v) => v.scene.includes(filter.scene))
     .filter((v) => v.style.includes(filter.style))
+    .map<LabelValue>((v) => ({ label: v.label, value: v.value }))
   return [200, data]
 })
 

@@ -2,11 +2,10 @@
 import AnchorList from './anchor-list.vue'
 import TagList from './tag-list.vue'
 import SliderPanle from './slider-panle.vue'
-import { ElInput, ElForm, ElIcon } from 'element-plus'
+import { ElInput, ElForm } from 'element-plus'
 import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
-import { Minus } from '@element-plus/icons-vue'
 import type { FilterSpeaker } from '@/model'
 import { defaultFilterSpeaker } from '@/model'
 
@@ -74,11 +73,11 @@ function handleSearchInputSubmit() {
     class="try-play user-select-none card z-3 shadow"
   >
     <div class="box ms-2">
-      <div class="try-play-header text-center d-flex flex-row justify-content-between">
-        <div ref="handleRef" class="col-11 try-play-move"></div>
-        <div @click="handleMinus" class="col-1 try-play-menu-close">
-          <ElIcon color="white"><Minus></Minus></ElIcon>
-        </div>
+      <div class="text-center d-flex flex-row justify-content-between" style="height: 30px">
+        <div ref="handleRef" class="h-100 w-100" style="cursor: move"></div>
+        <button @click="handleMinus" class="btn btn-sm border-0" style="width: 45px">
+          <span class="iconfont icon-zuixiaohua text-white fs-6"></span>
+        </button>
       </div>
       <div class="try-play-body d-flex flex-row">
         <div class="try-play-left w-50 border-right border-secondary">
@@ -113,18 +112,6 @@ $height: 390px;
 .try-play {
   width: $width;
   background-color: #2254a1;
-
-  .try-play-header {
-    .try-play-move {
-      cursor: move;
-    }
-
-    .try-play-menu-close {
-      &:hover {
-        cursor: pointer;
-      }
-    }
-  }
 
   .try-play-body {
     height: $height;
