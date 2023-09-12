@@ -6,11 +6,12 @@ export default {
   parseElemHtml: (domElem: Element, children: SlateDescendant[]): Audio => {
     const src = domElem.getAttribute('data-ow-src') || ''
     const remark = domElem.getAttribute('data-ow-remark') || ''
+    const isvoid = domElem.hasAttribute('data-w-e-is-void')
     return {
       type: 'ssml-audio',
       src: src,
       remark: remark,
-      children: children,
+      children: isvoid ? [{ text: '' }] : children,
     }
   },
 }

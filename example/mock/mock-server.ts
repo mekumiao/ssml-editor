@@ -7,16 +7,8 @@ import voices from './voices'
 import { getStyleDes, getRoleDes } from './emoji-config'
 import type { AudioInfo } from '@/menu/conversion-menu/data'
 import type { RecentUsageSpeaker } from '@/menu/management-menu/data'
-import { getPolyphoneData, polyphoneDataToLabelValue } from '../utils'
 
 const mock = new MockAdapter(axios)
-
-mock.onGet('/pinyin').reply((config) => {
-  const word = config.params.word as string
-  const polyphoneData = getPolyphoneData(word)
-  const data = polyphoneDataToLabelValue(polyphoneData)
-  return [200, data]
-})
 
 mock.onGet('/english').reply((config) => {
   const word = config.params.word as string
@@ -31,6 +23,7 @@ mock.onGet('/bgm').reply((config) => {
     .filter((v) => v.menu.includes(filter.menu))
     .filter((v) => v.scene.includes(filter.scene))
     .filter((v) => v.style.includes(filter.style))
+    .map<LabelValue>((v) => ({ label: v.label, value: v.value }))
   return [200, data]
 })
 
@@ -41,6 +34,7 @@ mock.onGet('/special').reply((config) => {
     .filter((v) => v.menu.includes(filter.menu))
     .filter((v) => v.scene.includes(filter.scene))
     .filter((v) => v.style.includes(filter.style))
+    .map<LabelValue>((v) => ({ label: v.label, value: v.value }))
   return [200, data]
 })
 

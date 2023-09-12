@@ -1,10 +1,10 @@
-import type { SSMLEditorConfig } from '@/config'
-import { pinyin, english, bgm, special, scene, style, tag, speaker, star } from './api'
+import type { PartialSSMLEditorConfig } from '@/config'
+import { english, bgm, special, scene, style, tag, speaker, star } from './api'
 import { upload, transfer, conversionSpeaker, play } from './api'
 import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 
-export default <Partial<SSMLEditorConfig>>{
+export default <PartialSSMLEditorConfig>{
   handleError: (error, detail) => {
     if (!detail) {
       ElMessage.warning({ message: error, grouping: true })
@@ -12,7 +12,6 @@ export default <Partial<SSMLEditorConfig>>{
       console.error(error, detail)
     }
   },
-  pinyin: { fetchData: pinyin },
   english: { fetchData: english },
   bgm: { fetchData: bgm, fetchScene: scene, fetchStyle: style },
   special: { fetchData: special, fetchScene: scene, fetchStyle: style },

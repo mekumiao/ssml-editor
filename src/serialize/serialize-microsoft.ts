@@ -309,7 +309,7 @@ function paragraphBreak(): Break {
 function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   const arrayList = editor.children
     .filter((v) => DomEditor.checkNodeType(v, 'paragraph'))
-    .filter((v) => !!SlateNode.string(v as SlateElement).trim())
+    .filter((v) => !SlateEditor.isEmpty(editor, v as SlateElement))
     .map((v, i, ls) => {
       const elem = v as SlateElement
       const list = elem.children as SlateNode[]
