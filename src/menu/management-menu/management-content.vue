@@ -114,7 +114,7 @@ async function handleSubmit(label?: string) {
     category: contentDataRef.value.category,
     name: contentDataRef.value.name,
     label:
-      label ??
+      label ||
       `${speakerLabel}|${roleLabel}|${styleLabel}|${contentDataRef.value.speed}|${contentDataRef.value.pitch}`,
     value: contentDataRef.value.name,
     role: contentDataRef.value.role,

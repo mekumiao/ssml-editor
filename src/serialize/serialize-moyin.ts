@@ -157,8 +157,8 @@ function createDefaultSpeakDataHandler(pushParent: (item: SpeakData) => void) {
   const { rootExpressAs, rootProsody } = useSSMLStore()
   const speakData: SpeakData = {
     style: rootExpressAs.style,
-    speed: rootProsody.rate ?? '1',
-    pitch: rootProsody.pitch ?? '0',
+    speed: rootProsody.rate || '1',
+    pitch: rootProsody.pitch || '0',
     ssml: '',
   }
   const speakNode = defaultSpeakNode()

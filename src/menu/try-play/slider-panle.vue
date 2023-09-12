@@ -227,7 +227,12 @@ function handleTimeChange(time: Arrayable<number>) {
         <li @click="handleSpeakerClick(item)" v-for="(item, index) in speakerList" :key="index">
           <AnchorAvatar
             :activate="item.name === tryPlayStore.speaker.name"
-            :data="{ ...item, label: item.displayName, value: item.name }"
+            :data="{
+              label: item.displayName,
+              value: item.name,
+              avatar: item.avatar,
+              isFree: item.isFree,
+            }"
           ></AnchorAvatar>
         </li>
       </ul>

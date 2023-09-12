@@ -12,7 +12,7 @@ const mock = new MockAdapter(axios)
 
 mock.onGet('/english').reply((config) => {
   const word = config.params.word as string
-  const data = (DataSource.english as Record<string, LabelValue[]>)[word] ?? []
+  const data = (DataSource.english as Record<string, LabelValue[]>)[word] || []
   return [200, data]
 })
 
@@ -76,11 +76,11 @@ mock.onGet('/speaker').reply((config) => {
           avatar: '',
           roles: v.VoiceRoleNames.split(',').map((n) => {
             const des = getRoleDes(n)
-            return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+            return { label: des?.word || n, value: n, emoji: des?.emoji }
           }),
           styles: v.VoiceStyleNames.split(',').map((n) => {
             const des = getStyleDes(n)
-            return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+            return { label: des?.word || n, value: n, emoji: des?.emoji }
           }),
         },
     )
@@ -132,11 +132,11 @@ mock.onGet('/conversionSpeaker').reply(() => {
         avatar: '',
         roles: v.VoiceRoleNames.split(',').map((n) => {
           const des = getRoleDes(n)
-          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+          return { label: des?.word || n, value: n, emoji: des?.emoji }
         }),
         styles: v.VoiceStyleNames.split(',').map((n) => {
           const des = getStyleDes(n)
-          return { label: des?.word ?? n, value: n, emoji: des?.emoji }
+          return { label: des?.word || n, value: n, emoji: des?.emoji }
         }),
       },
   )
