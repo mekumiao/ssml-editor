@@ -1,12 +1,12 @@
 import type { LabelValue } from '@/model'
 
 export interface AnchorAvatarData extends LabelValue {
-  src?: string
+  avatar?: string
   isFree?: boolean
 }
 
 export interface StyleAvatarData extends LabelValue {
-  src?: string
+  avatar?: string
 }
 
 export function formatPitch(v: number) {

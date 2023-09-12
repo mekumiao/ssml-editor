@@ -12,7 +12,7 @@ defineProps<{ activate?: boolean; data?: StyleAvatarData }>()
     @click="$emit('click', data?.value)"
   >
     <img
-      :src="data?.src || demoAvatar()"
+      :src="data?.avatar || demoAvatar()"
       class="rounded-circle"
       style="height: 30px"
       :class="{ 'border border-2 border-warning': activate }"
