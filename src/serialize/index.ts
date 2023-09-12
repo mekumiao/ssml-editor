@@ -1,4 +1,4 @@
 import { default as serializeToSSMLMicrosoft } from './serialize-microsoft'
-import { default as serializeToSSMLMoyin } from './serialize-moyin'
+// import { default as serializeToSSMLMoyin } from './serialize-moyin'
 
-export { serializeToSSMLMoyin as serializeToSSML }
+export { serializeToSSMLMicrosoft as serializeToSSML }
