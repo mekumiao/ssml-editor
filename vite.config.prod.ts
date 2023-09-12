@@ -1,6 +1,5 @@
 import { type UserConfig } from 'vite'
 import vue from '@vitejs/plugin-vue'
-
 import { resolve } from 'path'
 import dts from 'vite-plugin-dts'
 
@@ -31,7 +30,13 @@ export default function (): UserConfig {
         input: {
           main: resolve(__dirname, 'src/index.ts'),
         },
-        external: ['vue', '@wangeditor/editor', 'element-plus', '@element-plus/icons-vue'],
+        external: [
+          'vue',
+          '@wangeditor/editor',
+          'element-plus',
+          '@element-plus/icons-vue',
+          'pinyin-pro',
+        ],
         output: {
           exports: 'named',
           globals: {
@@ -39,6 +44,7 @@ export default function (): UserConfig {
             '@wangeditor/editor': 'wangEditor',
             'element-plus': 'ElementPlus',
             '@element-plus/icons-vue': 'ElementPlusIconsVue',
+            'pinyin-pro': 'pinyinPro',
           },
         },
       },

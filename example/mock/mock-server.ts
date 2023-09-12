@@ -7,15 +7,11 @@ import voices from './voices'
 import { getStyleDes, getRoleDes } from './emoji-config'
 import type { AudioInfo } from '@/menu/conversion-menu/data'
 import type { RecentUsageSpeaker } from '@/menu/management-menu/data'
-import { getPolyphoneData, polyphoneDataToLabelValue } from '../utils'
 
 const mock = new MockAdapter(axios)
 
-mock.onGet('/pinyin').reply((config) => {
-  const word = config.params.word as string
-  const polyphoneData = getPolyphoneData(word)
-  const data = polyphoneDataToLabelValue(polyphoneData)
-  return [200, data]
+mock.onGet('/pinyin').reply(() => {
+  return [200, []]
 })
 
 mock.onGet('/english').reply((config) => {

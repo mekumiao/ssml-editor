@@ -7,6 +7,7 @@ import { PinyinFn } from './pinyin-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
 import { getConfig } from '@/config'
+import { polyphoneDataToLabelValue, getPolyphoneData } from '@/utils'
 
 const ssmlEditorConfig = getConfig()
 const fn = shallowRef<PinyinFn>()
@@ -23,12 +24,21 @@ function hide() {
   visible.value = false
 }
 
+async function fetchPyList(word: string) {
+  const list = await ssmlEditorConfig.pinyin.fetchData(word)
+  if (!list.length) {
+    const polyphoneData = getPolyphoneData(word)
+    return polyphoneDataToLabelValue(polyphoneData)
+  }
+  return list
+}
+
 async function handleClick(editor: IDomEditor) {
   fn.value ??= new PinyinFn(editor)
   if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
-    pyList.value = await ssmlEditorConfig.pinyin.fetchData(text)
+    pyList.value = await fetchPyList(text)
   } else {
     pyList.value = []
   }
