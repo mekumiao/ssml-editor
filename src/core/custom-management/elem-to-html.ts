@@ -14,7 +14,7 @@ export default {
           data-ow-role="${role}"
           data-ow-pitch="${pitch}"
           data-ow-rate="${rate}"
-          data-ow-custom="${JSON.stringify(custom)}"
+          data-ow-custom='${JSON.stringify(custom)}'
         >${childrenHtml}</span>`
     return html
   },
