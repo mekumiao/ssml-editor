@@ -10,10 +10,6 @@ import type { RecentUsageSpeaker } from '@/menu/management-menu/data'
 
 const mock = new MockAdapter(axios)
 
-mock.onGet('/pinyin').reply(() => {
-  return [200, []]
-})
-
 mock.onGet('/english').reply((config) => {
   const word = config.params.word as string
   const data = (DataSource.english as Record<string, LabelValue[]>)[word] ?? []

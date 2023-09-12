@@ -6,11 +6,6 @@ import type { CancellationToken } from '@/utils'
 import type { AudioInfo } from '@/menu/conversion-menu/data'
 import type { RecentUsageSpeaker } from '@/menu/management-menu/data'
 
-export async function pinyin(word: string): Promise<LabelValue[]> {
-  const resp = await axios.get('/pinyin', { params: { word } })
-  return resp.data
-}
-
 export async function english(word: string): Promise<LabelValue[]> {
   const resp = await axios.get('/english', { params: { word } })
   return resp.data
