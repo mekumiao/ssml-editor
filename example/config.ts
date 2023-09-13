@@ -5,6 +5,7 @@ import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 
 export default <PartialSSMLEditorConfig>{
+  effects: { grayscale: false, zoom: true },
   handleError: (error, detail) => {
     if (!detail) {
       ElMessage.warning({ message: error, grouping: true })
