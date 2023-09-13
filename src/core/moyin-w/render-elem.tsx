@@ -1,7 +1,7 @@
 import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { MoyinW } from './custom-types'
-import { handleUnwrapNodes } from '../helper'
+import { handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 
 export default {
   type: 'moyin-w',
@@ -13,6 +13,10 @@ export default {
           className="remark"
           contentEditable="false"
           style={{ 'background-color': 'var(--moyin-w)' }}
+          on={{
+            mousedown: (event: Event) => event.preventDefault(),
+            click: [handleSSMLRemarkClick(editor, elem)],
+          }}
         >
           <span
             className="iconfont icon-roundclosefill"

@@ -1,4 +1,4 @@
-import { SlateRange, type IDomEditor } from '@wangeditor/editor'
+import { SlateRange, type IDomEditor, DomEditor, SlateTransforms } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { WANGEDITOR_EVENT } from '@/constant'
 import type { LabelValue } from '@/model'
@@ -28,13 +28,22 @@ export class AliasFn extends BaseFn {
     const value = this.getValue()
     if (value == null) return
 
-    const node: Sub = {
+    const elem: Sub = {
       type: 'ssml-sub',
       remark: opt.value,
       alias: opt.value,
       children: [{ text: value }],
     }
-
-    this.editor.insertNode(node)
+    const node = DomEditor.getSelectedNodeByType(this.editor, 'ssml-sub')
+    if (node) {
+      const partElem = elem as Partial<Sub>
+      delete partElem.children
+      delete partElem.type
+      SlateTransforms.setNodes(this.editor, partElem, {
+        at: DomEditor.findPath(this.editor, node),
+      })
+    } else {
+      this.editor.insertNode(elem)
+    }
   }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { BarButton, DragBox } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { onMounted, reactive, ref, shallowRef } from 'vue'
+import { reactive, ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import ManagementContent from './management-content.vue'
 import { defaultContentData, type ContentData, type SubmitData } from './data'
@@ -18,13 +18,9 @@ const contentData = reactive<ContentData>(defaultContentData())
 
 const { x, y, height } = useElementBounding(menuRef)
 
-onMounted(() => {
-  // 监听editor创建成功事件
-  emitter.once(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
-    // 监听在editor中点击ssml标签事件
-    editor.on(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
-      if (elem.type === 'custom-management') handleClick(editor)
-    })
+emitter.on(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
+  editor.on(WANGEDITOR_EVENT.SSML_REMARK_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
+    if (elem.type === 'custom-management') handleClick(editor)
   })
 })
 

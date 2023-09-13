@@ -3,7 +3,7 @@ import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Audio } from './custom-types'
 import throttle from 'lodash.throttle'
 import { audioPlayer } from '@/utils'
-import { handleDeleteNode, handleUnwrapNodes } from '../helper'
+import { handleDeleteNode, handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 
 function handlePlay(src: string) {
   return throttle((event: Event) => {
@@ -36,6 +36,10 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
         className="remark"
         contentEditable="false"
         style={{ 'background-color': 'var(--ssml-audio)' }}
+        on={{
+          mousedown: (event: Event) => event.preventDefault(),
+          click: [handleSSMLRemarkClick(editor, elem)],
+        }}
       >
         <span
           className="iconfont icon-roundclosefill"

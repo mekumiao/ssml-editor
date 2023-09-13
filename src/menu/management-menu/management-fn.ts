@@ -75,7 +75,7 @@ export class ManagementFn extends BaseFn {
     }
     const node = DomEditor.getSelectedNodeByType(this.editor, 'custom-management')
     if (node) {
-      const partElem: Partial<CustomManagement> = { ...elem }
+      const partElem = elem as Partial<CustomManagement>
       delete partElem.children
       delete partElem.type
       SlateTransforms.setNodes(this.editor, partElem, {

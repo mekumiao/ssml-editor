@@ -1,7 +1,7 @@
 import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Prosody } from './custom-types'
-import { handleUnwrapNodes } from '../helper'
+import { handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 
 export default {
   type: 'ssml-prosody',
@@ -13,6 +13,10 @@ export default {
           className="remark"
           contentEditable="false"
           style={{ 'background-color': 'var(--ssml-prosody)' }}
+          on={{
+            mousedown: (event: Event) => event.preventDefault(),
+            click: [handleSSMLRemarkClick(editor, elem)],
+          }}
         >
           <span
             className="iconfont icon-roundclosefill"
