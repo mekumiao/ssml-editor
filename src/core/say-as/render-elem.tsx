@@ -1,7 +1,7 @@
 import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { SayAs } from './custom-types'
-import { handleGrayscaleControl, handleUnwrapNodes } from '../helper'
+import { handleUnwrapNodes } from '../helper'
 
 export default {
   type: 'ssml-say-as',
@@ -13,12 +13,11 @@ export default {
           className="remark"
           contentEditable="false"
           style={{ 'background-color': 'var(--ssml-say-as)' }}
-          on={handleGrayscaleControl()}
         >
           <span
             className="iconfont icon-roundclosefill"
             on={{
-              click: [handleGrayscaleControl().mouseleave, handleUnwrapNodes(editor, elem)],
+              click: [handleUnwrapNodes(editor, elem)],
             }}
           ></span>
           <span className="data-content" attrs={{ 'data-content': remark }}></span>

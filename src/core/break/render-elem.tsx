@@ -1,7 +1,7 @@
 import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Break } from './custom-types'
-import { handleDeleteNode, handleGrayscaleControl } from '../helper'
+import { handleDeleteNode } from '../helper'
 
 export default {
   type: 'ssml-break',
@@ -9,14 +9,10 @@ export default {
     const { remark } = elem as Break
     return (
       <span className="ssml-wrapper" contentEditable="false">
-        <span
-          className="remark"
-          style={{ 'background-color': 'var(--ssml-break)' }}
-          on={handleGrayscaleControl()}
-        >
+        <span className="remark" style={{ 'background-color': 'var(--ssml-break)' }}>
           <span
             className="iconfont icon-roundclosefill"
-            on={{ click: [handleGrayscaleControl().mouseleave, handleDeleteNode(editor, elem)] }}
+            on={{ click: [handleDeleteNode(editor, elem)] }}
           ></span>
           <span className="data-content" attrs={{ 'data-content': remark }}></span>
         </span>

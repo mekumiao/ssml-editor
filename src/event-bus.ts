@@ -6,7 +6,7 @@ const emitter = ee()
 
 export { emitter }
 
-emitter.once(EMITTER_EVENT.EDITOR_CREATED, () => {
+emitter.on(EMITTER_EVENT.EDITOR_CREATED, () => {
   const config = getConfig()
   if (config.effects.zoom) {
     document.querySelector('.w-e-text-container')?.classList.add('allow-zoom')

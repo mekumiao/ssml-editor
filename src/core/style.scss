@@ -80,12 +80,12 @@
   transition: all 0.1s ease;
 }
 
-.w-e-text-container.allow-grayscale.grayscale {
+.w-e-text-container.allow-grayscale:has(.ssml-wrapper > .remark:hover) {
   .ssml-wrapper:not(:hover) {
     @include grayscale();
   }
 
-  div[data-slate-editor] > p > [data-slate-node='text'] {
+  div[data-slate-editor] > p[data-slate-node='element'] > [data-slate-node='text'] {
     @include grayscale();
   }
 }

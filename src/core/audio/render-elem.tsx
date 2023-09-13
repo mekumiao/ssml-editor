@@ -3,7 +3,7 @@ import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Audio } from './custom-types'
 import throttle from 'lodash.throttle'
 import { audioPlayer } from '@/utils'
-import { handleDeleteNode, handleGrayscaleControl, handleUnwrapNodes } from '../helper'
+import { handleDeleteNode, handleUnwrapNodes } from '../helper'
 
 function handlePlay(src: string) {
   return throttle((event: Event) => {
@@ -36,16 +36,11 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
         className="remark"
         contentEditable="false"
         style={{ 'background-color': 'var(--ssml-audio)' }}
-        on={handleGrayscaleControl()}
       >
         <span
           className="iconfont icon-roundclosefill"
           on={{
-            click: [
-              handleGrayscaleControl().mouseleave,
-              handleUnwrapNodes(editor, elem),
-              handleStop(src),
-            ],
+            click: [handleUnwrapNodes(editor, elem), handleStop(src)],
           }}
         ></span>
         <span className="iconfont icon-play" on={{ click: handlePlay(src) }}></span>
@@ -72,19 +67,11 @@ function renderVoidElement(elem: Audio, editor: IDomEditor) {
   const { remark, src } = elem
   return (
     <span className="ssml-wrapper" contentEditable="false">
-      <span
-        className="remark"
-        style={{ 'background-color': 'var(--ssml-audio)' }}
-        on={handleGrayscaleControl()}
-      >
+      <span className="remark" style={{ 'background-color': 'var(--ssml-audio)' }}>
         <span
           className="iconfont icon-roundclosefill"
           on={{
-            click: [
-              handleGrayscaleControl().mouseleave,
-              handleDeleteNode(editor, elem),
-              handleStop(src),
-            ],
+            click: [handleDeleteNode(editor, elem), handleStop(src)],
           }}
         ></span>
         <span className="iconfont icon-play" on={{ click: handlePlay(src) }}></span>
