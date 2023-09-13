@@ -22,12 +22,12 @@ import type { Voice } from '@/core/voice'
 import type { CustomManagement, MsttsSilence, SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 
-export function formatPitch(v: string) {
+function formatPitch(v: string) {
   if (!/^-?\d+(\.\d+)?$/.test(v)) return v
   return `${(0.05 * Number(v) * 100).toFixed(0)}%`
 }
 
-export function formatRate(v: string) {
+function formatRate(v: string) {
   if (!/^-?\d+(\.\d+)?$/.test(v)) return v
   return `${((Number(v) - 1) * 100).toFixed(0)}%`
 }
