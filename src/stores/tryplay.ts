@@ -28,7 +28,7 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
     _speaker.value.isStar = value
   }
 
-  async function play(fetchAudio: (ssml: string) => Promise<AudioInfo>) {
+  async function play(fetchAudio: (ssmlGetter: () => string) => Promise<AudioInfo>) {
     if (isLoading.value) {
       _isLoading.value = false
       audioPlayer.value.pause()
@@ -39,9 +39,8 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
       return
     }
     try {
-      const ssml = serializeToSSML()
       _isLoading.value = true
-      const audio = await fetchAudio(ssml)
+      const audio = await fetchAudio(serializeToSSML)
       await audioPlayer.value.load(audio.src)
       await sleep(200)
       if (isLoading.value) {

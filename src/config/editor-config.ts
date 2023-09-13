@@ -41,7 +41,7 @@ export interface SSMLEditorConfig {
     fetchData: FilterFetchFunction
   }
   tryPlay: {
-    play: (ssml: string) => Promise<AudioInfo>
+    play: (ssmlGetter: () => string) => Promise<AudioInfo>
     gender: LabelValue[]
     topFlag: LabelValue[]
     category: LabelValue[]

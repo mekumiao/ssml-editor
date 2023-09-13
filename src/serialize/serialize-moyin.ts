@@ -103,7 +103,7 @@ function serializeNode(node: SlateNode): string {
   return ''
 }
 
-export interface MoyinSpeakData {
+export interface SpeakData {
   style: string
   speed: string
   pitch: string
@@ -153,9 +153,9 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   return ([] as SlateNode[]).concat(...arrayList)
 }
 
-function createDefaultSpeakDataHandler(pushParent: (item: MoyinSpeakData) => void) {
+function createDefaultSpeakDataHandler(pushParent: (item: SpeakData) => void) {
   const { rootExpressAs, rootProsody } = useSSMLStore()
-  const speakData: MoyinSpeakData = {
+  const speakData: SpeakData = {
     style: rootExpressAs.style,
     speed: rootProsody.rate || '1',
     pitch: rootProsody.pitch || '0',
@@ -176,7 +176,7 @@ function createDefaultSpeakDataHandler(pushParent: (item: MoyinSpeakData) => voi
   return { pushNode, serialize }
 }
 
-function customManagmentToSpeakData(customNode: CustomManagement): MoyinSpeakData {
+function customManagmentToSpeakData(customNode: CustomManagement): SpeakData {
   const speakNode = defaultSpeakNode()
   speakNode.children = customNode.children
   const speakSSML = serializeNode(speakNode)
@@ -188,9 +188,9 @@ function customManagmentToSpeakData(customNode: CustomManagement): MoyinSpeakDat
   }
 }
 
-function converToSpeakDataList(editor: IDomEditor): MoyinSpeakData[] {
+function converToSpeakDataList(editor: IDomEditor): SpeakData[] {
   const nodes = mergeParagraphNodes(editor)
-  const list: MoyinSpeakData[] = []
+  const list: SpeakData[] = []
   let handler: ReturnType<typeof createDefaultSpeakDataHandler> | undefined
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
@@ -219,7 +219,7 @@ export function serializeToSpeakDataList() {
 
 export default function serializeToSSML() {
   const list = serializeToSpeakDataList()
-  function speakDataToXML(data: MoyinSpeakData) {
+  function speakDataToXML(data: SpeakData) {
     return `<with style="${data.style}" speed="${data.speed}" pitch="${data.pitch}">${data.ssml}</with>`
   }
   const ssml = list.map((v) => speakDataToXML(v)).join('')
