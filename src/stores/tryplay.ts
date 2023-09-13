@@ -24,6 +24,10 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
     ssmlStore.rootVoice.name = value.name
   }
 
+  const setStar = (value: boolean) => {
+    _speaker.value.isStar = value
+  }
+
   async function play(fetchAudio: (ssml: string) => Promise<AudioInfo>) {
     if (isLoading.value) {
       _isLoading.value = false
@@ -53,5 +57,5 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
     }
   }
 
-  return { speaker, setSpeaker, audioPlayer, isLoading, play }
+  return { speaker, setSpeaker, setStar, audioPlayer, isLoading, play }
 })

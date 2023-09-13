@@ -26,7 +26,6 @@ const { rootProsody, rootExpressAs } = useSSMLStore()
 const { fetchStar, category, fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
-const isStar = ref(tryPlayStore.speaker.isStar)
 const timeMax = tryPlayStore.audioPlayer.duration
 const currentTime = tryPlayStore.audioPlayer.currentTime
 const time = ref(0)
@@ -40,6 +39,7 @@ const pitch = ref(0)
 
 const timeMaxText = computed(() => formatTime(timeMax.value))
 const timeText = computed(() => formatTime(time.value))
+const isStar = computed(() => tryPlayStore.speaker.isStar)
 
 const speedMarks = reactive<Marks>(defaultSpeed())
 const pitchMarks = reactive<Marks>(defaultPitch())
@@ -81,7 +81,15 @@ watch(currentTime, (newValue) => {
 })
 
 async function handleStar() {
-  isStar.value = await fetchStar(tryPlayStore.speaker.name, !isStar.value)
+  const speakerId = tryPlayStore.speaker.id
+  const rest = await fetchStar(speakerId, !isStar.value)
+  // 更当前选中的speaker
+  tryPlayStore.setStar(rest)
+  // 更新缓存中的speaker
+  const speakerCache = speakerList.value.find((v) => v.id === speakerId)
+  if (speakerCache) speakerCache.isStar = rest
+  // 触发star事件
+  emitter.emit(EMITTER_EVENT.SPEAKER_STAR, speakerId, rest)
 }
 
 function handleRoleClick(value: string) {

@@ -68,6 +68,7 @@ mock.onGet('/speaker').reply((config) => {
     .map(
       (v) =>
         <Speaker>{
+          id: v.name,
           displayName: v.LocalName,
           name: v.name,
           isFree: false,
@@ -124,6 +125,7 @@ mock.onGet('/conversionSpeaker').reply(() => {
   const data = voices.map(
     (v) =>
       <Speaker>{
+        id: v.name,
         displayName: v.LocalName,
         name: v.name,
         isFree: false,
@@ -157,6 +159,7 @@ mock.onPost('/recentUsage').reply((config) => {
 mock.onGet('/recentUsage').reply(() => {
   const data = <RecentUsageSpeaker[]>[
     {
+      id: '1',
       category: '',
       label: '晓萱|年轻成年女性|冷静|1.0x',
       name: 'zh-CN-XiaoxuanNeural',
@@ -166,6 +169,7 @@ mock.onGet('/recentUsage').reply(() => {
       style: 'calm',
     },
     {
+      id: '2',
       category: '',
       label: '晓萱|年轻成年女性|冷静|1.0x',
       name: 'zh-CN-XiaoxuanNeural',
@@ -175,6 +179,7 @@ mock.onGet('/recentUsage').reply(() => {
       style: 'calm',
     },
     {
+      id: '3',
       category: '',
       label: '晓萱|年轻成年女性|冷静|1.0x',
       name: 'zh-CN-XiaoxuanNeural',
@@ -184,6 +189,7 @@ mock.onGet('/recentUsage').reply(() => {
       style: 'calm',
     },
     {
+      id: '4',
       category: '',
       label: '晓萱|年轻成年女性|冷静|1.0x',
       name: 'zh-CN-XiaoxuanNeural',
