@@ -7,7 +7,8 @@ import type { CancellationToken } from '@/utils'
 import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
 import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
-import merge from 'lodash.merge'
+import mergeWith from 'lodash.mergewith'
+import isArray from 'lodash.isarray'
 
 type Effects = { zoom: boolean; grayscale: boolean }
 type FetchFunction = () => Promise<LabelValue[]>
@@ -40,7 +41,7 @@ export interface SSMLEditorConfig {
     fetchData: FilterFetchFunction
   }
   tryPlay: {
-    play: (ssml: string) => Promise<AudioInfo>
+    play: (ssmlGetter: () => string) => Promise<AudioInfo>
     gender: LabelValue[]
     topFlag: LabelValue[]
     category: LabelValue[]
@@ -130,7 +131,9 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
 
 function mergeSSMLEditorConfig(config?: Partial<SSMLEditorConfig>): SSMLEditorConfig {
   const defaultConfig = defaultSSMLEditorConfig()
-  return merge(defaultConfig, config)
+  return mergeWith(defaultConfig, config, (objValue, srcValue) => {
+    if (isArray(objValue) && isArray(srcValue)) return srcValue
+  })
 }
 
 type CacheKey = 'editor-config'

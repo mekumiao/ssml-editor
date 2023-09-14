@@ -39,14 +39,6 @@ export const pitch = () => [
   { value: '10', label: '10' },
 ]
 
-export function formatPitch(v: number) {
-  return `${(0.05 * v * 100).toFixed(0)}%`
-}
-
-export function formatRate(v: number) {
-  return `${((v - 1) * 100).toFixed(0)}%`
-}
-
 export interface ContentData {
   category: string
   name: string

@@ -12,6 +12,7 @@
   --ssml-break: #27ae60;
   --ssml-mstts--express-as: #ffff00;
   --custom-management: #ff1493;
+  --moyin-w: #c0392b;
 
   position: relative;
   box-sizing: border-box;
@@ -79,12 +80,12 @@
   transition: all 0.1s ease;
 }
 
-.w-e-text-container.allow-grayscale.grayscale {
+.w-e-text-container.allow-grayscale:has(.ssml-wrapper > .remark:hover) {
   .ssml-wrapper:not(:hover) {
     @include grayscale();
   }
 
-  div[data-slate-editor] > p > [data-slate-node='text'] {
+  div[data-slate-editor] > p[data-slate-node='element'] > [data-slate-node='text'] {
     @include grayscale();
   }
 }

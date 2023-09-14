@@ -24,6 +24,11 @@ export class AudioPlayer {
       this.isPlaying.value = true
     })
 
+    this.audio.addEventListener('cancel', () => {
+      this.canplay.value = false
+      this.isLoading.value = false
+    })
+
     this.audio.addEventListener('canplay', () => {
       this.canplay.value = true
     })
@@ -79,6 +84,11 @@ export class AudioPlayer {
 
   pause() {
     this.audio.pause()
+  }
+
+  cancel() {
+    this.pause()
+    this.audio.src = ''
   }
 
   togglePlayPause() {

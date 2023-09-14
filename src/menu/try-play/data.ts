@@ -9,14 +9,6 @@ export interface StyleAvatarData extends LabelValue {
   avatar?: string
 }
 
-export function formatPitch(v: number) {
-  return `${(0.05 * v * 100).toFixed(0)}%`
-}
-
-export function formatRate(v: number) {
-  return `${((v - 1) * 100).toFixed(0)}%`
-}
-
 export const defaultSpeed = () => ({
   0: '0',
   0.1: '0.1',

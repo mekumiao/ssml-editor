@@ -1,3 +1,4 @@
+import { WANGEDITOR_EVENT } from '@/constant'
 import {
   SlateRange,
   type IDomEditor,
@@ -67,17 +68,6 @@ export function removeNodeSpace(editor: IDomEditor, path: SlatePath) {
   })
 }
 
-export function handleGrayscaleControl() {
-  return {
-    mouseenter: () => {
-      document.querySelector('.w-e-text-container')?.classList.add('grayscale')
-    },
-    mouseleave: () => {
-      document.querySelector('.w-e-text-container')?.classList.remove('grayscale')
-    },
-  }
-}
-
 export function handleDeleteNode(editor: IDomEditor, elem: SlateNode) {
   return throttle((event: Event) => {
     event.preventDefault()
@@ -92,5 +82,13 @@ export function handleUnwrapNodes(editor: IDomEditor, elem: SlateNode) {
     const path = DomEditor.findPath(editor, elem)
     removeNodeSpace(editor, path)
     SlateTransforms.unwrapNodes(editor, { at: path })
+  })
+}
+
+export function handleSSMLRemarkClick(editor: IDomEditor, elem: SlateNode) {
+  return throttle((event: Event) => {
+    event.preventDefault()
+    editor.select(DomEditor.findPath(editor, elem))
+    editor.emit(WANGEDITOR_EVENT.SSML_REMARK_CLICK, editor, elem)
   })
 }

@@ -7,7 +7,7 @@ import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 import { getConfig } from '@/config'
 import StyleAvatar from './style-avatar.vue'
-import { formatPitch, formatRate, defaultSpeed, defaultPitch } from './data'
+import { defaultSpeed, defaultPitch } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
@@ -26,7 +26,6 @@ const { rootProsody, rootExpressAs } = useSSMLStore()
 const { fetchStar, category, fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
-const isStar = ref(tryPlayStore.speaker.isStar)
 const timeMax = tryPlayStore.audioPlayer.duration
 const currentTime = tryPlayStore.audioPlayer.currentTime
 const time = ref(0)
@@ -40,6 +39,7 @@ const pitch = ref(0)
 
 const timeMaxText = computed(() => formatTime(timeMax.value))
 const timeText = computed(() => formatTime(time.value))
+const isStar = computed(() => tryPlayStore.speaker.isStar)
 
 const speedMarks = reactive<Marks>(defaultSpeed())
 const pitchMarks = reactive<Marks>(defaultPitch())
@@ -63,7 +63,7 @@ watch(
 watch(
   pitch,
   (value) => {
-    rootProsody.pitch = formatPitch(value)
+    rootProsody.pitch = value.toString()
   },
   { immediate: true },
 )
@@ -71,7 +71,7 @@ watch(
 watch(
   speed,
   (value) => {
-    rootProsody.rate = formatRate(value)
+    rootProsody.rate = value.toString()
   },
   { immediate: true },
 )
@@ -81,7 +81,15 @@ watch(currentTime, (newValue) => {
 })
 
 async function handleStar() {
-  isStar.value = await fetchStar(tryPlayStore.speaker.name, !isStar.value)
+  const speakerId = tryPlayStore.speaker.id
+  const rest = await fetchStar(speakerId, !isStar.value)
+  // 更当前选中的speaker
+  tryPlayStore.setStar(rest)
+  // 更新缓存中的speaker
+  const speakerCache = speakerList.value.find((v) => v.id === speakerId)
+  if (speakerCache) speakerCache.isStar = rest
+  // 触发star事件
+  emitter.emit(EMITTER_EVENT.SPEAKER_STAR, speakerId, rest)
 }
 
 function handleRoleClick(value: string) {
@@ -227,7 +235,12 @@ function handleTimeChange(time: Arrayable<number>) {
         <li @click="handleSpeakerClick(item)" v-for="(item, index) in speakerList" :key="index">
           <AnchorAvatar
             :activate="item.name === tryPlayStore.speaker.name"
-            :data="{ ...item, label: item.displayName, value: item.name }"
+            :data="{
+              label: item.displayName,
+              value: item.name,
+              avatar: item.avatar,
+              isFree: item.isFree,
+            }"
           ></AnchorAvatar>
         </li>
       </ul>

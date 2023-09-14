@@ -6,7 +6,7 @@ import type { Prosody } from '@/core/prosody'
 import type { SayAs } from '@/core/say-as'
 import type { Sub } from '@/core/sub'
 import type { Speak } from '@/core/speak'
-import type { SSMLElementType } from '@/core/custom-types'
+import type { CustomManagement, SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 import type { MoyinW } from '@/core/moyin-w'
 
@@ -68,12 +68,12 @@ function serializeSub(node: Sub, children: string) {
 }
 
 function serializeSpeak(node: Speak, children: string) {
-  return `<speak version="${node.version}" xml:lang="${node.xmlLang}" xmlns="http://www.w3.org/2001/10/synthesis">${children}</speak>`
+  return `<speak version="${node.version}" xml:lang="${node['xml:lang']}" xmlns="${node.xmlns}">${children}</speak>`
 }
 
 function serializeNode(node: SlateNode): string {
   if (SlateText.isText(node)) {
-    return node.text
+    return node.text.trim()
   } else if (SlateElement.isElement(node)) {
     const children = node.children.map((n) => serializeNode(n)).join('')
     const type = DomEditor.getNodeType(node) as SSMLElementType
@@ -85,6 +85,10 @@ function serializeNode(node: SlateNode): string {
       case 'ssml-phoneme':
         return serializePhoneme(node as Phoneme, children)
       case 'ssml-prosody':
+        //@ts-ignore
+        if (node.remark == '连读') {
+          return serializeMoyinW({ ...(node as Prosody), type: 'moyin-w' }, children)
+        }
         return serializeProsody(node as Prosody, children)
       case 'ssml-say-as':
         return serializeSayAs(node as SayAs, children)
@@ -99,15 +103,24 @@ function serializeNode(node: SlateNode): string {
   return ''
 }
 
-function createDefaultProsodyHandler() {
-  const { rootProsody } = useSSMLStore()
-  const prosody = { ...rootProsody, children: [] } as Prosody
+export interface SpeakData {
+  style: string
+  speed: string
+  pitch: string
+  ssml: string
+}
 
-  function pushNode(node: SlateNode) {
-    prosody.children.push(node)
+function defaultSpeakNode(): Speak {
+  return {
+    type: 'ssml-speak',
+    remark: '',
+    version: '1.0',
+    'xml:lang': 'zh-CN',
+    xmlns: 'http://www.w3.org/2001/10/synthesis',
+    'xmlns:mstts': '',
+    'xmlns:emo': '',
+    children: [],
   }
-
-  return { prosody, pushNode }
 }
 
 /**
@@ -130,7 +143,7 @@ function paragraphBreak(): Break {
 function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   const arrayList = editor.children
     .filter((v) => DomEditor.checkNodeType(v, 'paragraph'))
-    .filter((v) => !!SlateNode.string(v as SlateElement).trim())
+    .filter((v) => !SlateEditor.isEmpty(editor, v as SlateElement))
     .map((v, i, ls) => {
       const elem = v as SlateElement
       const list = elem.children as SlateNode[]
@@ -140,54 +153,75 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
   return ([] as SlateNode[]).concat(...arrayList)
 }
 
-/**
- * 处理自定义的多人语音标签
- * 1. 多人语音标签已被限制为顶级标签
- * 2. 没有多人语音标签的节点将被合并添加默认语音标签
- */
-function handleCustomManagementNode(editor: IDomEditor) {
+function createDefaultSpeakDataHandler(pushParent: (item: SpeakData) => void) {
+  const { rootExpressAs, rootProsody } = useSSMLStore()
+  const speakData: SpeakData = {
+    style: rootExpressAs.style,
+    speed: rootProsody.rate || '1',
+    pitch: rootProsody.pitch || '0',
+    ssml: '',
+  }
+  const speakNode = defaultSpeakNode()
+
+  pushParent(speakData)
+
+  function pushNode(node: SlateNode) {
+    speakNode.children.push(node)
+  }
+
+  function serialize() {
+    speakData.ssml = serializeNode(speakNode)
+  }
+
+  return { pushNode, serialize }
+}
+
+function customManagmentToSpeakData(customNode: CustomManagement): SpeakData {
+  const speakNode = defaultSpeakNode()
+  speakNode.children = customNode.children
+  const speakSSML = serializeNode(speakNode)
+  return {
+    style: customNode.style,
+    speed: customNode.rate,
+    pitch: customNode.pitch,
+    ssml: speakSSML,
+  }
+}
+
+function converToSpeakDataList(editor: IDomEditor): SpeakData[] {
   const nodes = mergeParagraphNodes(editor)
-  const wrapNodes: SlateNode[] = []
+  const list: SpeakData[] = []
+  let handler: ReturnType<typeof createDefaultSpeakDataHandler> | undefined
   for (let i = 0; i < nodes.length; i++) {
     const node = nodes[i]
     // 跳过空节点
-    if (SlateText.isText(node) && !node.text) continue
+    if (SlateText.isText(node) && !node.text.trim()) continue
     // 多人语音节点
     if (DomEditor.checkNodeType(node, 'custom-management')) {
+      handler?.serialize()
+      handler = undefined
+      list.push(customManagmentToSpeakData(node as CustomManagement))
       continue
     }
-
-    if (SlateText.isText(node)) {
-      const { pushNode } = createDefaultProsodyHandler()
-      pushNode(node)
-      continue
-    } else if (!SlateEditor.isVoid(editor, node)) {
-      const path = DomEditor.findPath(editor, node)
-      const [nodeEntity] = SlateEditor.nodes(editor, {
-        at: path,
-        mode: 'lowest',
-        voids: false,
-        match: (n) => {
-          return DomEditor.checkNodeType(n, 'ssml-prosody')
-        },
-      })
-
-      if (!nodeEntity) {
-        const { pushNode } = createDefaultProsodyHandler()
-        pushNode(node)
-        continue
-      }
-
-      continue
-    }
+    handler ??= createDefaultSpeakDataHandler((item) => list.push(item))
+    handler.pushNode(node)
   }
-  return wrapNodes
+  handler?.serialize()
+  return list
+}
+
+export function serializeToSpeakDataList() {
+  const { editor } = useEditorStore()
+  if (!editor) throw Error('没有找到 editor 对象')
+  const speaks = converToSpeakDataList(editor)
+  return speaks
 }
 
 export default function serializeToSSML() {
-  const { editor } = useEditorStore()
-  if (!editor) throw Error('没有找到 editor 对象')
-  const speaks = handleCustomManagementNode(editor)
-  const ssmls = speaks.map((v) => serializeNode(v))
-  return ssmls
+  const list = serializeToSpeakDataList()
+  function speakDataToXML(data: SpeakData) {
+    return `<with style="${data.style}" speed="${data.speed}" pitch="${data.pitch}">${data.ssml}</with>`
+  }
+  const ssml = list.map((v) => speakDataToXML(v)).join('')
+  return `<ssml>${ssml}</ssml>`
 }

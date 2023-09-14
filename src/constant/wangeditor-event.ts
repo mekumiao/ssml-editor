@@ -1,7 +1,7 @@
 const ERROR = 'wangeditor-error'
-const SSML_ELEMENT_CLICK = 'ssml-element-click'
+const SSML_REMARK_CLICK = 'ssml-remark-click'
 
 export default {
   ERROR,
-  SSML_ELEMENT_CLICK,
+  SSML_REMARK_CLICK,
 }

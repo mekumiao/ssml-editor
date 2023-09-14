@@ -1,9 +1,12 @@
 <script setup lang="ts">
-import { onMounted, ref, shallowRef, toRaw, watch } from 'vue'
+import { onMounted, onUnmounted, ref, shallowRef, toRaw, watch } from 'vue'
 import AnchorAvatar from './anchor-avatar.vue'
 import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
 import { useTryPlayStore } from '@/stores'
 import { getConfig } from '@/config'
+import type { AnchorAvatarData } from './data'
+import { emitter } from '@/event-bus'
+import { EMITTER_EVENT } from '@/constant'
 
 const props = defineProps<{ filter: FilterSpeaker }>()
 
@@ -28,10 +31,28 @@ function handleClick(value: string) {
   speaker && tryPlayStore.setSpeaker(speaker)
 }
 
+function handleSpeakerStar(speakerId: string, isStar: boolean) {
+  const item = speaderCache.value.find((v) => v.id === speakerId)
+  if (item) item.isStar = isStar
+}
+
+onMounted(() => {
+  emitter.on(EMITTER_EVENT.SPEAKER_STAR, handleSpeakerStar)
+})
+
+onUnmounted(() => {
+  emitter.off(EMITTER_EVENT.SPEAKER_STAR, handleSpeakerStar)
+})
+
 onMounted(async () => {
   const list = await fetchData(toRaw(props.filter))
   speaderCache.value = list
-  dataList.value = list.map((v) => ({ label: v.displayName, value: v.name }))
+  dataList.value = list.map<AnchorAvatarData>((v) => ({
+    label: v.displayName,
+    value: v.name,
+    avatar: v.avatar,
+    isFree: v.isFree,
+  }))
   if (dataList.value.length > 0) handleClick(dataList.value[0].value)
 })
 </script>

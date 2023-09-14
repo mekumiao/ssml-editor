@@ -18,7 +18,7 @@ defineProps<{ activate?: boolean; data?: AnchorAvatarData }>()
       >付费</span
     >
     <img
-      :src="data?.avatar ?? demoAvatar()"
+      :src="data?.avatar || demoAvatar()"
       class="rounded-circle"
       style="height: 40px"
       :class="{ 'border border-2 border-warning': activate }"

@@ -22,10 +22,10 @@ import {
 <template>
   <div class="editor-bar border-bottom">
     <BarWrapper>
-      <BarWrapperGroup divider="green">
+      <BarWrapperGroup>
         <PlayMenu></PlayMenu>
       </BarWrapperGroup>
-      <BarWrapperGroup divider="cyan">
+      <BarWrapperGroup>
         <PinyinMenu></PinyinMenu>
         <ReadMenu></ReadMenu>
         <DigitalMenu></DigitalMenu>
@@ -33,16 +33,16 @@ import {
         <AliasMenu></AliasMenu>
         <EnglishMenu></EnglishMenu>
       </BarWrapperGroup>
-      <BarWrapperGroup divider="orange">
+      <BarWrapperGroup>
         <ChangespeedMenu></ChangespeedMenu>
         <ManagementMenu></ManagementMenu>
         <ConversionMenu></ConversionMenu>
       </BarWrapperGroup>
-      <BarWrapperGroup divider="purple">
+      <BarWrapperGroup>
         <RhythmMenu></RhythmMenu>
         <MuteMenu></MuteMenu>
       </BarWrapperGroup>
-      <BarWrapperGroup divider="yellow">
+      <BarWrapperGroup>
         <SpecialMenu></SpecialMenu>
         <BgmMenu></BgmMenu>
       </BarWrapperGroup>

@@ -22,6 +22,16 @@ import type { Voice } from '@/core/voice'
 import type { CustomManagement, MsttsSilence, SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 
+function formatPitch(v: string) {
+  if (!/^-?\d+(\.\d+)?$/.test(v)) return v
+  return `${(0.05 * Number(v) * 100).toFixed(0)}%`
+}
+
+function formatRate(v: string) {
+  if (!/^-?\d+(\.\d+)?$/.test(v)) return v
+  return `${((Number(v) - 1) * 100).toFixed(0)}%`
+}
+
 function escapeText(text: string): string {
   const result = text
     .replaceAll(/[&]/gi, '&amp;')
@@ -76,17 +86,17 @@ function serializeP(_node: P, children: string) {
 }
 
 function serializePhoneme(node: Phoneme, children: string) {
-  const alphabet = node.alphabet ? `alphabet="${node.alphabet}"` : ''
+  const alphabet = node.alphabet ? ` alphabet="${node.alphabet}"` : ''
   return `<phoneme ph="${node.ph}"${alphabet}>${children}</phoneme>`
 }
 
 function serializeProsody(node: Prosody, children: string) {
   if (!node.contour && !node.pitch && !node.range && !node.rate && !node.volume) return children
   const contour = node.contour ? ` contour="${node.contour}"` : ''
-  const pitch = node.pitch ? ` pitch="${node.pitch}"` : ''
+  const pitch = node.pitch ? ` pitch="${formatPitch(node.pitch)}"` : ''
   const range = node.range ? ` range="${node.range}"` : ''
   const volume = node.volume ? ` volume="${node.volume}"` : ''
-  const rate = node.rate ? ` rate="${node.rate}"` : ''
+  const rate = node.rate ? ` rate="${formatRate(node.rate)}"` : ''
   return `<prosody${contour}${pitch}${range}${volume}${rate}>${children}</prosody>`
 }
 
@@ -111,7 +121,7 @@ function serializeVoice(node: Voice, children: string) {
 }
 
 function serializeSpeak(node: Speak, children: string) {
-  return `<speak version="${node.version}" xml:lang="${node.xmlLang}" xmlns="${node.xmlns}" xmlns:mstts="${node['xmlns:mstts']}" xmlns:emo="${node['xmlns:emo']}">${children}</speak>`
+  return `<speak version="${node.version}" xml:lang="${node['xml:lang']}" xmlns="${node.xmlns}" xmlns:mstts="${node['xmlns:mstts']}" xmlns:emo="${node['xmlns:emo']}">${children}</speak>`
 }
 
 function serializeNode(node: SlateNode): string {
@@ -156,6 +166,19 @@ function serializeNode(node: SlateNode): string {
     }
   }
   return ''
+}
+
+function defaultSpeakNode(): Speak {
+  return {
+    type: 'ssml-speak',
+    version: '1.0',
+    'xml:lang': 'zh-CN',
+    xmlns: 'http://www.w3.org/2001/10/synthesis',
+    'xmlns:mstts': 'http://www.w3.org/2001/mstts',
+    'xmlns:emo': 'http://www.w3.org/2009/10/emotionml',
+    remark: '',
+    children: [],
+  }
 }
 
 /**
@@ -239,23 +262,30 @@ function createDefaultMsttsSilences(): MsttsSilence[] {
   return [
     {
       type: 'ssml-mstts:silence',
-      attrType: 'comma-exact',
+      attrType: 'Comma-exact',
       value: '200ms',
       remark: '逗号静音',
       children: [],
     },
     {
       type: 'ssml-mstts:silence',
-      attrType: 'semicolon-exact',
+      attrType: 'Semicolon-exact',
       value: '200ms',
       remark: '分号静音',
       children: [],
     },
     {
       type: 'ssml-mstts:silence',
-      attrType: 'enumerationcomma-exact',
+      attrType: 'Enumerationcomma-exact',
       value: '200ms',
       remark: '顿号静音',
+      children: [],
+    },
+    {
+      type: 'ssml-mstts:silence',
+      attrType: 'Sentenceboundary-exact',
+      value: '200ms',
+      remark: '相邻句子间静音',
       children: [],
     },
   ]
@@ -382,8 +412,8 @@ function wrapVoiceNode(editor: IDomEditor) {
 export default function serializeToSSML() {
   const { editor } = useEditorStore()
   if (!editor) throw Error('没有找到 editor 对象')
-  const { rootSpeak, rootBackgroundaudio } = useSSMLStore()
-  const speak = { ...rootSpeak, children: [] } as Speak
+  const { rootBackgroundaudio } = useSSMLStore()
+  const speak = defaultSpeakNode()
   const backgroundaudio = { ...rootBackgroundaudio } as MsttsBackgroundaudio
   speak.children.push(backgroundaudio, ...wrapVoiceNode(editor))
   return serializeNode(speak)

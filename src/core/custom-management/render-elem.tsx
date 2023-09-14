@@ -1,9 +1,7 @@
 import { jsx, type VNode } from 'snabbdom'
-import { SlateElement, type IDomEditor, DomEditor } from '@wangeditor/editor'
+import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { CustomManagement } from './custom-types'
-import throttle from 'lodash.throttle'
-import { handleGrayscaleControl, handleUnwrapNodes } from '../helper'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 
 export default {
   type: 'custom-management',
@@ -17,17 +15,12 @@ export default {
           style={{ 'background-color': 'var(--custom-management)' }}
           on={{
             mousedown: (event: Event) => event.preventDefault(),
-            click: throttle((event: Event) => {
-              event.preventDefault()
-              editor.select(DomEditor.findPath(editor, elem))
-              editor.emit(WANGEDITOR_EVENT.SSML_ELEMENT_CLICK, editor, elem)
-            }),
-            ...handleGrayscaleControl(),
+            click: [handleSSMLRemarkClick(editor, elem)],
           }}
         >
           <span
             className="iconfont icon-roundclosefill"
-            on={{ click: [handleGrayscaleControl().mouseleave, handleUnwrapNodes(editor, elem)] }}
+            on={{ click: [handleUnwrapNodes(editor, elem)] }}
           ></span>
           <span className="data-content" attrs={{ 'data-content': remark }}></span>
         </span>

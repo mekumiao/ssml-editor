@@ -39,9 +39,18 @@ watch(isVisible, (newValue) => {
 })
 
 onMounted(async () => {
-  if (!dataListCache.value.length) await handleFetchData()
   if (!sceneListCache.value.length) sceneListCache.value = await props.fetchScene()
   if (!styleListCache.value.length) styleListCache.value = await props.fetchStyle()
+  if (sceneListCache.value.length) {
+    sceneSelect.value = sceneListCache.value[0].value
+  }
+  if (styleListCache.value.length) {
+    styleSelect.value = styleListCache.value[0].value
+  }
+  if (props.menus.length) {
+    menuSelect.value = props.menus[0].value
+  }
+  if (!dataListCache.value.length) await handleFetchData()
 })
 
 async function handleFetchData() {

@@ -11,6 +11,7 @@ import SayAsModule from './say-as'
 import SubModule from './sub'
 import VoiceModule from './voice'
 import CustomManagement from './custom-management'
+import MoyinW from './moyin-w'
 
 import plugin from './plugin'
 
@@ -31,6 +32,7 @@ export default {
     Boot.registerModule(SubModule)
     Boot.registerModule(VoiceModule)
     Boot.registerModule(CustomManagement)
+    Boot.registerModule(MoyinW)
     // 全局插件
     Boot.registerPlugin(plugin)
   },

@@ -2,9 +2,22 @@ import type { SSMLBaseElement } from '../base'
 
 export interface Speak extends SSMLBaseElement {
   type: 'ssml-speak'
-  version: '1.0'
-  xmlLang: string
-  xmlns: 'http://www.w3.org/2001/10/synthesis'
-  'xmlns:mstts': 'http://www.w3.org/2001/mstts'
-  'xmlns:emo': 'http://www.w3.org/2009/10/emotionml'
+  version: string
+  'xml:lang': string
+  xmlns: string
+  'xmlns:mstts': string
+  'xmlns:emo': string
+}
+
+export function defaultSpeak(): Speak {
+  return {
+    type: 'ssml-speak',
+    remark: '',
+    version: '',
+    'xml:lang': '',
+    xmlns: '',
+    'xmlns:mstts': '',
+    'xmlns:emo': '',
+    children: [],
+  }
 }

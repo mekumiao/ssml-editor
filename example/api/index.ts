@@ -72,7 +72,8 @@ export async function conversionSpeaker(): Promise<Speaker[]> {
   return resp.data
 }
 
-export async function play(ssml: string): Promise<AudioInfo> {
+export async function play(ssmlGetter: () => string): Promise<AudioInfo> {
+  const ssml = ssmlGetter()
   const resp = await axios.post('/play', { ssml })
   return resp.data
 }
