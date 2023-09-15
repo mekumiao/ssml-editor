@@ -5,7 +5,6 @@ import { inject, onMounted, ref, shallowRef, watch } from 'vue'
 import { Recorder } from './recorder'
 import { CancellationTokenSource, FileSelector, Timer } from '@/utils'
 import { emitter } from '@/event-bus'
-import { EMITTER_EVENT } from '@/constant'
 import { type AudioInfo } from './data'
 import { useElementVisibility } from '@vueuse/core'
 import { AudioPlayer } from './audio-player'
@@ -92,7 +91,7 @@ async function handleStartRecord() {
     cts.startTimeout()
     recordFile.value = await audioRecorder.start(cts.token)
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   } finally {
     cts.cancel()
     recordTimer.stop()
@@ -136,7 +135,7 @@ async function handleAudioUpload() {
       throw new Error('请选则文件或实时录音')
     }
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 
@@ -146,10 +145,10 @@ async function handleSpeakerItemClick(item: Speaker) {
       selSpeaker.value = item
       transferAudioInfo.value = await transfer({ audioId: audioInfo.value.id, speakerId: item.id })
     } else {
-      emitter.emit(EMITTER_EVENT.ERROR, '请先上传音频文件')
+      emitter.emit('error', '请先上传音频文件')
     }
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 

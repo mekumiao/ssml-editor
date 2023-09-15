@@ -11,7 +11,6 @@ import { defaultSpeed, defaultPitch } from './data'
 import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
-import { EMITTER_EVENT } from '@/constant'
 import type { Arrayable } from 'element-plus/lib/utils/typescript'
 
 interface Mark {
@@ -89,7 +88,7 @@ async function handleStar() {
   const speakerCache = speakerList.value.find((v) => v.id === speakerId)
   if (speakerCache) speakerCache.isStar = rest
   // 触发star事件
-  emitter.emit(EMITTER_EVENT.SPEAKER_STAR, speakerId, rest)
+  emitter.emit('speaker-star', speakerId, rest)
 }
 
 function handleRoleClick(value: string) {
@@ -105,7 +104,7 @@ async function handleCategoryClick(value: string) {
   try {
     speakerList.value = await fetchData({ ...defaultFilterSpeaker(), category: value })
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 

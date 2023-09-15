@@ -5,6 +5,7 @@ import { WANGEDITOR_EVENT } from '@/constant'
 import { getConfig } from '@/config'
 import { useEditorStore } from '@/stores'
 import Core from '@/core'
+import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 const { setEditor } = useEditorStore()
@@ -31,6 +32,7 @@ function initEditor() {
     config: {
       ...toRaw(ssmlEditorConfig.editorConfig),
       onCreated(editor) {
+        emitter.emit('editor-created', editor)
         emit('created', editor)
         ssmlEditorConfig.editorConfig.onCreated?.(editor)
       },

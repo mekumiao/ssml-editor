@@ -4,7 +4,6 @@ import EditorCore from './editor-core.vue'
 import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 import { emitter } from '@/event-bus'
-import { EMITTER_EVENT } from '@/constant'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 
@@ -17,11 +16,11 @@ const handleChange = (editor: IDomEditor) => {
 }
 
 function handleClick(ev: MouseEvent) {
-  emitter.emit(EMITTER_EVENT.VIEW_CLICK, ev)
+  emitter.emit('view-click', ev)
 }
 
 function handleKeyDown(ev: KeyboardEvent) {
-  emitter.emit(EMITTER_EVENT.VIEW_KEYDOWN, ev)
+  emitter.emit('view-keydown', ev)
 }
 </script>
 

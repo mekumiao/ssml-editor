@@ -6,7 +6,6 @@ import { useTryPlayStore } from '@/stores'
 import { getConfig } from '@/config'
 import type { SpeakerAvatarData } from './data'
 import { emitter } from '@/event-bus'
-import { EMITTER_EVENT } from '@/constant'
 
 const props = defineProps<{ filter: FilterSpeaker }>()
 
@@ -35,11 +34,11 @@ function handleSpeakerStar(speakerId: string, isStar: boolean) {
 }
 
 onMounted(() => {
-  emitter.on(EMITTER_EVENT.SPEAKER_STAR, handleSpeakerStar)
+  emitter.on('speaker-star', handleSpeakerStar)
 })
 
 onUnmounted(() => {
-  emitter.off(EMITTER_EVENT.SPEAKER_STAR, handleSpeakerStar)
+  emitter.off('speaker-star', handleSpeakerStar)
 })
 
 onMounted(async () => {

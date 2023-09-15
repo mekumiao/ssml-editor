@@ -5,7 +5,6 @@ import type { Speaker } from '@/model'
 import { defaultAudioInfo, type AudioInfo } from '@/menu/conversion-menu/data'
 import type { CancellationToken } from '@/utils'
 import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
-import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import mergeWith from 'lodash.mergewith'
 import isArray from 'lodash.isarray'
@@ -48,6 +47,7 @@ export interface SSMLEditorConfig {
     fetchData: FilterSpeakerFetchFunction
     featchTag: FetchFunction
     fetchStar: (speaker: string, star: boolean) => Promise<boolean>
+    selectSpeaker?: (speaker: Speaker, speakerSetter: (speaker: Speaker) => void) => void
   }
   conversion: {
     timeoutMilliseconds: number
@@ -141,7 +141,7 @@ const cache = {} as Record<CacheKey, unknown>
 
 export function setConfig(config?: Partial<SSMLEditorConfig>) {
   const ssmlEditorConfig = mergeSSMLEditorConfig(config)
-  emitter.on(EMITTER_EVENT.ERROR, ssmlEditorConfig.handleError)
+  emitter.on('error', ssmlEditorConfig.handleError)
   cache['editor-config'] = ssmlEditorConfig
 }
 
