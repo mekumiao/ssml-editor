@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import TagItem from './tag-item.vue'
+import SimpleTag from './simple-tag.vue'
 import { onMounted, ref, toRaw } from 'vue'
 import type { FilterSpeaker, LabelValue } from '@/model'
 import { getConfig } from '@/config'
@@ -35,7 +35,7 @@ function handleTagsClick(value: string) {
       class="w-100 d-flex flex-row border-bottom border-secondary align-items-center"
       style="height: 40px"
     >
-      <TagItem
+      <SimpleTag
         @click="handleTopFlagClick"
         v-for="(item, index) in topFlag"
         :key="index"
@@ -43,13 +43,13 @@ function handleTagsClick(value: string) {
         :activate="filter.topFlag === item.value"
       >
         {{ item.label }}
-      </TagItem>
+      </SimpleTag>
     </div>
     <div
       class="w-100 d-flex flex-row border-bottom border-secondary align-items-center"
       style="height: 40px"
     >
-      <TagItem
+      <SimpleTag
         @click="handleGenderClick"
         v-for="(item, index) in gender"
         :key="index"
@@ -57,13 +57,13 @@ function handleTagsClick(value: string) {
         :activate="filter.gender === item.value"
       >
         {{ item.label }}
-      </TagItem>
+      </SimpleTag>
     </div>
     <div
       style="height: 100px"
       class="w-100 pt-2 d-flex flex-row flex-wrap align-content-start row-gap-2 overflow-y-auto overflow-x-hidden scrollbar-none"
     >
-      <TagItem
+      <SimpleTag
         @click="handleTagsClick"
         v-for="(item, index) in tags"
         :key="index"
@@ -71,7 +71,7 @@ function handleTagsClick(value: string) {
         :activate="filter.tag === item.value"
       >
         {{ item.label }}
-      </TagItem>
+      </SimpleTag>
     </div>
   </div>
 </template>

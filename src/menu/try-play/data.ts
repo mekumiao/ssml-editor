@@ -1,6 +1,6 @@
 import type { LabelValue } from '@/model'
 
-export interface AnchorAvatarData extends LabelValue {
+export interface SpeakerAvatarData extends LabelValue {
   avatar?: string
   isFree?: boolean
 }

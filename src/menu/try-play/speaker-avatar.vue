@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { demoAvatar } from '@/config'
-import type { AnchorAvatarData } from './data'
+import type { SpeakerAvatarData } from './data'
 
 defineEmits<{ click: [value: string] }>()
-defineProps<{ activate?: boolean; data?: AnchorAvatarData }>()
+defineProps<{ activate?: boolean; data?: SpeakerAvatarData }>()
 </script>
 
 <template>

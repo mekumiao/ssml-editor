@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElSlider, ElIcon } from 'element-plus'
-import AnchorAvatar from './anchor-avatar.vue'
+import SpeakerAvatar from './speaker-avatar.vue'
 import PlayButton from './play-button.vue'
 import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
@@ -127,7 +127,7 @@ function handleTimeChange(time: Arrayable<number>) {
 </script>
 
 <template>
-  <div class="slider-panle w-100 px-3 text-white" style="font-size: 0.5rem">
+  <div class="right-panle w-100 px-3 text-white" style="font-size: 0.5rem">
     <div class="mt-2 d-flex text-center justify-content-between align-items-center">
       <div class="me-auto d-flex flex-row align-items-center">
         <PlayButton></PlayButton>
@@ -178,7 +178,7 @@ function handleTimeChange(time: Arrayable<number>) {
       </div>
     </div>
     <ul
-      class="audio-mood mt-2 d-flex flex-row flex-wrap justify-content-start align-items-center row-gap-1 column-gap-2"
+      class="mt-2 d-flex flex-row flex-wrap justify-content-start align-items-center row-gap-1 column-gap-2"
     >
       <li
         class="mx-2"
@@ -195,7 +195,7 @@ function handleTimeChange(time: Arrayable<number>) {
     <div class="my-3">
       <span class="border rounded-pill p-1">配音师详情</span>
     </div>
-    <div class="slider-box">
+    <div class="right-box">
       <div>
         <span>语速：{{ speed }}x</span>
       </div>
@@ -207,7 +207,7 @@ function handleTimeChange(time: Arrayable<number>) {
         :marks="speedMarks"
       ></ElSlider>
     </div>
-    <div class="slider-box">
+    <div class="right-box">
       <div>
         <span>语调：{{ pitch }}</span>
       </div>
@@ -233,7 +233,7 @@ function handleTimeChange(time: Arrayable<number>) {
       </ul>
       <ul class="d-flex flex-row flex-wrap row-gap-2 column-gap-3 mb-3" style="min-height: 100px">
         <li @click="handleSpeakerClick(item)" v-for="(item, index) in speakerList" :key="index">
-          <AnchorAvatar
+          <SpeakerAvatar
             :activate="item.name === tryPlayStore.speaker.name"
             :data="{
               label: item.displayName,
@@ -241,7 +241,7 @@ function handleTimeChange(time: Arrayable<number>) {
               avatar: item.avatar,
               isFree: item.isFree,
             }"
-          ></AnchorAvatar>
+          ></SpeakerAvatar>
         </li>
       </ul>
     </div>
@@ -255,7 +255,7 @@ ul {
   margin: 0;
 }
 
-.slider-box {
+.right-box {
   height: 75px;
 }
 </style>

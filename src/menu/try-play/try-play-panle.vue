@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import SliderPanle from './slider-panle.vue'
+import RightPanle from './right-panle.vue'
 import LeftPanle from './left-panle.vue'
-import { ElInput } from 'element-plus'
-import { onMounted, onUnmounted, ref, watch, nextTick } from 'vue'
+import { onMounted, onUnmounted, ref } from 'vue'
 import { constrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 const props = defineProps<{ visible: boolean }>()
 
-const searchInputRef = ref<InstanceType<typeof ElInput>>()
 const boxRef = ref<HTMLElement>()
 const handleRef = ref<HTMLElement>()
 
@@ -20,13 +18,6 @@ onMounted(() => {
 onUnmounted(() => {
   window.addEventListener('keydown', handleKeyDownEsc)
 })
-
-watch(
-  () => props.visible,
-  (newValue) => {
-    newValue && searchInputFocus()
-  },
-)
 
 function handleKeyDownEsc(event: KeyboardEvent) {
   if (event.code === 'Escape') {
@@ -46,12 +37,6 @@ onMounted(() => {
 
 function handleMinimize() {
   emit('update:visible', false)
-}
-
-function searchInputFocus() {
-  nextTick(() => {
-    searchInputRef.value?.input?.focus()
-  })
 }
 </script>
 
@@ -77,7 +62,7 @@ function searchInputFocus() {
         <div
           class="try-play-right w-50 border-start rounded border-top border-secondary overflow-x-hidden overflow-y-auto scrollbar-none"
         >
-          <SliderPanle></SliderPanle>
+          <RightPanle></RightPanle>
         </div>
       </div>
     </div>

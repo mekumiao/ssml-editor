@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, shallowRef, toRaw, watch } from 'vue'
-import AnchorAvatar from './anchor-avatar.vue'
+import SpeakerAvatar from './speaker-avatar.vue'
 import type { FilterSpeaker, Speaker } from '@/model'
 import { useTryPlayStore } from '@/stores'
 import { getConfig } from '@/config'
-import type { AnchorAvatarData } from './data'
+import type { SpeakerAvatarData } from './data'
 import { emitter } from '@/event-bus'
 import { EMITTER_EVENT } from '@/constant'
 
@@ -14,7 +14,7 @@ const ssmlEditorConfig = getConfig()
 const { fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
-const dataList = ref<AnchorAvatarData[]>([])
+const dataList = ref<SpeakerAvatarData[]>([])
 const speaderCache = shallowRef<Speaker[]>([])
 
 watch(
@@ -50,7 +50,7 @@ onMounted(async () => {
 async function handleFetchData() {
   const list = await fetchData({ ...toRaw(props.filter) })
   speaderCache.value = list
-  dataList.value = list.map<AnchorAvatarData>((v) => ({
+  dataList.value = list.map<SpeakerAvatarData>((v) => ({
     label: v.displayName,
     value: v.name,
     avatar: v.avatar,
@@ -65,11 +65,11 @@ async function handleFetchData() {
     class="w-100 d-flex flex-row flex-wrap justify-content-start overflow-x-hidden overflow-y-auto scrollbar-none"
   >
     <div class="m-3" v-for="(item, index) in dataList" :key="index">
-      <AnchorAvatar
+      <SpeakerAvatar
         :data="item"
         :activate="item.value === tryPlayStore.speaker.name"
         @click="handleClick(item.value)"
-      ></AnchorAvatar>
+      ></SpeakerAvatar>
     </div>
   </div>
 </template>
