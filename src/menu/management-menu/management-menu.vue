@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { BarButton, DragBox } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { reactive, ref, shallowRef } from 'vue'
+import { onMounted, nextTick, reactive, ref, shallowRef, onUnmounted } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import ManagementContent from './management-content.vue'
 import { defaultContentData, type ContentData, type SubmitData } from './data'
 import { ManagementFn } from './management-fn'
-import { emitter } from '@/event-bus'
-import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { SSMLBaseElement } from '@/core/base'
+import { useEditorStore } from '@/stores'
 
 const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
@@ -18,11 +18,21 @@ const contentData = reactive<ContentData>(defaultContentData())
 
 const { x, y, height } = useElementBounding(menuRef)
 
-emitter.on(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
-  editor.on(WANGEDITOR_EVENT.SSML_REMARK_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
-    if (elem.type === 'custom-management') handleClick(editor)
+onMounted(() => {
+  nextTick(() => {
+    const { editor } = useEditorStore()
+    editor?.on(WANGEDITOR_EVENT.SSML_REMARK_CLICK, handleSSMLRemarkClick)
   })
 })
+
+onUnmounted(() => {
+  const { editor } = useEditorStore()
+  editor?.off(WANGEDITOR_EVENT.SSML_REMARK_CLICK, handleSSMLRemarkClick)
+})
+
+function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement) {
+  if (elem.type === 'custom-management') handleClick(editor)
+}
 
 function show() {
   const call = () => {

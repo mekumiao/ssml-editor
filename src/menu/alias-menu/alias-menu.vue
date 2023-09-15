@@ -1,21 +1,31 @@
 <script setup lang="ts">
-import { ref, shallowRef } from 'vue'
+import { nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
 import { BarButton, BarInput, BarPopover } from '@/components'
 import { AliasFn } from './alias-fn'
 import type { IDomEditor } from '@wangeditor/editor'
-import { emitter } from '@/event-bus'
-import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 import type { SSMLBaseElement } from '@/core/base'
+import { useEditorStore } from '@/stores'
 
 const fn = shallowRef<AliasFn>()
 const inputRef = ref<InstanceType<typeof BarInput>>()
 const visible = ref(false)
 
-emitter.on(EMITTER_EVENT.EDITOR_CREATED, (editor: IDomEditor) => {
-  editor.on(WANGEDITOR_EVENT.SSML_REMARK_CLICK, (editor: IDomEditor, elem: SSMLBaseElement) => {
-    if (elem.type === 'ssml-sub') handleClick(editor)
+onMounted(() => {
+  nextTick(() => {
+    const { editor } = useEditorStore()
+    editor?.on(WANGEDITOR_EVENT.SSML_REMARK_CLICK, handleSSMLRemarkClick)
   })
 })
+
+onUnmounted(() => {
+  const { editor } = useEditorStore()
+  editor?.off(WANGEDITOR_EVENT.SSML_REMARK_CLICK, handleSSMLRemarkClick)
+})
+
+function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement) {
+  if (elem.type === 'ssml-sub') handleClick(editor)
+}
 
 function show() {
   if (visible.value) return
