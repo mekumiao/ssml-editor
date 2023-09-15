@@ -1,5 +1,5 @@
 import { defineStore } from 'pinia'
-import { computed, ref, shallowRef } from 'vue'
+import { computed, readonly, ref, shallowRef } from 'vue'
 import { defaultSpeaker, type Speaker } from '@/model'
 import { useSSMLStore } from './ssml'
 import AudioPlayer from '@/menu/conversion-menu/audio-player'
@@ -16,7 +16,7 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
   const _speaker = ref<Speaker>(defaultSpeaker())
   const _isLoading = ref(false)
 
-  const speaker = computed(() => _speaker.value)
+  const speaker = computed(() => readonly(_speaker.value))
   const audioPlayer = computed(() => _audioPlayer.value)
   const isLoading = computed(() => _isLoading.value)
 
