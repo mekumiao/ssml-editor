@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, shallowRef, toRaw, watch } from 'vue'
 import AnchorAvatar from './anchor-avatar.vue'
-import type { FilterSpeaker, LabelValue, Speaker } from '@/model'
+import type { FilterSpeaker, Speaker } from '@/model'
 import { useTryPlayStore } from '@/stores'
 import { getConfig } from '@/config'
 import type { AnchorAvatarData } from './data'
@@ -14,15 +14,13 @@ const ssmlEditorConfig = getConfig()
 const { fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
-const dataList = ref<LabelValue[]>([])
+const dataList = ref<AnchorAvatarData[]>([])
 const speaderCache = shallowRef<Speaker[]>([])
 
 watch(
   () => props.filter,
-  async (value) => {
-    const list = await fetchData(toRaw(value))
-    speaderCache.value = list
-    dataList.value = list.map((v) => ({ label: v.displayName, value: v.name }))
+  async () => {
+    await handleFetchData()
   },
 )
 
@@ -45,7 +43,12 @@ onUnmounted(() => {
 })
 
 onMounted(async () => {
-  const list = await fetchData(toRaw(props.filter))
+  await handleFetchData()
+  if (dataList.value.length > 0) handleClick(dataList.value[0].value)
+})
+
+async function handleFetchData() {
+  const list = await fetchData({ ...toRaw(props.filter) })
   speaderCache.value = list
   dataList.value = list.map<AnchorAvatarData>((v) => ({
     label: v.displayName,
@@ -53,8 +56,7 @@ onMounted(async () => {
     avatar: v.avatar,
     isFree: v.isFree,
   }))
-  if (dataList.value.length > 0) handleClick(dataList.value[0].value)
-})
+}
 </script>
 
 <template>
