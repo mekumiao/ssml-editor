@@ -128,7 +128,7 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
   }
 }
 
-function mergeSSMLEditorConfig(config?: Partial<SSMLEditorConfig>): SSMLEditorConfig {
+function mergeSSMLEditorConfig(config?: PartialSSMLEditorConfig): SSMLEditorConfig {
   const defaultConfig = defaultSSMLEditorConfig()
   return mergeWith(defaultConfig, config, (objValue, srcValue) => {
     if (Array.isArray(objValue) && Array.isArray(srcValue)) return srcValue
@@ -138,7 +138,7 @@ function mergeSSMLEditorConfig(config?: Partial<SSMLEditorConfig>): SSMLEditorCo
 type CacheKey = 'editor-config'
 const cache = {} as Record<CacheKey, unknown>
 
-export function setConfig(config?: Partial<SSMLEditorConfig>) {
+export function setConfig(config?: PartialSSMLEditorConfig) {
   const ssmlEditorConfig = mergeSSMLEditorConfig(config)
   emitter.on('error', ssmlEditorConfig.handleError)
   cache['editor-config'] = ssmlEditorConfig
