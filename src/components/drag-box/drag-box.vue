@@ -4,7 +4,6 @@ import { onMounted, onUnmounted, ref } from 'vue'
 import { type Position } from '@vueuse/core'
 import { constrainDragBounds } from './constrain-drag-bounds'
 import { emitter } from '@/event-bus'
-import { EMITTER_EVENT } from '@/constant'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
 const props = defineProps<{ visible: boolean; initialValue?: Position }>()
@@ -29,12 +28,12 @@ defineExpose({
 })
 
 onMounted(() => {
-  emitter.on(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  emitter.on('view-click', handleViewClick)
   document.addEventListener('keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
-  emitter.off(EMITTER_EVENT.VIEW_CLICK, handleViewClick)
+  emitter.off('view-click', handleViewClick)
   document.removeEventListener('keydown', handleKeyDownEsc)
 })
 

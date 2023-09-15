@@ -1,6 +1,6 @@
 {
   "name": "@mekumiao/ssml-editor",
-  "version": "1.0.18",
+  "version": "1.0.19",
   "private": false,
   "description": "基于wangeditor实现的支持SSML语法的编辑器",
   "keywords": [
@@ -53,7 +53,7 @@
     "@types/lodash.uniqby": "^4.7.7",
     "@vueuse/core": "^10.4.1",
     "@wangeditor/editor": "^5.1.23",
-    "bootstrap": "github:twbs/bootstrap#39030/head",
+    "bootstrap": "^5.3.2",
     "element-plus": "^2.3.12",
     "event-emitter": "^0.3.5",
     "lodash.isarray": "^4.0.0",

@@ -1,17 +1,25 @@
+import type { IDomEditor } from '@wangeditor/editor'
 import ee from 'event-emitter'
-import { EMITTER_EVENT } from './constant'
-import { getConfig } from './config'
+import type { Speaker } from '@/model'
 
-const emitter = ee()
+const emitter = ee() as EventBus
 
 export { emitter }
 
-emitter.on(EMITTER_EVENT.EDITOR_CREATED, () => {
-  const config = getConfig()
-  if (config.effects.zoom) {
-    document.querySelector('.w-e-text-container')?.classList.add('allow-zoom')
-  }
-  if (config.effects.grayscale) {
-    document.querySelector('.w-e-text-container')?.classList.add('allow-grayscale')
-  }
-})
+interface EmitterEventMap {
+  error: [message: string, detail?: unknown]
+  'view-click': [event: MouseEvent]
+  'view-keydown': [event: KeyboardEvent]
+  'speaker-star': [speakerId: string, isStar: boolean]
+  'editor-created': [editor: IDomEditor]
+  'tryplay-speaker-select': [speaker: Speaker]
+}
+
+type EmitterMethod<K extends keyof EmitterEventMap> = (...args: EmitterEventMap[K]) => void
+
+declare interface EventBus {
+  emit<K extends keyof EmitterEventMap>(type: K, ...args: EmitterEventMap[K]): void
+  off<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void
+  on<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void
+  once<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void
+}

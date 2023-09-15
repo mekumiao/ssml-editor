@@ -71,7 +71,7 @@ mock.onGet('/speaker').reply((config) => {
           id: v.name,
           displayName: v.LocalName,
           name: v.name,
-          isFree: false,
+          isFree: v.LocalName !== '云健',
           isStar: false,
           isSupper24K: true,
           avatar: '',

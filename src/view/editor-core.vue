@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, shallowRef, toRaw } from 'vue'
 import { type IDomEditor, createEditor } from '@wangeditor/editor'
-import { EMITTER_EVENT, WANGEDITOR_EVENT } from '@/constant'
+import { WANGEDITOR_EVENT } from '@/constant'
 import { getConfig } from '@/config'
 import { useEditorStore } from '@/stores'
-import { emitter } from '@/event-bus'
 import Core from '@/core'
+import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 const { setEditor } = useEditorStore()
@@ -17,6 +17,7 @@ const editorRef = shallowRef<IDomEditor>()
 onMounted(() => {
   Core.install()
   initEditor()
+  initEffects()
 })
 
 onUnmounted(() => {
@@ -31,8 +32,8 @@ function initEditor() {
     config: {
       ...toRaw(ssmlEditorConfig.editorConfig),
       onCreated(editor) {
+        emitter.emit('editor-created', editor)
         emit('created', editor)
-        emitter.emit(EMITTER_EVENT.EDITOR_CREATED, editor)
         ssmlEditorConfig.editorConfig.onCreated?.(editor)
       },
       onChange(editor) {
@@ -45,6 +46,15 @@ function initEditor() {
   editorRef.value = editor
   setEditor(editor)
   editor.on(WANGEDITOR_EVENT.ERROR, ssmlEditorConfig.handleError)
+}
+
+function initEffects() {
+  if (ssmlEditorConfig.effects.zoom) {
+    document.querySelector('.w-e-text-container')?.classList.add('allow-zoom')
+  }
+  if (ssmlEditorConfig.effects.grayscale) {
+    document.querySelector('.w-e-text-container')?.classList.add('allow-grayscale')
+  }
 }
 </script>
 

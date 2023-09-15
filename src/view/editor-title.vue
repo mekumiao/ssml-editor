@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import { ElButton, ElDialog, ElTag } from 'element-plus'
+import { ElButton, ElDialog } from 'element-plus'
 import { Share } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
-import { audioPlayer } from '@/utils'
 import { serializeToSSML } from '@/serialize'
 import { useSSMLStore } from '@/stores'
+import { PlayTag } from '@/components'
 
 const dialogVisible = ref(false)
 const ssmlValue = ref('')
@@ -25,12 +25,7 @@ const handleGenSSML = () => {
   dialogVisible.value = true
 }
 
-const handlePlayBgm = () => {
-  rootBackgroundaudio.src && audioPlayer.play(rootBackgroundaudio.src)
-}
-
 const handleCloseBgm = () => {
-  audioPlayer.stop(rootBackgroundaudio.src)
   rootBackgroundaudio.src = ''
   rootBackgroundaudio.remark = ''
 }
@@ -51,18 +46,13 @@ async function handleCopy(isFormat: boolean) {
       <div class="title-author pb-1">SSML编辑器</div>
       <div class="author d-flex flex-row align-items-center justify-content-start">
         <div>未保存</div>
-        <ElTag
-          class="bgm-txt ms-2"
-          closable
-          size="small"
-          @click="handlePlayBgm"
-          @close="handleCloseBgm"
+        <PlayTag
           v-if="rootBackgroundaudio.src"
+          :src="rootBackgroundaudio.src"
+          @close="handleCloseBgm"
         >
-          <span class="iconfont icon-play font-size-12 p-1"></span>
-          <div class="d-inline-block"></div>
-          <span>{{ rootBackgroundaudio.remark }}</span>
-        </ElTag>
+          {{ rootBackgroundaudio.remark }}
+        </PlayTag>
       </div>
     </div>
     <div class="operation-wrapper d-flex flex-row justify-content-center align-items-center">
@@ -119,14 +109,6 @@ async function handleCopy(isFormat: boolean) {
       margin: 0 14px;
       background: #e1e1e1;
     }
-  }
-
-  .iconfont.icon-play {
-    cursor: pointer;
-  }
-
-  .bgm-txt {
-    cursor: pointer;
   }
 }
 </style>

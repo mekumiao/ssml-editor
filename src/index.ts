@@ -16,6 +16,8 @@ export * from './model'
 export * from './config'
 export * from './utils'
 export * from './serialize'
+export * from './stores'
+export * from './event-bus'
 
 export default <Plugin>{
   install(app: App, config?: Partial<SSMLEditorConfig>) {

@@ -2,20 +2,25 @@ import { jsx, type VNode } from 'snabbdom'
 import { SlateElement, type IDomEditor } from '@wangeditor/editor'
 import type { Audio } from './custom-types'
 import throttle from 'lodash.throttle'
-import { audioPlayer } from '@/utils'
+import { AudioPlayer } from './audio-player'
 import { handleDeleteNode, handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 
+const audioPlayer = new AudioPlayer()
+
 function handlePlay(src: string) {
-  return throttle((event: Event) => {
+  return throttle(async (event: Event) => {
     event.preventDefault()
-    audioPlayer.play(src)
+    await audioPlayer.load(src)
+    audioPlayer.play()
   })
 }
 
 function handleStop(src: string) {
   return throttle((event: Event) => {
     event.preventDefault()
-    audioPlayer.stop(src)
+    if (audioPlayer.src === src) {
+      audioPlayer.stop()
+    }
   })
 }
 
@@ -48,6 +53,7 @@ function renderElement(elem: Audio, children: VNode[], editor: IDomEditor) {
           }}
         ></span>
         <span className="iconfont icon-play" on={{ click: handlePlay(src) }}></span>
+        <span className="iconfont icon-pause" on={{ click: handleStop(src) }}></span>
         <span className="data-content" attrs={{ 'data-content': remark }}></span>
       </span>
       <span
@@ -79,6 +85,7 @@ function renderVoidElement(elem: Audio, editor: IDomEditor) {
           }}
         ></span>
         <span className="iconfont icon-play" on={{ click: handlePlay(src) }}></span>
+        <span className="iconfont icon-pause" on={{ click: handleStop(src) }}></span>
         <span className="data-content" attrs={{ 'data-content': remark }}></span>
       </span>
       <span className="iconfont icon-music" style={{ color: 'var(--ssml-audio)' }}></span>

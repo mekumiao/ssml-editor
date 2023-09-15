@@ -6,7 +6,6 @@ import SelectList from './select-list.vue'
 import { computed, onMounted, ref, shallowRef, watch } from 'vue'
 import { speed, pitch, type RecentUsageSpeaker, type ContentData } from './data'
 import { type SubmitData } from './data'
-import { EMITTER_EVENT } from '@/constant'
 import { emitter } from '@/event-bus'
 import { useElementVisibility } from '@vueuse/core'
 import uniqBy from 'lodash.uniqby'
@@ -89,7 +88,9 @@ async function handleFetchData() {
 
 function handleSelectSpeaker(name: string) {
   const speader = speakerCache.value.find((v) => v.name === name)
-  if (speader) {
+  function setter(speader: Speaker) {
+    contentDataRef.value.name = speader.name
+
     dataListRole.value = speader.roles
     dataListStyle.value = speader.styles
 
@@ -98,6 +99,14 @@ function handleSelectSpeaker(name: string) {
     }
     if (dataListStyle.value.length > 0) {
       contentDataRef.value.style = dataListStyle.value[0].value
+    }
+  }
+
+  if (speader) {
+    if (ssmlEditorConfig.tryPlay.selectSpeaker) {
+      ssmlEditorConfig.tryPlay.selectSpeaker(speader, setter)
+    } else {
+      setter(speader)
     }
   }
 }
@@ -130,7 +139,7 @@ async function handleFetchRecentUsage() {
   try {
     recentUsageCache.value = await management.fetchRecentUsage()
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 
@@ -144,7 +153,7 @@ async function handleRecordRecentUsage(data: SubmitData) {
       (item) => `${item.name}+${item.role}+${item.style}+${item.speed}+${item.pitch}`,
     )
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 
@@ -165,7 +174,7 @@ async function handleRecentUsageClose(index: number) {
     await management.deleteRecentUsage(item.id)
     recentUsageCache.value.splice(index, 1)
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 
@@ -174,7 +183,7 @@ async function handleRecentUsageClean() {
     await management.deleteRecentUsage()
     recentUsageCache.value = []
   } catch (error) {
-    emitter.emit(EMITTER_EVENT.ERROR, `${error}`, error)
+    emitter.emit('error', `${error}`, error)
   }
 }
 </script>
@@ -214,7 +223,7 @@ async function handleRecentUsageClean() {
         </SelectList>
         <SelectList
           @update:modelValue="handleSelectSpeaker"
-          v-model="contentDataRef.name"
+          :modelValue="contentDataRef.name"
           :dataList="dataListSpeaker"
         >
           <span class="my-3">配音师</span>

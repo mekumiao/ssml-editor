@@ -19,8 +19,11 @@ export default abstract class BaseFn {
   public isDisabled(): boolean {
     const { selection } = this.editor
     if (selection == null) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '未选中编辑器')
-      return true
+      this.editor.restoreSelection()
+      if (this.editor.selection == null) {
+        this.editor.emit(WANGEDITOR_EVENT.ERROR, '未选中编辑器')
+        return true
+      }
     }
     return false
   }
