@@ -5,15 +5,20 @@ import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 import type { Speaker } from '@/model'
 
-async function selectSpeaker(speaker: Speaker, speakerSetter: (speaker: Speaker) => void) {
+/**
+ * 覆盖试听面板的speaker选中方法
+ * @param speaker 将选中的speaker
+ * @param setter 设置选中的speaker
+ */
+async function selectSpeaker(speaker: Speaker, setter: (speaker: Speaker) => void) {
   if (!speaker.isFree) {
     ElMessage.warning({ message: '会员独享', grouping: true })
   } else {
-    speakerSetter(speaker)
+    setter(speaker)
   }
 }
 
-export default <PartialSSMLEditorConfig>{
+const config: PartialSSMLEditorConfig = {
   effects: { grayscale: false, zoom: true },
   handleError: (error, detail) => {
     if (!detail) {
@@ -44,3 +49,5 @@ export default <PartialSSMLEditorConfig>{
     recordRecentUsage: recordRecentUsage,
   },
 }
+
+export default config

@@ -47,7 +47,7 @@ export interface SSMLEditorConfig {
     fetchData: FilterSpeakerFetchFunction
     featchTag: FetchFunction
     fetchStar: (speaker: string, star: boolean) => Promise<boolean>
-    selectSpeaker?: (speaker: Speaker, speakerSetter: (speaker: Speaker) => void) => void
+    selectSpeaker?: (speaker: Speaker, setter: (speaker: Speaker) => void) => void
   }
   conversion: {
     timeoutMilliseconds: number

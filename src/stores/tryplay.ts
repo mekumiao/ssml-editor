@@ -21,15 +21,15 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
   const isLoading = computed(() => _isLoading.value)
 
   const setSpeaker = (value: Speaker) => {
-    function set(value: Speaker) {
+    function setter(value: Speaker) {
       _speaker.value = value
       ssmlStore.rootVoice.name = value.name
       emitter.emit('tryplay-speaker-select', value)
     }
     if (config.tryPlay.selectSpeaker) {
-      config.tryPlay.selectSpeaker(value, set)
+      config.tryPlay.selectSpeaker(value, setter)
     } else {
-      set(value)
+      setter(value)
     }
   }
 

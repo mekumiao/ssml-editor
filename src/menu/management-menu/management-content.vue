@@ -88,7 +88,7 @@ async function handleFetchData() {
 
 function handleSelectSpeaker(name: string) {
   const speader = speakerCache.value.find((v) => v.name === name)
-  function set(speader: Speaker) {
+  function setter(speader: Speaker) {
     contentDataRef.value.name = speader.name
 
     dataListRole.value = speader.roles
@@ -104,9 +104,9 @@ function handleSelectSpeaker(name: string) {
 
   if (speader) {
     if (ssmlEditorConfig.tryPlay.selectSpeaker) {
-      ssmlEditorConfig.tryPlay.selectSpeaker(speader, set)
+      ssmlEditorConfig.tryPlay.selectSpeaker(speader, setter)
     } else {
-      set(speader)
+      setter(speader)
     }
   }
 }
