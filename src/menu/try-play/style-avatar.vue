@@ -9,7 +9,6 @@ function getRandomColor() {
   const mainstreamColors = [
     '#2ecc71',
     '#3498db',
-    '#f39c12',
     '#9b59b6',
     '#e74c3c',
     '#1abc9c',
