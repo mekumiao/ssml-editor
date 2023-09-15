@@ -1,22 +1,22 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import TryPlayCircle from './try-play-circle.vue'
 import TryPlayPanle from './try-play-panle.vue'
 
 const circleVisible = ref(true)
-
-function handlePanleVisible(value: boolean) {
-  if (!value) {
-    circleVisible.value = true
-  }
-}
+const panleVisible = computed({
+  get: () => !circleVisible.value,
+  set: (value) => {
+    circleVisible.value = !value
+  },
+})
 </script>
 
 <template>
   <Teleport to="body">
     <div class="ssml-editor-root">
       <TryPlayCircle v-model:visible="circleVisible"></TryPlayCircle>
-      <TryPlayPanle :visible="!circleVisible" @update:visible="handlePanleVisible"></TryPlayPanle>
+      <TryPlayPanle v-model:visible="panleVisible"></TryPlayPanle>
     </div>
   </Teleport>
 </template>
