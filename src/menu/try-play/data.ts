@@ -7,6 +7,7 @@ export interface AnchorAvatarData extends LabelValue {
 
 export interface StyleAvatarData extends LabelValue {
   avatar?: string
+  emoji?: string
 }
 
 export const defaultSpeed = () => ({
