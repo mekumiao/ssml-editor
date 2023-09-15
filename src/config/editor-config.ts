@@ -7,7 +7,6 @@ import type { CancellationToken } from '@/utils'
 import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
 import { emitter } from '@/event-bus'
 import mergeWith from 'lodash.mergewith'
-import isArray from 'lodash.isarray'
 
 type Effects = { zoom: boolean; grayscale: boolean }
 type FetchFunction = () => Promise<LabelValue[]>
@@ -132,7 +131,7 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
 function mergeSSMLEditorConfig(config?: Partial<SSMLEditorConfig>): SSMLEditorConfig {
   const defaultConfig = defaultSSMLEditorConfig()
   return mergeWith(defaultConfig, config, (objValue, srcValue) => {
-    if (isArray(objValue) && isArray(srcValue)) return srcValue
+    if (Array.isArray(objValue) && Array.isArray(srcValue)) return srcValue
   })
 }
 

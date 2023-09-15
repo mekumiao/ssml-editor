@@ -672,13 +672,6 @@
   dependencies:
     "@types/lodash" "*"
 
-"@types/lodash.isarray@^4.0.7":
-  version "4.0.7"
-  resolved "https://registry.npmjs.org/@types/lodash.isarray/-/lodash.isarray-4.0.7.tgz#14cc4718fdd5bde829e6ddd7d925d110a98fe821"
-  integrity sha512-j4LGkaWRU3siKODqnY9xffwoJgnpp4TYsfCxDhRSZwIbX4qD+TkH483r6+mqGkgqlnP08NhjQYhDXPLWgA2uxQ==
-  dependencies:
-    "@types/lodash" "*"
-
 "@types/lodash.merge@^4.6.7":
   version "4.6.7"
   resolved "https://registry.yarnpkg.com/@types/lodash.merge/-/lodash.merge-4.6.7.tgz#0af6555dd8bc6568ef73e5e0d820a027362946b1"
@@ -2635,11 +2628,6 @@ lodash.get@^4.4.2:
   version "4.4.2"
   resolved "https://registry.npmmirror.com/lodash.get/-/lodash.get-4.4.2.tgz#2d177f652fa31e939b4438d5341499dfa3825e99"
   integrity sha512-z+Uw/vLuy6gQe8cfaFWD7p0wVv8fJl3mbzXh33RS+0oW2wvUqiRXiQ69gLWSLpgB5/6sU+r6BlQR0MBILadqTQ==
-
-lodash.isarray@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.npmjs.org/lodash.isarray/-/lodash.isarray-4.0.0.tgz#2aca496b28c4ca6d726715313590c02e6ea34403"
-  integrity sha512-V8ViWvoNlXpCrB6Ewaj3ScRXUpmCvqp4tJUxa3dlovuJj/8lp3SND5Kw4v5OeuHgoyw4qJN+gl36qZqp6WYQ6g==
 
 lodash.isequal@^4.5.0:
   version "4.5.0"
