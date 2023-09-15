@@ -21,6 +21,7 @@ import type { Speak } from '@/core/speak'
 import type { Voice } from '@/core/voice'
 import type { CustomManagement, MsttsSilence, SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
+import { convertSoftlyTo5 } from '@/utils'
 
 function formatPitch(v: string) {
   if (!/^-?\d+(\.\d+)?$/.test(v)) return v
@@ -30,6 +31,10 @@ function formatPitch(v: string) {
 function formatRate(v: string) {
   if (!/^-?\d+(\.\d+)?$/.test(v)) return v
   return `${((Number(v) - 1) * 100).toFixed(0)}%`
+}
+
+function formatPinyin(pinyin: string) {
+  return convertSoftlyTo5(pinyin).replace(/([\d])/g, ' $1')
 }
 
 function escapeText(text: string): string {
@@ -87,7 +92,7 @@ function serializeP(_node: P, children: string) {
 
 function serializePhoneme(node: Phoneme, children: string) {
   const alphabet = node.alphabet ? ` alphabet="${node.alphabet}"` : ''
-  return `<phoneme ph="${node.ph}"${alphabet}>${children}</phoneme>`
+  return `<phoneme ph="${formatPinyin(node.ph)}"${alphabet}>${children}</phoneme>`
 }
 
 function serializeProsody(node: Prosody, children: string) {

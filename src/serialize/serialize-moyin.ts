@@ -9,6 +9,11 @@ import type { Speak } from '@/core/speak'
 import type { CustomManagement, SSMLElementType } from '@/core/custom-types'
 import { useEditorStore, useSSMLStore } from '@/stores'
 import type { MoyinW } from '@/core/moyin-w'
+import { convertSoftlyTo5 } from '@/utils'
+
+function formatPinyin(pinyin: string) {
+  return convertSoftlyTo5(pinyin)
+}
 
 function serializeBreak(node: Break) {
   if (node.time) {
@@ -34,7 +39,7 @@ function serializeBreak(node: Break) {
 
 function serializePhoneme(node: Phoneme, children: string) {
   if (!node.ph) return children
-  return `<p phoneme="${node.ph}">${children}</phoneme>`
+  return `<p phoneme="${formatPinyin(node.ph)}">${children}</phoneme>`
 }
 
 function serializeProsody(node: Prosody, children: string) {
@@ -104,6 +109,8 @@ function serializeNode(node: SlateNode): string {
 }
 
 export interface SpeakData {
+  name: string
+  role: string
   style: string
   speed: string
   pitch: string
@@ -154,8 +161,10 @@ function mergeParagraphNodes(editor: IDomEditor): SlateNode[] {
 }
 
 function createDefaultSpeakDataHandler(pushParent: (item: SpeakData) => void) {
-  const { rootExpressAs, rootProsody } = useSSMLStore()
+  const { rootVoice, rootExpressAs, rootProsody } = useSSMLStore()
   const speakData: SpeakData = {
+    name: rootVoice.name,
+    role: rootExpressAs.role || '',
     style: rootExpressAs.style,
     speed: rootProsody.rate || '1',
     pitch: rootProsody.pitch || '0',
@@ -181,6 +190,8 @@ function customManagmentToSpeakData(customNode: CustomManagement): SpeakData {
   speakNode.children = customNode.children
   const speakSSML = serializeNode(speakNode)
   return {
+    name: customNode.name,
+    role: customNode.role,
     style: customNode.style,
     speed: customNode.rate,
     pitch: customNode.pitch,
@@ -220,7 +231,7 @@ export function serializeToSpeakDataList() {
 export default function serializeToSSML() {
   const list = serializeToSpeakDataList()
   function speakDataToXML(data: SpeakData) {
-    return `<with style="${data.style}" speed="${data.speed}" pitch="${data.pitch}">${data.ssml}</with>`
+    return `<with name="${data.name}" role="${data.role}" style="${data.style}" speed="${data.speed}" pitch="${data.pitch}">${data.ssml}</with>`
   }
   const ssml = list.map((v) => speakDataToXML(v)).join('')
   return `<ssml>${ssml}</ssml>`
