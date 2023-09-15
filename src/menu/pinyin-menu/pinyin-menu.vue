@@ -44,7 +44,7 @@ async function handleClick(editor: IDomEditor) {
   }
 
   if (pyList.value.length == 0) {
-    return editor.emit(WANGEDITOR_EVENT.ERROR, '选中的字符没有不是多音字')
+    return editor.emit(WANGEDITOR_EVENT.ERROR, '选中的字符不是多音字')
   }
 
   show()
