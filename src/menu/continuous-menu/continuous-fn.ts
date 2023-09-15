@@ -1,7 +1,7 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateEditor, SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import type { Prosody } from '@/core'
 
 export class ContinuousFn extends BaseFn {
@@ -14,7 +14,7 @@ export class ContinuousFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选要连读的词或句子')
+      emitter.emit('error', '请框选要连读的词或句子')
       return true
     }
 

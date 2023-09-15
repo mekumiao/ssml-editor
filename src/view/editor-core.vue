@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, shallowRef, toRaw } from 'vue'
 import { type IDomEditor, createEditor } from '@wangeditor/editor'
-import { WANGEDITOR_EVENT } from '@/constant'
 import { getConfig } from '@/config'
 import { useEditorStore } from '@/stores'
 import Core from '@/core'
@@ -45,7 +44,6 @@ function initEditor() {
 
   editorRef.value = editor
   setEditor(editor)
-  editor.on(WANGEDITOR_EVENT.ERROR, ssmlEditorConfig.handleError)
 }
 
 function initEffects() {
