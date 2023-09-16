@@ -4,12 +4,13 @@ import { Share } from '@element-plus/icons-vue'
 import { computed, ref } from 'vue'
 import xmlFormat from 'xml-formatter'
 import { serializeToSSML } from '@/serialize'
-import { useSSMLStore } from '@/stores'
+import { useEditorStore, useSSMLStore } from '@/stores'
 import { PlayTag } from '@/components'
 
 const dialogVisible = ref(false)
 const ssml = ref('')
 const { rootBackgroundaudio } = useSSMLStore()
+const editorStore = useEditorStore()
 
 const ssmlFormat = computed(() => {
   return xmlFormat(ssml.value, {
@@ -18,6 +19,19 @@ const ssmlFormat = computed(() => {
     collapseContent: true,
     lineSeparator: '\n',
   })
+})
+
+const saveStateFormat = computed(() => {
+  switch (editorStore.saveState) {
+    case 'unsave':
+      return '未保存'
+    case 'saving':
+      return '保存中...'
+    case 'saved':
+      return '已保存'
+    default:
+      return ''
+  }
 })
 
 function handleShowSSML() {
@@ -45,7 +59,7 @@ async function handleCopy(isFormat: boolean) {
     <div class="title-wrapper d-flex flex-column justify-content-center ps-3">
       <div class="title-author pb-1">SSML编辑器</div>
       <div class="author d-flex flex-row align-items-center justify-content-start">
-        <div>未保存</div>
+        <div>{{ saveStateFormat }}</div>
         <PlayTag
           v-if="rootBackgroundaudio.src"
           :src="rootBackgroundaudio.src"

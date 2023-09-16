@@ -22,7 +22,10 @@ export type PartialSSMLEditorConfig = Partial<Omit<SSMLEditorConfig, PartialKey>
 
 export interface SSMLEditorConfig {
   effects: Effects
-  editorConfig: Partial<IEditorConfig>
+  editorConfig: Partial<IEditorConfig> & {
+    saveHtml?: (htmlGetter: () => string) => Promise<boolean>
+    readHtml?: () => Promise<string | null>
+  }
   handleError: (error: string, detail?: any) => void
   pinyin: { fetchData: WordFetchFunction }
   english: { fetchData: WordFetchFunction }
