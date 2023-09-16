@@ -88,6 +88,7 @@ export function handleUnwrapNodes(editor: IDomEditor, elem: SlateNode) {
 export function handleSSMLRemarkClick(editor: IDomEditor, elem: SlateNode) {
   return throttle((event: Event) => {
     event.preventDefault()
+    if (!editor.isFocused()) editor.focus()
     editor.select(DomEditor.findPath(editor, elem))
     editor.emit(WANGEDITOR_EVENT.SSML_REMARK_CLICK, editor, elem)
   })
