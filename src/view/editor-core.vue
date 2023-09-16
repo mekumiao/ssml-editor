@@ -1,14 +1,14 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref, shallowRef, toRaw } from 'vue'
 import { type IDomEditor, createEditor } from '@wangeditor/editor'
-import { WANGEDITOR_EVENT } from '@/constant'
 import { getConfig } from '@/config'
 import { useEditorStore } from '@/stores'
 import Core from '@/core'
 import { emitter } from '@/event-bus'
+import { sleep } from '@/utils'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
-const { setEditor } = useEditorStore()
+const { setEditor, saveEditorHtml } = useEditorStore()
 const ssmlEditorConfig = getConfig()
 
 const boxRef = ref(null)
@@ -35,17 +35,18 @@ function initEditor() {
         emitter.emit('editor-created', editor)
         emit('created', editor)
         ssmlEditorConfig.editorConfig.onCreated?.(editor)
+        initEditorHtml(editor)
       },
       onChange(editor) {
         emit('change', editor)
         ssmlEditorConfig.editorConfig.onChange?.(editor)
+        saveEditorHtml(editor.getHtml)
       },
     },
   })
 
   editorRef.value = editor
   setEditor(editor)
-  editor.on(WANGEDITOR_EVENT.ERROR, ssmlEditorConfig.handleError)
 }
 
 function initEffects() {
@@ -54,6 +55,16 @@ function initEffects() {
   }
   if (ssmlEditorConfig.effects.grayscale) {
     document.querySelector('.w-e-text-container')?.classList.add('allow-grayscale')
+  }
+}
+
+async function initEditorHtml(editor: IDomEditor) {
+  const readHtml = ssmlEditorConfig.editorConfig.readHtml
+  if (readHtml) {
+    const html = await readHtml()
+    html && editor.setHtml(html)
+    await sleep(500)
+    editor.focus(true)
   }
 }
 </script>

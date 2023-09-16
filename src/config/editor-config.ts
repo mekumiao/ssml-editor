@@ -7,7 +7,6 @@ import type { CancellationToken } from '@/utils'
 import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/management-menu/data'
 import { emitter } from '@/event-bus'
 import mergeWith from 'lodash.mergewith'
-import isArray from 'lodash.isarray'
 
 type Effects = { zoom: boolean; grayscale: boolean }
 type FetchFunction = () => Promise<LabelValue[]>
@@ -23,7 +22,10 @@ export type PartialSSMLEditorConfig = Partial<Omit<SSMLEditorConfig, PartialKey>
 
 export interface SSMLEditorConfig {
   effects: Effects
-  editorConfig: Partial<IEditorConfig>
+  editorConfig: Partial<IEditorConfig> & {
+    saveHtml?: (htmlGetter: () => string) => Promise<boolean>
+    readHtml?: () => Promise<string | null>
+  }
   handleError: (error: string, detail?: any) => void
   pinyin: { fetchData: WordFetchFunction }
   english: { fetchData: WordFetchFunction }
@@ -129,17 +131,17 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
   }
 }
 
-function mergeSSMLEditorConfig(config?: Partial<SSMLEditorConfig>): SSMLEditorConfig {
+function mergeSSMLEditorConfig(config?: PartialSSMLEditorConfig): SSMLEditorConfig {
   const defaultConfig = defaultSSMLEditorConfig()
   return mergeWith(defaultConfig, config, (objValue, srcValue) => {
-    if (isArray(objValue) && isArray(srcValue)) return srcValue
+    if (Array.isArray(objValue) && Array.isArray(srcValue)) return srcValue
   })
 }
 
 type CacheKey = 'editor-config'
 const cache = {} as Record<CacheKey, unknown>
 
-export function setConfig(config?: Partial<SSMLEditorConfig>) {
+export function setConfig(config?: PartialSSMLEditorConfig) {
   const ssmlEditorConfig = mergeSSMLEditorConfig(config)
   emitter.on('error', ssmlEditorConfig.handleError)
   cache['editor-config'] = ssmlEditorConfig

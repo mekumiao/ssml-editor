@@ -18,7 +18,7 @@ const visible = ref(false)
 
 const { x, y, height } = useElementBounding(menuRef)
 
-const handleClick = async (editor: IDomEditor) => {
+async function handleClick(editor: IDomEditor) {
   const pot = {
     x: x.value - 300,
     y: y.value + height.value,

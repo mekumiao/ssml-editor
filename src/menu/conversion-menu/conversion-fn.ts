@@ -1,6 +1,6 @@
 import { SlateRange, type IDomEditor } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import type { LabelValue } from '@/model'
 import type { Audio } from '@/core'
 
@@ -19,7 +19,7 @@ export class ConversionFn extends BaseFn {
     if (selection == null) return true
 
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选要变音的句子')
+      emitter.emit('error', '请框选要变音的句子')
       return true
     }
 

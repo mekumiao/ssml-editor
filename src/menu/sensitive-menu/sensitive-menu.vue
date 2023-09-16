@@ -13,7 +13,7 @@ const visible = ref(false)
 
 const { x, y, height } = useElementBounding(menuRef)
 
-const handleClick = (editor: IDomEditor) => {
+function handleClick(editor: IDomEditor) {
   edirorRef.value = editor
   dragRef.value?.setPosition({
     x: x.value - 200,

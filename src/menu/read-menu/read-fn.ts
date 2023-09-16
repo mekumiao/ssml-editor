@@ -1,5 +1,5 @@
 import { SlateRange, type IDomEditor } from '@wangeditor/editor'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { Prosody } from '@/core'
 import { readValueMap, type ReadLabelValue } from './data'
@@ -15,7 +15,7 @@ export class ReadFn extends BaseFn {
     if (!selection) return true
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选词或句子')
+      emitter.emit('error', '请框选词或句子')
       return true
     }
 

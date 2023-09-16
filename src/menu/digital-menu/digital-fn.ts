@@ -1,6 +1,6 @@
 import { type IDomEditor } from '@wangeditor/editor'
 import { SlateEditor, SlateRange } from '@wangeditor/editor'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { SayAs } from '@/core'
@@ -15,7 +15,7 @@ export class DigitalFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选纯数字')
+      emitter.emit('error', '请框选纯数字')
       return true
     }
 
@@ -23,7 +23,7 @@ export class DigitalFn extends BaseFn {
     if (value.length <= 0) return true
 
     if (Number.isNaN(Number(value))) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选纯数字')
+      emitter.emit('error', '请框选纯数字')
       return true
     }
 

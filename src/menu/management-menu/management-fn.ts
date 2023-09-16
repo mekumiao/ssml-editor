@@ -6,7 +6,7 @@ import {
   SlateTransforms,
 } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import type { CustomManagement } from '@/core'
 import type { ContentData, SubmitData } from './data'
 
@@ -25,14 +25,14 @@ export class ManagementFn extends BaseFn {
     }
 
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选句子')
+      emitter.emit('error', '请框选句子')
       return true
     }
 
     const [currentNode] = SlateEditor.node(this.editor, selection)
     const parentNode = this.editor.getParentNode(currentNode)
     if (!parentNode || !DomEditor.checkNodeType(parentNode, 'paragraph')) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '多人配音需要在最外层使用')
+      emitter.emit('error', '多人配音需要在最外层使用')
       return true
     }
 

@@ -4,7 +4,7 @@ import { ref, shallowRef } from 'vue'
 import { BarButton } from '@/components'
 import { ElPopover } from 'element-plus'
 import { PinyinFn } from './pinyin-fn'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import type { LabelValue } from '@/model'
 import { getConfig } from '@/config'
 import { polyphoneDataToLabelValue, getPolyphoneData } from '@/utils'
@@ -44,7 +44,7 @@ async function handleClick(editor: IDomEditor) {
   }
 
   if (pyList.value.length == 0) {
-    return editor.emit(WANGEDITOR_EVENT.ERROR, '选中的字符没有不是多音字')
+    return emitter.emit('error', '选中的字符不是多音字')
   }
 
   show()

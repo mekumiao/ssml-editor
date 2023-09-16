@@ -7,11 +7,11 @@ import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 
-const handleCreated = (editor: IDomEditor) => {
+function handleCreated(editor: IDomEditor) {
   emit('created', editor)
 }
 
-const handleChange = (editor: IDomEditor) => {
+function handleChange(editor: IDomEditor) {
   emit('change', editor)
 }
 

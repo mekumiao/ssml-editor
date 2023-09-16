@@ -1,6 +1,6 @@
 import { SlateRange, type IDomEditor, DomEditor, SlateTransforms } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import type { LabelValue } from '@/model'
 import type { Sub } from '@/core'
 
@@ -14,7 +14,7 @@ export class AliasFn extends BaseFn {
     const { selection } = this.editor
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '请框选要设置别名的词或句子')
+      emitter.emit('error', '请框选要设置别名的词或句子')
       return true
     }
 

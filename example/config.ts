@@ -4,6 +4,7 @@ import { upload, transfer, conversionSpeaker, play } from './api'
 import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 import type { Speaker } from '@/model'
+import { sleep } from '@/utils'
 
 /**
  * 覆盖试听面板的speaker选中方法
@@ -18,8 +19,19 @@ async function selectSpeaker(speaker: Speaker, setter: (speaker: Speaker) => voi
   }
 }
 
+async function saveHtml(getter: () => string) {
+  await sleep(1000)
+  window.localStorage.setItem('editor-html', getter())
+  return Promise.resolve(true)
+}
+
+async function readHtml() {
+  return window.localStorage.getItem('editor-html')
+}
+
 const config: PartialSSMLEditorConfig = {
   effects: { grayscale: false, zoom: true },
+  editorConfig: { saveHtml: saveHtml, readHtml: readHtml },
   handleError: (error, detail) => {
     if (!detail) {
       ElMessage.warning({ message: error, grouping: true })

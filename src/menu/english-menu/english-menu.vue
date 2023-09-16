@@ -5,7 +5,7 @@ import { BarButton, BarPopover } from '@/components'
 import { selectionTrimEnd } from '@/core/helper'
 import { EnglishFn } from './english-fn'
 import type { LabelValue } from '@/model'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import { getConfig } from '@/config'
 
 const ssmlEditorConfig = getConfig()
@@ -32,7 +32,7 @@ async function handleClick(editor: IDomEditor) {
     englishList.value = await ssmlEditorConfig.english.fetchData(text)
 
     if (englishList.value.length <= 0) {
-      return editor.emit(WANGEDITOR_EVENT.ERROR, '找不到单词的音标')
+      return emitter.emit('error', '找不到单词的音标')
     }
 
     show()

@@ -1,5 +1,5 @@
 import { SlateRange, type IDomEditor } from '@wangeditor/editor'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { emitter } from '@/event-bus'
 import BaseFn from '../base-fn'
 import type { LabelValue } from '@/model'
 import type { Break } from '@/core'
@@ -14,7 +14,7 @@ export class MuteFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isExpanded(selection)) {
-      this.editor.emit(WANGEDITOR_EVENT.ERROR, '不能框选文本')
+      emitter.emit('error', '不能框选文本')
       return true
     }
 
