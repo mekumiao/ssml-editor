@@ -20,7 +20,7 @@ const ssmlFormat = computed(() => {
   })
 })
 
-function handleGenSSML() {
+function handleShowSSML() {
   ssml.value = serializeToSSML()
   dialogVisible.value = true
 }
@@ -58,7 +58,7 @@ async function handleCopy(isFormat: boolean) {
     <div class="operation-wrapper d-flex flex-row justify-content-center align-items-center">
       <ElButton type="primary" :icon="Share" disabled>分享</ElButton>
       <div class="menu-divider"></div>
-      <ElButton type="primary" @click="handleGenSSML">查看SSML</ElButton>
+      <ElButton type="primary" @click="handleShowSSML">查看SSML</ElButton>
       <ElButton disabled>下载音频</ElButton>
       <ElButton disabled>下载视频</ElButton>
       <ElButton disabled>下载字幕</ElButton>
