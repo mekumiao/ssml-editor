@@ -248,12 +248,6 @@ function handleTimeChange(time: Arrayable<number>) {
 </template>
 
 <style lang="scss" scoped>
-ol,
-ul {
-  padding: 0;
-  margin: 0;
-}
-
 .right-box {
   height: 75px;
 }
