@@ -6,10 +6,8 @@ import { ElPopover } from 'element-plus'
 import { PinyinFn } from './pinyin-fn'
 import { emitter } from '@/event-bus'
 import type { LabelValue } from '@/model'
-import { getConfig } from '@/config'
 import { polyphoneDataToLabelValue, getPolyphoneData } from '@/utils'
 
-const ssmlEditorConfig = getConfig()
 const fn = shallowRef<PinyinFn>()
 const pyList = ref<LabelValue[]>([])
 const visible = ref(false)
@@ -24,13 +22,9 @@ function hide() {
   visible.value = false
 }
 
-async function fetchPyList(word: string) {
-  const list = await ssmlEditorConfig.pinyin.fetchData(word)
-  if (!list.length) {
-    const polyphoneData = getPolyphoneData(word)
-    return polyphoneDataToLabelValue(polyphoneData)
-  }
-  return list
+function getPinyinList(word: string) {
+  const polyphoneData = getPolyphoneData(word)
+  return polyphoneDataToLabelValue(polyphoneData)
 }
 
 async function handleClick(editor: IDomEditor) {
@@ -38,7 +32,7 @@ async function handleClick(editor: IDomEditor) {
   if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
-    pyList.value = await fetchPyList(text)
+    pyList.value = getPinyinList(text)
   } else {
     pyList.value = []
   }
