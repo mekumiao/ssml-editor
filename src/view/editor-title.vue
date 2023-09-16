@@ -8,11 +8,11 @@ import { useSSMLStore } from '@/stores'
 import { PlayTag } from '@/components'
 
 const dialogVisible = ref(false)
-const ssmlValue = ref('')
+const ssml = ref('')
 const { rootBackgroundaudio } = useSSMLStore()
 
-const ssml = computed(() => {
-  return xmlFormat(ssmlValue.value, {
+const ssmlFormat = computed(() => {
+  return xmlFormat(ssml.value, {
     indentation: '    ',
     filter: (node) => node.type !== 'Comment',
     collapseContent: true,
@@ -21,7 +21,7 @@ const ssml = computed(() => {
 })
 
 function handleGenSSML() {
-  ssmlValue.value = serializeToSSML()
+  ssml.value = serializeToSSML()
   dialogVisible.value = true
 }
 
@@ -35,7 +35,7 @@ function handleCloseBgm() {
  * @param isFormat 是否输出copy格式化的文本到剪贴板. 多余的空格和换行可能会导致意外的停顿
  */
 async function handleCopy(isFormat: boolean) {
-  await navigator.clipboard.writeText(isFormat ? ssml.value : ssmlValue.value)
+  await navigator.clipboard.writeText(isFormat ? ssmlFormat.value : ssml.value)
   dialogVisible.value = false
 }
 </script>
@@ -71,7 +71,7 @@ async function handleCopy(isFormat: boolean) {
     <pre
       class="border border-secondary-subtle rounded-2 px-2 scrollbar overflow-y-auto"
       style="white-space: pre-wrap; max-height: 50vh"
-      >{{ ssml }}</pre
+      >{{ ssmlFormat }}</pre
     >
     <template #header>
       <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
