@@ -5,6 +5,12 @@ import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage } from 'element-plus'
 import type { Speaker } from '@/model'
 import { sleep } from '@/utils'
+import { emitter } from '@/event-bus'
+
+emitter.on('tryplay-speaker-detail-show', (speaker) => {
+  // 可打开自定义dialog
+  ElMessage.success({ message: speaker.name, grouping: true })
+})
 
 /**
  * 覆盖试听面板的speaker选中方法

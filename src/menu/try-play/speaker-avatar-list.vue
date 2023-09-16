@@ -28,17 +28,17 @@ function handleClick(value: string) {
   speaker && tryPlayStore.setSpeaker(speaker)
 }
 
-function handleSpeakerStar(speakerId: string, isStar: boolean) {
+function handleUpdateStarTheCache(speakerId: string, isStar: boolean) {
   const item = speaderCache.value.find((v) => v.id === speakerId)
   if (item) item.isStar = isStar
 }
 
 onMounted(() => {
-  emitter.on('speaker-star', handleSpeakerStar)
+  emitter.on('tryplay-speaker-update-star', handleUpdateStarTheCache)
 })
 
 onUnmounted(() => {
-  emitter.off('speaker-star', handleSpeakerStar)
+  emitter.off('tryplay-speaker-update-star', handleUpdateStarTheCache)
 })
 
 onMounted(async () => {

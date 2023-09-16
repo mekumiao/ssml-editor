@@ -2,7 +2,8 @@
 import { ElSlider, ElIcon } from 'element-plus'
 import SpeakerAvatar from './speaker-avatar.vue'
 import PlayButton from './play-button.vue'
-import { reactive, ref, type CSSProperties, computed, watch, onMounted, toRaw } from 'vue'
+import type { CSSProperties } from 'vue'
+import { reactive, ref, onUnmounted, computed, watch, onMounted, toRaw } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 import { getConfig } from '@/config'
@@ -22,7 +23,7 @@ type Marks = Record<number, Mark | string>
 
 const ssmlEditorConfig = getConfig()
 const { rootProsody, rootExpressAs } = useSSMLStore()
-const { fetchStar, category, fetchData } = ssmlEditorConfig.tryPlay
+const { category, fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
 const timeMax = tryPlayStore.audioPlayer.duration
@@ -48,6 +49,14 @@ const speakerList = ref<Speaker[]>([])
 
 onMounted(async () => {
   await handleCategoryClick(category[0].value)
+})
+
+onMounted(() => {
+  emitter.on('tryplay-speaker-update-star', handleUpdateStarTheCache)
+})
+
+onUnmounted(() => {
+  emitter.off('tryplay-speaker-update-star', handleUpdateStarTheCache)
 })
 
 watch(
@@ -80,15 +89,12 @@ watch(currentTime, (newValue) => {
 })
 
 async function handleStar() {
-  const speakerId = tryPlayStore.speaker.id
-  const rest = await fetchStar(speakerId, !isStar.value)
-  // 更当前选中的speaker
-  tryPlayStore.setStar(rest)
-  // 更新缓存中的speaker
+  await tryPlayStore.star(!isStar.value)
+}
+
+function handleUpdateStarTheCache(speakerId: string, isStar: boolean) {
   const speakerCache = speakerList.value.find((v) => v.id === speakerId)
-  if (speakerCache) speakerCache.isStar = rest
-  // 触发star事件
-  emitter.emit('speaker-star', speakerId, rest)
+  if (speakerCache) speakerCache.isStar = isStar
 }
 
 function handleRoleClick(value: string) {
@@ -122,6 +128,10 @@ function handleTimeChange(time: Arrayable<number>) {
     tryPlayStore.audioPlayer.play()
   }
   isInput.value = false
+}
+
+function handleSpeakerDetailShow() {
+  emitter.emit('tryplay-speaker-detail-show', tryPlayStore.speaker)
 }
 </script>
 
@@ -192,7 +202,7 @@ function handleTimeChange(time: Arrayable<number>) {
       </li>
     </ul>
     <div class="my-3">
-      <span class="border rounded-pill p-1">配音师详情</span>
+      <span @click="handleSpeakerDetailShow" class="border rounded-pill p-1">配音师详情</span>
     </div>
     <div class="right-box">
       <div>
