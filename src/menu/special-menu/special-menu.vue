@@ -18,7 +18,7 @@ const visible = ref(false)
 
 const { x, y, height } = useElementBounding(menuRef)
 
-const handleClick = (editor: IDomEditor) => {
+function handleClick(editor: IDomEditor) {
   fn.value ??= new SpecialFn(editor)
   if (fn.value.isDisabled()) return
   dragRef.value?.setPosition({

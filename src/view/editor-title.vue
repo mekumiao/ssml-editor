@@ -20,12 +20,12 @@ const ssml = computed(() => {
   })
 })
 
-const handleGenSSML = () => {
+function handleGenSSML() {
   ssmlValue.value = serializeToSSML()
   dialogVisible.value = true
 }
 
-const handleCloseBgm = () => {
+function handleCloseBgm() {
   rootBackgroundaudio.src = ''
   rootBackgroundaudio.remark = ''
 }

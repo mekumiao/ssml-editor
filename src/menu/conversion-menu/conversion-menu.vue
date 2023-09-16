@@ -18,7 +18,7 @@ const text = ref('')
 
 const { x, y, height } = useElementBounding(menuRef)
 
-const handleClick = (editor: IDomEditor) => {
+function handleClick(editor: IDomEditor) {
   fn.value ??= new ConversionFn(editor)
   if (fn.value.isDisabled()) return
   text.value = fn.value.getValue()
