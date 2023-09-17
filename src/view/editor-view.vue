@@ -48,8 +48,10 @@ function handleKeyDown(ev: KeyboardEvent) {
 
 <style lang="scss" scoped>
 .editor-view {
+  background-color: var(--tool-bg-color);
+
   .editor-box {
-    background-color: var(--tool-bg-color);
+    background-color: var(--tool-bg-grey-color);
 
     .editor-core-container {
       margin: 0 auto;

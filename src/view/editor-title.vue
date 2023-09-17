@@ -103,7 +103,6 @@ async function handleCopy(isFormat: boolean) {
 <style lang="scss" scoped>
 .editor-title {
   height: 80px;
-  background-color: white;
 
   .title-wrapper {
     .author {
