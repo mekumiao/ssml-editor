@@ -2,7 +2,7 @@
 import RightPanle from './right-panle.vue'
 import LeftPanle from './left-panle.vue'
 import { onMounted, onUnmounted, ref } from 'vue'
-import { constrainDragBounds } from '@/components'
+import { useConstrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
@@ -28,7 +28,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 const { position } = useDraggable(handleRef, {
   initialValue: { x: 40, y: 40 },
 })
-const { style } = constrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, position)
 
 onMounted(() => {
   position.value.x = (window.innerWidth - 890) / 2
