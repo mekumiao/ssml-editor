@@ -39,7 +39,7 @@ const bgColor = getRandomColor()
       :style="{ 'background-color': bgColor }"
       :class="{ 'border border-2 border-warning': activate }"
     >
-      {{ data?.emoji }}
+      {{ data.emoji[0] }}
     </div>
     <img
       v-else
