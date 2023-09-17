@@ -40,7 +40,7 @@ export const useEditorStore = defineStore('--editor-config', () => {
         throw error
       }
     },
-    5000,
+    3000,
     { leading: false, trailing: true },
   )
 
