@@ -9,7 +9,7 @@ const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
 
 const boxRef = ref<HTMLDivElement>()
-const btnPlayRef = ref<InstanceType<typeof PlayButton>>()
+const playButtonRef = ref<InstanceType<typeof PlayButton>>()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
 
@@ -26,7 +26,7 @@ const { style } = useConstrainDragBounds(boxRef, position)
 function handleMouseup(event: MouseEvent) {
   const callback = () => {
     if (!isClick(event.clientX, event.clientY)) return
-    if (isBtnPlayClick(event)) return btnPlayRef.value?.handleClick()
+    if (isPlayButtonClick(event)) return playButtonRef.value?.handleClick()
     return emit('update:visible', false)
   }
 
@@ -54,9 +54,9 @@ function isClick(x: number, y: number) {
   return res
 }
 
-function isBtnPlayClick(event: MouseEvent) {
+function isPlayButtonClick(event: MouseEvent) {
   const target = event.target as HTMLElement
-  return btnPlayRef.value?.divBox?.contains(target) || false
+  return playButtonRef.value?.divBox?.contains(target) || false
 }
 </script>
 
@@ -70,9 +70,9 @@ function isBtnPlayClick(event: MouseEvent) {
     @mousedown="handleMousedown"
     @mouseup="handleMouseup"
   >
-    <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <PlayButton ref="btnPlayRef" disabled-click :size="40"></PlayButton>
-      <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.displayName }}</div>
+    <div class="avatar d-flex flex-column justify-content-center align-items-center">
+      <PlayButton ref="playButtonRef" disabled-click :size="40"></PlayButton>
+      <div class="text-white" style="font-size: 0.5rem">{{ tryPlayStore.speaker.displayName }}</div>
     </div>
   </div>
 </template>
@@ -88,13 +88,9 @@ function isBtnPlayClick(event: MouseEvent) {
   justify-content: center;
   align-items: center;
 
-  .anchor-avatar {
+  .avatar {
     width: 90px;
     height: 90px;
-
-    .anchor-avatar-name {
-      font-size: 0.5rem;
-    }
   }
 }
 </style>

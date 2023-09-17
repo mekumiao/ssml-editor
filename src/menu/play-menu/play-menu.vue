@@ -27,7 +27,7 @@ const handleClick = throttle(async () => {
       <span v-else-if="playState === 'paused'" class="fs-3 iconfont-moyin moyin-icon_play"></span>
       <span v-else class="iconfont icon-pause"></span>
     </template>
-    24K高清音质
+    播放
   </BarButton>
 </template>
 
