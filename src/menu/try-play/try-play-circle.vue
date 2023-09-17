@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from 'vue'
-import { constrainDragBounds } from '@/components'
+import { useConstrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 import { useTryPlayStore } from '@/stores'
 import PlayButton from './play-button.vue'
@@ -21,7 +21,7 @@ const { position } = useDraggable(boxRef, {
     return isClick(event.clientX, event.clientY) ? false : undefined
   },
 })
-const { style } = constrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, position)
 
 function handleMouseup(event: MouseEvent) {
   const callback = () => {

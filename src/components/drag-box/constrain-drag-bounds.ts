@@ -5,7 +5,7 @@ function createStyle(x: number, y: number) {
   return `left:${x}px;top:${y}px`
 }
 
-export function constrainDragBounds(
+export function useConstrainDragBounds(
   box: Ref<HTMLElement | undefined>,
   position: Ref<{
     x: number

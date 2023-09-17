@@ -2,7 +2,7 @@
 import { useDraggable } from '@vueuse/core'
 import { onMounted, onUnmounted, ref } from 'vue'
 import { type Position } from '@vueuse/core'
-import { constrainDragBounds } from './constrain-drag-bounds'
+import { useConstrainDragBounds } from './constrain-drag-bounds'
 import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
@@ -16,7 +16,7 @@ const allowClose = ref(true)
 const { position } = useDraggable(dragRef, {
   initialValue: props.initialValue,
 })
-const { style } = constrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, position)
 
 function setPosition(opt: Position) {
   position.value = opt
