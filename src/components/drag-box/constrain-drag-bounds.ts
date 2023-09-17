@@ -12,16 +12,16 @@ function constrainRange(value: number, min: number, max: number) {
 function boundaryRef(
   box: MaybeComputedElementRef,
   containerBox: MaybeComputedElementRef,
-  offset: number,
+  padding: number,
 ) {
   const { width, height } = useElementSize(box)
   const { x, y, width: windowWidth, height: windowHeight } = useElementBounding(containerBox)
   return computed(() => {
     return {
-      minX: x.value + offset,
-      minY: y.value + offset,
-      maxX: x.value + windowWidth.value - width.value - offset,
-      maxY: y.value + windowHeight.value - height.value - offset,
+      minX: x.value + padding,
+      minY: y.value + padding,
+      maxX: x.value + windowWidth.value - width.value - padding,
+      maxY: y.value + windowHeight.value - height.value - padding,
     }
   })
 }
