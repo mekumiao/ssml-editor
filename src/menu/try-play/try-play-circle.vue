@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, inject } from 'vue'
 import { useConstrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 import { useTryPlayStore } from '@/stores'
@@ -9,6 +9,7 @@ const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
 
 const boxRef = ref<HTMLDivElement>()
+const editorViewRef = inject('box-editor-view')
 const playButtonRef = ref<InstanceType<typeof PlayButton>>()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
@@ -21,7 +22,7 @@ const { position } = useDraggable(boxRef, {
     return isClick(event.clientX, event.clientY) ? false : undefined
   },
 })
-const { style } = useConstrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, editorViewRef, position)
 
 function handleMouseup(event: MouseEvent) {
   const callback = () => {

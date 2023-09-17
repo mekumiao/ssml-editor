@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { LabelValue, Speaker } from '@/model'
 import SpeakerItem from './speaker-item.vue'
-import { inject, onMounted, ref, shallowRef, watch } from 'vue'
+import { onMounted, ref, shallowRef, watch } from 'vue'
 import { Recorder } from './recorder'
 import { CancellationTokenSource, FileSelector, Timer } from '@/utils'
 import { emitter } from '@/event-bus'
@@ -11,6 +11,7 @@ import { AudioPlayer } from './audio-player'
 import { getConfig } from '@/config'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
+const props = defineProps<{ reopen: VoidFunction }>()
 
 const ssmlEditorConfig = getConfig()
 const { audioUpload, transfer, fetchSpeaker, timeoutMilliseconds } = ssmlEditorConfig.conversion
@@ -37,8 +38,6 @@ const { state: recordTimerState } = recordTimer
 const { recorderState } = audioRecorder
 
 const visible = useElementVisibility(boxRef)
-
-const reopen = inject<VoidFunction>('reopen')
 
 watch(visible, (newValue) => {
   if (!newValue) {
@@ -161,7 +160,7 @@ function handleSubmit() {
 
 function handleReupload() {
   cts?.cancel()
-  reopen?.()
+  props.reopen()
 }
 </script>
 

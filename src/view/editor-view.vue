@@ -4,8 +4,13 @@ import EditorCore from './editor-core.vue'
 import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 import { emitter } from '@/event-bus'
+import { ref, provide } from 'vue'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
+
+const boxRef = ref<HTMLDivElement>()
+
+provide('box-editor-view', boxRef)
 
 function handleCreated(editor: IDomEditor) {
   emit('created', editor)
@@ -25,7 +30,12 @@ function handleKeyDown(ev: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="ssml-editor-root editor-view" @click="handleClick" @keydown="handleKeyDown">
+  <div
+    ref="boxRef"
+    class="ssml-editor-root editor-view"
+    @click="handleClick"
+    @keydown="handleKeyDown"
+  >
     <slot><EditorTitle></EditorTitle></slot>
     <div class="editor-box">
       <EditorBar></EditorBar>

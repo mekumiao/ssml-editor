@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import RightPanle from './right-panle.vue'
 import LeftPanle from './left-panle.vue'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, inject } from 'vue'
 import { useConstrainDragBounds } from '@/components'
 import { useDraggable } from '@vueuse/core'
 
@@ -10,6 +10,7 @@ const props = defineProps<{ visible: boolean }>()
 
 const boxRef = ref<HTMLElement>()
 const handleRef = ref<HTMLElement>()
+const editorViewRef = inject('box-editor-view')
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDownEsc)
@@ -28,7 +29,7 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 const { position } = useDraggable(handleRef, {
   initialValue: { x: 40, y: 40 },
 })
-const { style } = useConstrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, editorViewRef, position)
 
 onMounted(() => {
   position.value.x = (window.innerWidth - 890) / 2
