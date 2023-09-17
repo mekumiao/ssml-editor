@@ -37,7 +37,6 @@ function initEditor() {
         emit('created', editor)
         ssmlEditorConfig.editorConfig.onCreated?.(editor)
         initEditorHtml(editor)
-        editor.on(WANGEDITOR_EVENT.SSML_UPDATE, handleSaveEditorHtml)
       },
       onChange(editor) {
         emit('change', editor)
@@ -67,6 +66,7 @@ async function initEditorHtml(editor: IDomEditor) {
     await sleep(500)
     editor.focus(true)
   }
+  editor.on(WANGEDITOR_EVENT.SSML_UPDATE, handleSaveEditorHtml)
 }
 
 function handleSaveEditorHtml(editor: IDomEditor) {
