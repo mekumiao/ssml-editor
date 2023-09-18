@@ -53,7 +53,7 @@ export interface SSMLEditorConfig {
   }
   conversion: {
     timeoutMilliseconds: number
-    audioUpload: (file: File | Blob, token: CancellationToken) => Promise<AudioInfo>
+    audioUpload: (file: File, token: CancellationToken) => Promise<AudioInfo>
     transfer: (opt: { audioId: string; speakerId: string }) => Promise<AudioInfo>
     fetchSpeaker: () => Promise<Speaker[]>
   }

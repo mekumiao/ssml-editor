@@ -46,7 +46,7 @@ export async function star(speaker: string, star: boolean): Promise<boolean> {
   return resp.data
 }
 
-export async function upload(file: File | Blob, token: CancellationToken): Promise<AudioInfo> {
+export async function upload(file: File, token: CancellationToken): Promise<AudioInfo> {
   const source = axios.CancelToken.source()
   const formData = new FormData()
   formData.append('file', file)
