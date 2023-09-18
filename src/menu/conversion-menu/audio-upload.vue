@@ -24,7 +24,7 @@ const isRecord = ref<boolean>(true)
 const speakerList = ref<Speaker[]>([])
 const selSpeaker = ref<Speaker>()
 
-const recordFile = shallowRef<Blob>()
+const recordFile = shallowRef<File>()
 const inputFile = shallowRef<File>()
 const audioPlayer = new AudioPlayer()
 const { playState } = audioPlayer
