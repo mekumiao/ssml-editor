@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { useDraggable } from '@vueuse/core'
-import { onMounted, onUnmounted, ref, inject } from 'vue'
+import { onMounted, onUnmounted, ref, inject, type Ref } from 'vue'
 import { type Position } from '@vueuse/core'
 import { useConstrainDragBounds } from './constrain-drag-bounds'
 import { emitter } from '@/event-bus'
@@ -14,7 +14,7 @@ const props = defineProps<{
 const boxRef = ref<HTMLElement>()
 const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
-const editorViewRef = inject('box-editor-view')
+const editorViewRef = inject<Ref<HTMLDivElement | undefined>>('box-editor-view')
 const allowClose = ref(true)
 
 const { position } = useDraggable(dragRef, { initialValue: props.initialValue })
