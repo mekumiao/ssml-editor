@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref, inject, type Ref } from 'vue'
+import { ref, inject, onMounted, type Ref } from 'vue'
 import { useConstrainDragBounds } from '@/components'
-import { useDraggable } from '@vueuse/core'
+import { useDraggable, useElementBounding } from '@vueuse/core'
 import { useTryPlayStore } from '@/stores'
 import PlayButton from './play-button.vue'
 
@@ -9,7 +9,8 @@ const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
 
 const boxRef = ref<HTMLDivElement>()
-const editorViewRef = inject<Ref<HTMLDivElement | undefined>>('box-editor-view')
+const dragContainerBoxRef = inject<Ref<HTMLElement | undefined>>('dragContainerBox')
+const editorViewBoxBounds = useElementBounding(dragContainerBoxRef)
 const playButtonRef = ref<InstanceType<typeof PlayButton>>()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
@@ -17,12 +18,19 @@ const recordClientY = ref<number>(0)
 const tryPlayStore = useTryPlayStore()
 
 const { position } = useDraggable(boxRef, {
-  initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
   onStart: (_, event) => {
     return isClick(event.clientX, event.clientY) ? false : undefined
   },
 })
-const { style } = useConstrainDragBounds(boxRef, editorViewRef, position)
+const { style } = useConstrainDragBounds(boxRef, dragContainerBoxRef, position)
+
+onMounted(() => {
+  const point = {
+    x: editorViewBoxBounds.x.value + (editorViewBoxBounds.width.value - 90 - 5),
+    y: editorViewBoxBounds.y.value + (editorViewBoxBounds.height.value - 90) / 2,
+  }
+  position.value = point
+})
 
 function handleMouseup(event: MouseEvent) {
   const callback = () => {

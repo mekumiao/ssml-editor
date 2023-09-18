@@ -10,7 +10,8 @@ const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomE
 
 const boxRef = ref<HTMLDivElement>()
 
-provide('box-editor-view', boxRef)
+// 设置拖拽容器盒子,如果想要在整个页面可拖拽,将boxRef换为ref(document.body)即可
+provide('dragContainerBox', boxRef)
 
 function handleCreated(editor: IDomEditor) {
   emit('created', editor)

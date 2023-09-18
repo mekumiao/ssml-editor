@@ -14,11 +14,11 @@ const props = defineProps<{
 const boxRef = ref<HTMLElement>()
 const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
-const editorViewRef = inject<Ref<HTMLDivElement | undefined>>('box-editor-view')
+const dragContainerBoxRef = inject<Ref<HTMLElement | undefined>>('dragContainerBox')
 const allowClose = ref(true)
 
 const { position } = useDraggable(dragRef, { initialValue: props.initialValue })
-const { style } = useConstrainDragBounds(boxRef, editorViewRef, position)
+const { style } = useConstrainDragBounds(boxRef, dragContainerBoxRef, position)
 
 function setPosition(opt: Position) {
   position.value = opt
