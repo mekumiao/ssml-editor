@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { LabelValue } from '@/model'
-import { provide, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useElementVisibility } from '@vueuse/core'
 import AudioUpload from './audio-upload.vue'
 
@@ -14,11 +14,6 @@ const showText = ref<boolean>(true)
 const showAudioUpload = ref<boolean>(false)
 
 const visible = useElementVisibility(boxRef)
-
-provide('reopen', () => {
-  showText.value = true
-  showAudioUpload.value = false
-})
 
 watch(visible, (newValue) => {
   if (!newValue) {
@@ -38,6 +33,11 @@ async function handleOpenInputFile() {
     showAudioUpload.value = true
   }
 }
+
+function reopen() {
+  showText.value = true
+  showAudioUpload.value = false
+}
 </script>
 
 <template>
@@ -56,7 +56,11 @@ async function handleOpenInputFile() {
       </p>
     </section>
     <section v-show="showAudioUpload">
-      <AudioUpload ref="audioUploadRef" @submit="(value) => $emit('submit', value)"></AudioUpload>
+      <AudioUpload
+        :reopen="reopen"
+        ref="audioUploadRef"
+        @submit="(value) => $emit('submit', value)"
+      ></AudioUpload>
     </section>
   </div>
 </template>

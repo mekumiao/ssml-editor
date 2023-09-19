@@ -8,6 +8,12 @@ function handleCreate(editor: IDomEditor) {
 </script>
 
 <template>
+  <!-- <div class="d-flex flex-row justify-content-between">
+    <div>菜单栏</div>
+    <div>
+      <EditorView @created="handleCreate"></EditorView>
+    </div>
+  </div> -->
   <EditorView @created="handleCreate"></EditorView>
 </template>
 

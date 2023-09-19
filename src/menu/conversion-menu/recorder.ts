@@ -11,7 +11,7 @@ export class Recorder {
     return computed(() => (this.isRecording.value ? 'recording' : 'paused'))
   }
 
-  public async start(token: CancellationToken): Promise<Blob> {
+  public async start(token: CancellationToken): Promise<File> {
     if (navigator.mediaDevices.getUserMedia) {
       const chunks: Blob[] = []
       try {
@@ -19,7 +19,7 @@ export class Recorder {
         const mediaRecorder = new MediaRecorder(stream)
         this.mediaRecorder = mediaRecorder
 
-        return new Promise<Blob>((resolve, reject) => {
+        return new Promise<File>((resolve, reject) => {
           mediaRecorder.ondataavailable = (e) => {
             if (token.isCancellationRequested()) {
               mediaRecorder.stop()
@@ -37,8 +37,9 @@ export class Recorder {
           }
           mediaRecorder.onstop = () => {
             this.isRecording.value = false
-            const blob = new Blob(chunks, { type: 'audio/wav' })
-            resolve(blob)
+            const fileName = `record-${new Date().getTime()}.wav`
+            const file = new File(chunks, fileName, { type: 'audio/wav' })
+            resolve(file)
           }
           mediaRecorder.onerror = (ev) => {
             this.isRecording.value = false

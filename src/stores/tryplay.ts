@@ -33,8 +33,11 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
     }
   }
 
-  const setStar = (value: boolean) => {
-    _speaker.value.isStar = value
+  const star = async (isStar: boolean) => {
+    const speakerId = _speaker.value.id
+    const resIsStar = await config.tryPlay.fetchStar(speakerId, isStar)
+    _speaker.value.isStar = resIsStar
+    emitter.emit('tryplay-speaker-update-star', _speaker.value.id, resIsStar)
   }
 
   async function play(fetchAudio: (ssmlGetter: () => string) => Promise<AudioInfo>) {
@@ -66,5 +69,5 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
     }
   }
 
-  return { speaker, setSpeaker, setStar, audioPlayer, isLoading, play }
+  return { speaker, setSpeaker, star, audioPlayer, isLoading, play }
 })

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { constrainDragBounds } from '@/components'
-import { useDraggable } from '@vueuse/core'
+import { ref, inject, onMounted, type Ref } from 'vue'
+import { useConstrainDragBounds } from '@/components'
+import { useDraggable, useElementBounding } from '@vueuse/core'
 import { useTryPlayStore } from '@/stores'
 import PlayButton from './play-button.vue'
 
@@ -9,24 +9,33 @@ const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 defineProps<{ visible: boolean }>()
 
 const boxRef = ref<HTMLDivElement>()
-const btnPlayRef = ref<InstanceType<typeof PlayButton>>()
+const dragContainerBoxRef = inject<Ref<HTMLElement | undefined>>('dragContainerBox')
+const editorViewBoxBounds = useElementBounding(dragContainerBoxRef)
+const playButtonRef = ref<InstanceType<typeof PlayButton>>()
 const recordClientX = ref<number>(0)
 const recordClientY = ref<number>(0)
 
 const tryPlayStore = useTryPlayStore()
 
 const { position } = useDraggable(boxRef, {
-  initialValue: { x: window.innerWidth - 15, y: window.innerHeight / 2 - 15 },
   onStart: (_, event) => {
     return isClick(event.clientX, event.clientY) ? false : undefined
   },
 })
-const { style } = constrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, dragContainerBoxRef, position)
+
+onMounted(() => {
+  const point = {
+    x: editorViewBoxBounds.x.value + (editorViewBoxBounds.width.value - 90 - 5),
+    y: editorViewBoxBounds.y.value + (editorViewBoxBounds.height.value - 90) / 2,
+  }
+  position.value = point
+})
 
 function handleMouseup(event: MouseEvent) {
   const callback = () => {
     if (!isClick(event.clientX, event.clientY)) return
-    if (isBtnPlayClick(event)) return btnPlayRef.value?.handleClick()
+    if (isPlayButtonClick(event)) return playButtonRef.value?.handleClick()
     return emit('update:visible', false)
   }
 
@@ -54,9 +63,9 @@ function isClick(x: number, y: number) {
   return res
 }
 
-function isBtnPlayClick(event: MouseEvent) {
+function isPlayButtonClick(event: MouseEvent) {
   const target = event.target as HTMLElement
-  return btnPlayRef.value?.divBox?.contains(target) || false
+  return playButtonRef.value?.divBox?.contains(target) || false
 }
 </script>
 
@@ -70,9 +79,9 @@ function isBtnPlayClick(event: MouseEvent) {
     @mousedown="handleMousedown"
     @mouseup="handleMouseup"
   >
-    <div class="anchor-avatar d-flex flex-column justify-content-center align-items-center">
-      <PlayButton ref="btnPlayRef" disabled-click :size="40"></PlayButton>
-      <div class="anchor-avatar-name text-white">{{ tryPlayStore.speaker.displayName }}</div>
+    <div class="avatar d-flex flex-column justify-content-center align-items-center">
+      <PlayButton ref="playButtonRef" disabled-click :size="40"></PlayButton>
+      <div class="text-white" style="font-size: 0.5rem">{{ tryPlayStore.speaker.displayName }}</div>
     </div>
   </div>
 </template>
@@ -88,13 +97,9 @@ function isBtnPlayClick(event: MouseEvent) {
   justify-content: center;
   align-items: center;
 
-  .anchor-avatar {
+  .avatar {
     width: 90px;
     height: 90px;
-
-    .anchor-avatar-name {
-      font-size: 0.5rem;
-    }
   }
 }
 </style>

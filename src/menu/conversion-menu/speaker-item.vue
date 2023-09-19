@@ -15,12 +15,8 @@ defineProps<{ label: string; value?: string; avatar?: string; activated?: boolea
         style="height: 40px"
       />
     </div>
-    <div class="speaker-name">{{ label }}</div>
+    <div style="font-size: 0.5rem">{{ label }}</div>
   </div>
 </template>
 
-<style lang="scss" scoped>
-.speaker-name {
-  font-size: 0.5rem;
-}
-</style>
+<style lang="scss" scoped></style>

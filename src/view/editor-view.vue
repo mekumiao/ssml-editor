@@ -4,8 +4,14 @@ import EditorCore from './editor-core.vue'
 import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 import { emitter } from '@/event-bus'
+import { ref, provide } from 'vue'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
+
+const boxRef = ref<HTMLDivElement>()
+
+// 设置拖拽容器盒子,如果想要在整个页面可拖拽,将boxRef换为ref(document.body)即可
+provide('dragContainerBox', boxRef)
 
 function handleCreated(editor: IDomEditor) {
   emit('created', editor)
@@ -25,7 +31,12 @@ function handleKeyDown(ev: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="ssml-editor-root editor-view" @click="handleClick" @keydown="handleKeyDown">
+  <div
+    ref="boxRef"
+    class="ssml-editor-root editor-view"
+    @click="handleClick"
+    @keydown="handleKeyDown"
+  >
     <slot><EditorTitle></EditorTitle></slot>
     <div class="editor-box">
       <EditorBar></EditorBar>
@@ -38,8 +49,10 @@ function handleKeyDown(ev: KeyboardEvent) {
 
 <style lang="scss" scoped>
 .editor-view {
+  background-color: var(--tool-bg-color);
+
   .editor-box {
-    background-color: var(--tool-bg-color);
+    background-color: var(--tool-bg-grey-color);
 
     .editor-core-container {
       margin: 0 auto;

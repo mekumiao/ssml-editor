@@ -46,7 +46,7 @@ function handleCloseBgm() {
 
 /**
  * 复制ssml到剪贴板
- * @param isFormat 是否输出copy格式化的文本到剪贴板. 多余的空格和换行可能会导致意外的停顿
+ * @param isFormat 是否格式化ssml(多余的空格和换行可能会导致意外的停顿)
  */
 async function handleCopy(isFormat: boolean) {
   await navigator.clipboard.writeText(isFormat ? ssmlFormat.value : ssml.value)
@@ -103,7 +103,6 @@ async function handleCopy(isFormat: boolean) {
 <style lang="scss" scoped>
 .editor-title {
   height: 80px;
-  background-color: white;
 
   .title-wrapper {
     .author {

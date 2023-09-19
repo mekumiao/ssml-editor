@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import RightPanle from './right-panle.vue'
 import LeftPanle from './left-panle.vue'
-import { onMounted, onUnmounted, ref } from 'vue'
-import { constrainDragBounds } from '@/components'
-import { useDraggable } from '@vueuse/core'
+import { onMounted, onUnmounted, ref, inject, type Ref } from 'vue'
+import { useConstrainDragBounds } from '@/components'
+import { useDraggable, useElementBounding } from '@vueuse/core'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 const props = defineProps<{ visible: boolean }>()
 
 const boxRef = ref<HTMLElement>()
 const handleRef = ref<HTMLElement>()
+const dragContainerBoxRef = inject<Ref<HTMLElement | undefined>>('dragContainerBox')
+const editorViewBoxBounds = useElementBounding(dragContainerBoxRef)
 
 onMounted(() => {
   window.addEventListener('keydown', handleKeyDownEsc)
@@ -28,11 +30,14 @@ function handleKeyDownEsc(event: KeyboardEvent) {
 const { position } = useDraggable(handleRef, {
   initialValue: { x: 40, y: 40 },
 })
-const { style } = constrainDragBounds(boxRef, position)
+const { style } = useConstrainDragBounds(boxRef, dragContainerBoxRef, position)
 
 onMounted(() => {
-  position.value.x = (window.innerWidth - 890) / 2
-  position.value.y = (window.innerHeight - 390) / 2
+  const point = {
+    x: editorViewBoxBounds.x.value + (editorViewBoxBounds.width.value - 890) / 2,
+    y: editorViewBoxBounds.y.value + (editorViewBoxBounds.height.value - 390) / 2,
+  }
+  position.value = point
 })
 
 function handleMinimize() {

@@ -10,7 +10,7 @@ export const useEditorStore = defineStore('--editor-config', () => {
   const config = getConfig()
 
   const _editor = shallowRef<IDomEditor>()
-  const _saveState = ref<SaveState>('unsave')
+  const _saveState = ref<SaveState>('saved')
 
   const editor = computed(() => _editor.value)
   const saveState = computed(() => _saveState.value)
@@ -40,7 +40,7 @@ export const useEditorStore = defineStore('--editor-config', () => {
         throw error
       }
     },
-    5000,
+    3000,
     { leading: false, trailing: true },
   )
 

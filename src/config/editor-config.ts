@@ -27,7 +27,7 @@ export interface SSMLEditorConfig {
     readHtml?: () => Promise<string | null>
   }
   handleError: (error: string, detail?: any) => void
-  pinyin: { fetchData: WordFetchFunction }
+  pinyin: {}
   english: { fetchData: WordFetchFunction }
   bgm: {
     menus: LabelValue[]
@@ -53,7 +53,7 @@ export interface SSMLEditorConfig {
   }
   conversion: {
     timeoutMilliseconds: number
-    audioUpload: (file: File | Blob, token: CancellationToken) => Promise<AudioInfo>
+    audioUpload: (file: File, token: CancellationToken) => Promise<AudioInfo>
     transfer: (opt: { audioId: string; speakerId: string }) => Promise<AudioInfo>
     fetchSpeaker: () => Promise<Speaker[]>
   }
@@ -73,7 +73,7 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
     effects: { zoom: true, grayscale: true },
     editorConfig: { placeholder: '请输入内容...' },
     handleError: () => {},
-    pinyin: { fetchData: resolveList() },
+    pinyin: {},
     english: { fetchData: resolveList() },
     bgm: {
       menus: [

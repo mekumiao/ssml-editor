@@ -1,6 +1,7 @@
 import type { IDomEditor } from '@wangeditor/editor'
 import ee from 'event-emitter'
 import type { Speaker } from '@/model'
+import type { DeepReadonly, UnwrapNestedRefs } from 'vue'
 
 const emitter = ee() as EventBus
 
@@ -10,9 +11,10 @@ interface EmitterEventMap {
   error: [message: string, detail?: unknown]
   'view-click': [event: MouseEvent]
   'view-keydown': [event: KeyboardEvent]
-  'speaker-star': [speakerId: string, isStar: boolean]
   'editor-created': [editor: IDomEditor]
   'tryplay-speaker-select': [speaker: Speaker]
+  'tryplay-speaker-update-star': [speakerId: string, isStar: boolean]
+  'tryplay-speaker-detail-show': [speaker: DeepReadonly<UnwrapNestedRefs<Speaker>>]
 }
 
 type EmitterMethod<K extends keyof EmitterEventMap> = (...args: EmitterEventMap[K]) => void

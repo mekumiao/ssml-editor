@@ -1,22 +1,24 @@
 <script setup lang="ts">
 import { useDraggable } from '@vueuse/core'
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, inject, type Ref } from 'vue'
 import { type Position } from '@vueuse/core'
-import { constrainDragBounds } from './constrain-drag-bounds'
+import { useConstrainDragBounds } from './constrain-drag-bounds'
 import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean]; close: [] }>()
-const props = defineProps<{ visible: boolean; initialValue?: Position }>()
+const props = defineProps<{
+  visible: boolean
+  initialValue?: Position
+}>()
 
 const boxRef = ref<HTMLElement>()
 const dragRef = ref<HTMLElement>()
 const referenceRef = ref<HTMLElement>()
+const dragContainerBoxRef = inject<Ref<HTMLElement | undefined>>('dragContainerBox')
 const allowClose = ref(true)
 
-const { position } = useDraggable(dragRef, {
-  initialValue: props.initialValue,
-})
-const { style } = constrainDragBounds(boxRef, position)
+const { position } = useDraggable(dragRef, { initialValue: props.initialValue })
+const { style } = useConstrainDragBounds(boxRef, dragContainerBoxRef, position)
 
 function setPosition(opt: Position) {
   position.value = opt
