@@ -20,7 +20,7 @@ export class SpecialFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isExpanded(selection)) {
-      emitter.emit('error', '不能框选文字')
+      emitter.emit('warn', '不能框选文字')
       return true
     }
     return false

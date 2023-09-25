@@ -21,7 +21,7 @@ export default abstract class BaseFn {
     if (selection == null) {
       this.editor.restoreSelection()
       if (this.editor.selection == null) {
-        emitter.emit('error', '未选中编辑器')
+        emitter.emit('warn', '未选中编辑器')
         return true
       }
     }

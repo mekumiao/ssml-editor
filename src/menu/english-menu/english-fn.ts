@@ -19,14 +19,14 @@ export class EnglishFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit('error', '请框选英文单词')
+      emitter.emit('warn', '请框选英文单词')
       return true
     }
 
     const value = SlateEditor.string(this.editor, selection)
     if (value.length <= 0) return true
     if (!/^[A-Za-z]+$/gi.test(value)) {
-      emitter.emit('error', '请框选英文单词')
+      emitter.emit('warn', '请框选英文单词')
       return true
     }
 

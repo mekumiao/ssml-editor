@@ -8,6 +8,7 @@ const emitter = ee() as EventBus
 export { emitter }
 
 interface EmitterEventMap {
+  warn: [message: string]
   error: [error: unknown]
   'view-click': [event: MouseEvent]
   'view-keydown': [event: KeyboardEvent]

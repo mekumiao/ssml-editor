@@ -32,7 +32,7 @@ async function handleClick(editor: IDomEditor) {
     englishList.value = await ssmlEditorConfig.english.fetchData(text)
 
     if (englishList.value.length <= 0) {
-      return emitter.emit('error', '找不到单词的音标')
+      return emitter.emit('warn', '找不到单词的音标')
     }
 
     show()

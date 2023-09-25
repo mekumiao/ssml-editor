@@ -38,7 +38,7 @@ async function handleClick(editor: IDomEditor) {
   }
 
   if (pyList.value.length == 0) {
-    return emitter.emit('error', '选中的字符不是多音字')
+    return emitter.emit('warn', '选中的字符不是多音字')
   }
 
   show()

@@ -14,7 +14,7 @@ export class ContinuousFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit('error', '请框选要连读的词或句子')
+      emitter.emit('warn', '请框选要连读的词或句子')
       return true
     }
 

@@ -38,9 +38,12 @@ async function readHtml() {
 const config: PartialSSMLEditorConfig = {
   effects: { grayscale: false, zoom: true },
   editorConfig: { saveHtml: saveHtml, readHtml: readHtml },
+  handleWarn: (message) => {
+    ElMessage.warning({ message: message, grouping: true })
+  },
   handleError: (error) => {
     if (typeof error === 'string') {
-      ElMessage.warning({ message: error, grouping: true })
+      ElMessage.error({ message: error, grouping: true })
     } else if (error instanceof Error) {
       ElMessage.error({ message: error.message, grouping: true })
     } else {

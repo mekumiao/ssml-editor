@@ -25,14 +25,14 @@ export class ManagementFn extends BaseFn {
     }
 
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit('error', '请框选句子')
+      emitter.emit('warn', '请框选句子')
       return true
     }
 
     const [currentNode] = SlateEditor.node(this.editor, selection)
     const parentNode = this.editor.getParentNode(currentNode)
     if (!parentNode || !DomEditor.checkNodeType(parentNode, 'paragraph')) {
-      emitter.emit('error', '多人配音需要在最外层使用')
+      emitter.emit('warn', '多人配音需要在最外层使用')
       return true
     }
 
