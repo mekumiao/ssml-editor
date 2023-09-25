@@ -47,9 +47,12 @@ onMounted(async () => {
 })
 
 async function handleFetchData() {
-  const list = await fetchData({ ...toRaw(props.filter) })
-  speaderCache.value = list
-  dataList.value = list.map<SpeakerAvatarData>((v) => ({
+  try {
+    speaderCache.value = await fetchData({ ...toRaw(props.filter) })
+  } catch (error) {
+    emitter.emit('error', error)
+  }
+  dataList.value = speaderCache.value.map<SpeakerAvatarData>((v) => ({
     label: v.displayName,
     value: v.name,
     avatar: v.avatar,

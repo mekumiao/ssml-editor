@@ -46,7 +46,11 @@ watch(visible, (newValue) => {
 })
 
 onMounted(async () => {
-  speakerList.value = await fetchSpeaker()
+  try {
+    speakerList.value = await fetchSpeaker()
+  } catch (error) {
+    emitter.emit('error', error)
+  }
 })
 
 watch(visible, (newVlaue) => {

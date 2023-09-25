@@ -5,6 +5,7 @@ import { Search } from '@element-plus/icons-vue'
 import { useElementVisibility } from '@vueuse/core'
 import type { LabelValue } from '@/model'
 import type { FilterBarSearch } from './data'
+import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ submit: [value: LabelValue] }>()
 
@@ -39,8 +40,12 @@ watch(isVisible, (newValue) => {
 })
 
 onMounted(async () => {
-  if (!sceneListCache.value.length) sceneListCache.value = await props.fetchScene()
-  if (!styleListCache.value.length) styleListCache.value = await props.fetchStyle()
+  try {
+    if (!sceneListCache.value.length) sceneListCache.value = await props.fetchScene()
+    if (!styleListCache.value.length) styleListCache.value = await props.fetchStyle()
+  } catch (error) {
+    emitter.emit('error', error)
+  }
   if (sceneListCache.value.length) {
     sceneSelect.value = sceneListCache.value[0].value
   }
@@ -54,12 +59,16 @@ onMounted(async () => {
 })
 
 async function handleFetchData() {
-  dataListCache.value = await props.fetchData({
-    word: searchInput.value,
-    menu: menuSelect.value,
-    scene: sceneSelect.value,
-    style: styleSelect.value,
-  })
+  try {
+    dataListCache.value = await props.fetchData({
+      word: searchInput.value,
+      menu: menuSelect.value,
+      scene: sceneSelect.value,
+      style: styleSelect.value,
+    })
+  } catch (error) {
+    emitter.emit('error', error)
+  }
 }
 
 function handleMenuSelect(value: string) {
