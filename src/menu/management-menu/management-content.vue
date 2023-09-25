@@ -139,7 +139,7 @@ async function handleFetchRecentUsage() {
   try {
     recentUsageCache.value = await management.fetchRecentUsage()
   } catch (error) {
-    emitter.emit('error', `${error}`, error)
+    emitter.emit('error', error)
   }
 }
 
@@ -153,7 +153,7 @@ async function handleRecordRecentUsage(data: SubmitData) {
       (item) => `${item.name}+${item.role}+${item.style}+${item.speed}+${item.pitch}`,
     )
   } catch (error) {
-    emitter.emit('error', `${error}`, error)
+    emitter.emit('error', error)
   }
 }
 
@@ -174,7 +174,7 @@ async function handleRecentUsageClose(index: number) {
     await management.deleteRecentUsage(item.id)
     recentUsageCache.value.splice(index, 1)
   } catch (error) {
-    emitter.emit('error', `${error}`, error)
+    emitter.emit('error', error)
   }
 }
 
@@ -183,7 +183,7 @@ async function handleRecentUsageClean() {
     await management.deleteRecentUsage()
     recentUsageCache.value = []
   } catch (error) {
-    emitter.emit('error', `${error}`, error)
+    emitter.emit('error', error)
   }
 }
 </script>

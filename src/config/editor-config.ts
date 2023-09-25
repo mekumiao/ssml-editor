@@ -26,7 +26,7 @@ export interface SSMLEditorConfig {
     saveHtml?: (htmlGetter: () => string) => Promise<boolean>
     readHtml?: () => Promise<string | null>
   }
-  handleError: (error: string, detail?: any) => void
+  handleError: (error: unknown) => void
   pinyin: {}
   english: { fetchData: WordFetchFunction }
   bgm: {
@@ -72,7 +72,7 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
   return {
     effects: { zoom: true, grayscale: true },
     editorConfig: { placeholder: '请输入内容...' },
-    handleError: () => {},
+    handleError: (error) => console.error(error),
     pinyin: {},
     english: { fetchData: resolveList() },
     bgm: {

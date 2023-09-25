@@ -60,10 +60,7 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
         audioPlayer.value.play()
       }
     } catch (error) {
-      if (error instanceof Error) {
-        emitter.emit('error', error.message)
-      }
-      console.error(error)
+      emitter.emit('error', error)
     } finally {
       _isLoading.value = false
     }

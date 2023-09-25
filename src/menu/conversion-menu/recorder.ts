@@ -51,7 +51,6 @@ export class Recorder {
           mediaRecorder.start()
         })
       } catch (error) {
-        console.error(error)
         throw new Error('授权失败！', { cause: error })
       }
     }
