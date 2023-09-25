@@ -19,7 +19,7 @@ interface EmitterEventMap {
 
 type EmitterMethod<K extends keyof EmitterEventMap> = (...args: EmitterEventMap[K]) => void
 
-declare interface EventBus {
+interface EventBus {
   emit<K extends keyof EmitterEventMap>(type: K, ...args: EmitterEventMap[K]): void
   off<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void
   on<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void
