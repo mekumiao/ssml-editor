@@ -43,7 +43,7 @@ export default <T extends IDomEditor>(editor: T) => {
 
   /**
    * 自定义剪贴板粘贴行为
-   * 1. 放行编辑器之身的粘贴行为
+   * 1. 放行编辑器自身的粘贴行为
    * 2. 其他粘贴行为一律使用文本粘贴
    */
   newEditor.insertData = (data) => {
