@@ -6,7 +6,7 @@ import { handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 export default {
   type: 'ssml-say-as',
   renderElem: (elem: SlateElement, children: VNode[] | null, editor: IDomEditor) => {
-    const { remark } = elem as SayAs
+    const ssml_elem = elem as SayAs
     return (
       <span className="ssml-wrapper">
         <span
@@ -15,16 +15,16 @@ export default {
           style={{ 'background-color': 'var(--ssml-say-as)' }}
           on={{
             mousedown: (event: Event) => event.preventDefault(),
-            click: [handleSSMLRemarkClick(editor, elem)],
+            click: [handleSSMLRemarkClick(editor, ssml_elem)],
           }}
         >
           <span
             className="iconfont icon-roundclosefill"
             on={{
-              click: [handleUnwrapNodes(editor, elem)],
+              click: [handleUnwrapNodes(editor, ssml_elem)],
             }}
           ></span>
-          <span className="data-content" attrs={{ 'data-content': remark }}></span>
+          <span className="data-content" attrs={{ 'data-content': ssml_elem.remark }}></span>
         </span>
         <span
           className="data-content"

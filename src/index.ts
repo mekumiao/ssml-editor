@@ -11,7 +11,6 @@ export type { AudioInfo } from './menu/conversion-menu/data'
 export type { RecentUsageSpeaker } from './menu/management-menu/data'
 
 export * from './view'
-export * from './constant'
 export * from './model'
 export * from './config'
 export * from './utils'

@@ -6,7 +6,7 @@ import { handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 export default {
   type: 'ssml-mstts:express-as',
   renderElem: (elem: SlateElement, children: VNode[] | null, editor: IDomEditor) => {
-    const { remark } = elem as MsttsExpressAs
+    const ssml_elem = elem as MsttsExpressAs
     return (
       <span className="ssml-wrapper">
         <span
@@ -15,14 +15,14 @@ export default {
           style={{ 'background-color': 'var(--ssml-mstts--express-as)' }}
           on={{
             mousedown: (event: Event) => event.preventDefault(),
-            click: [handleSSMLRemarkClick(editor, elem)],
+            click: [handleSSMLRemarkClick(editor, ssml_elem)],
           }}
         >
           <span
             className="iconfont icon-roundclosefill"
-            on={{ click: [handleUnwrapNodes(editor, elem)] }}
+            on={{ click: [handleUnwrapNodes(editor, ssml_elem)] }}
           ></span>
-          <span className="data-content" attrs={{ 'data-content': remark }}></span>
+          <span className="data-content" attrs={{ 'data-content': ssml_elem.remark }}></span>
         </span>
         <span
           className="data-content"

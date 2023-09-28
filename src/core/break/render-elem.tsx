@@ -6,7 +6,7 @@ import { handleDeleteNode, handleSSMLRemarkClick } from '../helper'
 export default {
   type: 'ssml-break',
   renderElem: (elem: SlateElement, _children: VNode[] | null, editor: IDomEditor): VNode => {
-    const { remark } = elem as Break
+    const ssml_elem = elem as Break
     return (
       <span className="ssml-wrapper" contentEditable="false">
         <span
@@ -14,14 +14,14 @@ export default {
           style={{ 'background-color': 'var(--ssml-break)' }}
           on={{
             mousedown: (event: Event) => event.preventDefault(),
-            click: [handleSSMLRemarkClick(editor, elem)],
+            click: [handleSSMLRemarkClick(editor, ssml_elem)],
           }}
         >
           <span
             className="iconfont icon-roundclosefill"
-            on={{ click: [handleDeleteNode(editor, elem)] }}
+            on={{ click: [handleDeleteNode(editor, ssml_elem)] }}
           ></span>
-          <span className="data-content" attrs={{ 'data-content': remark }}></span>
+          <span className="data-content" attrs={{ 'data-content': ssml_elem.remark }}></span>
         </span>
         <span className="iconfont icon-tingdun" style={{ color: 'var(--ssml-break)' }}></span>
       </span>

@@ -42,7 +42,7 @@ export function convertSoftlyTo5(pinyin: string) {
 /**
  * 去除数字音调0
  * @param pinyin 数字音调拼音
- * @returns 
+ * @returns
  */
 export function clearSoftly0(pinyin: string) {
   return isSoftly(pinyin) ? pinyin.slice(0, pinyin.length - 1) : pinyin

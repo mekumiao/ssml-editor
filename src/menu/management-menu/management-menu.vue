@@ -6,7 +6,7 @@ import { useElementBounding } from '@vueuse/core'
 import ManagementContent from './management-content.vue'
 import { defaultContentData, type ContentData, type SubmitData } from './data'
 import { ManagementFn } from './management-fn'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { getEmitter } from '@/core/emitter'
 import type { SSMLBaseElement } from '@/core/base'
 import { useEditorStore } from '@/stores'
 
@@ -21,13 +21,13 @@ const { x, y, height } = useElementBounding(menuRef)
 onMounted(() => {
   nextTick(() => {
     const { editor } = useEditorStore()
-    editor?.on(WANGEDITOR_EVENT.SSML_REMARK_CLICK, handleSSMLRemarkClick)
+    getEmitter(editor)?.on('ssml-remark-click', handleSSMLRemarkClick)
   })
 })
 
 onUnmounted(() => {
   const { editor } = useEditorStore()
-  editor?.off(WANGEDITOR_EVENT.SSML_REMARK_CLICK, handleSSMLRemarkClick)
+  getEmitter(editor)?.off('ssml-remark-click', handleSSMLRemarkClick)
 })
 
 function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement) {

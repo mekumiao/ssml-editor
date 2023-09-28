@@ -2,7 +2,7 @@ import { type IDomEditor, DomEditor, SlateTransforms, SlateNode } from '@wangedi
 import { SlateEditor } from '@wangeditor/editor'
 import { insertNodeSpace } from './helper'
 import { Operation } from 'slate'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { getEmitter } from '@/core/emitter'
 
 export default <T extends IDomEditor>(editor: T) => {
   const {
@@ -37,7 +37,7 @@ export default <T extends IDomEditor>(editor: T) => {
   newEditor.apply = (operation) => {
     apply(operation)
     if (!Operation.isSelectionOperation(operation)) {
-      editor.emit(WANGEDITOR_EVENT.SSML_UPDATE, editor)
+      getEmitter(editor)?.emit('ssml-update', editor)
     }
   }
 
