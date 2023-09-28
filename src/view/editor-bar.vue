@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { BarWrapper, BarWrapperGroup } from '../components'
+import { BarWrapper, BarWrapperMenus } from '../components'
 import {
   PlayMenu,
   PinyinMenu,
@@ -22,30 +22,30 @@ import {
 <template>
   <div class="editor-bar border-bottom">
     <BarWrapper>
-      <BarWrapperGroup>
+      <BarWrapperMenus>
         <PlayMenu></PlayMenu>
-      </BarWrapperGroup>
-      <BarWrapperGroup>
+      </BarWrapperMenus>
+      <BarWrapperMenus>
         <PinyinMenu></PinyinMenu>
         <ReadMenu></ReadMenu>
         <DigitalMenu></DigitalMenu>
         <ContinuousMenu></ContinuousMenu>
         <AliasMenu></AliasMenu>
         <EnglishMenu></EnglishMenu>
-      </BarWrapperGroup>
-      <BarWrapperGroup>
+      </BarWrapperMenus>
+      <BarWrapperMenus>
         <ChangespeedMenu></ChangespeedMenu>
         <ManagementMenu></ManagementMenu>
         <ConversionMenu></ConversionMenu>
-      </BarWrapperGroup>
-      <BarWrapperGroup>
+      </BarWrapperMenus>
+      <BarWrapperMenus>
         <RhythmMenu></RhythmMenu>
         <MuteMenu></MuteMenu>
-      </BarWrapperGroup>
-      <BarWrapperGroup>
+      </BarWrapperMenus>
+      <BarWrapperMenus>
         <SpecialMenu></SpecialMenu>
         <BgmMenu></BgmMenu>
-      </BarWrapperGroup>
+      </BarWrapperMenus>
     </BarWrapper>
   </div>
   <TryPlay></TryPlay>
