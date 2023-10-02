@@ -26,7 +26,8 @@ export interface SSMLEditorConfig {
     saveHtml?: (htmlGetter: () => string) => Promise<boolean>
     readHtml?: () => Promise<string | null>
   }
-  handleError: (error: string, detail?: any) => void
+  handleWarn: (message: string) => void
+  handleError: (error: unknown) => void
   pinyin: {}
   english: { fetchData: WordFetchFunction }
   bgm: {
@@ -72,7 +73,8 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
   return {
     effects: { zoom: true, grayscale: true },
     editorConfig: { placeholder: '请输入内容...' },
-    handleError: () => {},
+    handleWarn: (message) => console.warn(message),
+    handleError: (error) => console.error(error),
     pinyin: {},
     english: { fetchData: resolveList() },
     bgm: {
@@ -144,6 +146,7 @@ const cache = {} as Record<CacheKey, unknown>
 export function setConfig(config?: PartialSSMLEditorConfig) {
   const ssmlEditorConfig = mergeSSMLEditorConfig(config)
   emitter.on('error', ssmlEditorConfig.handleError)
+  emitter.on('warn', ssmlEditorConfig.handleWarn)
   cache['editor-config'] = ssmlEditorConfig
 }
 

@@ -6,7 +6,7 @@ import { handleSSMLRemarkClick, handleUnwrapNodes } from '../helper'
 export default {
   type: 'ssml-prosody',
   renderElem: (elem: SlateElement, children: VNode[] | null, editor: IDomEditor) => {
-    const { remark } = elem as Prosody
+    const ssml_elem = elem as Prosody
     return (
       <span className="ssml-wrapper">
         <span
@@ -15,14 +15,14 @@ export default {
           style={{ 'background-color': 'var(--ssml-prosody)' }}
           on={{
             mousedown: (event: Event) => event.preventDefault(),
-            click: [handleSSMLRemarkClick(editor, elem)],
+            click: [handleSSMLRemarkClick(editor, ssml_elem)],
           }}
         >
           <span
             className="iconfont icon-roundclosefill"
-            on={{ click: [handleUnwrapNodes(editor, elem)] }}
+            on={{ click: [handleUnwrapNodes(editor, ssml_elem)] }}
           ></span>
-          <span className="data-content" attrs={{ 'data-content': remark }}></span>
+          <span className="data-content" attrs={{ 'data-content': ssml_elem.remark }}></span>
         </span>
         <span
           className="data-content"

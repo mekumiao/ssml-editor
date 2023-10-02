@@ -15,7 +15,7 @@ export class ChangespeedFn extends BaseFn {
     if (selection == null) return true
 
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit('error', '请框选要变速的句子')
+      emitter.emit('warn', '请框选要变速的句子')
       return true
     }
 

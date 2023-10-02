@@ -6,7 +6,7 @@ import { useEditorStore } from '@/stores'
 import Core from '@/core'
 import { emitter } from '@/event-bus'
 import { sleep } from '@/utils'
-import { WANGEDITOR_EVENT } from '@/constant'
+import { getEmitter } from '@/core/emitter'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 const { setEditor, saveEditorHtml } = useEditorStore()
@@ -66,7 +66,7 @@ async function initEditorHtml(editor: IDomEditor) {
     await sleep(500)
     editor.focus(true)
   }
-  editor.on(WANGEDITOR_EVENT.SSML_UPDATE, handleSaveEditorHtml)
+  getEmitter(editor)?.on('ssml-update', handleSaveEditorHtml)
 }
 
 function handleSaveEditorHtml(editor: IDomEditor) {

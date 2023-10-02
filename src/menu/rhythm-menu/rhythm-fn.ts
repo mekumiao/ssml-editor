@@ -14,7 +14,7 @@ export class RhythmFn extends BaseFn {
     const { selection } = this.editor
     if (!selection) return true
     if (SlateRange.isExpanded(selection)) {
-      emitter.emit('error', '不能框选文本')
+      emitter.emit('warn', '不能框选文本')
       return true
     }
 

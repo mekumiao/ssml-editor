@@ -1,14 +1,8 @@
-import { WANGEDITOR_EVENT } from '@/constant'
-import {
-  SlateRange,
-  type IDomEditor,
-  SlateEditor,
-  SlateTransforms,
-  SlatePath,
-  SlateNode,
-  DomEditor,
-} from '@wangeditor/editor'
+import { getEmitter } from './emitter'
+import { SlateRange, SlateEditor, SlateTransforms, SlatePath, DomEditor } from '@wangeditor/editor'
+import type { IDomEditor } from '@wangeditor/editor'
 import throttle from 'lodash.throttle'
+import type { SSMLBaseElement } from './base'
 
 export function selectionTrimEnd(editor: IDomEditor) {
   const { selection } = editor
@@ -68,7 +62,7 @@ export function removeNodeSpace(editor: IDomEditor, path: SlatePath) {
   })
 }
 
-export function handleDeleteNode(editor: IDomEditor, elem: SlateNode) {
+export function handleDeleteNode(editor: IDomEditor, elem: SSMLBaseElement) {
   return throttle((event: Event) => {
     event.preventDefault()
     const path = DomEditor.findPath(editor, elem)
@@ -76,7 +70,7 @@ export function handleDeleteNode(editor: IDomEditor, elem: SlateNode) {
   })
 }
 
-export function handleUnwrapNodes(editor: IDomEditor, elem: SlateNode) {
+export function handleUnwrapNodes(editor: IDomEditor, elem: SSMLBaseElement) {
   return throttle((event: Event) => {
     event.preventDefault()
     const path = DomEditor.findPath(editor, elem)
@@ -85,11 +79,11 @@ export function handleUnwrapNodes(editor: IDomEditor, elem: SlateNode) {
   })
 }
 
-export function handleSSMLRemarkClick(editor: IDomEditor, elem: SlateNode) {
+export function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement) {
   return throttle((event: Event) => {
     event.preventDefault()
     if (!editor.isFocused()) editor.focus()
     editor.select(DomEditor.findPath(editor, elem))
-    editor.emit(WANGEDITOR_EVENT.SSML_REMARK_CLICK, editor, elem)
+    getEmitter(editor)?.emit('ssml-remark-click', editor, elem)
   })
 }

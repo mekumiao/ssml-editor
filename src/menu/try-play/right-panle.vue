@@ -110,7 +110,7 @@ async function handleCategoryClick(value: string) {
   try {
     speakerList.value = await fetchData({ ...defaultFilterSpeaker(), category: value })
   } catch (error) {
-    emitter.emit('error', `${error}`, error)
+    emitter.emit('error', error)
   }
 }
 

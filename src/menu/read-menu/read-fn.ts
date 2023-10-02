@@ -15,7 +15,7 @@ export class ReadFn extends BaseFn {
     if (!selection) return true
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit('error', '请框选词或句子')
+      emitter.emit('warn', '请框选词或句子')
       return true
     }
 

@@ -14,7 +14,7 @@ export class AliasFn extends BaseFn {
     const { selection } = this.editor
     if (selection == null) return true
     if (SlateRange.isCollapsed(selection)) {
-      emitter.emit('error', '请框选要设置别名的词或句子')
+      emitter.emit('warn', '请框选要设置别名的词或句子')
       return true
     }
 

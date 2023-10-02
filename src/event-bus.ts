@@ -8,7 +8,8 @@ const emitter = ee() as EventBus
 export { emitter }
 
 interface EmitterEventMap {
-  error: [message: string, detail?: unknown]
+  warn: [message: string]
+  error: [error: unknown]
   'view-click': [event: MouseEvent]
   'view-keydown': [event: KeyboardEvent]
   'editor-created': [editor: IDomEditor]
@@ -19,7 +20,7 @@ interface EmitterEventMap {
 
 type EmitterMethod<K extends keyof EmitterEventMap> = (...args: EmitterEventMap[K]) => void
 
-declare interface EventBus {
+interface EventBus {
   emit<K extends keyof EmitterEventMap>(type: K, ...args: EmitterEventMap[K]): void
   off<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void
   on<K extends keyof EmitterEventMap>(type: K, listener: EmitterMethod<K>): void

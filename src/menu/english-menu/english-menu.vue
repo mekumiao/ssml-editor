@@ -29,10 +29,13 @@ async function handleClick(editor: IDomEditor) {
   if (fn.value.isDisabled()) return
   const text = fn.value.getValue()
   if (text) {
-    englishList.value = await ssmlEditorConfig.english.fetchData(text)
-
+    try {
+      englishList.value = await ssmlEditorConfig.english.fetchData(text)
+    } catch (error) {
+      emitter.emit('error', error)
+    }
     if (englishList.value.length <= 0) {
-      return emitter.emit('error', '找不到单词的音标')
+      return emitter.emit('warn', '找不到单词的音标')
     }
 
     show()

@@ -24,7 +24,7 @@
       var(--tool-purple-color), var(--tool-yellow-color);
 
     @for $i from 0 to 5 {
-      .bar-wrapper-group:nth-child(#{$i + 1}) .divider {
+      .bar-wrapper-menus:nth-child(#{$i + 1}) .divider {
         background-color: nth($colors, $i + 1);
       }
     }
