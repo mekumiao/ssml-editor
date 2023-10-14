@@ -1,12 +1,17 @@
 # ssml-editor
 
-[在线体验](https://ssml.sdaxia.top/)  
 模仿[魔音工坊UI](https://www.moyin.com/overview/article-voice)的`SSML`编辑器  
 根据[微软语音文档](https://learn.microsoft.com/zh-cn/azure/ai-services/speech-service/speech-synthesis-markup)生成SSML, 可配合大佬项目[tts-vue](https://github.com/LokerL/tts-vue.git)一起使用
 
+## 预览
+
+[在线体验](https://ssml.sdaxia.top/)
+
+![](https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/20231014220252.png)
+
 ## 开始
 
-[详情可参考demo](https://github.com/mekumiao/ssml-editor-demo.git)
+详细使用方法请参考[ssml-editor-demo](https://github.com/mekumiao/ssml-editor-demo.git)项目
 
 ### 一、环境
 
@@ -51,7 +56,7 @@ import { EditorView } from '@mekumiao/ssml-editor'
 <style scoped></style>
 ```
 
-## 本地开发指南
+## 开发指南
 
 [开发指南](./DEV.md)
 
