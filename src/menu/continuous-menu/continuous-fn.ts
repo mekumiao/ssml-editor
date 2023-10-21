@@ -1,5 +1,5 @@
 import { type IDomEditor } from '@wangeditor/editor'
-import { SlateEditor, SlateRange } from '@wangeditor/editor'
+import { SlateRange } from '@wangeditor/editor'
 import BaseFn from '../base-fn'
 import { emitter } from '@/event-bus'
 import type { Prosody } from '@/core'
@@ -18,8 +18,11 @@ export class ContinuousFn extends BaseFn {
       return true
     }
 
-    const value = SlateEditor.string(this.editor, selection)
-    if (value.length < 2) return true
+    const value = this.getValue()
+    if (value.length < 2) {
+      emitter.emit('warn', '请框选至少2个字符')
+      return true
+    }
 
     return false
   }
