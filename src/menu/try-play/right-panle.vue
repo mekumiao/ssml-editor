@@ -136,14 +136,14 @@ function handleSpeakerDetailShow() {
 </script>
 
 <template>
-  <div class="right-panle w-100 px-3 text-white" style="font-size: 0.5rem">
+  <div class="right-panle w-100 px-3 text-white" style="font-size: 0.65rem">
     <div class="mt-2 d-flex text-center justify-content-between align-items-center">
       <div class="me-auto d-flex flex-row align-items-center">
         <PlayButton></PlayButton>
         <div class="ms-2 d-flex flex-column justify-content-between" style="height: 50px">
           <div class="d-flex dlex-row column-gap-2 align-items-end">
             <span class="fs-6">{{ tryPlayStore.speaker.displayName }}</span>
-            <span style="font-size: 0.5rem">{{ speed }}x</span>
+            <span>{{ speed }}x</span>
           </div>
           <div class="d-flex flex-row column-gap-2 align-items-center">
             <ElIcon @click="handleStar" class="fs-6" :style="{ color: isStar ? 'red' : 'white' }">

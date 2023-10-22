@@ -42,7 +42,7 @@ function reopen() {
 
 <template>
   <div ref="boxRef" class="px-2 py-1" style="width: 410px">
-    <section class="fw-bold" v-show="showText" style="font-size: 0.5rem">
+    <section class="fw-bold" v-show="showText" style="font-size: 0.65rem">
       <p class="text-start text-danger">请在安静的环境中进行录音，以需要转换的风格，读出以下文案</p>
       <div class="border border-secondary rounded p-2 w-100" style="height: 100px">{{ text }}</div>
     </section>
@@ -51,7 +51,7 @@ function reopen() {
         <button @click="handleOpenRecord" class="btn btn-success">实时录音</button>
         <button @click="handleOpenInputFile" class="btn btn-primary">上传录音</button>
       </div>
-      <p class="mt-2 text-secondary" style="font-size: 0.5rem">
+      <p class="mt-2 text-secondary" style="font-size: 0.65rem">
         录音内容需要和滑选一致，音频限制60秒，滑选文案限制60个字
       </p>
     </section>

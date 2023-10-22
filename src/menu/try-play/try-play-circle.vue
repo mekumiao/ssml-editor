@@ -81,7 +81,7 @@ function isPlayButtonClick(event: MouseEvent) {
   >
     <div class="avatar d-flex flex-column justify-content-center align-items-center">
       <PlayButton ref="playButtonRef" disabled-click :size="40"></PlayButton>
-      <div class="text-white" style="font-size: 0.5rem">{{ tryPlayStore.speaker.displayName }}</div>
+      <div class="text-white" style="font-size: 0.65rem">{{ tryPlayStore.speaker.displayName }}</div>
     </div>
   </div>
 </template>

@@ -17,13 +17,13 @@ withDefaults(defineProps<{ activate?: boolean; data?: SpeakerAvatarData }>(), {
     <span
       v-if="!data.isFree"
       class="position-absolute top-0 start-100 translate-middle text-bg-danger text-nowrap rounded px-1"
-      style="font-size: 0.5rem"
+      style="font-size: 0.65rem"
       >付费</span
     >
     <img
       :src="data.avatar || demoAvatar()"
       class="rounded-circle"
-      style="height: 40px"
+      style="height: 40px; width: 40px"
       :class="{ 'border border-2 border-warning': activate }"
     />
     <div class="anchor-avatar-name text-white">{{ data.label }}</div>

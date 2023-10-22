@@ -51,7 +51,7 @@ const bgColor = getRandomColor()
       style="height: 30px; width: 30px"
       :class="{ 'border border-2 border-warning': activate }"
     />
-    <div class="anchor-avatar-name text-white" style="font-size: 0.5rem">{{ data.label }}</div>
+    <div class="anchor-avatar-name text-white" style="font-size: 0.65rem">{{ data.label }}</div>
   </div>
 </template>
 

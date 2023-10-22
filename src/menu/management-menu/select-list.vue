@@ -38,7 +38,7 @@ defineExpose({
     >
       <li
         class="clickable select-item py-1"
-        style="font-size: 0.5rem"
+        style="font-size: 0.65rem"
         v-for="(item, index) in dataList"
         :class="{ activate: item.value === modelValue }"
         :key="index"

@@ -15,7 +15,7 @@ defineProps<{ label: string; value?: string; avatar?: string; activated?: boolea
         style="height: 40px"
       />
     </div>
-    <div style="font-size: 0.5rem">{{ label }}</div>
+    <div style="font-size: 0.65rem">{{ label }}</div>
   </div>
 </template>
 
