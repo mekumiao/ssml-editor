@@ -1,6 +1,6 @@
 <script setup lang="ts">
 defineEmits<{ click: [value: string] }>()
-defineProps<{ activate?: boolean; value?: string }>()
+withDefaults(defineProps<{ activate?: boolean; value?: string }>(), { activate: false, value: '' })
 </script>
 
 <template>

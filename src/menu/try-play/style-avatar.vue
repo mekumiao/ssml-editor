@@ -3,7 +3,10 @@ import { demoAvatar } from '@/config'
 import type { StyleAvatarData } from './data'
 
 defineEmits<{ click: [value: string] }>()
-defineProps<{ activate?: boolean; data?: StyleAvatarData }>()
+withDefaults(defineProps<{ activate?: boolean; data?: StyleAvatarData }>(), {
+  activate: false,
+  data: () => ({ label: '', value: '' }),
+})
 
 function getRandomColor() {
   const mainstreamColors = [
@@ -30,10 +33,10 @@ const bgColor = getRandomColor()
 <template>
   <div
     class="anchor-avatar d-flex flex-column align-items-center text-center justify-content-center position-relative"
-    @click="$emit('click', data?.value)"
+    @click="$emit('click', data.value)"
   >
     <div
-      v-if="data?.emoji"
+      v-if="data.emoji"
       class="rounded-circle d-flex border-info justify-content-center align-items-center"
       style="height: 30px; width: 30px"
       :style="{ 'background-color': bgColor }"
@@ -43,12 +46,12 @@ const bgColor = getRandomColor()
     </div>
     <img
       v-else
-      :src="data?.avatar || demoAvatar()"
+      :src="data.avatar || demoAvatar()"
       class="rounded-circle"
       style="height: 30px; width: 30px"
       :class="{ 'border border-2 border-warning': activate }"
     />
-    <div class="anchor-avatar-name text-white" style="font-size: 0.5rem">{{ data?.label }}</div>
+    <div class="anchor-avatar-name text-white" style="font-size: 0.5rem">{{ data.label }}</div>
   </div>
 </template>
 
