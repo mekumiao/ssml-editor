@@ -31,12 +31,12 @@ defineExpose({
 
 onMounted(() => {
   emitter.on('view-click', handleViewClick)
-  document.addEventListener('keydown', handleKeyDownEsc)
+  emitter.on('view-keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
   emitter.off('view-click', handleViewClick)
-  document.removeEventListener('keydown', handleKeyDownEsc)
+  emitter.off('view-keydown', handleKeyDownEsc)
 })
 
 function handleViewClick(ev: MouseEvent) {

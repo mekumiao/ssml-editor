@@ -4,7 +4,7 @@ import EditorCore from './editor-core.vue'
 import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 import { emitter } from '@/event-bus'
-import { ref, provide } from 'vue'
+import { ref, provide, onMounted, onUnmounted } from 'vue'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 
@@ -12,6 +12,14 @@ const boxRef = ref<HTMLDivElement>()
 
 // 设置拖拽容器盒子,如果想要在整个页面可拖拽,将boxRef换为ref(document.body)即可
 provide('dragContainerBox', boxRef)
+
+onMounted(() => {
+  document.addEventListener('keydown', handleKeyDown)
+})
+
+onUnmounted(() => {
+  document.removeEventListener('keydown', handleKeyDown)
+})
 
 function handleCreated(editor: IDomEditor) {
   emit('created', editor)
@@ -31,12 +39,7 @@ function handleKeyDown(ev: KeyboardEvent) {
 </script>
 
 <template>
-  <div
-    ref="boxRef"
-    class="ssml-editor-root editor-view"
-    @click="handleClick"
-    @keydown="handleKeyDown"
-  >
+  <div ref="boxRef" class="ssml-editor-root editor-view" @click="handleClick">
     <slot><EditorTitle></EditorTitle></slot>
     <div class="editor-box">
       <EditorBar></EditorBar>

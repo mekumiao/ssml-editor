@@ -4,6 +4,7 @@ import LeftPanle from './left-panle.vue'
 import { onMounted, onUnmounted, ref, inject, type Ref } from 'vue'
 import { useConstrainDragBounds } from '@/components'
 import { useDraggable, useElementBounding } from '@vueuse/core'
+import { emitter } from '@/event-bus'
 
 const emit = defineEmits<{ 'update:visible': [value: boolean] }>()
 const props = defineProps<{ visible: boolean }>()
@@ -14,11 +15,11 @@ const dragContainerBoxRef = inject<Ref<HTMLElement | undefined>>('dragContainerB
 const editorViewBoxBounds = useElementBounding(dragContainerBoxRef)
 
 onMounted(() => {
-  window.addEventListener('keydown', handleKeyDownEsc)
+  emitter.on('view-keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
-  window.addEventListener('keydown', handleKeyDownEsc)
+  emitter.off('view-keydown', handleKeyDownEsc)
 })
 
 function handleKeyDownEsc(event: KeyboardEvent) {
