@@ -40,7 +40,7 @@ onUnmounted(() => {
 })
 
 function handleViewClick(ev: MouseEvent) {
-  allowClose.value && isOthreClick(ev) && handleClose()
+  allowClose.value && isOtherClick(ev) && handleClose()
 }
 
 function withoutAutoClose(callback: VoidFunction) {
@@ -52,7 +52,7 @@ function withoutAutoClose(callback: VoidFunction) {
   }
 }
 
-function isOthreClick(ev: MouseEvent) {
+function isOtherClick(ev: MouseEvent) {
   const target = ev.target as HTMLElement
   if (!boxRef.value || !referenceRef.value) return false
   if (referenceRef.value.contains(target)) return false
