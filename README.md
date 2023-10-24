@@ -7,7 +7,7 @@
 
 [在线体验](https://ssml.sdaxia.top/)
 
-![](https://gcore.jsdelivr.net/gh/mekumiao/img-hosting/upload/20231014220252.png)
+![](https://i.yuxiaoyu.top/upload/20231014220252.png)
 
 ## 开始
 
