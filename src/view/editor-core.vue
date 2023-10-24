@@ -18,7 +18,7 @@ const editorRef = shallowRef<IDomEditor>()
 onMounted(() => {
   Core.install()
   initEditor()
-  initEffects()
+  initAnimation()
 })
 
 onUnmounted(() => {
@@ -49,11 +49,11 @@ function initEditor() {
   setEditor(editor)
 }
 
-function initEffects() {
-  if (ssmlEditorConfig.effects.zoom) {
+function initAnimation() {
+  if (ssmlEditorConfig.animation.zoom) {
     document.querySelector('.w-e-text-container')?.classList.add('allow-zoom')
   }
-  if (ssmlEditorConfig.effects.grayscale) {
+  if (ssmlEditorConfig.animation.grayscale) {
     document.querySelector('.w-e-text-container')?.classList.add('allow-grayscale')
   }
 }

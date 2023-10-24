@@ -8,20 +8,20 @@ import { defaultRecentUsageSpeaker, type RecentUsageSpeaker } from '@/menu/manag
 import { emitter } from '@/event-bus'
 import mergeWith from 'lodash.mergewith'
 
-type Effects = { zoom: boolean; grayscale: boolean }
+type Animation = { zoom: boolean; grayscale: boolean }
 type FetchFunction = () => Promise<LabelValue[]>
 type WordFetchFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetchFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
 type FilterSpeakerFetchFunction = (filter: FilterSpeaker) => Promise<Speaker[]>
 
-type PartialKey = 'effects' | 'bgm' | 'special' | 'tryPlay' | 'conversion' | 'management'
+type PartialKey = 'animation' | 'bgm' | 'special' | 'tryPlay' | 'conversion' | 'management'
 type PartialProps<T, K extends keyof T> = { [P in K]?: Partial<T[P]> }
 
 export type PartialSSMLEditorConfig = Partial<Omit<SSMLEditorConfig, PartialKey>> &
   PartialProps<SSMLEditorConfig, PartialKey>
 
 export interface SSMLEditorConfig {
-  effects: Effects
+  animation: Animation
   editorConfig: Partial<IEditorConfig> & {
     saveHtml?: (htmlGetter: () => string) => Promise<boolean>
     readHtml?: () => Promise<string | null>
@@ -71,7 +71,7 @@ function resolveList() {
 
 function defaultSSMLEditorConfig(): SSMLEditorConfig {
   return {
-    effects: { zoom: true, grayscale: true },
+    animation: { zoom: true, grayscale: true },
     editorConfig: { placeholder: '请输入内容...' },
     handleWarn: (message) => console.warn(message),
     handleError: (error) => console.error(error),
