@@ -173,7 +173,7 @@ function handleReupload() {
     <div
       class="d-flex flex-row justify-content-between border rounded-pill border-secondary my-3 py-1 px-2"
     >
-      <div class="text-secondary d-flex flex-row align-items-center" style="font-size: 0.5rem">
+      <div class="text-secondary d-flex flex-row align-items-center" style="font-size: 0.65rem">
         <button @click="handlePlay" v-if="recordFile || inputFile" class="btn btn-sm rounded-pill">
           <span
             v-if="playState === 'playing' || recorderState === 'recording'"
@@ -191,7 +191,7 @@ function handleReupload() {
         >
           <span class="iconfont icon-delete"></span>
         </button>
-        <span v-if="audioInfo" style="font-size: 0.5rem">已上传</span>
+        <span v-if="audioInfo" style="font-size: 0.65rem">已上传</span>
         <template v-if="isRecord && !recordFile">
           <button
             v-if="recorderState === 'recording'"

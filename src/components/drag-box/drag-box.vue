@@ -31,16 +31,16 @@ defineExpose({
 
 onMounted(() => {
   emitter.on('view-click', handleViewClick)
-  document.addEventListener('keydown', handleKeyDownEsc)
+  emitter.on('view-keydown', handleKeyDownEsc)
 })
 
 onUnmounted(() => {
   emitter.off('view-click', handleViewClick)
-  document.removeEventListener('keydown', handleKeyDownEsc)
+  emitter.off('view-keydown', handleKeyDownEsc)
 })
 
 function handleViewClick(ev: MouseEvent) {
-  allowClose.value && isOthreClick(ev) && handleClose()
+  allowClose.value && isOtherClick(ev) && handleClose()
 }
 
 function withoutAutoClose(callback: VoidFunction) {
@@ -52,7 +52,7 @@ function withoutAutoClose(callback: VoidFunction) {
   }
 }
 
-function isOthreClick(ev: MouseEvent) {
+function isOtherClick(ev: MouseEvent) {
   const target = ev.target as HTMLElement
   if (!boxRef.value || !referenceRef.value) return false
   if (referenceRef.value.contains(target)) return false

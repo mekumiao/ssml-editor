@@ -22,16 +22,12 @@ const ssmlFormat = computed(() => {
 })
 
 const saveStateFormat = computed(() => {
-  switch (editorStore.saveState) {
-    case 'unsave':
-      return '未保存'
-    case 'saving':
-      return '保存中...'
-    case 'saved':
-      return '已保存'
-    default:
-      return ''
+  const map: Record<typeof editorStore.saveState, string> = {
+    unsave: '未保存',
+    saving: '保存中...',
+    saved: '已保存',
   }
+  return map[editorStore.saveState]
 })
 
 function handleShowSSML() {
