@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, shallowRef, toRaw, watch } from 'vue'
+import { inject, onMounted, onUnmounted, ref, shallowRef, toRaw, watch } from 'vue'
 import SpeakerAvatar from './speaker-avatar.vue'
 import type { FilterSpeaker, Speaker } from '@/model'
 import { useTryPlayStore } from '@/stores'
@@ -9,7 +9,8 @@ import { emitter } from '@/event-bus'
 
 const props = defineProps<{ filter: FilterSpeaker }>()
 
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 const { fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
 
@@ -25,7 +26,7 @@ watch(
 
 function handleClick(value: string) {
   const speaker = speaderCache.value.find((v) => v.name === value)
-  speaker && tryPlayStore.setSpeaker(speaker)
+  speaker && tryPlayStore.setSpeaker(editorKey, speaker)
 }
 
 function handleUpdateStarTheCache(speakerId: string, isStar: boolean) {

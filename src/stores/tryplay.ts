@@ -10,7 +10,6 @@ import type { AudioInfo } from '@/menu/conversion-menu/data'
 import { getConfig } from '@/config'
 
 export const useTryPlayStore = defineStore('--editor-try-play', () => {
-  const config = getConfig()
   const ssmlStore = useSSMLStore()
   const _audioPlayer = shallowRef(new AudioPlayer())
   const _speaker = ref<Speaker>(defaultSpeaker())
@@ -20,12 +19,13 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
   const audioPlayer = computed(() => _audioPlayer.value)
   const isLoading = computed(() => _isLoading.value)
 
-  const setSpeaker = (value: Speaker) => {
+  const setSpeaker = (key: symbol, value: Speaker) => {
     function setter(value: Speaker) {
       _speaker.value = value
       ssmlStore.rootVoice.name = value.name
       emitter.emit('tryplay-speaker-select', value)
     }
+    const config = getConfig(key)
     if (config.tryPlay.selectSpeaker) {
       config.tryPlay.selectSpeaker(value, setter)
     } else {
@@ -33,8 +33,9 @@ export const useTryPlayStore = defineStore('--editor-try-play', () => {
     }
   }
 
-  const star = async (isStar: boolean) => {
+  const star = async (key: symbol, isStar: boolean) => {
     const speakerId = _speaker.value.id
+    const config = getConfig(key)
     const resIsStar = await config.tryPlay.fetchStar(speakerId, isStar)
     _speaker.value.isStar = resIsStar
     emitter.emit('tryplay-speaker-update-star', _speaker.value.id, resIsStar)

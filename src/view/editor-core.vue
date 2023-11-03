@@ -1,16 +1,16 @@
 <script setup lang="ts">
-import { onMounted, onUnmounted, ref, shallowRef, toRaw } from 'vue'
+import { inject, onMounted, onUnmounted, ref, shallowRef, toRaw } from 'vue'
 import { type IDomEditor, createEditor } from '@wangeditor/editor'
 import { getConfig } from '@/config'
 import { useEditorStore } from '@/stores'
 import Core from '@/core'
 import { emitter } from '@/event-bus'
-import { sleep } from '@/utils'
 import { getEmitter } from '@/core/emitter'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
 const { setEditor, saveEditorHtml } = useEditorStore()
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 
 const boxRef = ref(null)
 const editorRef = shallowRef<IDomEditor>()
@@ -25,10 +25,11 @@ onUnmounted(() => {
   editorRef.value?.destroy()
 })
 
-function initEditor() {
+async function initEditor() {
   if (!boxRef.value) return
   const editor = createEditor({
     selector: boxRef.value! as Element,
+    html: (await readHtml()) || undefined,
     mode: 'simple',
     config: {
       ...toRaw(ssmlEditorConfig.editorConfig),
@@ -36,7 +37,8 @@ function initEditor() {
         emitter.emit('editor-created', editor)
         emit('created', editor)
         ssmlEditorConfig.editorConfig.onCreated?.(editor)
-        initEditorHtml(editor)
+        getEmitter(editor)?.on('ssml-update', handleSaveEditorHtml)
+        editor.focus(true)
       },
       onChange(editor) {
         emit('change', editor)
@@ -58,19 +60,22 @@ function initAnimation() {
   }
 }
 
-async function initEditorHtml(editor: IDomEditor) {
-  const readHtml = ssmlEditorConfig.editorConfig.readHtml
-  if (readHtml) {
-    const html = await readHtml()
-    html && editor.setHtml(html)
-    await sleep(500)
-    editor.focus(true)
+async function readHtml() {
+  try {
+    const read = ssmlEditorConfig.editorConfig.readHtml
+    return (await read?.()) || null
+  } catch (error) {
+    emitter.emit('error', error)
+    return null
   }
-  getEmitter(editor)?.on('ssml-update', handleSaveEditorHtml)
 }
 
 function handleSaveEditorHtml(editor: IDomEditor) {
-  saveEditorHtml(editor.getHtml)
+  try {
+    saveEditorHtml(editorKey, editor.getHtml)
+  } catch (error) {
+    emitter.emit('error', error)
+  }
 }
 </script>
 

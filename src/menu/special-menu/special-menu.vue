@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { BarButton } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef } from 'vue'
+import { inject, ref, shallowRef } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import { SpecialFn } from './special-fn'
 import type { LabelValue } from '@/model'
@@ -11,7 +11,8 @@ import { getConfig } from '@/config'
 const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
 const fn = shallowRef<SpecialFn>()
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 const { special } = ssmlEditorConfig
 
 const visible = ref(false)

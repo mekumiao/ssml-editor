@@ -1,13 +1,14 @@
 <script setup lang="ts">
 import SimpleTag from './simple-tag.vue'
-import { onMounted, ref, toRaw } from 'vue'
+import { inject, onMounted, ref, toRaw } from 'vue'
 import type { FilterSpeaker, LabelValue } from '@/model'
 import { getConfig } from '@/config'
 
 const emit = defineEmits<{ 'update:filter': [value: FilterSpeaker] }>()
 const props = defineProps<{ filter: FilterSpeaker }>()
 
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 const { topFlag, gender, featchTag } = ssmlEditorConfig.tryPlay
 
 const tags = ref<LabelValue[]>([])

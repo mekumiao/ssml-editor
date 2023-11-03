@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref, type CSSProperties } from 'vue'
+import { computed, ref, type CSSProperties, inject } from 'vue'
 import { demoAvatar } from '@/config'
 import { useTryPlayStore } from '@/stores'
 import { ElIcon } from 'element-plus'
@@ -17,7 +17,8 @@ const boxRef = ref<HTMLDivElement>()
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 
 const styleObject = computed<CSSProperties>(() => ({
   'background-image': `url(${tryPlayStore.speaker.avatar || demoAvatar()})`,

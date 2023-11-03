@@ -1,14 +1,12 @@
 import type { IDomEditor } from '@wangeditor/editor'
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
-import { getConfig } from '@/config'
+import { getConfig, type SSMLEditorConfig } from '@/config'
 import throttle from 'lodash.throttle'
 
 type SaveState = 'unsave' | 'saving' | 'saved'
 
 export const useEditorStore = defineStore('--editor-config', () => {
-  const config = getConfig()
-
   const _editor = shallowRef<IDomEditor>()
   const _saveState = ref<SaveState>('saved')
 
@@ -24,7 +22,7 @@ export const useEditorStore = defineStore('--editor-config', () => {
   }
 
   const saveThrottle = throttle(
-    async (htmlGetter: () => string) => {
+    async (config: SSMLEditorConfig, htmlGetter: () => string) => {
       const saveHtml = config.editorConfig.saveHtml
       if (!saveHtml) return
       try {
@@ -44,9 +42,9 @@ export const useEditorStore = defineStore('--editor-config', () => {
     { leading: false, trailing: true },
   )
 
-  const saveEditorHtml = (htmlGetter: () => string) => {
+  const saveEditorHtml = (key: symbol, htmlGetter: () => string) => {
     if (_saveState.value === 'saved') _saveState.value = 'unsave'
-    saveThrottle(htmlGetter)
+    saveThrottle(getConfig(key), htmlGetter)
   }
 
   return { editor, saveState, setEditor, setSaveState, saveEditorHtml }

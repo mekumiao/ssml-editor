@@ -3,7 +3,7 @@ import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { computed, onMounted, ref, shallowRef, watch } from 'vue'
+import { computed, inject, onMounted, ref, shallowRef, watch } from 'vue'
 import { speed, pitch, type RecentUsageSpeaker, type ContentData } from './data'
 import { type SubmitData } from './data'
 import { emitter } from '@/event-bus'
@@ -17,7 +17,8 @@ const emit = defineEmits<{
 }>()
 const props = defineProps<{ contentData: ContentData }>()
 
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 const { tryPlay, management } = ssmlEditorConfig
 
 const boxRef = ref<HTMLDivElement>()

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { type IDomEditor } from '@wangeditor/editor'
-import { ref, shallowRef } from 'vue'
+import { inject, ref, shallowRef } from 'vue'
 import { BarButton, BarPopover } from '@/components'
 import { selectionTrimEnd } from '@/core/helper'
 import { EnglishFn } from './english-fn'
@@ -8,7 +8,8 @@ import type { LabelValue } from '@/model'
 import { emitter } from '@/event-bus'
 import { getConfig } from '@/config'
 
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 const fn = shallowRef<EnglishFn>()
 const englishList = ref<LabelValue[]>([])
 const visible = ref(false)

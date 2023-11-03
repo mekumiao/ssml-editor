@@ -5,13 +5,15 @@ import { Loading } from '@element-plus/icons-vue'
 import { BarButton } from '@/components'
 import throttle from 'lodash.throttle'
 import { getConfig } from '@/config'
+import { inject } from 'vue'
 
 withDefaults(defineProps<{ disabled?: boolean }>(), { disabled: false })
 
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 
 const handleClick = throttle(async () => {
   await play(ssmlEditorConfig.tryPlay.play)

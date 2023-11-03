@@ -3,7 +3,7 @@ import { ElSlider, ElIcon } from 'element-plus'
 import SpeakerAvatar from './speaker-avatar.vue'
 import PlayButton from './play-button.vue'
 import type { CSSProperties } from 'vue'
-import { reactive, ref, onUnmounted, computed, watch, onMounted, toRaw } from 'vue'
+import { reactive, ref, onUnmounted, computed, watch, onMounted, toRaw, inject } from 'vue'
 import { formatTime } from '@/utils'
 import { Star, StarFilled } from '@element-plus/icons-vue'
 import { getConfig } from '@/config'
@@ -21,7 +21,8 @@ interface Mark {
 
 type Marks = Record<number, Mark | string>
 
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 const { rootProsody, rootExpressAs } = useSSMLStore()
 const { category, fetchData } = ssmlEditorConfig.tryPlay
 const tryPlayStore = useTryPlayStore()
@@ -89,7 +90,7 @@ watch(currentTime, (newValue) => {
 })
 
 async function handleStar() {
-  await tryPlayStore.star(!isStar.value)
+  await tryPlayStore.star(editorKey, !isStar.value)
 }
 
 function handleUpdateStarTheCache(speakerId: string, isStar: boolean) {
@@ -115,7 +116,7 @@ async function handleCategoryClick(value: string) {
 }
 
 function handleSpeakerClick(value: Speaker) {
-  tryPlayStore.setSpeaker(toRaw(value))
+  tryPlayStore.setSpeaker(editorKey, toRaw(value))
 }
 
 function handleTimeInput() {
