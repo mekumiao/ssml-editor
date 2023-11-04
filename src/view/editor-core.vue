@@ -70,9 +70,9 @@ async function readHtml() {
   }
 }
 
-function handleSaveEditorHtml(editor: IDomEditor) {
+async function handleSaveEditorHtml(editor: IDomEditor) {
   try {
-    saveEditorHtml(editorKey, editor.getHtml)
+    await saveEditorHtml(editorKey, editor.getHtml)
   } catch (error) {
     emitter.emit('error', error)
   }

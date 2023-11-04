@@ -62,8 +62,13 @@ export default <T extends IDomEditor>(editor: T) => {
    */
   newEditor.setFragmentData = (data) => {
     setFragmentData(data)
-    const plain = editor.getText()
-    data.setData('text/plain', plain)
+    // const { selection } = editor
+    // if (selection) {
+    //   const plain = SlateEditor.string(editor, selection)
+    //   data.setData('text/plain', editor.getText())
+    // } else {
+    //   setFragmentData(data)
+    // }
   }
 
   newEditor.insertText = (text) => {
