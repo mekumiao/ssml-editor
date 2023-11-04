@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { demoAvatar } from '@/config'
+import { defaultAvatar } from '@/config'
 import type { StyleAvatarData } from './data'
 
 defineEmits<{ click: [value: string] }>()
@@ -46,7 +46,7 @@ const bgColor = getRandomColor()
     </div>
     <img
       v-else
-      :src="data.avatar || demoAvatar()"
+      :src="data.avatar || defaultAvatar()"
       class="rounded-circle"
       style="height: 30px; width: 30px"
       :class="{ 'border border-2 border-warning': activate }"
