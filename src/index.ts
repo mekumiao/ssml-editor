@@ -1,5 +1,10 @@
 import '@wangeditor/editor/dist/css/style.css'
+import 'highlight.js/styles/atom-one-dark.css'
 import './assets/main.scss'
+
+import hljs from 'highlight.js/lib/core'
+import xml from 'highlight.js/lib/languages/javascript'
+import hljsVuePlugin from '@highlightjs/vue-plugin'
 
 import type { App, Plugin } from 'vue'
 import { createPinia, setActivePinia } from 'pinia'
@@ -16,8 +21,11 @@ export * from './serialize'
 export * from './stores'
 export * from './event-bus'
 
+hljs.registerLanguage('xml', xml)
+
 export default <Plugin>{
   install(app: App) {
+    app.use(hljsVuePlugin)
     const pinia = app.config.globalProperties.$pinia
     if (pinia) {
       setActivePinia(pinia)

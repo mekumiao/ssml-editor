@@ -96,11 +96,12 @@ async function handleCopy(isFormat: boolean) {
   </div>
 
   <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
-    <pre
-      class="border border-secondary-subtle rounded-2 px-2 scrollbar overflow-y-auto"
+    <div
+      class="border border-secondary-subtle rounded-2 scrollbar overflow-y-auto"
       style="white-space: pre-wrap; max-height: 50vh"
-      >{{ ssmlFormat }}</pre
     >
+      <highlightjs language="xml" :code="ssmlFormat" />
+    </div>
     <template #header>
       <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
       <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭(推荐)</ElButton>
