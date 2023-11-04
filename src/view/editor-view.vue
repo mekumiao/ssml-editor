@@ -4,20 +4,21 @@ import EditorCore from './editor-core.vue'
 import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
 import { emitter } from '@/event-bus'
-import { ref, provide, onMounted, onUnmounted } from 'vue'
+import { ref, provide, onMounted, onUnmounted, toRaw } from 'vue'
 import { type PartialSSMLEditorConfig, setConfig } from '@/config'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
-const props = defineProps<{ config?: PartialSSMLEditorConfig }>()
+const props = withDefaults(defineProps<{ config?: PartialSSMLEditorConfig; editorKey: symbol }>(), {
+  editorKey: () => Symbol('editorKey'),
+})
 
 const boxRef = ref<HTMLDivElement>()
-const editorKey = Symbol('editorKey')
 
-setConfig(editorKey, props.config)
+setConfig(props.editorKey, toRaw(props.config))
 
 // 设置拖拽容器盒子,如果想要在整个页面可拖拽,将boxRef换为ref(document.body)即可
 provide('dragContainerBox', boxRef)
-provide('editorKey', editorKey)
+provide('editorKey', props.editorKey)
 
 onMounted(() => {
   document.addEventListener('keydown', handleKeyDown)
