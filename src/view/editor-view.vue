@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import EditorTitle from './editor-title.vue'
+import EditorHeader from './editor-header.vue'
 import EditorCore from './editor-core.vue'
 import EditorBar from './editor-bar.vue'
 import { type IDomEditor } from '@wangeditor/editor'
@@ -8,9 +8,12 @@ import { ref, provide, onMounted, onUnmounted, toRaw } from 'vue'
 import { type PartialSSMLEditorConfig, setConfig } from '@/config'
 
 const emit = defineEmits<{ created: [editor: IDomEditor]; change: [editor: IDomEditor] }>()
-const props = withDefaults(defineProps<{ config?: PartialSSMLEditorConfig; editorKey: symbol }>(), {
-  editorKey: () => Symbol('editorKey'),
-})
+const props = withDefaults(
+  defineProps<{ config?: PartialSSMLEditorConfig; editorKey?: symbol }>(),
+  {
+    editorKey: () => Symbol('editorKey'),
+  },
+)
 
 const boxRef = ref<HTMLDivElement>()
 
@@ -47,7 +50,7 @@ function handleKeyDown(ev: KeyboardEvent) {
 
 <template>
   <div ref="boxRef" class="ssml-editor-root editor-view" @click="handleClick">
-    <slot><EditorTitle></EditorTitle></slot>
+    <slot name="header"><EditorHeader></EditorHeader></slot>
     <div class="editor-box">
       <EditorBar></EditorBar>
       <div class="editor-core-container shadow pt-1">
