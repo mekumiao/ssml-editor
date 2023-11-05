@@ -41,6 +41,11 @@ function handleShowSSML() {
   dialogVisible.value = true
 }
 
+function handleCopySSML() {
+  ssml.value = serializeToSSML()
+  handleCopy(false)
+}
+
 function handleCloseBgm() {
   rootBackgroundaudio.src = ''
   rootBackgroundaudio.remark = ''
@@ -97,7 +102,7 @@ async function handleCopy(isFormat: boolean) {
         <ElButton type="primary" @click="handleSave">保存到浏览器</ElButton>
         <ElButton type="primary" @click="handleExport">导出文件(.txt)</ElButton>
         <div class="menu-divider"></div>
-        <ElButton type="warning" @click="handleCopy(false)">复制 SSML</ElButton>
+        <ElButton type="warning" @click="handleCopySSML">复制 SSML</ElButton>
         <ElButton type="warning" @click="handleShowSSML">显示 SSML</ElButton>
         <div v-if="slots.menus" class="menu-divider"></div>
       </template>
