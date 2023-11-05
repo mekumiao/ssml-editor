@@ -1,14 +1,12 @@
 import type { IDomEditor } from '@wangeditor/editor'
 import { defineStore } from 'pinia'
 import { computed, ref, shallowRef } from 'vue'
-import { getConfig } from '@/config'
+import { getConfig, type SSMLEditorConfig } from '@/config'
 import throttle from 'lodash.throttle'
 
 type SaveState = 'unsave' | 'saving' | 'saved'
 
 export const useEditorStore = defineStore('--editor-config', () => {
-  const config = getConfig()
-
   const _editor = shallowRef<IDomEditor>()
   const _saveState = ref<SaveState>('saved')
 
@@ -23,30 +21,33 @@ export const useEditorStore = defineStore('--editor-config', () => {
     _saveState.value = state
   }
 
-  const saveThrottle = throttle(
-    async (htmlGetter: () => string) => {
-      const saveHtml = config.editorConfig.saveHtml
-      if (!saveHtml) return
-      try {
-        _saveState.value = 'saving'
-        const rest = await saveHtml(htmlGetter)
-        if (rest) {
-          _saveState.value = 'saved'
-        } else {
-          _saveState.value = 'unsave'
-        }
-      } catch (error) {
+  const _saveEditorHtml = async (config: SSMLEditorConfig, htmlGetter: () => string) => {
+    const saveHtml = config.editorConfig.saveHtml
+    if (!saveHtml || _saveState.value !== 'unsave') return
+    try {
+      _saveState.value = 'saving'
+      const rest = await saveHtml(htmlGetter)
+      if (rest) {
+        _saveState.value = 'saved'
+      } else {
         _saveState.value = 'unsave'
-        throw error
       }
-    },
-    3000,
-    { leading: false, trailing: true },
-  )
+    } catch (error) {
+      _saveState.value = 'unsave'
+      throw error
+    }
+  }
 
-  const saveEditorHtml = (htmlGetter: () => string) => {
+  const _saveEditorHtmlWithThrottle = throttle(_saveEditorHtml, 10000, {
+    leading: false,
+    trailing: true,
+  })
+
+  const saveEditorHtml = (key: symbol, htmlGetter: () => string, isThrottle: boolean = true) => {
     if (_saveState.value === 'saved') _saveState.value = 'unsave'
-    saveThrottle(htmlGetter)
+    return isThrottle
+      ? _saveEditorHtmlWithThrottle(getConfig(key), htmlGetter)
+      : _saveEditorHtml(getConfig(key), htmlGetter)
   }
 
   return { editor, saveState, setEditor, setSaveState, saveEditorHtml }

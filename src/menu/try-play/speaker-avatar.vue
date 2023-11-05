@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { demoAvatar } from '@/config'
+import { defaultAvatar } from '@/config'
 import type { SpeakerAvatarData } from './data'
 
 defineEmits<{ click: [value: string] }>()
@@ -21,7 +21,7 @@ withDefaults(defineProps<{ activate?: boolean; data?: SpeakerAvatarData }>(), {
       >付费</span
     >
     <img
-      :src="data.avatar || demoAvatar()"
+      :src="data.avatar || defaultAvatar()"
       class="rounded-circle"
       style="height: 40px; width: 40px"
       :class="{ 'border border-2 border-warning': activate }"

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { EditorView } from '@/view'
+import config from './config'
 import type { IDomEditor } from '@wangeditor/editor'
 
 function handleCreate(editor: IDomEditor) {
@@ -14,7 +15,7 @@ function handleCreate(editor: IDomEditor) {
       <EditorView @created="handleCreate"></EditorView>
     </div>
   </div> -->
-  <EditorView @created="handleCreate"></EditorView>
+  <EditorView @created="handleCreate" :config="config"></EditorView>
 </template>
 
 <style scoped></style>

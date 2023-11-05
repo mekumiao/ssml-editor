@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { computed, ref, type CSSProperties } from 'vue'
-import { demoAvatar } from '@/config'
+import { computed, ref, type CSSProperties, inject } from 'vue'
+import { defaultAvatar } from '@/config'
 import { useTryPlayStore } from '@/stores'
 import { ElIcon } from 'element-plus'
 import { Loading } from '@element-plus/icons-vue'
@@ -17,10 +17,11 @@ const boxRef = ref<HTMLDivElement>()
 const tryPlayStore = useTryPlayStore()
 const { audioPlayer, play } = tryPlayStore
 const playState = audioPlayer.playState
-const ssmlEditorConfig = getConfig()
+const editorKey = inject<symbol>('editorKey')!
+const ssmlEditorConfig = getConfig(editorKey)
 
 const styleObject = computed<CSSProperties>(() => ({
-  'background-image': `url(${tryPlayStore.speaker.avatar || demoAvatar()})`,
+  'background-image': `url(${tryPlayStore.speaker.avatar || defaultAvatar()})`,
   width: `${props.size}px`,
   height: `${props.size}px`,
 }))
@@ -38,7 +39,7 @@ defineExpose({
 <template>
   <div
     ref="boxRef"
-    class="play-button rounded-circle"
+    class="play-button rounded-circle user-select-none"
     :style="styleObject"
     @click="!disabledClick && handleClick()"
   >

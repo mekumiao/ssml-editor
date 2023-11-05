@@ -1,16 +1,20 @@
 <script setup lang="ts">
-import { ElButton, ElDialog } from 'element-plus'
-import { Share } from '@element-plus/icons-vue'
-import { computed, ref } from 'vue'
+import { ElButton, ElDialog, ElMessage } from 'element-plus'
+import { computed, inject, ref, useSlots } from 'vue'
 import xmlFormat from 'xml-formatter'
 import { serializeToSSML } from '@/serialize'
 import { useEditorStore, useSSMLStore } from '@/stores'
 import { PlayTag } from '@/components'
 
+withDefaults(defineProps<{ showSsmlButton?: boolean }>(), { showSsmlButton: true })
+
+const slots = useSlots()
+
 const dialogVisible = ref(false)
 const ssml = ref('')
 const { rootBackgroundaudio } = useSSMLStore()
 const editorStore = useEditorStore()
+const editorKey = inject<symbol>('editorKey')!
 
 const ssmlFormat = computed(() => {
   return xmlFormat(ssml.value, {
@@ -40,6 +44,18 @@ function handleCloseBgm() {
   rootBackgroundaudio.remark = ''
 }
 
+async function handleSave() {
+  const editor = editorStore.editor
+  if (editor) {
+    try {
+      await editorStore.saveEditorHtml(editorKey, editor.getHtml, false)
+      ElMessage.success({ message: '保存成功!', grouping: true })
+    } catch (error) {
+      ElMessage.error({ message: '保存失败!', grouping: true })
+    }
+  }
+}
+
 /**
  * 复制ssml到剪贴板
  * @param isFormat 是否格式化ssml(多余的空格和换行可能会导致意外的停顿)
@@ -47,13 +63,14 @@ function handleCloseBgm() {
 async function handleCopy(isFormat: boolean) {
   await navigator.clipboard.writeText(isFormat ? ssmlFormat.value : ssml.value)
   dialogVisible.value = false
+  ElMessage.success({ message: '复制成功!', grouping: true })
 }
 </script>
 
 <template>
-  <div class="editor-title d-flex flex-row align-item-center justify-content-between">
+  <div class="editor-header d-flex flex-row align-item-center justify-content-between">
     <div class="title-wrapper d-flex flex-column justify-content-center ps-3">
-      <div class="title-author pb-1">SSML编辑器</div>
+      <div class="pb-1"><slot name="title">SSML编辑器</slot></div>
       <div class="author d-flex flex-row align-items-center justify-content-start">
         <div>{{ saveStateFormat }}</div>
         <PlayTag
@@ -66,23 +83,25 @@ async function handleCopy(isFormat: boolean) {
       </div>
     </div>
     <div class="operation-wrapper d-flex flex-row justify-content-center align-items-center">
-      <ElButton type="primary" :icon="Share" disabled>分享</ElButton>
-      <div class="menu-divider"></div>
-      <ElButton type="primary" @click="handleShowSSML">查看SSML</ElButton>
-      <ElButton disabled>下载音频</ElButton>
-      <ElButton disabled>下载视频</ElButton>
-      <ElButton disabled>下载字幕</ElButton>
-      <ElButton disabled>声音转换</ElButton>
+      <template v-if="showSsmlButton">
+        <ElButton type="primary" @click="handleSave">保存</ElButton>
+        <div class="menu-divider"></div>
+        <ElButton type="warning" @click="handleCopy(false)">复制 SSML</ElButton>
+        <ElButton type="warning" @click="handleShowSSML">显示 SSML</ElButton>
+        <div v-if="slots.menus" class="menu-divider"></div>
+      </template>
+      <slot name="menus"></slot>
       <div class="px-1"></div>
     </div>
   </div>
 
   <ElDialog v-model="dialogVisible" title="查看SSML" width="80%">
-    <pre
-      class="border border-secondary-subtle rounded-2 px-2 scrollbar overflow-y-auto"
+    <div
+      class="border border-secondary-subtle rounded-2 scrollbar overflow-y-auto"
       style="white-space: pre-wrap; max-height: 50vh"
-      >{{ ssmlFormat }}</pre
     >
+      <highlightjs language="xml" :code="ssmlFormat" />
+    </div>
     <template #header>
       <ElButton type="info" @click="handleCopy(true)">复制+关闭</ElButton>
       <ElButton type="primary" @click="handleCopy(false)">压缩+复制+关闭(推荐)</ElButton>
@@ -97,7 +116,7 @@ async function handleCopy(isFormat: boolean) {
 </template>
 
 <style lang="scss" scoped>
-.editor-title {
+.editor-header {
   height: 80px;
 
   .title-wrapper {
@@ -109,9 +128,6 @@ async function handleCopy(isFormat: boolean) {
   }
 
   .operation-wrapper {
-    display: flex;
-    flex-direction: row;
-
     .menu-divider {
       height: 30px;
       width: 1px;

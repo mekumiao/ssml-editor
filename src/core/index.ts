@@ -18,8 +18,11 @@ import plugin from './plugin'
 export * from './custom-types'
 export * from './helper'
 
+let isInit = false
+
 export default {
   install() {
+    if (isInit) return
     Boot.registerModule(AudioModule)
     Boot.registerModule(BreakModule)
     Boot.registerModule(EmphasisModule)
@@ -35,6 +38,7 @@ export default {
     Boot.registerModule(MoyinW)
     // 全局插件
     Boot.registerPlugin(plugin)
+    isInit = true
   },
 }
 

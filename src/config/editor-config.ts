@@ -133,25 +133,25 @@ function defaultSSMLEditorConfig(): SSMLEditorConfig {
   }
 }
 
-function mergeSSMLEditorConfig(config?: PartialSSMLEditorConfig): SSMLEditorConfig {
-  const defaultConfig = defaultSSMLEditorConfig()
-  return mergeWith(defaultConfig, config, (objValue, srcValue) => {
-    if (Array.isArray(objValue) && Array.isArray(srcValue)) return srcValue
-  })
+function mergeSSMLEditorConfig(dest: SSMLEditorConfig, src: PartialSSMLEditorConfig) {
+  return mergeWith(dest, src, (destValue, srcValue) => {
+    if (Array.isArray(destValue) && Array.isArray(srcValue)) return srcValue
+  }) as SSMLEditorConfig
 }
 
-type CacheKey = 'editor-config'
-const cache = {} as Record<CacheKey, unknown>
+const configList: Record<symbol, SSMLEditorConfig> = {}
 
-export function setConfig(config?: PartialSSMLEditorConfig) {
-  const ssmlEditorConfig = mergeSSMLEditorConfig(config)
+export function setConfig(key: symbol, partConfig?: PartialSSMLEditorConfig) {
+  if (configList[key]) return
+  const defaultConfig = defaultSSMLEditorConfig()
+  const ssmlEditorConfig = partConfig
+    ? mergeSSMLEditorConfig(defaultConfig, partConfig)
+    : defaultConfig
   emitter.on('error', ssmlEditorConfig.handleError)
   emitter.on('warn', ssmlEditorConfig.handleWarn)
-  cache['editor-config'] = ssmlEditorConfig
+  configList[key] = ssmlEditorConfig
 }
 
-export function getConfig() {
-  const config = cache['editor-config']
-  if (!config) throw new Error('SSMLEditorConfig is undefined')
-  return config as SSMLEditorConfig
+export function getConfig(key: symbol) {
+  return configList[key]
 }
