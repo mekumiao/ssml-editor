@@ -37,7 +37,9 @@ async function initEditor() {
         emitter.emit('editor-created', editor)
         emit('created', editor)
         ssmlEditorConfig.editorConfig.onCreated?.(editor)
-        getEmitter(editor).on('ssml-update', handleSaveEditorHtml)
+        if (ssmlEditorConfig.editorConfig.autoSave === true) {
+          getEmitter(editor).on('ssml-update', handleSaveEditorHtml)
+        }
         editor.focus(true)
       },
       onChange(editor) {
