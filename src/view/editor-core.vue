@@ -15,10 +15,10 @@ const ssmlEditorConfig = getConfig(editorKey)
 const boxRef = ref(null)
 const editorRef = shallowRef<IDomEditor>()
 
-onMounted(() => {
+onMounted(async () => {
   Core.install()
-  initEditor()
-  initAnimation()
+  await initEditor()
+  initAnimation() // 必须在initEditor方法后调用
 })
 
 onUnmounted(() => {
