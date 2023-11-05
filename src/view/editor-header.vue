@@ -66,8 +66,9 @@ async function handleSave() {
 function handleExport() {
   const editor = editorStore.editor
   if (editor) {
+    ssml.value = serializeToSSML()
     const fileName = `ssml-raw-${dayjs().format('YYYY-MM-DDTHH:mm:ss')}`
-    exportRaw(fileName, editor.getHtml())
+    exportRaw(fileName, ssml.value)
   }
 }
 
