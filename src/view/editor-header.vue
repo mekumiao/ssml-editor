@@ -5,6 +5,8 @@ import xmlFormat from 'xml-formatter'
 import { serializeToSSML } from '@/serialize'
 import { useEditorStore, useSSMLStore } from '@/stores'
 import { PlayTag } from '@/components'
+import { exportRaw } from '@/utils'
+import dayjs from 'dayjs'
 
 withDefaults(defineProps<{ showSsmlButton?: boolean }>(), { showSsmlButton: true })
 
@@ -56,6 +58,14 @@ async function handleSave() {
   }
 }
 
+function handleExport() {
+  const editor = editorStore.editor
+  if (editor) {
+    const fileName = `ssml-raw-${dayjs().format('YYYY-MM-DDTHH:mm:ss')}`
+    exportRaw(fileName, editor.getHtml())
+  }
+}
+
 /**
  * 复制ssml到剪贴板
  * @param isFormat 是否格式化ssml(多余的空格和换行可能会导致意外的停顿)
@@ -84,7 +94,8 @@ async function handleCopy(isFormat: boolean) {
     </div>
     <div class="operation-wrapper d-flex flex-row justify-content-center align-items-center">
       <template v-if="showSsmlButton">
-        <ElButton type="primary" @click="handleSave">保存</ElButton>
+        <ElButton type="primary" @click="handleSave">保存到浏览器</ElButton>
+        <ElButton type="primary" @click="handleExport">导出文件(.txt)</ElButton>
         <div class="menu-divider"></div>
         <ElButton type="warning" @click="handleCopy(false)">复制 SSML</ElButton>
         <ElButton type="warning" @click="handleShowSSML">显示 SSML</ElButton>

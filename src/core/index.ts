@@ -12,6 +12,7 @@ import SubModule from './sub'
 import VoiceModule from './voice'
 import CustomManagement from './custom-management'
 import MoyinW from './moyin-w'
+import Paragraph from './paragraph'
 
 import plugin from './plugin'
 
@@ -36,6 +37,7 @@ export default {
     Boot.registerModule(VoiceModule)
     Boot.registerModule(CustomManagement)
     Boot.registerModule(MoyinW)
+    Boot.registerModule(Paragraph)
     // 全局插件
     Boot.registerPlugin(plugin)
     isInit = true

@@ -14,7 +14,14 @@ type WordFetchFunction = (word: string) => Promise<LabelValue[]>
 type FilterFetchFunction = (filter: FilterBarSearch) => Promise<LabelValue[]>
 type FilterSpeakerFetchFunction = (filter: FilterSpeaker) => Promise<Speaker[]>
 
-type PartialKey = 'animation' | 'bgm' | 'special' | 'tryPlay' | 'conversion' | 'management'
+type PartialKey =
+  | 'animation'
+  | 'bgm'
+  | 'special'
+  | 'tryPlay'
+  | 'conversion'
+  | 'management'
+  | 'editorConfig'
 type PartialProps<T, K extends keyof T> = { [P in K]?: Partial<T[P]> }
 
 export type PartialSSMLEditorConfig = Partial<Omit<SSMLEditorConfig, PartialKey>> &
@@ -25,6 +32,8 @@ export interface SSMLEditorConfig {
   editorConfig: Partial<IEditorConfig> & {
     saveHtml?: (htmlGetter: () => string) => Promise<boolean>
     readHtml?: () => Promise<string | null>
+    autoSave: boolean
+    autoSaveWait: number
   }
   handleWarn: (message: string) => void
   handleError: (error: unknown) => void
@@ -72,7 +81,7 @@ function resolveList() {
 function defaultSSMLEditorConfig(): SSMLEditorConfig {
   return {
     animation: { zoom: true, grayscale: true },
-    editorConfig: { placeholder: '请输入内容...' },
+    editorConfig: { placeholder: '请输入内容...', autoSave: true, autoSaveWait: 5000 },
     handleWarn: (message) => console.warn(message),
     handleError: (error) => console.error(error),
     pinyin: {},

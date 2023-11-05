@@ -38,12 +38,21 @@ export const useEditorStore = defineStore('--editor-config', () => {
     }
   }
 
-  const _saveEditorHtmlWithThrottle = throttle(_saveEditorHtml, 10000, {
-    leading: false,
-    trailing: true,
-  })
+  let _saveEditorHtmlWithThrottle: ReturnType<typeof genSaveEditorHtmlWithThrottle> | undefined
+
+  const genSaveEditorHtmlWithThrottle = (wait: number) => {
+    return throttle(_saveEditorHtml, wait, {
+      leading: false,
+      trailing: true,
+    })
+  }
 
   const saveEditorHtml = (key: symbol, htmlGetter: () => string, isThrottle: boolean = true) => {
+    const config = getConfig(key)
+    if (!_saveEditorHtmlWithThrottle) {
+      _saveEditorHtmlWithThrottle = genSaveEditorHtmlWithThrottle(config.editorConfig.autoSaveWait)
+    }
+
     if (_saveState.value === 'saved') _saveState.value = 'unsave'
     return isThrottle
       ? _saveEditorHtmlWithThrottle(getConfig(key), htmlGetter)

@@ -44,14 +44,21 @@ export default <T extends IDomEditor>(editor: T) => {
   /**
    * 自定义剪贴板粘贴行为
    * 1. 放行编辑器自身的粘贴行为
-   * 2. 其他粘贴行为一律使用文本粘贴
+   * 2. 本编辑器生成的html使用text/html格式粘贴
+   * 3. 其他粘贴行为一律使用文本粘贴
    */
   newEditor.insertData = (data) => {
     if (data.types.includes('application/x-slate-fragment')) {
       return insertData(data)
     } else {
       const copydata = new DataTransfer()
-      copydata.setData('text/plain', data.getData('text/plain').trim())
+      const text = data.getData('text/plain').trim()
+      // 判断是否为本编辑器生成的html
+      if (text.startsWith('<paragraph data-ow-remark="mekumiao/ssml-editor">')) {
+        copydata.setData('text/html', text)
+      } else {
+        copydata.setData('text/plain', text)
+      }
       // 这里不能使用insertText()方法,否者会破坏段落结构
       return insertData(copydata)
     }
