@@ -84,6 +84,6 @@ export function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement)
     event.preventDefault()
     if (!editor.isFocused()) editor.focus()
     editor.select(DomEditor.findPath(editor, elem))
-    getEmitter(editor)?.emit('ssml-remark-click', editor, elem)
+    getEmitter(editor).emit('ssml-remark-click', editor, elem)
   })
 }

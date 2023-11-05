@@ -1,14 +1,16 @@
 import type { IDomEditor } from '@wangeditor/editor'
 import type { SSMLBaseElement } from './base'
 
-export function getEmitter<T extends IDomEditor | undefined>(editor: T) {
-  if (!editor) return undefined
+type Result<T, Output> = T extends undefined ? undefined : Output
+
+export function getEmitter<T extends IDomEditor | undefined>(editor: T): Result<T, EventBus> {
+  if (!editor) return undefined as Result<T, EventBus>
   return {
     emit: editor.emit,
     off: editor.off,
     on: editor.on,
     once: editor.once,
-  } as EventBus
+  } as Result<T, EventBus>
 }
 
 interface EmitterEventMap {

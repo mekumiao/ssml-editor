@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { nextTick, onMounted, onUnmounted, ref, shallowRef } from 'vue'
+import { onMounted, onUnmounted, ref, shallowRef, nextTick } from 'vue'
 import { BarButton, BarInput, BarPopover } from '@/components'
 import { AliasFn } from './alias-fn'
 import type { IDomEditor } from '@wangeditor/editor'
 import { getEmitter } from '@/core/emitter'
 import type { SSMLBaseElement } from '@/core/base'
+import { emitter } from '@/event-bus'
 import { useEditorStore } from '@/stores'
 
 const fn = shallowRef<AliasFn>()
@@ -12,19 +13,29 @@ const inputRef = ref<InstanceType<typeof BarInput>>()
 const visible = ref(false)
 
 onMounted(() => {
+  emitter.on('editor-created', handleEditorCreated)
   nextTick(() => {
     const { editor } = useEditorStore()
-    getEmitter(editor)?.on('ssml-remark-click', handleSSMLRemarkClick)
+    editor && handleEditorCreated(editor)
   })
 })
 
 onUnmounted(() => {
+  emitter.off('editor-created', handleEditorCreated)
   const { editor } = useEditorStore()
   getEmitter(editor)?.off('ssml-remark-click', handleSSMLRemarkClick)
 })
 
+function handleEditorCreated(editor: IDomEditor) {
+  getEmitter(editor).off('ssml-remark-click', handleSSMLRemarkClick)
+  getEmitter(editor).on('ssml-remark-click', handleSSMLRemarkClick)
+}
+
 function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement) {
-  if (elem.type === 'ssml-sub') handleClick(editor)
+  if (elem.type === 'ssml-sub') {
+    fn.value = undefined
+    handleClick(editor)
+  }
 }
 
 function show() {

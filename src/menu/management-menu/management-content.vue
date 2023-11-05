@@ -3,7 +3,7 @@ import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
 import { More } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
-import { computed, inject, onMounted, ref, shallowRef, watch } from 'vue'
+import { computed, inject, onMounted, ref, shallowRef, watch, nextTick } from 'vue'
 import { speed, pitch, type RecentUsageSpeaker, type ContentData } from './data'
 import { type SubmitData } from './data'
 import { emitter } from '@/event-bus'
@@ -24,6 +24,7 @@ const { tryPlay, management } = ssmlEditorConfig
 const boxRef = ref<HTMLDivElement>()
 const showMore = ref(false)
 const searchInput = ref('')
+const searchRef = ref<InstanceType<typeof ElInput>>()
 
 const speakerCache = shallowRef<Speaker[]>([])
 const recentUsageCache = ref<RecentUsageSpeaker[]>([])
@@ -187,12 +188,26 @@ async function handleRecentUsageClean() {
     emitter.emit('error', error)
   }
 }
+
+function focus() {
+  nextTick(() => {
+    searchRef.value!.input!.focus()
+  })
+}
+
+defineExpose({
+  focus,
+})
 </script>
 
 <template>
   <div ref="boxRef" style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
     <ElForm @submit.prevent="handleSelectCategory('')">
-      <ElInput v-model="searchInput" placeholder="请输入名称快速查找配音师"></ElInput>
+      <ElInput
+        ref="searchRef"
+        v-model="searchInput"
+        placeholder="请输入名称快速查找配音师"
+      ></ElInput>
     </ElForm>
     <div class="position-relative">
       <div class="position-absolute top-0 end-0">
