@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { defaultFilterSpeaker, type LabelValue, type Speaker } from '@/model'
 import { ElInput, ElForm, ElTag, ElButton } from 'element-plus'
-import { More } from '@element-plus/icons-vue'
+import { More, Search } from '@element-plus/icons-vue'
 import SelectList from './select-list.vue'
 import { computed, inject, onMounted, ref, shallowRef, watch, nextTick } from 'vue'
 import { speed, pitch, type RecentUsageSpeaker, type ContentData } from './data'
@@ -203,11 +203,11 @@ defineExpose({
 <template>
   <div ref="boxRef" style="width: 600px; height: 360px" class="position-relative px-2 pb-2">
     <ElForm @submit.prevent="handleSelectCategory('')">
-      <ElInput
-        ref="searchRef"
-        v-model="searchInput"
-        placeholder="请输入名称快速查找配音师"
-      ></ElInput>
+      <ElInput ref="searchRef" v-model="searchInput" placeholder="请输入名称快速查找配音师">
+        <template #append>
+          <ElButton @click="handleSelectCategory('')" :icon="Search" />
+        </template>
+      </ElInput>
     </ElForm>
     <div class="position-relative">
       <div class="position-absolute top-0 end-0">
