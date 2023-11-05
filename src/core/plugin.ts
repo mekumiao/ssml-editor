@@ -37,7 +37,7 @@ export default <T extends IDomEditor>(editor: T) => {
   newEditor.apply = (operation) => {
     apply(operation)
     if (!Operation.isSelectionOperation(operation)) {
-      getEmitter(editor)?.emit('ssml-update', editor)
+      getEmitter(editor).emit('ssml-update', editor)
     }
   }
 

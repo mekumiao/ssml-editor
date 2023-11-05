@@ -1,17 +1,19 @@
 <script setup lang="ts">
 import { BarButton, DragBox } from '@/components'
 import { type IDomEditor } from '@wangeditor/editor'
-import { onMounted, nextTick, reactive, ref, shallowRef, onUnmounted } from 'vue'
+import { onMounted, reactive, ref, shallowRef, onUnmounted, nextTick } from 'vue'
 import { useElementBounding } from '@vueuse/core'
 import ManagementContent from './management-content.vue'
 import { defaultContentData, type ContentData, type SubmitData } from './data'
 import { ManagementFn } from './management-fn'
 import { getEmitter } from '@/core/emitter'
 import type { SSMLBaseElement } from '@/core/base'
+import { emitter } from '@/event-bus'
 import { useEditorStore } from '@/stores'
 
 const dragRef = ref<InstanceType<typeof DragBox>>()
 const menuRef = ref()
+const contentRef = ref<InstanceType<typeof ManagementContent>>()
 const visible = ref(false)
 const fn = shallowRef<ManagementFn>()
 const contentData = reactive<ContentData>(defaultContentData())
@@ -19,19 +21,29 @@ const contentData = reactive<ContentData>(defaultContentData())
 const { x, y, height } = useElementBounding(menuRef)
 
 onMounted(() => {
+  emitter.on('editor-created', handleEditorCreated)
   nextTick(() => {
     const { editor } = useEditorStore()
-    getEmitter(editor)?.on('ssml-remark-click', handleSSMLRemarkClick)
+    editor && handleEditorCreated(editor)
   })
 })
 
 onUnmounted(() => {
+  emitter.off('editor-created', handleEditorCreated)
   const { editor } = useEditorStore()
   getEmitter(editor)?.off('ssml-remark-click', handleSSMLRemarkClick)
 })
 
+function handleEditorCreated(editor: IDomEditor) {
+  getEmitter(editor).off('ssml-remark-click', handleSSMLRemarkClick)
+  getEmitter(editor).on('ssml-remark-click', handleSSMLRemarkClick)
+}
+
 function handleSSMLRemarkClick(editor: IDomEditor, elem: SSMLBaseElement) {
-  if (elem.type === 'custom-management') handleClick(editor)
+  if (elem.type === 'custom-management') {
+    fn.value = undefined
+    handleClick(editor)
+  }
 }
 
 function show() {
@@ -42,6 +54,7 @@ function show() {
     }
     dragRef.value?.setPosition(pot)
     visible.value = true
+    contentRef.value?.focus()
   }
   dragRef.value?.withoutAutoClose(call)
 }
@@ -69,7 +82,11 @@ function handleSubmit(opt: SubmitData) {
     <template #reference>
       <BarButton ref="menuRef" icon="management" @click="handleClick">多人配音</BarButton>
     </template>
-    <ManagementContent @submit="handleSubmit" :contentData="contentData"></ManagementContent>
+    <ManagementContent
+      ref="contentRef"
+      @submit="handleSubmit"
+      :contentData="contentData"
+    ></ManagementContent>
   </DragBox>
 </template>
 
