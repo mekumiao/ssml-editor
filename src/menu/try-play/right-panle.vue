@@ -13,6 +13,7 @@ import { useSSMLStore, useTryPlayStore } from '@/stores'
 import { defaultFilterSpeaker, type Speaker } from '@/model'
 import { emitter } from '@/event-bus'
 import type { Arrayable } from 'element-plus/lib/utils/typescript'
+import SimpleTag from './simple-tag.vue'
 
 interface Mark {
   style: CSSProperties
@@ -177,15 +178,16 @@ function handleSpeakerDetailShow() {
     <div
       class="role-list mt-2 d-flex flex-row flex-wrap justify-content-start align-items-center row-gap-2 column-gap-3"
     >
-      <div
-        @click="handleRoleClick(item.value)"
+      <SimpleTag
+        small
+        @click="handleRoleClick"
         v-for="(item, index) in tryPlayStore.speaker.roles"
         :key="index"
-        class="rounded-pill px-1"
-        :class="{ border: item.value === (rootExpressAs.role || '') }"
+        :value="item.value"
+        :activate="item.value === (rootExpressAs.role || '')"
       >
         {{ item.label }}
-      </div>
+      </SimpleTag>
     </div>
     <ul
       class="mt-2 d-flex flex-row flex-wrap justify-content-start align-items-center row-gap-1 column-gap-2"
@@ -230,17 +232,19 @@ function handleSpeakerDetailShow() {
       ></ElSlider>
     </div>
     <div>
-      <ul class="d-flex flex-row gap-3 my-3">
-        <li
-          @click="handleCategoryClick(item.value)"
+      <div class="d-flex flex-row gap-3 my-3">
+        <SimpleTag
+          small
+          custom-class="gap-3"
+          @click="handleCategoryClick"
           v-for="(item, index) in category"
           :key="index"
-          class="rounded-pill px-1"
-          :class="{ border: item.value === flag }"
+          :value="item.value"
+          :activate="item.value === flag"
         >
           {{ item.label }}
-        </li>
-      </ul>
+        </SimpleTag>
+      </div>
       <ul class="d-flex flex-row flex-wrap row-gap-2 column-gap-3 mb-3" style="min-height: 100px">
         <li @click="handleSpeakerClick(item)" v-for="(item, index) in speakerList" :key="index">
           <SpeakerAvatar

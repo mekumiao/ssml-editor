@@ -9,7 +9,6 @@ npm install -g yalc
 
 ## 本地开发及使用
 
-
 1.编译和发布本项目
 
 ```sh
@@ -26,6 +25,11 @@ yalc push
 yalc add @mekumiao/ssml-editor
 # 更新包
 yarn
+```
 
-# 由于缓存原因需要删除目录 node_modules/.cache 后重启应用
+3.由于`node_modules`缓存原因需要删除以下目录,然后重启应用
+
+```txt
+node_modules/.cache
+node_modules/.vite
 ```
