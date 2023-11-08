@@ -5,6 +5,8 @@ import type { FilterBarSearch } from '@/components/bar-search'
 import type { CancellationToken } from '@/utils'
 import type { AudioInfo } from '@/menu/conversion-menu/data'
 import type { RecentUsageSpeaker } from '@/menu/management-menu/data'
+import { sleep } from '@/utils'
+import { html } from '../mock/ssml'
 
 export async function english(word: string): Promise<LabelValue[]> {
   const resp = await axios.get('/english', { params: { word } })
@@ -91,4 +93,14 @@ export async function fetchRecentUsage(): Promise<RecentUsageSpeaker[]> {
 export async function deleteRecentUsage(id?: string): Promise<void> {
   const resp = await axios.delete('/recentUsage', { params: { id } })
   return resp.data
+}
+
+export async function saveHtml(getter: () => string) {
+  await sleep(200)
+  window.localStorage.setItem('editor-html', getter())
+  return true
+}
+
+export async function readHtml() {
+  return window.localStorage.getItem('editor-html') || html
 }
