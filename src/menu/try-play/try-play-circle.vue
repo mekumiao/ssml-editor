@@ -35,7 +35,7 @@ onMounted(() => {
 function handleMouseup(event: MouseEvent) {
   const callback = () => {
     if (!isClick(event.clientX, event.clientY)) return
-    if (isPlayButtonClick(event)) return playButtonRef.value?.handleClick()
+    if (isPlayButtonClick(event)) return playButtonRef.value?.play()
     return emit('update:visible', false)
   }
 
@@ -80,7 +80,7 @@ function isPlayButtonClick(event: MouseEvent) {
     @mouseup="handleMouseup"
   >
     <div class="avatar d-flex flex-column justify-content-center align-items-center">
-      <PlayButton ref="playButtonRef" disabled-click :size="40"></PlayButton>
+      <PlayButton ref="playButtonRef" @click.capture.stop :size="40"></PlayButton>
       <div class="text-white" style="font-size: 0.65rem">
         {{ tryPlayStore.speaker.displayName }}
       </div>

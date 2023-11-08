@@ -7,10 +7,7 @@ import { Loading } from '@element-plus/icons-vue'
 import throttle from 'lodash.throttle'
 import { getConfig } from '@/config'
 
-const props = withDefaults(defineProps<{ disabledClick?: boolean; size?: number }>(), {
-  disabledClick: false,
-  size: 50,
-})
+const props = withDefaults(defineProps<{ size?: number }>(), { size: 50 })
 
 const boxRef = ref<HTMLDivElement>()
 
@@ -32,7 +29,7 @@ const handleClick = throttle(async () => {
 
 defineExpose({
   divBox: boxRef,
-  handleClick,
+  play: handleClick,
 })
 </script>
 
@@ -41,7 +38,7 @@ defineExpose({
     ref="boxRef"
     class="play-button rounded-circle user-select-none"
     :style="styleObject"
-    @click="!disabledClick && handleClick()"
+    @click="handleClick"
   >
     <button class="btn w-100 h-100 bg-black bg-opacity-50 text-white rounded-circle border-0">
       <ElIcon v-if="tryPlayStore.isLoading" class="is-loading" color="white">
