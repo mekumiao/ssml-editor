@@ -205,7 +205,7 @@ function handleSpeakerDetailShow() {
       </li>
     </ul>
     <div class="my-3">
-      <span @click="handleSpeakerDetailShow" class="border rounded-pill p-1">配音师详情</span>
+      <SimpleTag activate @click="handleSpeakerDetailShow">配音师详情</SimpleTag>
     </div>
     <div class="right-box">
       <div>

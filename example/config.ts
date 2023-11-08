@@ -5,9 +5,18 @@ import { fetchRecentUsage, deleteRecentUsage, recordRecentUsage } from './api'
 import { ElMessage, ElNotification } from 'element-plus'
 import type { Speaker } from '@/model'
 import { emitter } from '@/event-bus'
+import { h } from 'vue'
+import { defaultAvatar } from '@/config'
 
 emitter.on('tryplay-speaker-detail-show', (speaker) => {
-  ElNotification.info(speaker.name)
+  ElNotification.info({
+    title: '配音师详情',
+    message: h('div', [
+      h('img', { src: speaker.avatar || defaultAvatar(), height: 60, width: 60 }),
+      h('h4', [h('span', 'ID: '), h('span', speaker.name)]),
+      h('h4', [h('span', '名称: '), h('span', speaker.displayName)]),
+    ]),
+  })
 })
 
 async function selectSpeaker(speaker: Speaker, setter: (speaker: Speaker) => void) {
