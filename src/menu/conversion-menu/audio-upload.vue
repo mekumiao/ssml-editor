@@ -102,16 +102,16 @@ async function handleStartRecord() {
   }
 }
 
-function handlePlay() {
+async function handlePlay() {
   if (playState.value === 'playing') {
     audioPlayer.pause()
   } else if (recordFile.value) {
     const audioURL = window.URL.createObjectURL(recordFile.value)
-    audioPlayer.load(audioURL)
+    await audioPlayer.load(audioURL)
     audioPlayer.play()
   } else if (inputFile.value) {
     const audioURL = window.URL.createObjectURL(inputFile.value)
-    audioPlayer.load(audioURL)
+    await audioPlayer.load(audioURL)
     audioPlayer.play()
   }
 }
