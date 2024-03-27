@@ -5,9 +5,9 @@
 
 ## 预览
 
-[在线体验](https://ssml.sdaxia.top/)
+[在线体验](https://ssml.yuxiaoyu.top/)
 
-![](https://i.yuxiaoyu.top/upload/20231105164151.png)
+![](./docs/20231105164151.png)
 
 ## 开始
 
